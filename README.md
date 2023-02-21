@@ -7,6 +7,8 @@
 3. 需要持续更新
 
 
+
+
 ## 初级别
 - 说一说cookie sessionStorage localStorage 区别？
 - 说一说JS数据类型有哪些,区别是什么？

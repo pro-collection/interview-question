@@ -701,5 +701,9 @@ Foo.a();
   - cookie和localStorage/sessionStorage的差异
   - 哪些信息适合放到cookie中
 
+--------------
 
+> 2023.02.26
+
+https://github.com/lgwebdream/FE-Interview/issues
 

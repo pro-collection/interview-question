@@ -705,5 +705,6 @@ Foo.a();
 
 > 2023.02.26
 
-https://github.com/lgwebdream/FE-Interview/issues
+- 面试问题收集：https://github.com/lgwebdream/FE-Interview/issues
+- 2021年前端面试必读文章【超三百篇文章/赠复习导图】：https://juejin.cn/post/6844904116339261447
 

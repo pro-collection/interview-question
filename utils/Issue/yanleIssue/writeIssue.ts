@@ -7,7 +7,7 @@ const config = require("../../configToken.json");
 
 const remote = [
   {
-    title: "【中】如何使对象 iterable 化， 以其可以支持 for...of 迭代",
+    title: "【中】JS 有哪些迭代器，该如何使用？",
     labels: ["JavaScript"],
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   },

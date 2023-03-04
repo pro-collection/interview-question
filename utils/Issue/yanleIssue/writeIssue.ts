@@ -7,7 +7,7 @@ const config = require("../../configToken.json");
 
 const remote = [
   {
-    title: "【中】详细讲一下 Symbol 数据类型特征与实际使用案例？",
+    title: "【中】如何使对象 iterable 化， 以其可以支持 for...of 迭代",
     labels: ["JavaScript"],
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   },

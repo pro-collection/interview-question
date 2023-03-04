@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/lodash': ^4.14.191
   '@types/node': ^18.14.6
   lodash: ^4.17.21
   octokit: ^2.0.14
@@ -10,6 +11,7 @@ dependencies:
   octokit: 2.0.14
 
 devDependencies:
+  '@types/lodash': 4.14.191
   '@types/node': 18.14.6
 
 packages:
@@ -281,6 +283,10 @@ packages:
     dependencies:
       '@types/node': 18.14.6
     dev: false
+
+  /@types/lodash/4.14.191:
+    resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
+    dev: true
 
   /@types/lru-cache/5.1.1:
     resolution: {integrity: sha512-ssE3Vlrys7sdIzs5LOxCzTVMsU7i9oa/IaW92wF32JFb3CVczqOkru2xspuKczHEbG3nvmPY7IFqVmGGHdNbYw==}

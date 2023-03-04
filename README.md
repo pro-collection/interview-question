@@ -13,7 +13,7 @@
 
 **初级**
 
-- 说一说cookie sessionStorage localStorage 区别？
+- 说一说 cookie sessionStorage localStorage 区别？
 - 说一说JS数据类型有哪些,区别是什么？
 - 说一说你对闭包的理解？
 - 说一说promise是什么与使用方法？

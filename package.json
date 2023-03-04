@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/yanlele/interview-question#readme",
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "@types/node": "^18.14.6"
   },
   "dependencies": {

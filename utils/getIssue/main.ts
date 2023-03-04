@@ -1,4 +1,20 @@
-import * as fs from "fs";
+const { Octokit } = require("octokit");
+const config = require("../configToken.json");
+const { get, find } = require("lodash");
 
-fs.writeFileSync("./demo.md", "123 我是 嘿嘿", { encoding: "utf-8" });
+const octokit = new Octokit({
+  auth: config.token,
+});
 
+const req = () => octokit.request(`GET /repos/${config.yanlele.owner}/${config.yanlele.repo}/issues`, {
+  headers: config.header,
+});
+
+const main = async () => {
+  const res = await req();
+
+  const result = get(find(res.data, (item: any) => item.number === 6), 'body');
+  console.log("yanle - logger: result: \n", result);
+};
+
+main();

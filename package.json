@@ -1,0 +1,22 @@
+{
+  "name": "interview-question",
+  "version": "1.0.0",
+  "description": "想做一个很全的面试题库工程",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yanlele/interview-question.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yanlele/interview-question/issues"
+  },
+  "homepage": "https://github.com/yanlele/interview-question#readme",
+  "devDependencies": {
+    "@types/node": "^18.14.6"
+  }
+}

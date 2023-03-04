@@ -716,3 +716,4 @@ Foo.a();
 
 将 node-index 项目里面的问题， 都搬移到这里来
 
+- [会写 TypeScript 但你真的会 TS 编译配置吗？](https://www.51cto.com/article/694463.html)

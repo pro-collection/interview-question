@@ -8,7 +8,7 @@ const config = require("../../configToken.json");
 
 const remote = [
   {
-    title: "跨域通信的常见方式有哪些?",
+    title: "WebSocket 了解多少？",
     labels: [labels.network],
     milestone: MileStone.inProgress,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),

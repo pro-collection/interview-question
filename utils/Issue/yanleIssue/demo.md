@@ -1,96 +1,140 @@
+## 基本概念
 
-## 常见的几种方式
+WebSocket 是一种基于 TCP 协议的网络通信协议，可以在客户端和服务器之间进行双向通信。相比传统的 HTTP 请求，WebSocket 具有更低的延迟和更高的效率。但是，由于同源策略的限制，**WebSocket 也会受到跨域问题的影响。**
 
-**JSONP**
-JSONP是通过动态创建script标签的方式，利用script标签可以跨域请求资源的特性来实现的，本质是利用了script标签没有跨域限制的特性，可以在请求的url后加一个callback参数，后端接收到请求后，将需要传递的数据作为参数传递到callback函数中，前端定义该函数来接收数据，从而实现跨域通信。
+WebSocket 通过在客户端和服务器之间建立持久连接来解决跨域问题。WebSocket 的握手过程与 HTTP 协议相似，客户端首先通过 HTTP 请求与服务器建立连接，然后服务器返回一个握手响应，表示连接已经建立成功。**在握手完成后，客户端和服务器之间就可以通过该连接进行双向通信，不受同源策略的限制。**
 
-**CORS**
-CORS是一种现代浏览器支持的跨域解决方案，CORS全称为跨域资源共享（Cross-Origin Resource Sharing），其本质是在服务端设置允许跨域访问的响应头，浏览器通过判断响应头中是否允许跨域访问来决定是否允许跨域访问。
-
-**postMessage**
-postMessage是HTML5引入的一种新的跨域通信方式，主要是用于在不同窗口之间进行通信，包括不同域名、协议、端口等情况，通过调用window.postMessage()方法，在两个窗口之间发送消息，接收方通过监听message事件来接收消息，从而实现跨域通信。
-
-**WebSocket**
-WebSocket是一种新的网络协议，可以实现客户端和服务器之间的实时双向通信，同时也可以跨域通信，WebSocket协议建立在TCP协议之上，通过HTTP协议发起握手请求，握手成功后，客户端和服务器就可以通过WebSocket协议进行实时通信了。
-
-**代理转发**
-代理转发是一种常用的跨域通信方式，主要是通过在同一域名下设置代理服务器，在代理服务器上实现跨域访问，再将结果返回给前端页面，从而实现跨域通信。
+需要注意的是，WebSocket 协议本身并没有限制跨域请求，**但是在实际使用中，服务器通常会限制 WebSocket 连接的来源**。这是出于安全性考虑，避免恶意网站通过 WebSocket 连接获取敏感信息。因此，在使用 WebSocket 进行跨域通信时，需要确保服务器允许来自指定域名或 IP 地址的连接。
 
 
-## JSONP
+## WebSocket 同源限制是啥？
 
-JSONP 的实现原理是通过添加一个 script 标签，指定 src 属性为跨域请求的 URL，而这个 URL 返回的不是 JSON 数据，而是一段可执行的 JavaScript 代码，这段代码会调用一个指定的函数，并且将 JSON 数据作为参数传入函数中。
+WebSocket 通信协议本身不受同源策略限制，因为 WebSocket 是一个独立的协议。但是在建立 WebSocket 连接时，需要进行握手，握手时会发送 HTTP 请求头，因此受到同源策略的限制。需要满足以下条件才能建立 WebSocket 连接：
 
-例如，假设我们从 http://example.com 域名下请求数据，我们可以通过在 http://example.com 中添加如下代码实现 JSONP 请求：
+- 协议头必须为 "ws://" 或 "wss://"（安全的 WebSocket）
 
+- 域名和端口必须与当前网页完全一致
+
+如果以上条件不满足，浏览器将不允许建立 WebSocket 连接。
+
+
+## 关于请求头的问题
+在建立WebSocket连接时，需要添加`Upgrade`头和`Connection`头，其中Upgrade头指明这是一个WebSocket请求，Connection头指明连接方式为升级连接（upgrade）。
+服务器如果同意升级，则会返回 101 状态码，表示升级成功，此时 WebSocket 连接建立成功，双方就可以通过该连接进行双向通信。这个过程与同源策略无关，因此 WebSocket 不会受到同源策略的限制。
+
+new WebSocket(url) 创建 WebSocket 对象时，会自动添加 Upgrade 头和 Connection 头。这是因为在 WebSocket 协议中，这两个头部是必需的，用于告知服务器客户端希望建立 WebSocket 连接。
+示例代码如下：
 ```js
-function handleData(data) {
-  // 处理获取到的数据
-}
-
-const script = document.createElement('script');
-script.src = 'http://example.org/api/data?callback=handleData';
-document.head.appendChild(script);
+const socket = new WebSocket('ws://localhost:8080');
 ```
 
-其中，我们指定了一个名为 `handleData` 的回调函数，并将这个函数名作为参数传递给了跨域请求的 URL 中的 callback 参数。服务器端返回的数据将会被包装在这个回调函数中，例如：
+此外，在WebSocket请求中也可以添加一些自定义的请求头，例如：
 ```js
-handleData({"name": "John", "age": 30});
+const socket = new WebSocket('ws://localhost:8080', {
+  headers: {
+    'X-Custom-Header': 'hello',
+    'Y-Custom-Header': 'world'
+  }
+});
 ```
 
-在这个例子中，我们可以在 handleData 函数中处理获取到的数据。需要注意的是，在使用 JSONP 时，**需要保证服务器端返回的数据是一个可执行的 JavaScript 代码，并且必须使用指定的回调函数名来包装数据，否则无法正确处理数据。**
 
-### 如何获取 jsonp 的相应参数
-
-获取 JSONP 响应结果的方法有两种，**一种是通过回调函数参数获取**，**另一种是通过 script 标签加载完成后解析全局变量获取**。
-
-假设服务器返回以下 JSONP 响应：
-
+## 建立一个 WebSocket 连接需要以下步骤：
+**1. 创建一个 WebSocket 对象**
 ```js
-callback({"name": "Alice", "age": 20});
+const socket = new WebSocket('ws://localhost:8080');
 ```
 
-其中 callback 是客户端定义的回调函数名，用于指定返回数据的处理方式。
+**2. 监听 WebSocket 事件**
+WebSocket 对象是一个 EventTarget 对象，它可以监听多个事件。常见的事件有 open、message、error 和 close。
 
-我们可以使用以下两种方式获取响应结果：
-
-**1. 通过回调函数参数获取**
-在客户端定义一个全局函数作为回调函数，服务器返回的数据会作为回调函数的参数传入，这个参数可以在回调函数中处理。
+- open 事件：WebSocket 连接建立成功时触发。
 ```js
-function handleResponse(data) {
-  console.log(data.name); // Alice
-  console.log(data.age); // 20
-}
-
-// 创建 script 标签
-const script = document.createElement('script');
-script.src = 'http://example.com/api?callback=handleResponse';
-
-// 插入到文档中开始加载数据
-document.body.appendChild(script);
+socket.addEventListener('open', event => {
+  console.log('WebSocket 连接已建立');
+});
 ```
 
-**2. 通过全局变量获取**
-在客户端定义一个全局函数作为回调函数，服务器返回的数据会作为一个全局变量赋值给该函数所在的对象，我们可以在 script 标签加载完成后解析全局变量获取响应结果。
+- message 事件：WebSocket 收到消息时触发。
 ```js
-function handleResponse() {
-  console.log(myData.name); // Alice
-  console.log(myData.age); // 20
-}
-
-// 创建 script 标签
-const script = document.createElement('script');
-script.src = 'http://example.com/api?callback=handleResponse';
-
-// 插入到文档中开始加载数据
-document.body.appendChild(script);
-
-// script 标签加载完成后解析全局变量
-window.myData = {};
-script.onload = () => {
-  delete window.myData; // 删除全局变量
-};
+socket.addEventListener('message', event => {
+  console.log(`收到消息：${event.data}`);
+});
 ```
 
-注意，使用 JSONP 时要注意安全问题，应该对返回的数据进行验证，避免接收到恶意代码。此外，JSONP **只能发送 GET 请求**，无法发送 POST 请求，**也无法使用 HTTP 请求头和请求体传递数据**。
+- error 事件：WebSocket 连接出错时触发。
+```js
+socket.addEventListener('error', event => {
+  console.error('WebSocket 连接出错', event);
+});
+```
+
+- close 事件：WebSocket 连接关闭时触发。
+```js
+socket.addEventListener('close', event => {
+  console.log('WebSocket 连接已关闭');
+});
+```
+
+以上是建立 WebSocket 连接的基本步骤。需要注意的是，在使用 WebSocket 协议时，服务器端也需要提供相应的支持。
+
+## 服务端支持
+要支持 WebSocket，服务器需要在接收到客户端 WebSocket 握手请求时，返回符合 WebSocket 协议规范的响应。在 Node.js 中，我们可以使用 ws 模块来实现 WebSocket 服务器。以下是一个简单的 WebSocket 服务器的示例代码：
+```js
+const WebSocket = require('ws');
+
+const server = new WebSocket.Server({ port: 8080 });
+
+server.on('connection', (socket) => {
+  console.log('Client connected');
+
+  socket.on('message', (message) => {
+    console.log(`Received message: ${message}`);
+
+    // Echo the message back to the client
+    socket.send(`Echo: ${message}`);
+  });
+
+  socket.on('close', () => {
+    console.log('Client disconnected');
+  });
+});
+```
+
+需要注意的是，在生产环境中，我们需要使用 HTTPS 协议来保证 WebSocket 的安全性。同时，我们还需要注意处理异常情况，例如客户端断开连接等。
+
+其中 `ws` 不是 Node.js 的内置模块，它是一个第三方模块，可以使用 npm 安装。在 Node.js 应用中使用 WebSocket 时，需要先安装 ws 模块。可以使用以下命令进行安装：
+```
+npm install ws
+```
+
+## 服务端如何限制链接源？
+在 WebSocket 建立连接的时候，可以通过检查请求的 Origin 头部信息来限制访问源。下面是一个简单的 Node.js 示例代码：
+```js
+const WebSocket = require('ws');
+const server = new WebSocket.Server({ port: 8080 });
+
+server.on('connection', (ws, req) => {
+  const { origin } = req.headers;
+  // 判断请求的 origin 是否允许连接
+  if (origin === 'https://www.example.com') {
+    // 允许连接
+    console.log('Connection allowed from', origin);
+    ws.send('Connection allowed');
+  } else {
+    // 拒绝连接
+    console.log('Connection refused from', origin);
+    ws.close();
+  }
+});
+```
+
+## "ws://" 与 "wss://" 有啥区别？
+"ws://" 和 "wss://" 都是 WebSocket 协议的 URL 前缀，它们之间的区别在于传输层协议的不同。
+
+"ws://" 使用的是普通的 HTTP 协议作为传输层协议，在传输过程中数据是明文的，容易被中间人攻击篡改数据，存在安全风险。
+
+"wss://" 使用的是加密的 SSL/TLS 协议作为传输层协议，在传输过程中数据是加密的，更加安全。但是因为要进行 SSL/TLS 握手等复杂过程，所以 "wss://" 的连接建立时间和数据传输速度会比 "ws://" 慢一些。
+
+因此，如果数据传输需要保密性，建议使用 "wss://"，否则可以使用 "ws://"。
 

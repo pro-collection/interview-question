@@ -6,11 +6,13 @@ const main = async () => {
   const { ChatGPTUnofficialProxyAPI } = await importDynamic("chatgpt");
   const api = new ChatGPTUnofficialProxyAPI({
     accessToken: config.chatGpt_access_token,
-    // apiReverseProxyUrl: 'http://127.0.0.1:1081/'
+    apiReverseProxyUrl: "https://gpt.pawan.krd/backend-api/conversation",
+    debug: true,
   });
 
-  api.sendMessage("Hello World!!", {
+  api.sendMessage("用 js 写一个简单的闭包", {
     timeoutMs: 5 * 60 * 1000,
+    debug: true,
   })
     .then((res: any) => {
       console.log(res.text);

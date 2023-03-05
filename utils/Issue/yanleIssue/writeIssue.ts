@@ -8,9 +8,9 @@ const config = require("../../configToken.json");
 
 const remote = [
   {
-    title: "WebSocket 了解多少？",
-    labels: [labels.network],
-    milestone: MileStone.inProgress,
+    title: "手写 async 函数？",
+    labels: [labels.js],
+    milestone: MileStone.senior,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   },
 ];

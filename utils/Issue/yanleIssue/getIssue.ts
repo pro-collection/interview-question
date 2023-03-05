@@ -12,8 +12,10 @@ const req = () => octokit.request(apiUrl.getIssue, {
 const main = async () => {
   const res = await req();
 
-  const result = get(find(res.data, (item: any) => item.number === 6), "body");
+  const result = get(find(res.data, (item: any) => item.number === 26), "body");
   console.log("yanle - logger: result: \n", result);
 };
 
 main();
+
+export {}

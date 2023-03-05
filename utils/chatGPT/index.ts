@@ -10,8 +10,8 @@ const main = async () => {
     debug: true,
   });
 
-  api.sendMessage("用 js 写一个简单的闭包", {
-    timeoutMs: 5 * 60 * 1000,
+  api.sendMessage("JS 实现 Promise", {
+    timeoutMs: 6 * 60 * 1000,
     debug: true,
   })
     .then((res: any) => {

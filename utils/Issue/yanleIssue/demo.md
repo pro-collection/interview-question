@@ -1,11 +1,26 @@
-同源策略是一种安全机制，它是浏览器对 JavaScript 实施的一种安全限制。所谓“同源”是指域名、协议、端口号均相同。同源策略限制了一个页面中的脚本只能与同源页面的脚本进行交互，而不能与不同源页面的脚本进行交互。这是为了防止恶意脚本窃取数据、进行 XSS 攻击等安全问题。
+## ajax如何获取下载进度?
 
+要获取下载进度，可以使用 `XMLHttpRequest` 对象提供的 `onprogress` 事件。
 
-同源策略限制的资源包括：
+使用 onprogress 事件，可以获取文件的下载进度信息，可以通过 loaded 和 total 属性获取当前已经下载的字节数和文件的总字节数，从而计算出当前的下载进度。
 
-- Cookie、LocalStorage 和 IndexDB 等存储性资源
-- AJAX、WebSocket 等发送 HTTP 请求的方法
-- DOM 节点
-- 其他通过脚本或插件执行的跨域请求
+下面是一个使用 onprogress 事件获取文件下载进度的示例代码：
 
-这些资源只能与同源页面进行交互，不能与不同源的页面进行交互。
+```js
+const xhr = new XMLHttpRequest();
+xhr.open('GET', 'file.url', true);
+xhr.responseType = 'blob';
+xhr.onprogress = function (event) {
+  if (event.lengthComputable) {
+    const percentComplete = (event.loaded / event.total) * 100;
+    console.log(`Downloaded ${percentComplete}%`);
+  }
+};
+xhr.onload = function (event) {
+  // 文件下载完成
+  const blob = xhr.response;
+};
+xhr.send();
+```
+
+在上面的代码中，通过将 XMLHttpRequest 对象的 **responseType 设置为 blob**，来请求一个文件资源，然后监听 onprogress 事件，计算出当前的下载进度，并在控制台输出，最后在 onload 事件中获取到下载的文件内容。

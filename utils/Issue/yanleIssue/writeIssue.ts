@@ -8,9 +8,9 @@ const config = require("../../configToken.json");
 
 const remote = [
   {
-    title: "什么是同源策略？",
+    title: "ajax如何获取下载进度?",
     labels: ["JavaScript"],
-    milestone: MileStone.base,
+    milestone: MileStone.inProgress,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   },
 ];

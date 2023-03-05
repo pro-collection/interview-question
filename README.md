@@ -8,6 +8,23 @@
 
 ----------
 
+
+## 如何使用？
+1. 面试题采用 issue 方式来进行记录和作答， 直接访问本项目链接即可：https://github.com/yanlele/interview-question/issues
+2. 题目难度分级：初级、中级、高级、资深， 可以通过 milestone 来进行筛选：
+<img width="1378" alt="image" src="https://user-images.githubusercontent.com/22188674/222943207-390166d3-062e-469d-a480-d34dc4db1895.png">
+   
+3. 题目的类型分类：使用 labels 方式管理
+<img width="927" alt="image" src="https://user-images.githubusercontent.com/22188674/222943276-0cf2146a-f7a9-416d-bd66-890fc81e736b.png">
+   
+4. 关于题目序号， 直接使用 issue 自增 id 即可， 便于收藏记忆记录等：
+<img width="620" alt="image" src="https://user-images.githubusercontent.com/22188674/222943315-fb58b939-53a2-467f-bc57-cccc66a166eb.png">
+
+5. 关于问题讨论：开通 discussions 社区, 可以直接在 discussions 区进行讨论即可。
+<img width="1334" alt="image" src="https://user-images.githubusercontent.com/22188674/222943370-122d4d33-73cb-44c7-b18d-7db089e0bdfe.png">
+
+## 问题收集
+
 > 2022.02.21
 
 

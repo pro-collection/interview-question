@@ -2,14 +2,14 @@ import { octokit } from "../main";
 import { apiUrl } from "../../apiUrl";
 import { WriteIssueOptions } from "./interface";
 import * as fs from "fs";
-import { MileStone } from "../consts";
+import { labels, MileStone } from "../consts";
 
 const config = require("../../configToken.json");
 
 const remote = [
   {
-    title: "ajax如何获取下载进度?",
-    labels: ["JavaScript"],
+    title: "跨域通信的常见方式有哪些?",
+    labels: [labels.network],
     milestone: MileStone.inProgress,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   },

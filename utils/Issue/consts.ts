@@ -4,3 +4,11 @@ export enum MileStone {
   senior, // 高级别
   master, // 资深
 }
+
+export const labels = {
+  network: "网络",
+  js: "JavaScript",
+  ts: "TypeScript",
+  node: "Nodejs",
+  css: "CSS",
+};

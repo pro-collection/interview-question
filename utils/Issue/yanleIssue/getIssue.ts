@@ -1,21 +1,19 @@
 import { apiUrl } from "../../apiUrl";
-import * as fs from "fs";
 
-const config = require("../../configToken.json");
 import { octokit } from "../main";
-import { get, find } from "lodash";
+import { map } from "lodash";
 import repoConfig from "../../repoConfig";
 
 const req = () => octokit.request(apiUrl.getIssue, {
-  // ...repoConfig.interviewRepo,
-  ...config.yanleleInfo,
+  ...repoConfig.interviewRepo,
   per_page: 100,
 });
 
 const main = async () => {
   const res = await req();
 
-  fs.writeFileSync("./issue.json", JSON.stringify(res.data), {encoding: "utf8"});
+  const titleList = map(res.data, item => item.title);
+  console.log('yanle - logger: title', titleList);
 };
 
 main();

@@ -3,8 +3,7 @@ import { apiUrl } from "../../apiUrl";
 import { WriteIssueOptions } from "./interface";
 import * as fs from "fs";
 import { labels, MileStone } from "../consts";
-
-const config = require("../../configToken.json");
+import repoConfig from "../../repoConfig";
 
 const remote = [
   {
@@ -17,7 +16,7 @@ const remote = [
 
 const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue, {
   ...options,
-  ...config.yanleleInfo,
+  ...repoConfig.interviewRepo,
 });
 
 write(remote[0])

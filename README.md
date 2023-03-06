@@ -24,6 +24,12 @@
 
 5. 关于问题讨论：开通 discussions 社区, 可以直接在 discussions 区进行讨论即可。
 <img width="1334" alt="image" src="https://user-images.githubusercontent.com/22188674/222943370-122d4d33-73cb-44c7-b18d-7db089e0bdfe.png">
+   
+6. 使用技巧：本项目所有 open 的 issue 是作者进行整理了的问题。如何精确筛选呢？
+- 搜索 title : `is:open in:title [txt]`
+- 搜索 内容: `is:open in:body [txt]`
+<img width="767" alt="image" src="https://user-images.githubusercontent.com/22188674/223155285-7cf7e2f5-e0ed-4d6c-adea-bc5ec3e2933c.png">
+
 
 ## 问题收集
 

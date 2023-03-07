@@ -12,7 +12,7 @@
 
 
 ## 如何使用？
-1. 面试题采用 issue 方式来进行记录和作答， 直接访问本项目链接即可：https://github.com/yanlele/interview-question/issues
+1. 面试题采用 issue 方式来进行记录和作答， 直接访问本项目链接即可：https://github.com/pro-collection/interview-question/issues
 2. 题目难度分级：初级、中级、高级、资深， 可以通过 milestone 来进行筛选：
 <img width="1378" alt="image" src="https://user-images.githubusercontent.com/22188674/222943207-390166d3-062e-469d-a480-d34dc4db1895.png">
    

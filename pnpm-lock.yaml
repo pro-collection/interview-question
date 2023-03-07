@@ -4,12 +4,14 @@ specifiers:
   '@types/lodash': ^4.14.191
   '@types/node': ^18.14.6
   chatgpt: ^5.0.6
+  dayjs: ^1.11.7
   lodash: ^4.17.21
   octokit: ^2.0.14
   openai: ^3.2.1
 
 dependencies:
   chatgpt: 5.0.6
+  dayjs: 1.11.7
   lodash: 4.17.21
   octokit: 2.0.14
   openai: 3.2.1
@@ -460,6 +462,10 @@ packages:
       env-paths: 3.0.0
       json-schema-typed: 8.0.1
       semver: 7.3.8
+    dev: false
+
+  /dayjs/1.11.7:
+    resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
     dev: false
 
   /debounce-fn/5.1.2:

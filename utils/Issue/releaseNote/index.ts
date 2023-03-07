@@ -1,34 +1,12 @@
-import { octokit } from "../main";
-import { apiUrl } from "../../apiUrl";
-import repoConfig from "../../repoConfig";
 import { base64ToString, stringToBase64 } from "./helper";
 import { split, toNumber, join, replace, get } from "lodash";
-
-const path = "package.json";
-
-// 获取 package.json
-const getPackageJson = () => octokit.request(apiUrl.getContent, {
-  ...repoConfig.interviewRepo,
-  path,
-});
-
-const updatePackageJson = (content: string, extend: object) => octokit.request(apiUrl.updateContent, {
-  ...repoConfig.interviewRepo,
-  path,
-  message: "update package version with github api runner",
-  committer: {
-    name: "yanlele",
-    email: "331393627@qq.com",
-  },
-  content,
-  ...extend,
-});
+import { createTagRequest, getPackageJson, updatePackageJson } from "./request";
 
 const main = async () => {
   // 获取 package.json
   const res = await getPackageJson();
   const sha = get(res, "data.sha");
-  let packageString = base64ToString(res.data.content);
+  let packageString = base64ToString(get(res, "data.content"));
   const packageJson = JSON.parse(packageString);
   const currentVersion = Reflect.get(packageJson, "version");
 
@@ -42,6 +20,9 @@ const main = async () => {
 
   // 提交
   await updatePackageJson(stringToBase64(packageString), { sha });
+
+  // 创建 tag
+  await createTagRequest();
 };
 
 main();

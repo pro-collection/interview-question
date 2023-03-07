@@ -23,10 +23,12 @@ export const updatePackageJson = (content: string, extend: object) => octokit.re
   ...extend,
 });
 
-export const createTagRequest = () => {
+export const createTagObjectRequest = (sha: string) => {
   return octokit.request(apiUrl.createTag, {
     ...repoConfig.interviewRepo,
-    // pattern: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-    pattern: "v1.*",
+    tag: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+    message: "auto tag",
+    object: sha,
+    type: "commit",
   });
 };

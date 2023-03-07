@@ -2,7 +2,7 @@ import { octokit } from "../main";
 import { apiUrl } from "../../apiUrl";
 import repoConfig from "../../repoConfig";
 import { base64ToString, stringToBase64 } from "./helper";
-import { split, toNumber, join, replace } from "lodash";
+import { split, toNumber, join, replace, get } from "lodash";
 
 const path = "package.json";
 
@@ -12,7 +12,7 @@ const getPackageJson = () => octokit.request(apiUrl.getContent, {
   path,
 });
 
-const updatePackageJson = (content: string) => octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+const updatePackageJson = (content: string, extend: object) => octokit.request(apiUrl.updateContent, {
   ...repoConfig.interviewRepo,
   path,
   message: "update package version with github api runner",
@@ -20,12 +20,14 @@ const updatePackageJson = (content: string) => octokit.request("PUT /repos/{owne
     name: "yanlele",
     email: "331393627@qq.com",
   },
-  content: "bXkgbmV3IGZpbGUgY29udGVudHM=",
+  content,
+  ...extend,
 });
 
 const main = async () => {
   // 获取 package.json
   const res = await getPackageJson();
+  const sha = get(res, "data.sha");
   let packageString = base64ToString(res.data.content);
   const packageJson = JSON.parse(packageString);
   const currentVersion = Reflect.get(packageJson, "version");
@@ -33,15 +35,16 @@ const main = async () => {
   // package.json 版本自增
   const [a, b, c] = split(currentVersion, ".");
   const patch = toNumber(c) + 1;
-  const newVersion = join([a, b, patch]);
+  const newVersion = join([a, b, patch], ".");
 
   // 替换旧 version
   packageString = replace(packageString, `"version": "${currentVersion}"`, `"version": "${newVersion}"`);
 
   // 提交
-  await updatePackageJson(stringToBase64(packageString));
-
+  await updatePackageJson(stringToBase64(packageString), { sha });
 };
+
+main();
 
 
 // 创建 tag

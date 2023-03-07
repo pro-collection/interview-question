@@ -1,6 +1,6 @@
 import { base64ToString, stringToBase64 } from "./helper";
 import { split, toNumber, join, replace, get } from "lodash";
-import { createTagObjectRequest, getPackageJson, updatePackageJson } from "./request";
+import { createTagObjectRequest, createTagRequest, getPackageJson, updatePackageJson } from "./request";
 
 const main = async () => {
   // 获取 package.json
@@ -21,9 +21,14 @@ const main = async () => {
   // 提交
   await updatePackageJson(stringToBase64(packageString), { sha });
 
-  // 创建 tag
-  const tagObject = await createTagObjectRequest(sha);
-  console.log('yanle - logger: tag', tagObject);
+  // 创建 tag obj
+  const tagObject = await createTagObjectRequest(newVersion, sha);
+
+  const tagSha = get(tagObject, "data.sha");
+
+  // create tag
+  const tag = await createTagRequest(tagSha);
+  console.log("yanle - logger: tag", tag);
 };
 
 main();

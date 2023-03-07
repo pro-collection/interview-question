@@ -3,5 +3,6 @@ export const apiUrl = {
   writeIssue: "POST /repos/{owner}/{repo}/issues",
   getContent: "GET /repos/{owner}/{repo}/contents/{path}",
   updateContent: "PUT /repos/{owner}/{repo}/contents/{path}",
-  createTag: "POST /repos/{owner}/{repo}/git/tags",
+  createTagObj: "POST /repos/{owner}/{repo}/git/tags",
+  createTag: "GET /repos/{owner}/{repo}/git/tags/{tag_sha}",
 };

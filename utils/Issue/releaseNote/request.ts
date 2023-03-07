@@ -5,12 +5,19 @@ import dayjs from "dayjs";
 
 const path = "package.json";
 
-// 获取 package.json
+/**
+ * 获取 package.json
+ */
 export const getPackageJson = () => octokit.request(apiUrl.getContent, {
   ...repoConfig.interviewRepo,
   path,
 });
 
+/**
+ * update package
+ * @param content
+ * @param extend
+ */
 export const updatePackageJson = (content: string, extend: object) => octokit.request(apiUrl.updateContent, {
   ...repoConfig.interviewRepo,
   path,
@@ -23,12 +30,28 @@ export const updatePackageJson = (content: string, extend: object) => octokit.re
   ...extend,
 });
 
-export const createTagObjectRequest = (sha: string) => {
-  return octokit.request(apiUrl.createTag, {
+/**
+ * create tag obj
+ * @param tag
+ * @param sha
+ */
+export const createTagObjectRequest = (tag: string, sha: string) => {
+  return octokit.request(apiUrl.createTagObj, {
     ...repoConfig.interviewRepo,
-    tag: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-    message: "auto tag",
+    tag,
+    message: dayjs().format("YYYY-MM-DD HH:mm:ss"),
     object: sha,
     type: "commit",
+  });
+};
+
+/**
+ * create tag
+ * @param tagSha
+ */
+export const createTagRequest = (tagSha: string) => {
+  return octokit.request(apiUrl.createTag, {
+    ...repoConfig.interviewRepo,
+    tag_sha: tagSha,
   });
 };

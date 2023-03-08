@@ -4,5 +4,8 @@ export const apiUrl = {
   getContent: "GET /repos/{owner}/{repo}/contents/{path}",
   updateContent: "PUT /repos/{owner}/{repo}/contents/{path}",
   createTagObj: "POST /repos/{owner}/{repo}/git/tags",
-  createTag: "GET /repos/{owner}/{repo}/git/tags/{tag_sha}",
+  // createTag: "GET /repos/{owner}/{repo}/git/tags/{tag_sha}",
+
+  // 关联 tag 和 commit
+  createRef: "POST /repos/{owner}/{repo}/git/refs",
 };

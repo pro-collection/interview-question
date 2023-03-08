@@ -1,6 +1,8 @@
 import { base64ToString, stringToBase64 } from "./helper";
 import { split, toNumber, join, replace, get } from "lodash";
 import { createTagObjectRequest, createTagRequest, getPackageJson, updatePackageJson } from "./request";
+import { octokit } from "../main";
+import repoConfig from "../../repoConfig";
 
 const main = async () => {
   // 获取 package.json
@@ -19,16 +21,14 @@ const main = async () => {
   packageString = replace(packageString, `"version": "${currentVersion}"`, `"version": "${newVersion}"`);
 
   // 提交
-  await updatePackageJson(stringToBase64(packageString), { sha });
+  const updateRes = await updatePackageJson(stringToBase64(packageString), { sha });
+  const commitSHA = get(updateRes, "data.commit.sha");
 
   // 创建 tag obj
-  const tagObject = await createTagObjectRequest(newVersion, sha);
-
-  const tagSha = get(tagObject, "data.sha");
+  await createTagObjectRequest(newVersion, commitSHA);
 
   // create tag
-  const tag = await createTagRequest(tagSha);
-  console.log("yanle - logger: tag", tag);
+  await createTagRequest(newVersion, commitSHA);
 };
 
 main();

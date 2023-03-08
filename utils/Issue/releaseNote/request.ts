@@ -40,18 +40,20 @@ export const createTagObjectRequest = (tag: string, sha: string) => {
     ...repoConfig.interviewRepo,
     tag,
     message: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-    object: sha,
+    object: sha, // commit sha
     type: "commit",
   });
 };
 
 /**
  * create tag
- * @param tagSha
+ * @param tag
+ * @param sha
  */
-export const createTagRequest = (tagSha: string) => {
-  return octokit.request(apiUrl.createTag, {
+export const createTagRequest = (tag: string, sha: string) => {
+  return octokit.request(apiUrl.createRef, {
     ...repoConfig.interviewRepo,
-    tag_sha: tagSha,
+    sha,
+    ref: `refs/tags/${tag}`,
   });
 };

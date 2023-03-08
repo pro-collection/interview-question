@@ -21,7 +21,7 @@ export const getPackageJson = () => octokit.request(apiUrl.getContent, {
 export const updatePackageJson = (content: string, extend: object) => octokit.request(apiUrl.updateContent, {
   ...repoConfig.interviewRepo,
   path,
-  message: `update: ${dayjs().format("YYYY-MM-DD HH:mm:ss")}`,
+  message: `update: ${dayjs().format("YYYY-MM-DDTHH:mm:ssZ")}`,
   committer: {
     name: "yanlele",
     email: "331393627@qq.com",
@@ -39,7 +39,7 @@ export const createTagObjectRequest = (tag: string, sha: string) => {
   return octokit.request(apiUrl.createTagObj, {
     ...repoConfig.interviewRepo,
     tag,
-    message: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+    message: dayjs().format("YYYY-MM-DDTHH:mm:ssZ"),
     object: sha, // commit sha
     type: "commit",
   });
@@ -57,3 +57,17 @@ export const createTagRequest = (tag: string, sha: string) => {
     ref: `refs/tags/${tag}`,
   });
 };
+
+/**
+ * 获取要求时间范围的 issue
+ */
+export const getDataIssue = () => octokit.request(apiUrl.getIssue, {
+  ...repoConfig.interviewRepo,
+  per_page: 100,
+  page: 1,
+  since: dayjs("2023-03-01").format("YYYY-MM-DDTHH:mm:ssZ"),
+});
+
+
+
+

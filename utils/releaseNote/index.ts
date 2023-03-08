@@ -1,8 +1,6 @@
 import { base64ToString, stringToBase64 } from "./helper";
 import { split, toNumber, join, replace, get } from "lodash";
 import { createTagObjectRequest, createTagRequest, getPackageJson, updatePackageJson } from "./request";
-import { octokit } from "../main";
-import repoConfig from "../../repoConfig";
 
 const main = async () => {
   // 获取 package.json
@@ -33,6 +31,11 @@ const main = async () => {
   // create tag
   await createTagRequest(newVersion, commitSHA);
   console.log('yanle - logger: 创建 tag 完成');
+
+  // 获取上一个 tag 的时间
+
+  // 获取最新的 issue
+
 };
 
 main();

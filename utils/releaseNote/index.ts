@@ -48,19 +48,10 @@ const main = async () => {
   const tag_name = newVersion;
   const releaseBody = getReleaseNoteBody(issueRes.data, date);
   const releaseName = `${date} 更新面试问题内容`;
-  const createReleaseRes = await createRelease({ tag_name, name: releaseName, body: releaseBody });
-  console.log("yanle - logger: 创建 Release 完成", createReleaseRes);
+  await createRelease({ tag_name, name: releaseName, body: releaseBody });
+  console.log("yanle - logger: 创建 Release 完成");
 };
 
 main();
-
-
-// 创建 tag
-
-// 获取当前发布的 issue
-
-// 整理格式
-
-// 发布 release note
 
 export {};

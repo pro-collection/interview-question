@@ -55,7 +55,7 @@ ${item.number}.${item.title}【${join(item.labels, "、")}】
     `;
   });
 
-  const reduceToString = (list: any[]) => reduce(itemTitle(sortBy(list, "number")), (prev, current) => prev + current);
+  const reduceToString = (list: any[]) => reduce(itemTitle(sortBy(list, "number")), (prev, current) => prev + current, '');
 
   // 需要将 list 写成一个 markdown
   const content =

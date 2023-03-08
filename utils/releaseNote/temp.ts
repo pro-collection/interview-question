@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { getDataIssue } from "./request";
-import { map } from "lodash";
+import { map, forEach, isEmpty, join, reduce, sortBy } from "lodash";
 
 
 // console.log("yanle - logger: dayjs().format(\"YYYY-MM-DDTHH:MM:SSZ\")", dayjs().format());
@@ -121,12 +121,65 @@ const tempRun = async () => {
       url: item.html_url,
       labels: map(item.labels, label => label.name),
       level: item.milestone.title,
-      body: "",
-      index: item.number,
+      number: item.number,
     };
   });
 
-  console.log('yanle - logger: list', list);
+  const base: any[] = [];
+  const inProgress: any[] = [];
+  const senior: any[] = [];
+  const master: any[] = [];
+
+  forEach(list, item => {
+    switch (item.level) {
+      case "初":
+        base.push(item);
+        break;
+      case "中":
+        inProgress.push(item);
+        break;
+      case "高":
+        senior.push(item);
+        break;
+      case "资深":
+        master.push(item);
+        break;
+      default:
+        break;
+    }
+  });
+
+  const itemTitle = (list: any[]) => map(list, item => {
+    return `
+${item.number}.${item.title}【${join(item.labels, "、")}】
+回答连接：${item.url}   
+    `;
+  });
+
+  const reduceToString = (list: any[]) => reduce(itemTitle(sortBy(list, "number")), (prev, current) => prev + current);
+
+  // 需要将 list 写成一个 markdown
+  const content =
+    `
+# 2023-03-08 更新内容
+
+${isEmpty(base) ? "" : "## 初级开发者相关问题"}
+${reduceToString(base)}
+
+
+${isEmpty(inProgress) ? "" : "## 中级开发者相关问题"}
+${reduceToString(inProgress)}
+
+
+${isEmpty(senior) ? "" : "## 高级开发者相关问题"}
+${reduceToString(senior)}
+
+
+${isEmpty(master) ? "" : "## 资深开发者相关问题"}
+${reduceToString(master)}
+`;
+
+  console.log("yanle - logger: content", content);
 };
 
 tempRun();

@@ -1,6 +1,6 @@
 import { base64ToString, stringToBase64 } from "./helper";
-import { split, toNumber, join, replace, get } from "lodash";
-import { createTagObjectRequest, createTagRequest, getPackageJson, updatePackageJson } from "./request";
+import { split, toNumber, join, replace, get, map } from "lodash";
+import { createTagObjectRequest, createTagRequest, getDataIssue, getPackageJson, updatePackageJson } from "./request";
 
 const main = async () => {
   // 获取 package.json
@@ -32,9 +32,21 @@ const main = async () => {
   await createTagRequest(newVersion, commitSHA);
   console.log('yanle - logger: 创建 tag 完成');
 
-  // 获取上一个 tag 的时间
+  // todo 获取上一个 tag 的时间
 
   // 获取最新的 issue
+  const issueRes = await getDataIssue();
+  const issueList = map(issueRes.data, item => {
+    return {
+      title: item.title,
+      url: item.html_url,
+      labels: map(item.labels, label => label.name),
+      level: item.milestone.title,
+      body: "",
+      index: item.number,
+    };
+  });
+
 
 };
 

@@ -179,7 +179,7 @@ ${isEmpty(master) ? "" : "## 资深开发者相关问题"}
 ${reduceToString(master)}
 `;
 
-  console.log("yanle - logger: content", content);
+  return content;
 };
 
 tempRun();

@@ -1,4 +1,4 @@
-import { base64ToString, stringToBase64 } from "./helper";
+import { base64ToString, getReleaseNoteBody, stringToBase64 } from "./helper";
 import { split, toNumber, join, replace, get, map } from "lodash";
 import { createTagObjectRequest, createTagRequest, getDataIssue, getPackageJson, updatePackageJson } from "./request";
 
@@ -30,12 +30,11 @@ const main = async () => {
 
   // create tag
   await createTagRequest(newVersion, commitSHA);
-  console.log('yanle - logger: 创建 tag 完成');
 
   // todo 获取上一个 tag 的时间
 
   // 获取最新的 issue
-  const issueRes = await getDataIssue();
+  const issueRes = await getDataIssue("2023.03.01");
   const issueList = map(issueRes.data, item => {
     return {
       title: item.title,
@@ -47,6 +46,9 @@ const main = async () => {
     };
   });
 
+  const tag_name = newVersion;
+  const releaseNoteBody = getReleaseNoteBody(issueRes.data, "2023.03.08");
+  const releaseNoteName = '';
 
 };
 

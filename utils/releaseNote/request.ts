@@ -61,11 +61,11 @@ export const createTagRequest = (tag: string, sha: string) => {
 /**
  * 获取要求时间范围的 issue
  */
-export const getDataIssue = () => octokit.request(apiUrl.getIssue, {
+export const getDataIssue = (preDate: string) => octokit.request(apiUrl.getIssue, {
   ...repoConfig.interviewRepo,
   per_page: 100,
   page: 1,
-  since: dayjs("2023-03-01").format("YYYY-MM-DDTHH:mm:ssZ"),
+  since: dayjs(preDate).format("YYYY-MM-DDTHH:mm:ssZ"),
 });
 
 

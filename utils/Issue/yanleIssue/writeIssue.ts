@@ -1,9 +1,9 @@
-import { octokit } from "../main";
 import { apiUrl } from "../../apiUrl";
 import { WriteIssueOptions } from "./interface";
 import * as fs from "fs";
 import { labels, MileStone } from "../consts";
 import repoConfig from "../../repoConfig";
+import { octokit } from "../../requestKit";
 
 const remote = [
   {

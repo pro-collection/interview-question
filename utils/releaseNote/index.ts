@@ -7,6 +7,7 @@ import repoConfig from "../../repoConfig";
 const main = async () => {
   // 获取 package.json
   const res = await getPackageJson();
+  console.log("yanle - logger: 获取 package json 完成");
   const sha = get(res, "data.sha");
   let packageString = base64ToString(get(res, "data.content"));
   const packageJson = JSON.parse(packageString);
@@ -22,13 +23,16 @@ const main = async () => {
 
   // 提交
   const updateRes = await updatePackageJson(stringToBase64(packageString), { sha });
+  console.log("yanle - logger: 更新 package.json version 完成");
   const commitSHA = get(updateRes, "data.commit.sha");
 
   // 创建 tag obj
   await createTagObjectRequest(newVersion, commitSHA);
+  console.log("yanle - logger: 创建 tag object 完成");
 
   // create tag
   await createTagRequest(newVersion, commitSHA);
+  console.log('yanle - logger: 创建 tag 完成');
 };
 
 main();

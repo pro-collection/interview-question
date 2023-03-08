@@ -1,7 +1,7 @@
-import { octokit } from "../main";
-import { apiUrl } from "../../apiUrl";
-import repoConfig from "../../repoConfig";
+import { apiUrl } from "../apiUrl";
+import repoConfig from "../repoConfig";
 import dayjs from "dayjs";
+import { octokit } from "../requestKit";
 
 const path = "package.json";
 
@@ -21,7 +21,7 @@ export const getPackageJson = () => octokit.request(apiUrl.getContent, {
 export const updatePackageJson = (content: string, extend: object) => octokit.request(apiUrl.updateContent, {
   ...repoConfig.interviewRepo,
   path,
-  message: "update package version with github api runner",
+  message: `update: ${dayjs().format("YYYY-MM-DD HH:mm:ss")}`,
   committer: {
     name: "yanlele",
     email: "331393627@qq.com",

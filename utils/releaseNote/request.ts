@@ -2,6 +2,7 @@ import { apiUrl } from "../apiUrl";
 import repoConfig from "../repoConfig";
 import dayjs from "dayjs";
 import { octokit } from "../requestKit";
+import { CreateReleaseParams } from "./interface";
 
 const path = "package.json";
 
@@ -68,6 +69,14 @@ export const getDataIssue = (preDate: string) => octokit.request(apiUrl.getIssue
   since: dayjs(preDate).format("YYYY-MM-DDTHH:mm:ssZ"),
 });
 
+/**
+ * createRelease
+ * @param params
+ */
+export const createRelease = (params: CreateReleaseParams) => octokit.request(apiUrl.createRelease, {
+  ...repoConfig.interviewRepo,
+  ...params,
+});
 
 
 

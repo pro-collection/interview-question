@@ -47,7 +47,7 @@ const main = async () => {
   const date = "2023.03.08";
   const tag_name = newVersion;
   const releaseBody = getReleaseNoteBody(issueRes.data, date);
-  const releaseName = `${date} 更新面试问题内容`;
+  const releaseName = `${date} 更新面试问题`;
   await createRelease({ tag_name, name: releaseName, body: releaseBody });
   console.log("yanle - logger: 创建 Release 完成");
 };

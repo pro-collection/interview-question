@@ -60,8 +60,6 @@ ${item.number}.${item.title}【${join(item.labels, "、")}】
   // 需要将 list 写成一个 markdown
   const content =
     `
-# ${date} 更新内容
-
 ${isEmpty(base) ? "" : "## 初级开发者相关问题"}
 ${reduceToString(base)}
 

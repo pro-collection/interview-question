@@ -7,10 +7,10 @@ import { octokit } from "../../requestKit";
 
 const remote = [
   {
-    title: "手写 async 函数？",
+    title: "手写防抖函数",
     labels: [labels.js],
-    milestone: MileStone.senior,
-    body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
+    milestone: MileStone.inProgress,
+    body: fs.readFileSync('/Users/yanle/code/self/node-index/books/专题知识库/05、基础知识点专题/other/06、实现函数防抖/README.md', { encoding: "utf8" }),
   },
 ];
 

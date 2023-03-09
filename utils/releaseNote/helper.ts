@@ -11,9 +11,8 @@ export function stringToBase64(str: string) {
 /**
  * 获取 创建 release note 的 文本 body
  * @param issueList
- * @param date
  */
-export const getReleaseNoteBody = (issueList: any[], date: string) => {
+export const getReleaseNoteBody = (issueList: any[]) => {
   const list = map(issueList, item => {
     return {
       title: item.title,

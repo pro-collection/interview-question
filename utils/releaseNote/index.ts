@@ -5,9 +5,15 @@ import {
   createTagObjectRequest,
   createTagRequest,
   getDataIssue,
-  getPackageJson,
+  getPackageJson, getTag,
   updatePackageJson,
 } from "./request";
+import dayjs from "dayjs";
+
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const main = async () => {
   // 获取 package.json
@@ -17,6 +23,18 @@ const main = async () => {
   let packageString = base64ToString(get(res, "data.content"));
   const packageJson = JSON.parse(packageString);
   const currentVersion = Reflect.get(packageJson, "version");
+
+  // 获取对应的 tag
+  const preTagRes = await getTag(currentVersion);
+
+  // 获取上一次时间戳
+  const createDate = get(preTagRes, "data.created_at", "");
+
+  // @ts-ignore
+  const currentTZ = dayjs.tz.guess();
+
+  // @ts-ignore
+  const preDate = dayjs.tz(createDate, currentTZ).format('YYYY.MM.DD');
 
   // package.json 版本自增
   const [a, b, c] = split(currentVersion, ".");
@@ -38,15 +56,15 @@ const main = async () => {
   // create tag
   await createTagRequest(newVersion, commitSHA);
 
-  // todo 获取上一个 tag 的时间
-
   // 获取最新的 issue
-  const issueRes = await getDataIssue("2023.03.01");
-  console.log('yanle - logger: 获取历史 issue 完成');
+  const issueRes = await getDataIssue(createDate);
+  console.log("yanle - logger: 获取历史 issue 完成");
 
-  const date = "2023.03.08";
+  const currentDate = dayjs().format("YYYY.MM.DD");
+
+  const date = preDate !== currentDate ? `${preDate} - ${currentDate}` : currentDate;
   const tag_name = newVersion;
-  const releaseBody = getReleaseNoteBody(issueRes.data, date);
+  const releaseBody = getReleaseNoteBody(issueRes.data);
   const releaseName = `${date} 更新面试问题`;
   await createRelease({ tag_name, name: releaseName, body: releaseBody });
   console.log("yanle - logger: 创建 Release 完成");

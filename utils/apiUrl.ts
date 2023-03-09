@@ -11,5 +11,11 @@ export const apiUrl = {
 
   // 创建 release
   createRelease: "POST /repos/{owner}/{repo}/releases",
+
+  // 获取一个 release
+  getRelease: "GET /repos/{owner}/{repo}/releases/{release_id}",
+
+  // 获取一个 tag
+  getTag: "GET /repos/{owner}/{repo}/releases/tags/{tag}",
 };
 

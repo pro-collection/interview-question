@@ -3,6 +3,9 @@ import repoConfig from "../repoConfig";
 import dayjs from "dayjs";
 import { octokit } from "../requestKit";
 import { CreateReleaseParams } from "./interface";
+import { get } from "lodash";
+
+
 
 const path = "package.json";
 
@@ -79,4 +82,25 @@ export const createRelease = (params: CreateReleaseParams) => octokit.request(ap
 });
 
 
-
+/**
+ * 获取一个 tag
+ */
+export const getTag = (tag: string) => octokit.request(apiUrl.getTag, {
+  ...repoConfig.interviewRepo,
+  tag,
+});
+//
+// getTag("0.0.13").then((res: any) => {
+//   // console.log('yanle - logger: res', res);
+//   const createDate = get(res, "data.created_at", "");
+//   console.log('yanle - logger: createDate', createDate);
+//   let preDate = dayjs(createDate).format("YYYY.MM.DD");
+//   console.log("yanle - logger: preDate", preDate);
+//
+//   // @ts-ignore
+//   const currentTZ = dayjs.tz.guess();
+//
+//   // @ts-ignore
+//   preDate = dayjs.tz(createDate, currentTZ).format('YYYY.MM.DD');
+//   console.log('yanle - logger: next preDate', preDate);
+// });

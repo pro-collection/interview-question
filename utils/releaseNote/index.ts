@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -34,7 +35,7 @@ const main = async () => {
   const currentTZ = dayjs.tz.guess();
 
   // @ts-ignore
-  const preDate = dayjs.tz(createDate, currentTZ).format('YYYY.MM.DD');
+  const preDate = dayjs.tz(createDate, currentTZ).format("YYYY.MM.DD");
 
   // package.json 版本自增
   const [a, b, c] = split(currentVersion, ".");
@@ -65,7 +66,13 @@ const main = async () => {
   const date = preDate !== currentDate ? `${preDate} - ${currentDate}` : currentDate;
   const tag_name = newVersion;
   const releaseBody = getReleaseNoteBody(issueRes.data);
-  const releaseName = `${date} 更新面试问题`;
+
+  // 获取一共有多少个题目
+  const issueLength = get(issueRes.data, "length");
+
+  const issueLenDesc = issueLength ? `（${issueLength}道题）` : "";
+
+  const releaseName = `${date} 更新收集面试问题${issueLenDesc}`;
   await createRelease({ tag_name, name: releaseName, body: releaseBody });
   console.log("yanle - logger: 创建 Release 完成");
 };

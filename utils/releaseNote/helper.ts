@@ -50,7 +50,7 @@ export const getReleaseNoteBody = (issueList: any[]) => {
   const itemTitle = (list: any[]) => map(list, item => {
     return `
 ${item.number}.${item.title}【${join(item.labels, "、")}】     
-回答链接：${item.url}   
+回答链接：[${item.url}](${item.url})           
     `;
   });
 

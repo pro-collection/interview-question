@@ -23,6 +23,7 @@
   "dependencies": {
     "chatgpt": "^5.0.6",
     "dayjs": "^1.11.7",
+    "html-to-md": "^0.8.3",
     "lodash": "^4.17.21",
     "md-to-pdf": "^5.2.1",
     "octokit": "^2.0.14",

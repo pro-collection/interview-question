@@ -5,6 +5,7 @@ specifiers:
   '@types/node': ^18.14.6
   chatgpt: ^5.0.6
   dayjs: ^1.11.7
+  html-to-md: ^0.8.3
   lodash: ^4.17.21
   md-to-pdf: ^5.2.1
   octokit: ^2.0.14
@@ -13,6 +14,7 @@ specifiers:
 dependencies:
   chatgpt: 5.0.6
   dayjs: 1.11.7
+  html-to-md: 0.8.3
   lodash: 4.17.21
   md-to-pdf: 5.2.1
   octokit: 2.0.14
@@ -991,6 +993,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       lru-cache: 6.0.0
+    dev: false
+
+  /html-to-md/0.8.3:
+    resolution: {integrity: sha512-Va+bB1YOdD6vMRDue9/l7YxbERgwOgsos4erUDRfRN6YE0B2Wbbw8uAj6xZJk9A9vrjVy7mG/WLlhDw6RXfgsA==}
     dev: false
 
   /https-proxy-agent/5.0.1:

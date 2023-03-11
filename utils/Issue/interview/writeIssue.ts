@@ -7,11 +7,11 @@ import { octokit } from "../../requestKit";
 
 const remote = [
   {
-    title: "从哪些方面可以对网站性能优化？",
-    labels: [labels.chrome],
-    milestone: MileStone.senior,
+    title: "如何做一个前端项目工程的自动化部署， 有哪些规范和流程设计？",
+    labels: [labels.js],
+    milestone: MileStone.master,
     body: fs.readFileSync('./demo.md', { encoding: "utf8" }),
-    // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/专题知识库/05、基础知识点专题/other/15、node内存优化/README.md', { encoding: "utf8" }),
+    // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/专题知识库/02、ECMAScript最新语法/10、Iterator 和 for...of 循环/README.md', { encoding: "utf8" }),
   },
 ];
 

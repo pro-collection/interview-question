@@ -20,5 +20,9 @@ export const apiUrl = {
 
   // 获取一个 tag
   getTag: "GET /repos/{owner}/{repo}/releases/tags/{tag}",
+
+  // 更新一个 tag
+  // api https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#update-an-issue
+  updateTag: "PATCH /repos/{owner}/{repo}/issues/{issue_number}",
 };
 

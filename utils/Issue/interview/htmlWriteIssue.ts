@@ -8,14 +8,17 @@ import repoConfig from "../../repoConfig";
 
 const htmlWriteIssue = async () => {
   const getHtml = fs.readFileSync("./demo.html", { encoding: "utf-8" });
-  const markdown = h2m(getHtml);
+  let markdown = h2m(getHtml);
 
   // 写入文件
+  //
+  if (/javascriptCopy code/gi.test(markdown)) markdown = markdown.replace(/javascriptCopy code/gi, "");
   if (markdown) fs.writeFileSync("./demo.md", markdown, { encoding: "utf-8" });
 
+  // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
   const remote = {
-    title: "重绘与重排的区别？",
-    labels: [labels.chrome],
+    title: "express middleware 工作原理是什么？？",
+    labels: [labels.node],
     milestone: MileStone.inProgress,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   };

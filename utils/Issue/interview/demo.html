@@ -1,1 +1,36 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>浏览器重绘（Repaint）和重排（Reflow）是Web页面中常见的两种渲染方式，它们的区别如下：</p><ol><li><p>重排（Reflow）：当DOM元素的结构或者布局发生变化时，浏览器需要重新计算元素的几何属性（比如位置、大小等），然后重新构建渲染树，这个过程叫做重排。重排的代价比较高，因为需要浏览器重新计算和布局，会消耗较多的CPU资源和时间。</p></li><li><p>重绘（Repaint）：当元素的样式（如背景颜色、字体颜色、边框颜色等）发生变化时，浏览器会重新绘制元素的样式，这个过程叫做重绘。重绘的代价比较低，因为不需要重新计算元素的位置和大小，只需要重新绘制元素的样式即可。</p></li></ol><p>因此，重排会触发重绘，但是重绘不一定会触发重排。在Web开发中，我们应该尽量避免频繁的重排和重绘，以提高页面的性能。一些常见的优化方式包括：减少DOM操作、使用CSS3动画代替JavaScript动画、避免使用table布局等。</p></div>
+
+<h2>express middleware 工作原理是什么？</h2>
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>Express middleware 的工作原理是通过拦截 HTTP 请求，对请求进行处理，然后将请求传递给下一个中间件或应用程序的路由处理。在 Express 中，中间件可以是一个或多个函数，每个函数都可以对请求进行操作或响应，从而实现对请求的处理和过滤。</p><p>当 Express 应用程序接收到一个 HTTP 请求时，请求将首先被传递给第一个注册的中间件函数。这个中间件函数可以对请求进行操作，例如修改请求的头信息、检查请求是否包含有效的身份验证令牌等等。当这个中间件函数完成操作后，它可以选择将请求传递给下一个中间件函数，或者直接将响应返回给客户端。</p><p>如果中间件函数选择将请求传递给下一个中间件函数，它可以调用 next() 函数来将控制权传递给下一个中间件。这个过程可以一直持续到所有中间件函数都被执行完毕，最后将请求传递给应用程序的路由处理函数。</p><p>通过使用中间件，开发人员可以将应用程序的功能模块化，从而实现更好的代码组织和可维护性。同时，中间件还可以实现各种功能，例如身份验证、日志记录、错误处理等等，从而为应用程序提供更丰富的功能和更好的用户体验。</p></div>
+
+<h2>它的设计模式是啥？写一个简单的示例呢</h2>
+
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>Express middleware 的设计模式是基于责任链模式。在责任链模式中，每个对象都有机会处理请求，并将其传递给下一个对象，直到请求被完全处理为止。在 Express 中，每个中间件函数都有机会对请求进行处理，并可以选择将请求传递给下一个中间件函数或应用程序的路由处理函数。</p><p>以下是一个简单的示例，演示如何使用 Express middleware 实现身份验证：</p><pre><div class="bg-black mb-4 rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans"><span class="">javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>();
+
+<span class="hljs-comment">// 定义一个中间件函数，用于验证用户身份</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">authenticate</span>(<span class="hljs-params">req, res, next</span>) {
+  <span class="hljs-keyword">const</span> token = req.<span class="hljs-property">headers</span>.<span class="hljs-property">authorization</span>;
+  <span class="hljs-keyword">if</span> (token === <span class="hljs-string">'secret-token'</span>) {
+    <span class="hljs-comment">// 如果令牌有效，则将控制权传递给下一个中间件函数</span>
+    <span class="hljs-title function_">next</span>();
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 否则，返回 401 错误</span>
+    res.<span class="hljs-title function_">status</span>(<span class="hljs-number">401</span>).<span class="hljs-title function_">send</span>(<span class="hljs-string">'Unauthorized'</span>);
+  }
+}
+
+<span class="hljs-comment">// 注册中间件函数，用于验证用户身份</span>
+app.<span class="hljs-title function_">use</span>(authenticate);
+
+<span class="hljs-comment">// 定义一个路由处理函数，用于返回受保护的资源</span>
+app.<span class="hljs-title function_">get</span>(<span class="hljs-string">'/protected'</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+  res.<span class="hljs-title function_">send</span>(<span class="hljs-string">'Protected resource'</span>);
+});
+
+<span class="hljs-comment">// 启动应用程序</span>
+app.<span class="hljs-title function_">listen</span>(<span class="hljs-number">3000</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'Server is running on port 3000'</span>);
+});
+</code></div></div></pre><p>在上面的示例中，我们定义了一个名为 authenticate 的中间件函数，它用于验证用户的身份。在这个函数中，我们检查请求头中是否包含有效的身份验证令牌。如果令牌有效，则将控制权传递给下一个中间件函数或路由处理函数。否则，返回 401 错误。</p><p>然后，我们通过调用 app.use() 方法来注册这个中间件函数，以便在每个请求中都进行身份验证。最后，我们定义一个名为 /protected 的路由处理函数，它表示受保护的资源。只有在身份验证通过后，才能访问这个路由处理函数。</p><p>通过这个简单的示例，我们可以看到如何使用 Express middleware 实现基本的身份验证功能。中间件函数充当责任链中的一个环节，通过对请求进行处理和过滤，为应用程序提供更好的安全性和用户体验。</p></div>
+
+

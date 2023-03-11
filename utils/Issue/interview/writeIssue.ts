@@ -7,11 +7,11 @@ import { octokit } from "../../requestKit";
 
 const remote = [
   {
-    title: "重绘与重排的区别？",
-    labels: [labels.chrome],
-    milestone: MileStone.inProgress,
+    title: "JS 内存泄露问题该如何排查？",
+    labels: [labels.js],
+    milestone: MileStone.master,
     body: fs.readFileSync('./demo.md', { encoding: "utf8" }),
-    // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/专题知识库/05、基础知识点专题/other/09、Promise原理与实现/README.md', { encoding: "utf8" }),
+    // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/专题知识库/05、基础知识点专题/other/11、双向绑定核心代码/README.md', { encoding: "utf8" }),
   },
 ];
 

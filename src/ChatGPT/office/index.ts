@@ -1,7 +1,7 @@
 // 使用官方 api
 
+const config = require("@utils/configToken.json");
 const { Configuration, OpenAIApi } = require("openai");
-const config = require("../configToken.json");
 
 const configuration = new Configuration({
   apiKey: config.openai_api_key,

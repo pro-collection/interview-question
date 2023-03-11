@@ -1,6 +1,6 @@
 // To use ESM in CommonJS, you can use a dynamic import
 const importDynamic = new Function("modulePath", "return import(modulePath)");
-const config = require("../../../utils/configToken.json");
+const config = require("@utils/configToken.json");
 
 const main = async () => {
   const { ChatGPTUnofficialProxyAPI } = await importDynamic("chatgpt");

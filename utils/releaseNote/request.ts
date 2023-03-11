@@ -25,7 +25,7 @@ export const getPackageJson = () => octokit.request(apiUrl.getContent, {
 export const updatePackageJson = (content: string, extend: object) => octokit.request(apiUrl.updateContent, {
   ...repoConfig.interviewRepo,
   path,
-  message: `update: ${dayjs().format("YYYY-MM-DDTHH:mm:ssZ")}`,
+  message: `update - package.json: ${dayjs().format("YYYY-MM-DDTHH:mm:ssZ")}`,
   committer: {
     name: "yanlele",
     email: "331393627@qq.com",

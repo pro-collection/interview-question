@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { get } from "lodash";
 import { base64ToString } from "../releaseNote/helper";
+import { updateContentFile } from "./request";
 
 /**
  * 读取最近的文档 然后写入本地 markdown
@@ -19,8 +20,17 @@ const main = async () => {
 
   const bookPath = path.resolve(__dirname, "../../books");
 
+  const writePath = `${bookPath}/${preTagRes.data.tag_name}_${preTagRes.data.name}.md`;
 
-  fs.writeFileSync(`${bookPath}/${preTagRes.data.tag_name}_${preTagRes.data.name}.md`, preTagRes.data.body, { encoding: "utf-8" });
+  // 文件写入本地
+  fs.writeFileSync(writePath, preTagRes.data.body, { encoding: "utf-8" });
+
+  const base64File = fs.readFileSync(writePath, { encoding: "base64" });
+  console.log("yanle - logger: fs.readFileSync(writePath)");
+
+  const updateFileRes = await updateContentFile(writePath, base64File);
+
+  console.log("yanle - logger: updateFile success", updateFileRes.status);
 };
 
 main();

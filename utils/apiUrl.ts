@@ -1,7 +1,10 @@
 export const apiUrl = {
   getIssue: "GET /repos/{owner}/{repo}/issues",
   writeIssue: "POST /repos/{owner}/{repo}/issues",
+
   getContent: "GET /repos/{owner}/{repo}/contents/{path}",
+
+  // api 文档 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#create-or-update-file-contents
   updateContent: "PUT /repos/{owner}/{repo}/contents/{path}",
 
   createTagObj: "POST /repos/{owner}/{repo}/git/tags",

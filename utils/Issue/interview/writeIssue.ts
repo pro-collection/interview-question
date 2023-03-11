@@ -7,10 +7,11 @@ import { octokit } from "../../requestKit";
 
 const remote = [
   {
-    title: "process.nextTick, setTimeout 以及 setImmediate 三者的执行顺序？",
-    labels: [labels.js],
+    title: "重绘与重排的区别？",
+    labels: [labels.chrome],
     milestone: MileStone.inProgress,
     body: fs.readFileSync('./demo.md', { encoding: "utf8" }),
+    // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/专题知识库/05、基础知识点专题/other/09、Promise原理与实现/README.md', { encoding: "utf8" }),
   },
 ];
 

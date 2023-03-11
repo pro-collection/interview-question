@@ -11,4 +11,5 @@ export const labels = {
   ts: "TypeScript",
   node: "Nodejs",
   css: "CSS",
+  chrome: "浏览器",
 };

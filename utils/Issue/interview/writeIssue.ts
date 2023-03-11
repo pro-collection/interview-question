@@ -7,11 +7,11 @@ import { octokit } from "../../requestKit";
 
 const remote = [
   {
-    title: "JS 内存泄露问题该如何排查？",
-    labels: [labels.js],
-    milestone: MileStone.master,
+    title: "从哪些方面可以对网站性能优化？",
+    labels: [labels.chrome],
+    milestone: MileStone.senior,
     body: fs.readFileSync('./demo.md', { encoding: "utf8" }),
-    // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/专题知识库/05、基础知识点专题/other/11、双向绑定核心代码/README.md', { encoding: "utf8" }),
+    // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/专题知识库/05、基础知识点专题/other/15、node内存优化/README.md', { encoding: "utf8" }),
   },
 ];
 

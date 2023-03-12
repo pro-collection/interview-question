@@ -1,8 +1,8 @@
-import { apiUrl } from "../../apiUrl";
 import { find, map } from "lodash";
-import repoConfig from "../../repoConfig";
-import { octokit } from "../../requestKit";
 import dayjs from "dayjs";
+import { octokit } from "@utils/requestKit";
+import { apiUrl } from "@utils/apiUrl";
+import repoConfig from "@utils/repoConfig";
 // import * as fs from "fs";
 // import * as path from "path";
 

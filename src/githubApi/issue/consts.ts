@@ -12,5 +12,5 @@ export const labels = {
   node: "Nodejs",
   css: "CSS",
   chrome: "浏览器",
-  frameWork: "web 框架",
+  frameWork: "web框架",
 };

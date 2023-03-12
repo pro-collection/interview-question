@@ -26,3 +26,10 @@ export const apiUrl = {
   updateTag: "PATCH /repos/{owner}/{repo}/issues/{issue_number}",
 };
 
+/**
+ * api 文档： https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoStargazers?ex=no
+ */
+export const giteeApiUrl = {
+
+};
+

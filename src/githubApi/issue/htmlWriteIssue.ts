@@ -1,11 +1,11 @@
-import { labels, MileStone } from "../consts";
 import fs from "fs";
 import h2m from "html-to-md";
 import { flow } from "lodash";
 import { WriteIssueOptions } from "./interface";
-import { octokit } from "../../requestKit";
-import { apiUrl } from "../../apiUrl";
-import repoConfig from "../../repoConfig";
+import { octokit } from "@utils/requestKit";
+import { apiUrl } from "@utils/apiUrl";
+import repoConfig from "@utils/repoConfig";
+import { labels, MileStone } from "@src/githubApi/issue/consts";
 
 const htmlWriteIssue = async () => {
   const getHtml = fs.readFileSync("./demo.html", { encoding: "utf-8" });
@@ -22,9 +22,9 @@ const htmlWriteIssue = async () => {
 
   // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
   const remote = {
-    title: "react和vue的区别？",
-    labels: [labels.frameWork],
-    milestone: MileStone.master,
+    title: "实现：setObjectValue(obj: object, keys: string[], value: any) 方法， 支持安全设置对象的值",
+    labels: [labels.js],
+    milestone: MileStone.inProgress,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   };
 

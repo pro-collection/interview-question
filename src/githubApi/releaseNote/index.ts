@@ -1,5 +1,5 @@
 import { base64ToString, getReleaseNoteBody, stringToBase64 } from "./helper";
-import { split, toNumber, join, replace, get, map } from "lodash";
+import { split, toNumber, join, replace, get } from "lodash";
 import {
   createRelease,
   createTagObjectRequest,

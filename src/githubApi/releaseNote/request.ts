@@ -1,9 +1,8 @@
-import { apiUrl } from "../apiUrl";
-import repoConfig from "../repoConfig";
 import dayjs from "dayjs";
-import { octokit } from "../requestKit";
 import { CreateReleaseParams } from "./interface";
-import { get } from "lodash";
+import { apiUrl } from "@utils/apiUrl";
+import { octokit } from "@utils/requestKit";
+import repoConfig from "@utils/repoConfig";
 
 
 

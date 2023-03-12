@@ -18,7 +18,7 @@ const main = async () => {
   // 获取对应的 tag
   const preTagRes = await getTag(currentVersion);
 
-  const bookPath = path.resolve(__dirname, "../../books");
+  const bookPath = path.resolve(__dirname, "../../../books");
 
   const writePath = `${bookPath}/${preTagRes.data.tag_name}_${preTagRes.data.name}.md`;
 

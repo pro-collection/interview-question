@@ -1,7 +1,7 @@
-import { octokit } from "../requestKit";
-import { apiUrl } from "../apiUrl";
-import repoConfig from "../repoConfig";
 import dayjs from "dayjs";
+import { octokit } from "@utils/requestKit";
+import { apiUrl } from "@utils/apiUrl";
+import repoConfig from "@utils/repoConfig";
 
 /**
  * @param path 更新文件的 path
@@ -17,5 +17,5 @@ export const updateContentFile = (path: string, content: string) => {
       email: "331393627@qq.com",
     },
     content,
-  })
-}
+  });
+};

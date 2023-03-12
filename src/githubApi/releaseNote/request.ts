@@ -4,8 +4,6 @@ import { apiUrl } from "@utils/apiUrl";
 import { octokit } from "@utils/requestKit";
 import repoConfig from "@utils/repoConfig";
 
-
-
 const path = "package.json";
 
 /**

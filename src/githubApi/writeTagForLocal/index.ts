@@ -1,9 +1,9 @@
-import { getPackageJson, getTag } from "../releaseNote/request";
 import * as fs from "fs";
 import * as path from "path";
 import { get } from "lodash";
-import { base64ToString } from "../releaseNote/helper";
 import { updateContentFile } from "./request";
+import { base64ToString } from "@utils/helper";
+import { getPackageJson, getTag } from "@src/githubApi/releaseNote/request";
 
 /**
  * 读取最近的文档 然后写入本地 markdown

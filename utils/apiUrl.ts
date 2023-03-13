@@ -30,6 +30,8 @@ export const apiUrl = {
  * api 文档： https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoStargazers?ex=no
  */
 export const giteeApiUrl = {
-
+  // post 请求
+  // 文档 https://gitee.com/api/v5/swagger#/postV5ReposOwnerIssues
+  createIssue: (owner: string) => `https://gitee.com/api/v5/repos/${owner}/issues`,
 };
 

@@ -1,3 +1,5 @@
+const { gitee_api_token } = require("./configToken.json");
+
 export default {
   "interviewRepo": {
     "owner": "pro-collection",
@@ -21,9 +23,10 @@ export default {
     },
   },
   gitee: {
+    access_token: gitee_api_token,
     interviewRepo: {
       "owner": "yanleweb",
       "repo": "interview-question",
-    }
+    },
   },
 };

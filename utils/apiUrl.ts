@@ -33,5 +33,8 @@ export const giteeApiUrl = {
   // post 请求
   // 文档 https://gitee.com/api/v5/swagger#/postV5ReposOwnerIssues
   createIssue: (owner: string) => `https://gitee.com/api/v5/repos/${owner}/issues`,
+
+  // 删除某个 issue
+  deleteIssue: (number: string) => `https://gitee.com/yanleweb/interview-question/issues/${number}`,
 };
 

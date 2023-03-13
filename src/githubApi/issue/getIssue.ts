@@ -38,7 +38,7 @@ const main = async () => {
   // console.log("yanle - logger: content", content);
 
   for (const item of titleList) {
-    console.log('yanle - logger: 开始写入', item.title);
+    console.log('yanle - logger: 开始写入 - ', item.title);
     await giteeWriteIssue(item);
   }
 };

@@ -82,10 +82,10 @@ ${mapTitle(master)}
 
   // 需要将 list 写成一个 markdown
   const content =
-    `> ${releaseName}
-获取更多面试问题可以访问
-github 地址: https://github.com/pro-collection/interview-question/issues
-gitee 地址: https://gitee.com/yanleweb/interview-question/issues
+    `> ${releaseName}           
+获取更多面试问题可以访问            
+github 地址: https://github.com/pro-collection/interview-question/issues            
+gitee 地址: https://gitee.com/yanleweb/interview-question/issues          
 
 
 ${isBody ? index : ""}

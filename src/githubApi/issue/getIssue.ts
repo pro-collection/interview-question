@@ -3,8 +3,9 @@ import dayjs from "dayjs";
 import { octokit } from "@utils/requestKit";
 import { apiUrl } from "@utils/apiUrl";
 import repoConfig from "@utils/repoConfig";
-import { mileStone } from "@src/giteeApi/issue/consts";
+import { giteeMileStone } from "@src/giteeApi/issue/consts";
 import { WriteRequestOptions } from "@src/giteeApi/issue/interface";
+
 import { giteeWriteIssue } from "@src/giteeApi/issue/writeIssue";
 // import * as fs from "fs";
 // import * as path from "path";
@@ -19,7 +20,7 @@ const main = async () => {
   const res = await req();
 
   const titleList = map(sortBy(res.data, sortItem => sortItem.number), item => {
-    const milestoneNumber = get(mileStone, item.milestone?.number);
+    const milestoneNumber = get(giteeMileStone, item.milestone?.number);
     const labels = map(item.labels, label => label.name).join(",");
     const returnData: WriteRequestOptions = {
       title: item.title,
@@ -33,7 +34,7 @@ const main = async () => {
     return returnData;
   });
 
-  console.log('yanle - logger: titleList', titleList);
+  console.log("yanle - logger: titleList", titleList);
 
   // console.log("yanle - logger: title", titleList);
   //

@@ -1,7 +1,7 @@
 import { giteeApi } from "@utils/requestKit";
 import { giteeApiUrl } from "@utils/apiUrl";
 import repoConfig from "@utils/repoConfig";
-import { mileStone } from "@src/giteeApi/issue/consts";
+import { giteeMileStone } from "@src/giteeApi/issue/consts";
 import { labels, MileStone } from "@src/githubApi/issue/consts";
 import { WriteRequestOptions } from "@src/giteeApi/issue/interface";
 
@@ -18,13 +18,13 @@ export const writeRequest = (options: WriteRequestOptions) => giteeApi.post(gite
 // const params = {
 //   title: "测试一下",
 //   body: `## 一下哈`,
-//   milestone: mileStone[MileStone.base],
+//   milestone: giteeMileStone[MileStone.base],
 //   labels: [labels.js].join(","),
 // };
 
 export const giteeWriteIssue = async (options: WriteRequestOptions) => {
   const res = await writeRequest(options);
-  console.log(`yanle - logger: 提交 issue - ${options.title} `, res.status);
+  console.log(`yanle - logger: 写入 gitee - ${options.title} `, res.status);
 };
 
 // giteeWriteIssue(params);

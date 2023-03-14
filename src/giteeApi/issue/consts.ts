@@ -1,6 +1,6 @@
 import { MileStone } from "@src/githubApi/issue/consts";
 
-export const mileStone = {
+export const giteeMileStone = {
   [MileStone.base]: 184143, // 初级
   [MileStone.inProgress]: 184144, // 中级
   [MileStone.senior]: 184145, // 高级别

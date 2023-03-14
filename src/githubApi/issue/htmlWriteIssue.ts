@@ -6,6 +6,8 @@ import { octokit } from "@utils/requestKit";
 import { apiUrl } from "@utils/apiUrl";
 import repoConfig from "@utils/repoConfig";
 import { labels, MileStone } from "@src/githubApi/issue/consts";
+import { giteeWriteIssue } from "@src/giteeApi/issue/writeIssue";
+import { giteeMileStone } from "@src/giteeApi/issue/consts";
 
 const htmlWriteIssue = async () => {
   const getHtml = fs.readFileSync("./demo.html", { encoding: "utf-8" });
@@ -14,17 +16,17 @@ const htmlWriteIssue = async () => {
   // 写入文件
   markdown = flow(
     value => value.replace(/javascriptCopy code/gi, ""),
-    value => value.replace(/\\. /gi, '. '),
-    value => value.replace(/\\- /gi, '- '),
+    value => value.replace(/\\. /gi, ". "),
+    value => value.replace(/\\- /gi, "- "),
   )(markdown);
   // if (/javascriptCopy code/gi.test(markdown)) markdown = markdown.replace(/javascriptCopy code/gi, "");
   if (markdown) fs.writeFileSync("./demo.md", markdown, { encoding: "utf-8" });
 
   // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
   const remote = {
-    title: "实现：setObjectValue(obj: object, keys: string[], value: any) 方法， 支持安全设置对象的值",
+    title: "map 和 weakMap 的区别 ?",
     labels: [labels.js],
-    milestone: MileStone.inProgress,
+    milestone: MileStone.senior,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   };
 
@@ -33,8 +35,15 @@ const htmlWriteIssue = async () => {
     ...repoConfig.interviewRepo,
   });
 
-  write(remote).then((res: any) => {
-    console.log("yanle - logger: html 写入文件成功", res.status);
+  const githubRes = await write(remote);
+  console.log(`yanle - logger: 写入 github - ${remote.title}`, githubRes.status);
+
+  // 写入 gitee
+  await giteeWriteIssue({
+    title: remote.title,
+    body: remote.body,
+    labels: remote.labels.join(","),
+    milestone: giteeMileStone[remote.milestone],
   });
 };
 

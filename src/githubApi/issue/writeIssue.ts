@@ -13,18 +13,18 @@ const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue,
 });
 
 const remote = {
-  title: "一个 tcp 连接能发几个 http 请求？",
-  labels: [labels.network],
+  title: "箭头函数和普通函数的区别？",
+  labels: [labels.js],
   milestone: MileStone.inProgress,
   body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
-  // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/专题知识库/02、ECMAScript最新语法/10、Iterator 和 for...of 循环/README.md', { encoding: "utf8" }),
+  // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };
 
 
 const main = async () => {
   // 写入 github
   const githubRes = await write(remote);
-  console.log("yanle - logger: 写入 github - ", githubRes.status);
+  console.log(`yanle - logger: 写入 github - ${remote.title}`, githubRes.status);
 
   // 写入 gitee
   await giteeWriteIssue({

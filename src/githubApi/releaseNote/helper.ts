@@ -49,8 +49,10 @@ ${item.body}
     const questionLink = `回答链接：${item.url}           `;
     const body = isBody ? bodyContent : questionLink;
 
+    const simpleTitle = `${item.number}.${item.title}【${join(item.labels, "、")}】`;
+    const title = isBody ? `## ${simpleTitle}` : simpleTitle;
     return `
-${item.number}.${item.title}【${join(item.labels, "、")}】     
+${title}
 ${body}           
 `;
   });
@@ -69,15 +71,15 @@ ${isEmpty(base) ? "" : `# 初级开发者相关问题【共计 ${base.length} �
 ${reduceToString(base)}
 
 
-${isEmpty(inProgress) ? "" : `## 中级开发者相关问题【共计 ${inProgress.length} 道题】`}
+${isEmpty(inProgress) ? "" : `# 中级开发者相关问题【共计 ${inProgress.length} 道题】`}
 ${reduceToString(inProgress)}
 
 
-${isEmpty(senior) ? "" : `## 高级开发者相关问题【共计 ${senior.length} 道题】`}
+${isEmpty(senior) ? "" : `# 高级开发者相关问题【共计 ${senior.length} 道题】`}
 ${reduceToString(senior)}
 
 
-${isEmpty(master) ? "" : `## 资深开发者相关问题【共计 ${master.length} 道题】`}
+${isEmpty(master) ? "" : `# 资深开发者相关问题【共计 ${master.length} 道题】`}
 ${reduceToString(master)}
 `;
 

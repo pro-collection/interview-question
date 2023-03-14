@@ -1,12 +1,9 @@
 import { giteeApi } from "@utils/requestKit";
 import { giteeApiUrl } from "@utils/apiUrl";
 import repoConfig from "@utils/repoConfig";
-import { giteeMileStone } from "@src/giteeApi/issue/consts";
+import { access_token, giteeMileStone, owner, repo } from "@src/giteeApi/issue/consts";
 import { labels, MileStone } from "@src/githubApi/issue/consts";
 import { WriteRequestOptions } from "@src/giteeApi/issue/interface";
-
-const { owner, repo } = repoConfig.gitee.interviewRepo;
-const { access_token } = repoConfig.gitee;
 
 export const writeRequest = (options: WriteRequestOptions) => giteeApi.post(giteeApiUrl.createIssue(owner), {
   access_token,

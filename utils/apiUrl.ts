@@ -34,7 +34,8 @@ export const giteeApiUrl = {
   // 文档 https://gitee.com/api/v5/swagger#/postV5ReposOwnerIssues
   createIssue: (owner: string) => `https://gitee.com/api/v5/repos/${owner}/issues`,
 
-  // 删除某个 issue
-  deleteIssue: (number: string) => `https://gitee.com/yanleweb/interview-question/issues/${number}`,
+  // get 请求
+  // https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoIssues
+  getIssue: (owner: string, repo: string) => `https://gitee.com/api/v5/repos/${owner}/${repo}/issues`,
 };
 

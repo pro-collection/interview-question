@@ -46,7 +46,7 @@ const main = async () => {
   // 替换旧 version
   packageString = replace(packageString, `"version": "${currentVersion}"`, `"version": "${newVersion}"`);
 
-  // 提交
+  // 提交更新版本
   const updateRes = await updatePackageJson(stringToBase64(packageString), { sha });
   console.log("yanle - logger: 更新 package.json version 完成");
   const commitSHA = get(updateRes, "data.commit.sha");
@@ -66,14 +66,14 @@ const main = async () => {
 
   const date = preDate !== currentDate ? `${preDate} - ${currentDate}` : currentDate;
   const tag_name = newVersion;
-  const releaseBody = getReleaseNoteBody(issueRes.data);
 
   // 获取一共有多少个题目
   const issueLength = get(issueRes.data, "length");
 
   const issueLenDesc = issueLength ? `（${issueLength}道题）` : "";
-
   const releaseName = `${date} 更新收集面试问题${issueLenDesc}`;
+  const releaseBody = getReleaseNoteBody(issueRes.data, releaseName);
+
   await createRelease({ tag_name, name: releaseName, body: releaseBody });
   console.log("yanle - logger: 创建 Release 完成");
 };

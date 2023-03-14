@@ -20,7 +20,7 @@ const main = async () => {
 
   const bookPath = path.resolve(__dirname, "../../../books");
 
-  const writePath = `${bookPath}/${preTagRes.data.tag_name}_${preTagRes.data.name}.md`;
+  const writePath = `${bookPath}/${preTagRes.data.tag_name}.md`;
 
   // 文件写入本地
   fs.writeFileSync(writePath, preTagRes.data.body, { encoding: "utf-8" });

@@ -43,7 +43,7 @@ export const getReleaseContent = (issueList: any[], releaseName: string, isBody:
   });
 
   const itemTitle = (list: any[]) => map(list, item => {
-    const bodyContent = `**回答:**      
+    const bodyContent = `      
 ${item.body}
 `;
     const questionLink = `回答链接：${item.url}           `;

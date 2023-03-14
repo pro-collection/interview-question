@@ -16,6 +16,7 @@ import { base64ToString, stringToBase64 } from "@utils/helper";
 import path from "path";
 import fs from "fs";
 import { updateContentFile } from "@src/githubApi/writeTagForLocal/request";
+import { writeContentForLocal } from "@src/githubApi/writeTagForLocal";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -82,22 +83,9 @@ const main = async () => {
 
   /* ==============================  写入本地 - Start ============================== */
   // 写入本地
-
   const contentHasBody = getReleaseContent(issueRes.data, releaseName, true);
   const bookPath = path.resolve(__dirname, "../../../books");
-  const writePath = `${bookPath}/${newVersion}.md`;
-  // 文件写入本地
-  console.log("yanle - logger: 开始写入本地");
-  fs.writeFileSync(writePath, contentHasBody, { encoding: "utf-8" });
-  console.log("yanle - logger: 写入本地完成");
-
-  const base64File = fs.readFileSync(writePath, { encoding: "base64" });
-  console.log("yanle - logger: 读取本地文件完成");
-
-  // 提交到 github
-  const updateFileRes = await updateContentFile(`books/${newVersion}.md`, base64File);
-
-  console.log("yanle - logger: 提交到 github 完成", updateFileRes.status);
+  await writeContentForLocal({ path: bookPath, fileName: newVersion, content: contentHasBody });
   /* ==============================  写入本地 - End   ============================== */
 };
 

@@ -13,6 +13,7 @@ export const getReleaseNoteBody = (issueList: any[], releaseName: string) => {
       labels: map(item.labels, label => label.name),
       level: item.milestone.title,
       number: item.number,
+      body: item.body,
     };
   });
 
@@ -42,9 +43,10 @@ export const getReleaseNoteBody = (issueList: any[], releaseName: string) => {
 
   const itemTitle = (list: any[]) => map(list, item => {
     return `
-${item.number}.${item.title}【${join(item.labels, "、")}】     
-回答: 
-${item.body}           
+## ${item.number}.${item.title}【${join(item.labels, "、")}】     
+**回答**: 
+${item.body}
+           
 `;
   });
 

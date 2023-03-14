@@ -91,14 +91,13 @@ const main = async () => {
   fs.writeFileSync(writePath, contentHasBody, { encoding: "utf-8" });
   console.log("yanle - logger: 写入本地完成");
 
-  // todo 这里始终报错
-  // const base64File = fs.readFileSync(writePath, { encoding: "base64" });
-  // console.log("yanle - logger: 读取本地文件完成");
+  const base64File = fs.readFileSync(writePath, { encoding: "base64" });
+  console.log("yanle - logger: 读取本地文件完成");
 
   // 提交到 github
-  // const updateFileRes = await updateContentFile(writePath, base64File);
+  const updateFileRes = await updateContentFile(`books/${newVersion}.md`, base64File);
 
-  // console.log("yanle - logger: 提交到 github 完成", updateFileRes.status);
+  console.log("yanle - logger: 提交到 github 完成", updateFileRes.status);
   /* ==============================  写入本地 - End   ============================== */
 };
 

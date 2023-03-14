@@ -19,16 +19,16 @@ const main = async () => {
   const preTagRes = await getTag(currentVersion);
 
   const bookPath = path.resolve(__dirname, "../../../books");
-
-  const writePath = `${bookPath}/${preTagRes.data.tag_name}.md`;
+  const writePath = `${bookPath}/${currentVersion}.md`;
 
   // 文件写入本地
   fs.writeFileSync(writePath, preTagRes.data.body, { encoding: "utf-8" });
 
+  console.log('yanle - logger: path', writePath);
   const base64File = fs.readFileSync(writePath, { encoding: "base64" });
   console.log("yanle - logger: fs.readFileSync(writePath)");
 
-  const updateFileRes = await updateContentFile(writePath, base64File);
+  const updateFileRes = await updateContentFile(`books/${currentVersion}.md`, base64File);
 
   console.log("yanle - logger: updateFile success", updateFileRes.status);
 };

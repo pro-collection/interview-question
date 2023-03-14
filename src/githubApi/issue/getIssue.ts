@@ -9,8 +9,9 @@ import { WriteRequestOptions } from "@src/giteeApi/issue/interface";
 import { giteeWriteIssue } from "@src/giteeApi/issue/writeIssue";
 import { getDataIssue, getTag } from "@src/githubApi/releaseNote/request";
 import { getReleaseContent } from "@src/githubApi/releaseNote/helper";
+import { writeContentForLocal } from "@src/githubApi/writeTagForLocal";
 // import * as fs from "fs";
-// import * as path from "path";
+import * as path from "path";
 
 const req = () => octokit.request(apiUrl.getIssue, {
   ...repoConfig.interviewRepo,
@@ -58,23 +59,25 @@ const main = async () => {
 
 
   // 获取对应的 tag
-  const preTagRes = await getTag('0.0.14');
+  const preTagRes = await getTag("0.0.14");
 
   // 获取上一次时间戳
   const createDate = get(preTagRes, "data.created_at", "");
 
   // @ts-ignore
-  const currentTZ = dayjs.tz.guess();
+  // const currentTZ = dayjs.tz.guess();
 
   // @ts-ignore
-  const preDate = dayjs.tz(createDate, currentTZ).format("YYYY.MM.DD");
+  // const preDate = dayjs.tz(createDate, currentTZ).format("YYYY.MM.DD");
 
   // 获取最新的 issue
-  const issueRes = await getIssueByDate(createDate, 1);
-  const issueLength = get(issueRes.data, "length");
-  const releaseName = `2023.03.09 - 2023.03.15 更新收集面试问题（45道题）【上】`;
+  const issueRes = await getIssueByDate(createDate, 3);
+  const releaseName = `2023.03.09 - 2023.03.15 更新收集面试问题（45道题）【下】`;
   const releaseBody = getReleaseContent(issueRes.data, releaseName, true);
+  const filePath = path.resolve(__dirname, "../../../books");
+  const fileName = "0.0.15_下";
 
+  await writeContentForLocal({ path: filePath, fileName, content: releaseBody });
 };
 
 main();

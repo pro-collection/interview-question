@@ -32,15 +32,19 @@ const main = async () => {
 
     return returnData;
   });
+
+  console.log('yanle - logger: titleList', titleList);
+
   // console.log("yanle - logger: title", titleList);
   //
   // const content = find(res.data, item => item.number === 3);
   // console.log("yanle - logger: content", content);
 
-  for (const item of titleList) {
-    console.log('yanle - logger: 开始写入 - ', item.title);
-    await giteeWriteIssue(item);
-  }
+  // 写入 title
+  // for (const item of titleList) {
+  //   console.log('yanle - logger: 开始写入 - ', item.title);
+  //   await giteeWriteIssue(item);
+  // }
 };
 
 main();

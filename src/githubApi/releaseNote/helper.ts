@@ -57,6 +57,27 @@ ${body}
 `;
   });
 
+  const justTitle = (list: any[]) => map(list, item => `  - ${item.number}.${item.title}【${join(item.labels, "、")}】`);
+
+  const mapTitle = (list: any[]) => reduce(justTitle(sortBy(list, "number")), (prev, current) => prev + current, "");
+
+  // 目录文件
+  const index = `
+目录：
+${isEmpty(base) ? "" : `- 初级开发者相关问题【共计 ${base.length} 道题】`}
+${mapTitle(base)}
+
+${isEmpty(inProgress) ? "" : `- 中级开发者相关问题【共计 ${inProgress.length} 道题】`}
+${mapTitle(inProgress)}
+
+${isEmpty(senior) ? "" : `- 高级开发者相关问题【共计 ${senior.length} 道题】`}
+${mapTitle(senior)}
+
+${isEmpty(master) ? "" : `- 资深开发者相关问题【共计 ${master.length} 道题】`}
+${mapTitle(master)}
+
+`;
+
   const reduceToString = (list: any[]) => reduce(itemTitle(sortBy(list, "number")), (prev, current) => prev + current, "");
 
   // 需要将 list 写成一个 markdown
@@ -65,6 +86,9 @@ ${body}
 获取更多面试问题可以访问
 github 地址: https://github.com/pro-collection/interview-question/issues
 gitee 地址: https://gitee.com/yanleweb/interview-question/issues
+
+
+${isBody ? index : ""}
 
     
 ${isEmpty(base) ? "" : `# 初级开发者相关问题【共计 ${base.length} 道题】`}

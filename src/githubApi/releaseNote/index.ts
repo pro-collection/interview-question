@@ -91,6 +91,7 @@ const main = async () => {
   fs.writeFileSync(writePath, contentHasBody, { encoding: "utf-8" });
   console.log("yanle - logger: 写入本地完成");
 
+  // todo 这里始终报错
   // const base64File = fs.readFileSync(writePath, { encoding: "base64" });
   // console.log("yanle - logger: 读取本地文件完成");
 

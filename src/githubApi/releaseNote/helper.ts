@@ -59,7 +59,7 @@ ${body}
 
   const justTitle = (list: any[]) => map(list, item => `  - ${item.number}.${item.title}【${join(item.labels, "、")}】`);
 
-  const mapTitle = (list: any[]) => reduce(justTitle(sortBy(list, "number")), (prev, current) => prev + current, "");
+  const mapTitle = (list: any[]) => reduce(justTitle(sortBy(list, "number")), (prev, current) => prev + current + '\n', "");
 
   // 目录文件
   const index = `

@@ -1,4 +1,4 @@
-import { getReleaseNoteBody } from "./helper";
+import { getReleaseContent } from "./helper";
 import { split, toNumber, join, replace, get } from "lodash";
 import {
   createRelease,
@@ -13,6 +13,9 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { base64ToString, stringToBase64 } from "@utils/helper";
+import path from "path";
+import fs from "fs";
+import { updateContentFile } from "@src/githubApi/writeTagForLocal/request";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -72,10 +75,30 @@ const main = async () => {
 
   const issueLenDesc = issueLength ? `（${issueLength}道题）` : "";
   const releaseName = `${date} 更新收集面试问题${issueLenDesc}`;
-  const releaseBody = getReleaseNoteBody(issueRes.data, releaseName);
+  const releaseBody = getReleaseContent(issueRes.data, releaseName);
 
   await createRelease({ tag_name, name: releaseName, body: releaseBody });
   console.log("yanle - logger: 创建 Release 完成");
+
+  /* ==============================  写入本地 - Start ============================== */
+  // 写入本地
+
+  const contentHasBody = getReleaseContent(issueRes.data, releaseName, true);
+  const bookPath = path.resolve(__dirname, "../../../books");
+  const writePath = `${bookPath}/${newVersion}.md`;
+  // 文件写入本地
+  console.log("yanle - logger: 开始写入本地");
+  fs.writeFileSync(writePath, contentHasBody, { encoding: "utf-8" });
+  console.log("yanle - logger: 写入本地完成");
+
+  const base64File = fs.readFileSync(writePath, { encoding: "base64" });
+  console.log("yanle - logger: 读取本地文件完成");
+
+  // 提交到 github
+  const updateFileRes = await updateContentFile(writePath, base64File);
+
+  console.log("yanle - logger: 提交到 github 完成", updateFileRes.status);
+  /* ==============================  写入本地 - End   ============================== */
 };
 
 main();

@@ -4,8 +4,9 @@ import { forEach, isEmpty, join, map, reduce, sortBy } from "lodash";
  * 获取 创建 release note 的 文本 body
  * @param issueList
  * @param releaseName
+ * @param isBody
  */
-export const getReleaseNoteBody = (issueList: any[], releaseName: string) => {
+export const getReleaseContent = (issueList: any[], releaseName: string, isBody: boolean = false) => {
   const list = map(issueList, item => {
     return {
       title: item.title,
@@ -42,10 +43,16 @@ export const getReleaseNoteBody = (issueList: any[], releaseName: string) => {
   });
 
   const itemTitle = (list: any[]) => map(list, item => {
+    const bodyContent = `**回答:**      
+${item.body}
+`;
+    const questionLink = `回答链接：${item.url}           `;
+    const body = isBody ? bodyContent : questionLink;
+
     return `
 ${item.number}.${item.title}【${join(item.labels, "、")}】     
-回答链接：${item.url}           
-    `;
+${body}           
+`;
   });
 
   const reduceToString = (list: any[]) => reduce(itemTitle(sortBy(list, "number")), (prev, current) => prev + current, "");

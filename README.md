@@ -30,6 +30,11 @@
 <img width="767" alt="image" src="https://user-images.githubusercontent.com/22188674/223155285-7cf7e2f5-e0ed-4d6c-adea-bc5ec3e2933c.png">
 
 
+## 更新周报
+1. 每隔一段时间， 总结会以 release 的方式总结： https://github.com/pro-collection/interview-question/releases              
+2. 具体面试问答内容， 会落地在 https://github.com/pro-collection/interview-question/tree/master/books 目录下面
+  gitee 可以访问这个链接： https://gitee.com/yanleweb/interview-question/tree/master/books
+
 ## 问题收集
 
 > 2022.02.21

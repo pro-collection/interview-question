@@ -13,8 +13,8 @@ const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue,
 });
 
 const remote = {
-  title: "箭头函数和普通函数的区别？",
-  labels: [labels.js],
+  title: "样式优先级的规则是什么？",
+  labels: [labels.css],
   milestone: MileStone.inProgress,
   body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),

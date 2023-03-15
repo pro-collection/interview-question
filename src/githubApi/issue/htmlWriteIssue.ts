@@ -24,8 +24,8 @@ const htmlWriteIssue = async () => {
 
   // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
   const remote = {
-    title: "map 和 weakMap 的区别 ?",
-    labels: [labels.js],
+    title: "浏览器垃圾回收机制？",
+    labels: [labels.chrome],
     milestone: MileStone.senior,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   };

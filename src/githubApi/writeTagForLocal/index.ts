@@ -22,7 +22,7 @@ export const writeContentForLocal = async (options: WriteContentForLocalOptions)
   console.log("yanle - logger: 提交到 github 完成", updateFileRes.status);
 
   // 文件从本地删除
-  fs.unlinkSync(writePath)
+  fs.unlinkSync(writePath);
 };
 
 export {};

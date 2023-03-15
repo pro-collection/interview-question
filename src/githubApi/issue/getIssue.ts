@@ -21,7 +21,7 @@ const req = () => octokit.request(apiUrl.getIssue, {
 
 const getIssueByDate = (preDate: string, page: number = 1, per_page = 100) => octokit.request(apiUrl.getIssue, {
   ...repoConfig.interviewRepo,
-  per_page: 5,
+  per_page,
   page,
   since: dayjs(preDate).format("YYYY-MM-DDTHH:mm:ssZ"),
 });
@@ -71,11 +71,11 @@ const main = async () => {
   // const preDate = dayjs.tz(createDate, currentTZ).format("YYYY.MM.DD");
 
   // 获取最新的 issue
-  const issueRes = await getIssueByDate(createDate, 3, 15);
-  const releaseName = `2023.03.09 - 2023.03.15 更新收集面试问题（45道题）【第5部分】`;
+  const issueRes = await getIssueByDate(createDate, 1, 15);
+  const releaseName = `2023.03.09 - 2023.03.15 更新收集面试问题（45道题）【第1部分】`;
   const releaseBody = getReleaseContent(issueRes.data, releaseName, true);
   const filePath = path.resolve(__dirname, "../../../books");
-  const fileName = "0.0.15_5";
+  const fileName = "0.0.15_1";
 
   await writeContentForLocal({ path: filePath, fileName, content: releaseBody });
 };

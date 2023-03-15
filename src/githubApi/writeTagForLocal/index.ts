@@ -20,6 +20,9 @@ export const writeContentForLocal = async (options: WriteContentForLocalOptions)
   const updateFileRes = await updateContentFile(`books/${fileName}.md`, base64File);
 
   console.log("yanle - logger: 提交到 github 完成", updateFileRes.status);
+
+  // 文件从本地删除
+  fs.unlinkSync(writePath)
 };
 
 export {};

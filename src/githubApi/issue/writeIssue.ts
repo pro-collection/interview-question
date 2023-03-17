@@ -13,7 +13,7 @@ const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue,
 });
 
 const remote = {
-  title: "样式优先级的规则是什么？",
+  title: "vue 的 keep-alive 的原理是啥？",
   labels: [labels.css],
   milestone: MileStone.inProgress,
   body: fs.readFileSync("./demo.md", { encoding: "utf8" }),

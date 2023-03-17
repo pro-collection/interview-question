@@ -24,9 +24,9 @@ const htmlWriteIssue = async () => {
 
   // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
   const remote = {
-    title: "浏览器垃圾回收机制？",
-    labels: [labels.chrome],
-    milestone: MileStone.senior,
+    title: "vue 的 keep-alive 的原理是啥？",
+    labels: [labels.frameWork],
+    milestone: MileStone.inProgress,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   };
 

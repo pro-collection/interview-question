@@ -24,9 +24,9 @@ const htmlWriteIssue = async () => {
 
   // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
   const remote = {
-    title: "vue 的 keep-alive 的原理是啥？",
-    labels: [labels.frameWork],
-    milestone: MileStone.inProgress,
+    title: "常见的 web 前端网路攻击有哪些？",
+    labels: [labels.network],
+    milestone: MileStone.senior,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   };
 

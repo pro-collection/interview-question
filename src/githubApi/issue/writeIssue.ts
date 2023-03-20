@@ -13,7 +13,7 @@ const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue,
 });
 
 const remote = {
-  title: "如何分析页面加载慢？",
+  title: "以用户为中心的前端性能指标有哪些？",
   labels: [labels.engineering],
   milestone: MileStone.senior,
   body: fs.readFileSync("./demo.md", { encoding: "utf8" }),

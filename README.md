@@ -63,26 +63,6 @@
 
 
 
-**初级**
-
-
-**中级**              
-
-- v8垃圾回收
-- bind pipe compose 深拷贝
-- 对React和Vue的看法
-    - 为什么react需要合成事件
-    - 生命周期
-    - 路由
-    - 指令
-    - 响应式原理
-    - 数组处理
-    - key,diff算法
-    - V3组合式API
-    - V3编译原理
-- pnpm、npm、yarn 关系？
-- 如何组织 monorepo 工程？
-
 
 ------------
 

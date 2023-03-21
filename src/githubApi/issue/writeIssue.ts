@@ -13,8 +13,8 @@ const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue,
 });
 
 const remote = {
-  title: "浏览器渲染进程了解多少？",
-  labels: [labels.chrome],
+  title: "如何组织 monorepo 工程？",
+  labels: [labels.engineering],
   milestone: MileStone.senior,
   body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),

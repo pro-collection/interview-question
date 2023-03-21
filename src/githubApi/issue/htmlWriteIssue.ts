@@ -26,7 +26,7 @@ const htmlWriteIssue = async () => {
 
   // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
   const remote = {
-    title: "如何分析页面加载慢？",
+    title: "pnpm 和 npm 的区别？",
     labels: [labels.engineering],
     milestone: MileStone.senior,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),

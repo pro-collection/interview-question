@@ -62,58 +62,21 @@
 - [2022凛冬之时三年经验前端面经](https://juejin.cn/post/7173316141161381924)
 
 
-
+- 性能监控功能问题研究
+  - https://juejin.cn/post/7097157902862909471
+  - https://juejin.cn/post/7148364027817623589
+  - https://juejin.cn/post/6844904112450994189
 
 ------------
 
 > 2023.02.22
 
 
-- 闭包是什么? 闭包的用途?
-- 简述事件循环原理
-- 虚拟dom是什么? 原理? 优缺点?
-- vue 和 react 在虚拟dom的diff上，做了哪些改进使得速度很快?
-- vue 和 react 里的key的作用是什么? 为什么不能用Index？用了会怎样? 如果不加key会怎样?
-- vue 双向绑定的原理是什么?
-- vue 的keep-alive的作用是什么？怎么实现的？如何刷新的?
-- vue 是怎么解析template的? template会变成什么?
-- 如何解析指令? 模板变量? html标签
-- 用过vue 的render吗? render和template有什么关系
 
-- 对前端工程化的理解
-- 前端性能优化都做了哪些工作
-- Nodejs 异步IO模型
-- pu/uv
-- 设计模式
-- 微前端
-- 节流和防抖
-- react有自己封装一些自定义hooks吗? vue有自己封装一些指令吗
-- vue 向 react迁移是怎么做的? 怎么保证兼容的
-- vue的双向绑定原理
-- Node的日志和负载均衡怎么做的
-- 那前后端的分工是怎样的？哪些后端做哪些node做
 
-- 了解过vue3吗?
-- webscoket的连接原理
-- react生命周期
-- redux原理
-- vue 父子组件的通信方式
-- async await的原理是什么?
-- async/await, generator, promise这三者的关联和区别是什么?
-
-- react和vue在技术层面的区别
-- 常用的hook都有哪些?
-- 用hook都遇到过哪些坑?
-- 了解useReducer吗
-- Node是怎么部署的? pm2守护进程的原理?
-- Node开启子进程的方法有哪些?
-- 进程间如何通信?
-- css 三列等宽布局如何实现? flex 1是代表什么意思？分别有哪些属性?
-- 前端安全都了解哪些? xss csrf
 - https是如何安全通信的?
 
 
-- 前端性能优化做了哪些工作?
 - 线上监控 对于crashed这种怎么监控? 对于内存持续增长，比如用了15分钟之后才会出现问题怎么监控
 - css 类 postion属性大概讲一下, static是什么表现? static在文档流里吗?
 - Webpack的原理, plugin loader 热更新等等

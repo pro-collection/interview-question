@@ -20,15 +20,18 @@ const htmlWriteIssue = async () => {
     value => value.replace(/\\. /gi, ". "),
     value => value.replace(/\\- /gi, "- "),
     value => value.replace(/复制代码/gi, ""),
+    value => value.replace(/\n### /gi, "\n#### "),
+    value => value.replace(/\n## /gi, "\n### "),
   )(markdown);
   // if (/javascriptCopy code/gi.test(markdown)) markdown = markdown.replace(/javascriptCopy code/gi, "");
+
   if (markdown) fs.writeFileSync("./demo.md", markdown, { encoding: "utf-8" });
 
   // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
   const remote = {
-    title: "pnpm 和 npm 的区别？",
-    labels: [labels.engineering],
-    milestone: MileStone.senior,
+    title: "nodejs 进程间如何通信?",
+    labels: [labels.node],
+    milestone: MileStone.inProgress,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   };
 

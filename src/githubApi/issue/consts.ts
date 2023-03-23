@@ -13,5 +13,15 @@ export const labels = {
   css: "CSS",
   chrome: "浏览器",
   frameWork: "web框架",
-  engineering: '工程化',
+  engineering: "工程化",
+};
+
+export const company = {
+  bytedance: "字节跳动",
+  alibaba: "阿里巴巴",
+  tencent: "腾讯",
+  baidu: "百度",
+  mi: "小米",
+  mt: "美团",
+  jd: "京东",
 };

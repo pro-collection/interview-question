@@ -3,7 +3,7 @@ import * as fs from "fs";
 import { octokit } from "@utils/requestKit";
 import { apiUrl } from "@utils/apiUrl";
 import repoConfig from "@utils/repoConfig";
-import { labels, MileStone } from "@src/githubApi/issue/consts";
+import { company, labels, MileStone } from "@src/githubApi/issue/consts";
 import { giteeWriteIssue } from "@src/giteeApi/issue/writeIssue";
 import { giteeMileStone } from "@src/giteeApi/issue/consts";
 
@@ -13,9 +13,9 @@ const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue,
 });
 
 const remote = {
-  title: "如何组织 monorepo 工程？",
+  title: "实现 JS 沙盒的方式有哪些？",
   labels: [labels.engineering],
-  milestone: MileStone.senior,
+  milestone: MileStone.master,
   body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };

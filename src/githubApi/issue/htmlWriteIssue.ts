@@ -1,43 +1,16 @@
-import fs from "fs";
-import h2m from "html-to-md";
-import { flow, escapeRegExp } from "lodash";
+import { join } from "lodash";
 import { WriteIssueOptions } from "./interface";
 import { octokit } from "@utils/requestKit";
 import { apiUrl } from "@utils/apiUrl";
 import repoConfig from "@utils/repoConfig";
-import { labels, MileStone } from "@src/githubApi/issue/consts";
+import { MileStone } from "@src/githubApi/issue/consts";
 import { giteeWriteIssue } from "@src/giteeApi/issue/writeIssue";
 import { giteeMileStone } from "@src/giteeApi/issue/consts";
 import { writeToTemp } from "@src/githubApi/issue/helper";
 
-const htmlWriteIssue = async () => {
-  // const getHtml = fs.readFileSync("./demo.html", { encoding: "utf-8" });
-  //
-  // let markdown = h2m(getHtml);
-  //
-  // // 写入文件
-  // markdown = flow(
-  //   value => value.replace(/javascriptCopy code/gi, ""),
-  //   value => value.replace(/\\. /gi, ". "),
-  //   value => value.replace(/\\- /gi, "- "),
-  //   value => value.replace(/复制代码/gi, ""),
-  //   // value => value.replace(/\n### /gi, "\n#### "),
-  //   value => value.replace(/\n## /gi, "\n### "),
-  // )(markdown);
-  // // if (/javascriptCopy code/gi.test(markdown)) markdown = markdown.replace(/javascriptCopy code/gi, "");
-  //
-  // if (markdown) fs.writeFileSync("./demo.md", markdown, { encoding: "utf-8" });
-
+export const htmlWriteIssue = async (remote: any) => {
   // 写入本地
   writeToTemp("./demo.md");
-
-  // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
-  const remote = {
-    title: "CSS 中 position 常见属性有哪些，大概讲一下？",
-    labels: [labels.css],
-    milestone: MileStone.base,
-    body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
-  };
 
   const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue, {
     ...options,
@@ -51,11 +24,9 @@ const htmlWriteIssue = async () => {
   await giteeWriteIssue({
     title: remote.title,
     body: remote.body,
-    labels: remote.labels.join(","),
-    milestone: giteeMileStone[remote.milestone],
+    labels: join(remote.labels, ","),
+    milestone: giteeMileStone[remote.milestone as MileStone],
   });
 };
-
-htmlWriteIssue();
 
 export {};

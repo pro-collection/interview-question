@@ -13,8 +13,8 @@ const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue,
 });
 
 const remote = {
-  title: "实现 JS 沙盒的方式有哪些？",
-  labels: [labels.engineering],
+  title: "HTTPS 加密算法和加解密过程是啥？",
+  labels: [labels.network],
   milestone: MileStone.master,
   body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),

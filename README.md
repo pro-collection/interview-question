@@ -72,11 +72,6 @@
 > 2023.02.22
 
 
-
-
-- https是如何安全通信的?
-
-
 - 线上监控 对于crashed这种怎么监控? 对于内存持续增长，比如用了15分钟之后才会出现问题怎么监控
 - css 类 postion属性大概讲一下, static是什么表现? static在文档流里吗?
 - Webpack的原理, plugin loader 热更新等等

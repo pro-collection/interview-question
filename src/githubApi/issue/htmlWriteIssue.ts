@@ -20,7 +20,7 @@ const htmlWriteIssue = async () => {
     value => value.replace(/\\. /gi, ". "),
     value => value.replace(/\\- /gi, "- "),
     value => value.replace(/复制代码/gi, ""),
-    value => value.replace(/\n### /gi, "\n#### "),
+    // value => value.replace(/\n### /gi, "\n#### "),
     value => value.replace(/\n## /gi, "\n### "),
   )(markdown);
   // if (/javascriptCopy code/gi.test(markdown)) markdown = markdown.replace(/javascriptCopy code/gi, "");
@@ -28,28 +28,28 @@ const htmlWriteIssue = async () => {
   if (markdown) fs.writeFileSync("./demo.md", markdown, { encoding: "utf-8" });
 
   // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
-  // const remote = {
-  //   title: "HTTP 与 HTTPS 的区别？",
-  //   labels: [labels.network],
-  //   milestone: MileStone.inProgress,
-  //   body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
-  // };
-  //
-  // const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue, {
-  //   ...options,
-  //   ...repoConfig.interviewRepo,
-  // });
-  //
-  // const githubRes = await write(remote);
-  // console.log(`yanle - logger: 写入 github - ${remote.title}`, githubRes.status);
-  //
-  // // 写入 gitee
-  // await giteeWriteIssue({
-  //   title: remote.title,
-  //   body: remote.body,
-  //   labels: remote.labels.join(","),
-  //   milestone: giteeMileStone[remote.milestone],
-  // });
+  const remote = {
+    title: "如何监控前端页面内存持续增长情况？",
+    labels: [labels.network],
+    milestone: MileStone.senior,
+    body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
+  };
+
+  const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue, {
+    ...options,
+    ...repoConfig.interviewRepo,
+  });
+
+  const githubRes = await write(remote);
+  console.log(`yanle - logger: 写入 github - ${remote.title}`, githubRes.status);
+
+  // 写入 gitee
+  await giteeWriteIssue({
+    title: remote.title,
+    body: remote.body,
+    labels: remote.labels.join(","),
+    milestone: giteeMileStone[remote.milestone],
+  });
 };
 
 htmlWriteIssue();

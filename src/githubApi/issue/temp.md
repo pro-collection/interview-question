@@ -1,296 +1,224 @@
-### 什么是洋葱模型
+### 前言
 
-说到洋葱模型，就必须聊一聊中间件，中间件这个概念，我们并不陌生，比如平时我们用的 `redux`、`express` 、`koa` 这些库里，都离不开中间件。
+众所周知，JavaScript 是单线程的语言。当我们面临需要大量计算的场景时（比如视频解码等），UI 线程就会被阻塞，甚至浏览器直接卡死。现在前端遇到大量计算的场景越来越多，为了有更好的体验，HTML5 中提出了 Web Worker 的概念。Web Worker 可以使脚本运行在新的线程中，它们独立于主线程，可以进行大量的计算活动，而不会影响主线程的 UI 渲染。当计算结束之后，它们可以把结果发送给主线程，从而形成了高效、良好的用户体验。Web Worker 是一个统称，具体可以细分为普通的 `Worker、SharedWorker 和 ServiceWorker` 等，接下来我们一一介绍其使用方法和适合的场景。
 
-那 `koa` 里面的中间件是什么样的呢？其本质上是一个函数，这个函数有着特定，单一的功能，`koa`将一个个中间件注册进来，通过**组合**实现强大的功能。
+### 普通 Worker
 
-先看 `demo` ：
-
-```js
-// index.js
-const Koa = require("koa")
-const app = new Koa();
-
-// 中间件1
-app.use(async (ctx, next) => {
-    console.log("1")
-    await next()
-    console.log("2")
-});
-// 中间件2
-app.use(async (ctx, next) => {
-    console.log("3")
-    await next()
-    console.log("4")
-});
-// 中间件3
-app.use(async (ctx, next) => {
-    console.log("5")
-    await next()
-    console.log("6")
-});
-app.listen(8002);
-
-
-```
-
-先后注册了三个中间件，运行一下`index.js` ，可以看到输出结果为：
-
-```js
-1
-3
-5
-6
-4
-2
-
-```
-
-没接触过洋葱模型的人第一眼可能会疑惑，为什么调用了一个 `next` 之后，直接从`1` 跳到了 `3` ，而不是先输出`1` ，再输出`2`呢。 其实这就是洋葱模型特点，下图是它的执行过程：
-
-![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/80798be002944d67a46c456d4af3c03c~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp?) 一开始我们先后注册了三个中间件，分别是中间件1，中间件2，中间件3，调用`listen`方法，打开对应端口的页面，触发了中间件的执行。
-
-首先会先执行第一个中间件的 `next` 的前置语句，相当于 `demo` 里面的 `console.log('1')` ，当调用 `next()` 之后，会直接进入第二个中间件，继续重复上述逻辑，直至最后一个中间件，就会执行 `next` 的后置语句，然后继续上一个中间件的后置语句，继续重复上述逻辑，直至执行第一个中间件的后置语句，最后输出。
-
-![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/935675e49480426eb517a68c224673c7~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp?) 正是因为它这种执行机制，才被称为**洋葱模型**。
-
-### 如何实现koa洋葱模型
-
-我们已经知道它为什么叫洋葱模型，以及它的执行过程，但是它到底是如何实现的呢？换句话说，koa内部是如何把这些中间件 **`组合`** 在一起的？
-
-先简单分析一下思路：
-
-* 首先调用 `use` 方法收集中间件，调用 `listen` 方法执行中间件。
-* 每一个中间件都有一个`next`参数（暂时不考虑ctx参数），`next`参数可以控制进入下一个中间件的时机。
-
-简易实现如下：
+1. 创建 Worker 通过 new 的方式来生成一个实例，参数为 url 地址，该地址必须和其创建者是同源的。
 
 ```javascript
-function Koa () {
-  // ...
-  this.middleares = [];
-}
-
-Koa.prototype.use = function (middleare) {
-    // 此时 middleare 其实就是 (ctx, next) => ()
-    this.middleares.push(middleare); // 发布订阅，先收集中间件
-    reutrn this;
-}
-Koa.prototype.listen = function () {
-   const fn = compose(this.middleares); // 组合中间件
-}
-
-// 核心函数
-function compose (middleares) {
-    // 准备递归
-    function dispatch(i) {
-        const middleare = middleares[i]; // 别忘记中间件的格式 (ctx, next) => ()
-        return middleare('ctx', dispatch.bind(null, i + 1)); // 每次调用next，都用调用一次dispatch方法，并且i+1
-    }
-    return dispatch(0)
-}
-const app = new Koa();
-
-// 中间件1
-app.use((ctx, next) => {
-  console.log("1");
-  next();
-  console.log('2');
-})
-// 中间件2
-app.use((ctx, next) => {
-  console.log("3");
-  console.log('4');
-})
-
-app.listen();
-// 打印 1342
+   const worker = new Worker('./worker.js'); // 参数是url，这个url必须与创建者同源 
 
 ```
 
-### 最后一个中间件调用next如何处理？
+2. Worker 的方法
 
-最简单的版本就已经实现了，但是还是有点问题，当最后一个中间件继续调用`next`时，会发现如下报错信息：
+* onmessage 主线程中可以在 Worker 上添加 onmessage 方法，用于监听 Worker 的信息。
+* onmessageerror 主线程中可以在 Worker 上添加 onmessageerror 方法，用于监听 Worker 的错误信息。
+* postMessage() 主线程通过此方法给 Worker 发送消息，发送参数的格式不限（可以是数组、对象、字符串等），可以根据自己的业务选择。
+* terminate() 主线程通过此方法终止 Worker 的运行。
 
-![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/df004d2b10904f348ac81713c7e3a3dd~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp?) 原因就是当最后一个中间件调用`next`的时候，`i+1` 之后已经超出了`middeares`的最大下标，找不到对应的`middeare`了，具体实现如下：
 
-```diff
-...
+3. 通信
 
-// 核心函数
-function compose (middleares) {
-  // 准备遍历
-  function dispatch(i) {
-+   if(i === middleares.length) return; // 没有找到直接跳出递归
-    const middleare = middleares[i]; // 别忘记中间件的格式 (ctx, next) => ()
-    return middleare('ctx', dispatch.bind(null, i + 1)); // 每次调用next，都用调用一次dispatch方法，并且i+1，
-  }
-  return dispatch(0);
-}
+Worker 的作用域跟主线程中的 Window 是相互独立的，并且 Worker 中是获取不到 DOM 元素的。所以在 Worker 中你无法使用 Window 变量。取而代之的是可以用 self 来表示全局对象。self 上有哪些方法和属性，感兴趣的小伙伴可以自行输出查看。比较常用的方法是 onmessage、postMessage，主要用来跟主线程进行通信。
 
-...
+4. Worker 中引用其他脚本的方式
 
-app.use((ctx, next) => {
-  console.log("1");
-  next();
-  console.log('2');
-})
-app.use((ctx, next) => {
-  console.log("3");
-+ next()
-  console.log('4');
-})
+跟常用的 JavaScript 一样，Worker 中也是可以引入其他的模块的。但是方式不太一样，是通过 importScripts 来引入。这边我为了演示，新建了一个 constant.js。在 constant.js 定义了一些变量和函数。
 
-app.listen(3000);
+示例：
 
-```
+```javascript
+   // Worker.js
+   importScripts('constant.js');
+   // 下面就可以获取到 constant.js 中的所有变量了
 
-### 如何解决同一个中间件多次调用next？
+   // constant.js
+   // 可以在 Worker 中使用
+   const a = 111;
 
-乍一看似乎是没有问题，但是如果在一个中间件里面连续调两次`next`，会发生什么结果呢？ 先来看看 `koa` ：
+   // 不可以在 Worker 中使用，原因未知
+   const b = function () {
+     console.log('test');
+   };
 
-![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d3febbc59cc14b6eb92f6aa70b5fed43~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp?) 报错信息说 `next()` 被调用多次，那这个又是如何实现的呢？
-
-思路： 创建一个`index`（指针），记录已递归的`middleare`的最新下标，当一个中间件第二次调用`next`的时候，说明它正在走后置语句部分，也就是说所有的中间件都调用过`next`了，那此时只需要比较一下`i`跟`index`的值即可。
-
-```diff
-
-...
-
-// 核心函数
-function compose (middleares) {
-+ let index = -1; 创建指针
-  // 准备遍历
-  function dispatch(i) {
-+   if(i <= index) throw new Error('next() called multiple times');
-+   index = i;
-    if(i === middleares.length) return;
-    const middleare = middleares[i]; // 别忘记中间件的格式 (ctx, next) => ()
-    return middleare('ctx', dispatch.bind(null, i + 1)); // 每次调用next，都用调用一次dispatch方法，并且i+1，
-  }
-  return dispatch(0)
-}
-
-...
-
-app.use((ctx, next) => {
-  console.log("1");
-  next();
-+ next();
-  console.log('2');
-})
-app.use((ctx, next) => {
-  console.log("3");
-  next();
-  console.log('4');
-})
-
-app.listen(3000);
-
+   // 可以在 Worker 中使用
+   function c() {
+     console.log('test');
+   }
 
 ```
 
-### 完整代码
+5. 调试方法
 
-其中最精华的部分就是`compose`函数，细数一下，只有`11`行代码，1比1还原了`koa`的`compose`函数（去除了不影响主逻辑判断）。
+写代码难免要进行调试。Worker 的调试在浏览器控制台中有专门展示的地方, 以 chrome 浏览器为例： `dev tools --> source --> worker.js`
 
-> koa是利用koa-compose这个库进行组合中间件的，在koa-compose里面，next返回的都是一个promise函数。
+6. 常见使用场景
+   * 一般的视频网站 以优酷为例，当我们开始播放优酷视频的时候，就能看到它会调用 Worker，解码的代码应该写在 Worker 里面。
+   * 需要大量计算的网站 比如 imgcook 这个网站，它能在前端解析 sketch 文件，这部分解析的逻辑就写在 Worker 里。
 
-```js
-function Koa () {
-  this.middleares = [];
-}
-Koa.prototype.use = function (middleare) {
-  this.middleares.push(middleare);
-  return this;
-}
-Koa.prototype.listen = function () {
-  const fn = compose(this.middleares);
-}
-function compose(middleares) {
-  let index = -1;
-  const dispatch = (i) => {
-    if(i <= index) throw new Error('next（） 不能调用多次');
-    index = i;
-    if(i >= middleares.length) return;
-    const middleare = middleares[i];
-    return middleare('ctx', dispatch.bind(null, i + 1));
-  }
-  return dispatch(0);
-}
 
-const app = new Koa();
-app.use(async (ctx, next) => {
-  console.log('1');
-  next();
-  console.log('2');
-});
-app.use(async (ctx, next) => {
-  console.log('3');
-  next();
-  console.log('4');
-});
-app.use(async (ctx, next) => {
-  console.log('5');
-  next();
-  console.log('6');
-});
+### SharedWorker
 
-app.listen();
+SharedWorker 是一种特定的 Worker。从它的命名就能知道，它是一种共享数据的 Worker。它可以同时被多个浏览器环境访问。这些浏览器环境可以是多个 window, iframes 或者甚至是多个 Worker，只要这些 Workers 处于同一主域。为跨浏览器 tab 共享数据提供了一种解决方案。
+
+1. 创建 SharedWorker
+
+   创建的方法跟上面普通 Worker 完全一模一样。
+
+```javaScript
+   const worker = new SharedWorker("./shareWorker.js"); // 参数是url，这个url必须与创建者同源 
 
 ```
 
-### 如何编写中间件
+2. SharedWorker 的方法
 
-使用中间件好处是可以解耦代码，提高可利用性，方便复用，比如`logger中间件`，或者是说 `跨域中间件`， 下面简易实现一个`cors()`中间件。
+   SharedWorker 的方法都在 port 上，这是它与普通 Worker 不同的地方。
 
-不使用中间件版本：
+* port.onmessage
 
-```js
-const Koa = require('koa');
-const app = new Koa();
+  主线程中可以在 worker 上添加 onmessage 方法，用于监听 SharedWorker 的信息
 
-app.use(async (ctx, next) => {
-  ctx.set('Access-Control-Allow-Headers', 'X-Requested-With')
-  ctx.set('Access-Control-Allow-Origin', '*')
-  ctx.set('Access-Control-Allow-Methods', 'GET,HEAD,PUT,POST,DELETE,PATCH')
-  console.log('第一个中间件', ctx.request.method,ctx.request.url);
-  await next();
-  ctx.body = 'hello world'
-});
-app.listen(8020);
+
+* port.postMessage()
+
+  主线程通过此方法给 SharedWorker 发送消息，发送参数的格式不限
+
+
+* port.start()
+
+  主线程通过此方法开启 SharedWorker 之间的通信
+
+
+* port.close()
+
+  主线程通过此方法关闭 SharedWorker
+
+
+3. 通信
+
+   SharedWorker 跟普通的 Worker 一样，可以用 self 来表示全局对象。不同之处是，它需要等 port 连接成功之后，利用 port 的onmessage、postMessage，来跟主线程进行通信。当你打开多个窗口的时候，SharedWorker 的作用域是公用的，这也是其特点。
+
+
+
+4. Worker 中引用其他脚本
+
+   这个与普通的 Worker 方法一样，使用 importScripts
+
+5. 调试方法
+
+   在浏览器中查看和调试 SharedWorker 的代码，需要输入 chrome://inspect/
+
+
+### ServiceWorker
+
+ServiceWorker 一般作为 Web 应用程序、浏览器和网络之间的代理服务。他们旨在创建有效的离线体验，拦截网络请求，以及根据网络是否可用采取合适的行动，更新驻留在服务器上的资源。他们还将允许访问推送通知和后台同步 API。
+
+1. 创建 ServiceWorker
+
+```javaScript
+   // index.js
+   if ('serviceWorker' in navigator) {
+     window.addEventListener('load', function () {
+       navigator.serviceWorker
+         .register('./serviceWorker.js', { scope: '/page/' })
+         .then(
+           function (registration) {
+             console.log(
+               'ServiceWorker registration successful with scope: ',
+               registration.scope
+             );
+           },
+           function (err) {
+             console.log('ServiceWorker registration failed: ', err);
+           }
+         );
+     });
+   }
 
 ```
 
-本地可以搭建一个前端项目，然后`fetch('http://localhost:8020')`上面是不使用中间件的版本，可以看到我们想要实现跨域，只能把跨域逻辑写在你的中间件里面，但同时这个中间件也还有你的业务逻辑代码，所以需要解耦出来。
+只要创建了 ServiceWorker，不管这个创建 ServiceWorker 的 html 是否打开，这个 ServiceWorker 是一直存在的。它会代理范围是根据 scope 决定的，如果没有这个参数，则其代理范围是创建目录同级别以及子目录下所有页面的网络请求。代理的范围可以通过registration.scope 查看。
 
-改造之后的版本：
+2. 安装 ServiceWorker
 
-```js
-const Koa = require('koa');
-const app = new Koa();
-
-// 中间件过多，可以创建一个middleares文件夹，将cors函数放到middleares/cors.js文件里面
-const cors = () => {
-  return async (ctx, next) => {
-    ctx.set('Access-Control-Allow-Headers', 'X-Requested-With')
-    ctx.set('Access-Control-Allow-Origin', '*')
-    ctx.set('Access-Control-Allow-Methods', 'GET,HEAD,PUT,POST,DELETE,PATCH')
-    await next();
-  }
-};
-
-app.use(cors());
-app.use(async (ctx, next) => {
-  console.log('第一个中间件', ctx.request.method,ctx.request.url);
-  await next();
-  ctx.body = 'hello world'
-});
+```javascript
+   // serviceWorker.js
+   const CACHE_NAME = 'cache-v1';
+   // 需要缓存的文件
+   const urlsToCache = [
+     '/style/main.css',
+     '/constant.js',
+     '/serviceWorker.html',
+     '/page/index.html',
+     '/serviceWorker.js',
+     '/image/131.png',
+   ];
+   self.oninstall = (event) => {
+     event.waitUntil(
+       caches
+         .open(CACHE_NAME) // 这返回的是promise
+         .then(function (cache) {
+           return cache.addAll(urlsToCache); // 这返回的是promise
+         })
+     );
+   };
 
 ```
 
-`koa`的中间件都是有固定模板的，首先是一个函数，并且返回一个`async`函数（闭包的应用），这个`async`函数有两个参数，一个是`koa`的`context`，一个是`next`函数。
+在上述代码中，我们可以看到，在 install 事件的回调中，我们打开了名字为 cache-v1 的缓存，它返回的是一个 promise。在打开缓存之后，我们需要把要缓存的文件 add 进去，基本上所有类型的资源都可以进行缓存，例子中缓存了 css、js、html、png。如果所有缓存数据都成功，就表示 ServiceWorker 安装成功；如果控制台提示 Uncaught (in promise) TypeError: Failed to execute 'Cache' on 'addAll': Request failed，则表示安装失败。
+
+3. 缓存和返回请求
+
+```javascript
+   self.onfetch = (event) => {
+     event.respondWith(
+       caches
+         .match(event.request) // 此方法从服务工作线程所创建的任何缓存中查找缓存的结果
+         .then(function (response) {
+           // response为匹配到的缓存资源，如果没有匹配到则返回undefined，需要fetch资源
+           if (response) {
+             return response;
+           }
+           return fetch(event.request);
+         })
+     );
+   };
+
+```
+
+在 fetch 事件的回调中，我们去匹配 cache 中的资源。如果匹配到，则使用缓存资源；没有匹配到则用 fetch 请求。正因为 ServiceWorker 可以代理网络请求，所以为了安全起见，规范中规定它只能在 https 和 localhost 下才能开启。
+
+4. 调试方法
+
+   在浏览器中查看和调试 ServiceWorker 的代码，需要输入 chrome://inspect/#service-workers
+
+
+5. 常见使用场景
+
+   缓存资源文件，加快渲染速度
+
+   这个我们以语雀为例。我们在打开语雀网站的时候，可以看到它使用 ServiceWorker 缓存了很多 css、js 文件，从而达到优化的效果。
+
 
 ### 总结
 
-本文实现了`koa`洋葱模型简易功能，虽然`koa`中间件注册的时候是一个个注册进去的，但是其内部利用组合函数（`compose`），按照注册的先后顺序，将中间件都包裹起来（有点类似于套娃hahaha），关键点就是`compose`函数妙用，值得学习。
+|类型|Worker|SharedWorker|ServiceWorker|
+|:---|:---|:---|:---|
+|通信方式|postMessage|port.postMessage|单向通信，通过addEventListener 监听serviceWorker 的状态|
+|使用场景|适合大量计算的场景|适合跨 tab、iframes之间共享数据|缓存资源、网络优化|
+|兼容性|>= IE 10>= Chrome 4|不支持 IE、Safari、Android、iOS>= Chrome 4|不支持 IE>= Chrome 40|
+
+
+本文介绍了 3 种 Worker，他们分别适合不同的场景，总结如上面表格。普通的 Worker 可以在需要大量计算的时候使用，创建新的线程可以降低主线程的计算压力，不会导致 UI 卡顿。SharedWorker 主要是为不同的 window、iframes 之间共享数据提供了另外一个解决方案。ServiceWorker 可以缓存资源，提供离线服务或者是网络优化，加快 Web 应用的开启速度，更多是优化体验方面的。
+
+示例代码：[github.com/Pulset/Web-…](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2FPulset%2FWeb-Worker "https://github.com/Pulset/Web-Worker")
+
+### 参考文献
+
+* https://juejin.cn/post/7091068088975622175
+* [在网络应用中添加服务工作线程和离线功能](https://link.juejin.cn?target=https%3A%2F%2Fdevelopers.google.com%2Fweb%2Ffundamentals%2Fcodelabs%2Foffline "https://developers.google.com/web/fundamentals/codelabs/offline")
+* [Service worker overview](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.chrome.com%2Fdocs%2Fworkbox%2Fservice-worker-overview%2F "https://developer.chrome.com/docs/workbox/service-worker-overview/")
+* [Workers](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FWorker "https://developer.mozilla.org/zh-CN/docs/Web/API/Worker")
+* [SharedWorker](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FSharedWorker "https://developer.mozilla.org/zh-CN/docs/Web/API/SharedWorker")

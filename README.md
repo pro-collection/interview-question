@@ -71,19 +71,6 @@
 
 > 2023.02.22
 
-
-- 对于内存持续增长，比如用了15分钟之后才会出现问题怎么监控
-- css 类 postion属性大概讲一下, static是什么表现? static在文档流里吗?
-- Webpack的原理, plugin loader 热更新等等
-- Set和Map
-- 浏览器从输入url开始发生了什么
-- vue 父子组件的通信方式
-
-- node.js如何调试
-- 代理调试工具用过哪些？
-- chrome devtool 如何查看内存情况
-
-
 - koa洋葱模型
 - 中间件的异常处理是怎么做的？
 - 在没有async await 的时候, koa是怎么实现的洋葱模型?

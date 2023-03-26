@@ -1,1 +1,252 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>监控前端页面内存持续增长可以帮助我们及时发现内存泄漏和其他内存问题，从而优化前端页面的性能和稳定性。以下是一些监控前端页面内存持续增长的方法：</p><ol><li><p>使用浏览器开发工具：现代浏览器的开发工具提供了内存监控功能。您可以使用 Chrome 开发者工具、Firefox 开发者工具等浏览器工具来监控内存的使用情况，并在内存使用超过阈值时进行警报。</p></li><li><p>手动检查页面代码：您可以手动检查页面的代码，特别是 JavaScript 代码和其他 DOM 操作，以查找可能导致内存泄漏的问题。例如，可能存在未清理的定时器、事件监听器、未释放的 DOM 元素等。</p></li><li><p>使用性能监测工具：性能监测工具，例如 New Relic、AppDynamics 等，可以监测前端页面的性能，并提供关于内存使用的警报和报告。</p></li><li><p>使用内存检测工具：内存检测工具，例如 memoryjs、heapdump.js 等，可以帮助检测内存泄漏和内存问题。这些工具可以生成内存快照，分析内存使用情况，以及识别潜在的内存泄漏问题。</p></li></ol><p>通过以上方法的一些组合使用，可以帮助您监控前端页面内存持续增长的情况，及时发现和解决内存问题，提升用户体验和网站可靠性。</p></div>
+<div class="markdown-body cache"><style>.markdown-body{color:#595959;font-size:15px;font-family:-apple-system,system-ui,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;background-image:linear-gradient(90deg,rgba(60,10,30,.04) 3%,transparent 0),linear-gradient(1turn,rgba(60,10,30,.04) 3%,transparent 0);background-size:20px 20px;background-position:50%}.markdown-body p{color:#595959;font-size:15px;line-height:2;font-weight:400}.markdown-body p+p{margin-top:16px}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{padding:30px 0;margin:0;color:#135ce0}.markdown-body h1{position:relative;text-align:center;font-size:22px;margin:50px 0}.markdown-body h1:before{position:absolute;content:"";top:-10px;left:50%;width:32px;height:32px;transform:translateX(-50%);background-size:100% 100%;opacity:.36;background-repeat:no-repeat;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABfVBMVEX///8Ad/8AgP8AgP8AgP8Aff8AgP8Af/8AgP8AVf8Af/8Af/8AgP8AgP8Af/8Afv8AAP8Afv8Afv8Aef8AgP8AdP8Afv8AgP8AgP8Acf8Ae/8AgP8Af/8AgP8Af/8Af/8AfP8Afv8AgP8Af/8Af/8Afv8Afv8AgP8Afv8AgP8Af/8Af/8AgP8AgP8Afv8AgP8Af/8AgP8AgP8AgP8Ae/8Afv8Af/8AgP8Af/8AgP8Af/8Af/8Aff8Af/8Abf8AgP8Af/8AgP8Af/8Af/8Afv8AgP8AgP8Afv8Afv8AgP8Af/8Aff8AgP8Afv8AgP8Aff8AgP8AfP8AgP8Ae/8AgP8Af/8AgP8AgP8AgP8Afv8AgP8AgP8AgP8Afv8AgP8AgP8AgP8AgP8AgP8Af/8AgP8Af/8Af/8Aev8Af/8AgP8Aff8Afv8AgP8AgP8AgP8Af/8AgP8Af/8Af/8AgP8Afv8AgP8AgP8AgP8AgP8Af/8AeP8Af/8Af/8Af//////rzEHnAAAAfXRSTlMAD7CCAivatxIDx5EMrP19AXdLEwgLR+6iCR/M0yLRzyFF7JupSXn8cw6v60Q0QeqzKtgeG237HMne850/6Qeq7QaZ+WdydHtj+OM3qENCMRYl1B3K2U7wnlWE/mhlirjkODa9FN/BF7/iNV/2kASNZpX1Wlf03C4stRGxgUPclqoAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gEaBzgZ4yeM3AAAAT9JREFUOMvNUldbwkAQvCAqsSBoABE7asSOBRUVVBQNNuy9996789+9cMFAMHnVebmdm+/bmdtbQv4dOFOW2UjPzgFyLfo6nweKfIMOBYWwFtmMPGz2Yj2pJI0JDq3udJW6VVbmKa9I192VQFV1ktXUAl5NB0cd4KpnORqsEO2ZIRpF9gJfE9Dckqq0KuZt7UAH5+8EPF3spjsRpCeQNO/tA/qDwIDA+OCQbBoKA8NOdjMySgcZGVM6jwcgRuUiSs0nlPFNSrEpJfU0jTLD6llqbvKxei7OzvkFNQohi0vAsj81+MoqsCaoPOQFgus/1LyxichW+hS2JWCHZ7VlF9jb187pIAYcHiViHAMnp5mTjJ8B5xeEXF4B1ze/fTh/C0h398DDI9HB07O8ci+vRBdvdGnfP4gBuM8vw7X/G3wDmFhFZEdxzjMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDEtMjZUMDc6NTY6MjUrMDE6MDA67pVWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTAxLTI2VDA3OjU2OjI1KzAxOjAwS7Mt6gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAWdEVYdFRpdGxlAGp1ZWppbl9sb2dvIGNvcHlxapmKAAAAV3pUWHRSYXcgcHJvZmlsZSB0eXBlIGlwdGMAAHic4/IMCHFWKCjKT8vMSeVSAAMjCy5jCxMjE0uTFAMTIESANMNkAyOzVCDL2NTIxMzEHMQHy4BIoEouAOoXEXTyQjWVAAAAAElFTkSuQmCC)}.markdown-body h2{position:relative;font-size:20px;border-left:4px solid;padding:0 0 0 10px;margin:30px 0}.markdown-body h3{font-size:16px}.markdown-body ul{list-style:disc outside;margin-left:2em;margin-top:1em}.markdown-body li{line-height:2;color:#595959}.markdown-body img.loaded{margin:0 auto;display:block}.markdown-body blockquote{background:#fff9f9;margin:2em 0;padding:2px 20px;border-left:4px solid #b2aec5}.markdown-body blockquote p{color:#666;line-height:2}.markdown-body a{color:#036aca;border-bottom:1px solid rgba(3,106,202,.8);font-weight:400;text-decoration:none}.markdown-body em strong,.markdown-body strong{color:#036aca}.markdown-body hr{border-top:1px solid #135ce0}.markdown-body pre{overflow:auto}.markdown-body code,.markdown-body pre{overflow:auto;position:relative;line-height:1.75;font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body table{border-collapse:collapse;margin:1rem 0;overflow-x:auto}.markdown-body table td,.markdown-body table th{border:1px solid #dfe2e5;padding:.6em 1em}.markdown-body table tr{border-top:1px solid #dfe2e5}.markdown-body table tr:nth-child(2n){background-color:#f6f8fa}</style><style data-highlight="">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/14f2cdaa1df041febb04f43a6bbdac7d~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp?" alt="image.png" loading="lazy" class="medium-zoom-image"></p>
+  <h2 data-id="heading-0">什么是洋葱模型</h2>
+  <p>说到洋葱模型，就必须聊一聊中间件，中间件这个概念，我们并不陌生，比如平时我们用的 <code>redux</code>、<code>express</code> 、<code>koa</code> 这些库里，都离不开中间件。</p>
+  <p>那 <code>koa</code> 里面的中间件是什么样的呢？其本质上是一个函数，这个函数有着特定，单一的功能，<code>koa</code>将一个个中间件注册进来，通过<strong>组合</strong>实现强大的功能。</p>
+  <p>先看 <code>demo</code> ：</p>
+  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Koa</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">"koa"</span>)
+<span class="hljs-keyword">const</span> app = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Koa</span>();
+
+<span class="hljs-comment">// 中间件1</span>
+app.<span class="hljs-title function_">use</span>(<span class="hljs-keyword">async</span> (ctx, next) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"1"</span>)
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>()
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"2"</span>)
+});
+<span class="hljs-comment">// 中间件2</span>
+app.<span class="hljs-title function_">use</span>(<span class="hljs-keyword">async</span> (ctx, next) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"3"</span>)
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>()
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"4"</span>)
+});
+<span class="hljs-comment">// 中间件3</span>
+app.<span class="hljs-title function_">use</span>(<span class="hljs-keyword">async</span> (ctx, next) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"5"</span>)
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>()
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"6"</span>)
+});
+app.<span class="hljs-title function_">listen</span>(<span class="hljs-number">8002</span>);
+
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <p>先后注册了三个中间件，运行一下<code>index.js</code> ，可以看到输出结果为：</p>
+  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-number">1</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">4</span>
+<span class="hljs-number">2</span>
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <p>没接触过洋葱模型的人第一眼可能会疑惑，为什么调用了一个 <code>next</code> 之后，直接从<code> 1</code> 跳到了 <code>3</code> ，而不是先输出<code>1</code> ，再输出<code>2</code>呢。 其实这就是洋葱模型特点，下图是它的执行过程：</p>
+  <p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/80798be002944d67a46c456d4af3c03c~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp?" alt="image.png" loading="lazy" class="medium-zoom-image">
+    一开始我们先后注册了三个中间件，分别是中间件1，中间件2，中间件3，调用<code>listen</code>方法，打开对应端口的页面，触发了中间件的执行。</p>
+  <p>首先会先执行第一个中间件的 <code>next</code> 的前置语句，相当于 <code>demo</code> 里面的 <code>console.log('1')</code> ，当调用 <code>next()</code> 之后，会直接进入第二个中间件，继续重复上述逻辑，直至最后一个中间件，就会执行 <code>next</code> 的后置语句，然后继续上一个中间件的后置语句，继续重复上述逻辑，直至执行第一个中间件的后置语句，最后输出。</p>
+  <p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/935675e49480426eb517a68c224673c7~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp?" alt="image.png" loading="lazy" class="medium-zoom-image">
+    正是因为它这种执行机制，才被称为<strong>洋葱模型</strong>。</p>
+  <h2 data-id="heading-1">如何实现koa洋葱模型</h2>
+  <p>我们已经知道它为什么叫洋葱模型，以及它的执行过程，但是它到底是如何实现的呢？换句话说，koa内部是如何把这些中间件 <strong><code>组合</code></strong> 在一起的？</p>
+  <p>先简单分析一下思路：</p>
+  <ul>
+    <li>首先调用 <code>use</code> 方法收集中间件，调用 <code>listen</code> 方法执行中间件。</li>
+    <li>每一个中间件都有一个<code>next</code>参数（暂时不考虑ctx参数），<code>next</code>参数可以控制进入下一个中间件的时机。</li>
+  </ul>
+  <p>简易实现如下：</p>
+  <pre><code class="hljs language-javascript copyable" lang="javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Koa</span> () {
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">middleares</span> = [];
+}
+
+<span class="hljs-title class_">Koa</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">use</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">middleare</span>) {
+    <span class="hljs-comment">// 此时 middleare 其实就是 (ctx, next) =&gt; ()</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">middleares</span>.<span class="hljs-title function_">push</span>(middleare); <span class="hljs-comment">// 发布订阅，先收集中间件</span>
+    reutrn <span class="hljs-variable language_">this</span>;
+}
+<span class="hljs-title class_">Koa</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">listen</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+   <span class="hljs-keyword">const</span> fn = <span class="hljs-title function_">compose</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">middleares</span>); <span class="hljs-comment">// 组合中间件</span>
+}
+
+<span class="hljs-comment">// 核心函数</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">compose</span> (middleares) {
+    <span class="hljs-comment">// 准备递归</span>
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">dispatch</span>(<span class="hljs-params">i</span>) {
+        <span class="hljs-keyword">const</span> middleare = middleares[i]; <span class="hljs-comment">// 别忘记中间件的格式 (ctx, next) =&gt; ()</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">middleare</span>(<span class="hljs-string">'ctx'</span>, dispatch.<span class="hljs-title function_">bind</span>(<span class="hljs-literal">null</span>, i + <span class="hljs-number">1</span>)); <span class="hljs-comment">// 每次调用next，都用调用一次dispatch方法，并且i+1</span>
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">dispatch</span>(<span class="hljs-number">0</span>)
+}
+<span class="hljs-keyword">const</span> app = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Koa</span>();
+
+<span class="hljs-comment">// 中间件1</span>
+app.<span class="hljs-title function_">use</span>(<span class="hljs-function">(<span class="hljs-params">ctx, next</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"1"</span>);
+  <span class="hljs-title function_">next</span>();
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'2'</span>);
+})
+<span class="hljs-comment">// 中间件2</span>
+app.<span class="hljs-title function_">use</span>(<span class="hljs-function">(<span class="hljs-params">ctx, next</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"3"</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'4'</span>);
+})
+
+app.<span class="hljs-title function_">listen</span>();
+<span class="hljs-comment">// 打印 1342</span>
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <h3 data-id="heading-2">最后一个中间件调用next如何处理？</h3>
+  <p>最简单的版本就已经实现了，但是还是有点问题，当最后一个中间件继续调用<code>next</code>时，会发现如下报错信息：</p>
+  <p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/df004d2b10904f348ac81713c7e3a3dd~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp?" alt="image.png" loading="lazy" class="medium-zoom-image">
+    原因就是当最后一个中间件调用<code>next</code>的时候，<code>i+1</code> 之后已经超出了<code>middeares</code>的最大下标，找不到对应的<code>middeare</code>了，具体实现如下：</p>
+  <pre><code class="hljs language-diff copyable" lang="diff">...
+
+// 核心函数
+function compose (middleares) {
+  // 准备遍历
+  function dispatch(i) {
+<span class="hljs-addition">+   if(i === middleares.length) return; // 没有找到直接跳出递归</span>
+    const middleare = middleares[i]; // 别忘记中间件的格式 (ctx, next) =&gt; ()
+    return middleare('ctx', dispatch.bind(null, i + 1)); // 每次调用next，都用调用一次dispatch方法，并且i+1，
+  }
+  return dispatch(0);
+}
+
+...
+
+app.use((ctx, next) =&gt; {
+  console.log("1");
+  next();
+  console.log('2');
+})
+app.use((ctx, next) =&gt; {
+  console.log("3");
+<span class="hljs-addition">+ next()</span>
+  console.log('4');
+})
+
+app.listen(3000);
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <h3 data-id="heading-3">如何解决同一个中间件多次调用next？</h3>
+  <p>乍一看似乎是没有问题，但是如果在一个中间件里面连续调两次<code>next</code>，会发生什么结果呢？
+    先来看看 <code>koa</code> ：</p>
+  <p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d3febbc59cc14b6eb92f6aa70b5fed43~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp?" alt="image.png" loading="lazy" class="medium-zoom-image">
+    报错信息说 <code>next()</code> 被调用多次，那这个又是如何实现的呢？</p>
+  <p>思路： 创建一个<code>index</code>（指针），记录已递归的<code>middleare</code>的最新下标，当一个中间件第二次调用<code>next</code>的时候，说明它正在走后置语句部分，也就是说所有的中间件都调用过<code>next</code>了，那此时只需要比较一下<code>i</code>跟<code>index</code>的值即可。</p>
+  <pre><code class="hljs language-diff copyable" lang="diff">
+...
+
+// 核心函数
+function compose (middleares) {
+<span class="hljs-addition">+ let index = -1; 创建指针</span>
+  // 准备遍历
+  function dispatch(i) {
+<span class="hljs-addition">+   if(i &lt;= index) throw new Error('next() called multiple times');</span>
+<span class="hljs-addition">+   index = i;</span>
+    if(i <span class="hljs-comment">=== middleares.length) return;</span>
+    const middleare = middleares[i]; // 别忘记中间件的格式 (ctx, next) =&gt; ()
+    return middleare('ctx', dispatch.bind(null, i + 1)); // 每次调用next，都用调用一次dispatch方法，并且i+1，
+  }
+  return dispatch(0)
+}
+
+...
+
+app.use((ctx, next) =&gt; {
+  console.log("1");
+  next();
+<span class="hljs-addition">+ next();</span>
+  console.log('2');
+})
+app.use((ctx, next) =&gt; {
+  console.log("3");
+  next();
+  console.log('4');
+})
+
+app.listen(3000);
+
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <h3 data-id="heading-4">完整代码</h3>
+  <p>其中最精华的部分就是<code>compose</code>函数，细数一下，只有<code>11</code>行代码，1比1还原了<code>koa</code>的<code>compose</code>函数（去除了不影响主逻辑判断）。</p>
+  <blockquote>
+    <p>koa是利用koa-compose这个库进行组合中间件的，在koa-compose里面，next返回的都是一个promise函数。</p>
+  </blockquote>
+  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Koa</span> () {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">middleares</span> = [];
+}
+<span class="hljs-title class_">Koa</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">use</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">middleare</span>) {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">middleares</span>.<span class="hljs-title function_">push</span>(middleare);
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+}
+<span class="hljs-title class_">Koa</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">listen</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> fn = <span class="hljs-title function_">compose</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">middleares</span>);
+}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">compose</span>(<span class="hljs-params">middleares</span>) {
+  <span class="hljs-keyword">let</span> index = -<span class="hljs-number">1</span>;
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">dispatch</span> = (<span class="hljs-params">i</span>) =&gt; {
+    <span class="hljs-keyword">if</span>(i &lt;= index) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">'next（） 不能调用多次'</span>);
+    index = i;
+    <span class="hljs-keyword">if</span>(i &gt;= middleares.<span class="hljs-property">length</span>) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">const</span> middleare = middleares[i];
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">middleare</span>(<span class="hljs-string">'ctx'</span>, dispatch.<span class="hljs-title function_">bind</span>(<span class="hljs-literal">null</span>, i + <span class="hljs-number">1</span>));
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">dispatch</span>(<span class="hljs-number">0</span>);
+}
+
+<span class="hljs-keyword">const</span> app = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Koa</span>();
+app.<span class="hljs-title function_">use</span>(<span class="hljs-keyword">async</span> (ctx, next) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'1'</span>);
+  <span class="hljs-title function_">next</span>();
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'2'</span>);
+});
+app.<span class="hljs-title function_">use</span>(<span class="hljs-keyword">async</span> (ctx, next) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'3'</span>);
+  <span class="hljs-title function_">next</span>();
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'4'</span>);
+});
+app.<span class="hljs-title function_">use</span>(<span class="hljs-keyword">async</span> (ctx, next) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'5'</span>);
+  <span class="hljs-title function_">next</span>();
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'6'</span>);
+});
+
+app.<span class="hljs-title function_">listen</span>();
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <h2 data-id="heading-5">如何编写中间件</h2>
+  <p>使用中间件好处是可以解耦代码，提高可利用性，方便复用，比如<code>logger中间件</code>，或者是说 <code>跨域中间件</code>，
+    下面简易实现一个<code>cors()</code>中间件。</p>
+  <p>不使用中间件版本：</p>
+  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Koa</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'koa'</span>);
+<span class="hljs-keyword">const</span> app = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Koa</span>();
+
+app.<span class="hljs-title function_">use</span>(<span class="hljs-keyword">async</span> (ctx, next) =&gt; {
+  ctx.<span class="hljs-title function_">set</span>(<span class="hljs-string">'Access-Control-Allow-Headers'</span>, <span class="hljs-string">'X-Requested-With'</span>)
+  ctx.<span class="hljs-title function_">set</span>(<span class="hljs-string">'Access-Control-Allow-Origin'</span>, <span class="hljs-string">'*'</span>)
+  ctx.<span class="hljs-title function_">set</span>(<span class="hljs-string">'Access-Control-Allow-Methods'</span>, <span class="hljs-string">'GET,HEAD,PUT,POST,DELETE,PATCH'</span>)
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'第一个中间件'</span>, ctx.<span class="hljs-property">request</span>.<span class="hljs-property">method</span>,ctx.<span class="hljs-property">request</span>.<span class="hljs-property">url</span>);
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>();
+  ctx.<span class="hljs-property">body</span> = <span class="hljs-string">'hello world'</span>
+});
+app.<span class="hljs-title function_">listen</span>(<span class="hljs-number">8020</span>);
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <p>本地可以搭建一个前端项目，然后<code>fetch('http://localhost:8020')</code>上面是不使用中间件的版本，可以看到我们想要实现跨域，只能把跨域逻辑写在你的中间件里面，但同时这个中间件也还有你的业务逻辑代码，所以需要解耦出来。</p>
+  <p>改造之后的版本：</p>
+  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Koa</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'koa'</span>);
+<span class="hljs-keyword">const</span> app = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Koa</span>();
+
+<span class="hljs-comment">// 中间件过多，可以创建一个middleares文件夹，将cors函数放到middleares/cors.js文件里面</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">cors</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">async</span> (ctx, next) =&gt; {
+    ctx.<span class="hljs-title function_">set</span>(<span class="hljs-string">'Access-Control-Allow-Headers'</span>, <span class="hljs-string">'X-Requested-With'</span>)
+    ctx.<span class="hljs-title function_">set</span>(<span class="hljs-string">'Access-Control-Allow-Origin'</span>, <span class="hljs-string">'*'</span>)
+    ctx.<span class="hljs-title function_">set</span>(<span class="hljs-string">'Access-Control-Allow-Methods'</span>, <span class="hljs-string">'GET,HEAD,PUT,POST,DELETE,PATCH'</span>)
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>();
+  }
+};
+
+app.<span class="hljs-title function_">use</span>(<span class="hljs-title function_">cors</span>());
+app.<span class="hljs-title function_">use</span>(<span class="hljs-keyword">async</span> (ctx, next) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'第一个中间件'</span>, ctx.<span class="hljs-property">request</span>.<span class="hljs-property">method</span>,ctx.<span class="hljs-property">request</span>.<span class="hljs-property">url</span>);
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>();
+  ctx.<span class="hljs-property">body</span> = <span class="hljs-string">'hello world'</span>
+});
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <p><code>koa</code>的中间件都是有固定模板的，首先是一个函数，并且返回一个<code>async</code>函数（闭包的应用），这个<code>async</code>函数有两个参数，一个是<code>koa</code>的<code>context</code>，一个是<code>next</code>函数。</p>
+  <h2 data-id="heading-6">总结</h2>
+  <p>本文实现了<code>koa</code>洋葱模型简易功能，虽然<code>koa</code>中间件注册的时候是一个个注册进去的，但是其内部利用组合函数（<code>compose</code>），按照注册的先后顺序，将中间件都包裹起来（有点类似于套娃hahaha），关键点就是<code>compose</code>函数妙用，值得学习。</p></div>

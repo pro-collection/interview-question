@@ -8,30 +8,34 @@ import repoConfig from "@utils/repoConfig";
 import { labels, MileStone } from "@src/githubApi/issue/consts";
 import { giteeWriteIssue } from "@src/giteeApi/issue/writeIssue";
 import { giteeMileStone } from "@src/giteeApi/issue/consts";
+import { writeToTemp } from "@src/githubApi/issue/helper";
 
 const htmlWriteIssue = async () => {
-  const getHtml = fs.readFileSync("./demo.html", { encoding: "utf-8" });
+  // const getHtml = fs.readFileSync("./demo.html", { encoding: "utf-8" });
+  //
+  // let markdown = h2m(getHtml);
+  //
+  // // 写入文件
+  // markdown = flow(
+  //   value => value.replace(/javascriptCopy code/gi, ""),
+  //   value => value.replace(/\\. /gi, ". "),
+  //   value => value.replace(/\\- /gi, "- "),
+  //   value => value.replace(/复制代码/gi, ""),
+  //   // value => value.replace(/\n### /gi, "\n#### "),
+  //   value => value.replace(/\n## /gi, "\n### "),
+  // )(markdown);
+  // // if (/javascriptCopy code/gi.test(markdown)) markdown = markdown.replace(/javascriptCopy code/gi, "");
+  //
+  // if (markdown) fs.writeFileSync("./demo.md", markdown, { encoding: "utf-8" });
 
-  let markdown = h2m(getHtml);
-
-  // 写入文件
-  markdown = flow(
-    value => value.replace(/javascriptCopy code/gi, ""),
-    value => value.replace(/\\. /gi, ". "),
-    value => value.replace(/\\- /gi, "- "),
-    value => value.replace(/复制代码/gi, ""),
-    // value => value.replace(/\n### /gi, "\n#### "),
-    value => value.replace(/\n## /gi, "\n### "),
-  )(markdown);
-  // if (/javascriptCopy code/gi.test(markdown)) markdown = markdown.replace(/javascriptCopy code/gi, "");
-
-  if (markdown) fs.writeFileSync("./demo.md", markdown, { encoding: "utf-8" });
+  // 写入本地
+  writeToTemp("./demo.md");
 
   // 直接用 html 写还是有一丢丢的问题， 需要认为改定一些内容才可
   const remote = {
-    title: "如何监控前端页面内存持续增长情况？",
-    labels: [labels.network],
-    milestone: MileStone.senior,
+    title: "CSS 中 position 常见属性有哪些，大概讲一下？",
+    labels: [labels.css],
+    milestone: MileStone.base,
     body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   };
 

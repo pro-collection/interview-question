@@ -13,9 +13,9 @@ const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue,
 });
 
 const remote = {
-  title: "HTTPS 加密算法和加解密过程是啥？",
-  labels: [labels.network],
-  milestone: MileStone.master,
+  title: "如何实现洋葱模式？",
+  labels: [labels.frameWork],
+  milestone: MileStone.senior,
   body: fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };

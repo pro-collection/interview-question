@@ -1,7 +1,63 @@
-Promise 构造函数是同步执行的，而 then 方法是异步执行的。
+订阅-发布模式是一种常用的设计模式，它可以实现对象间的解耦，让它们不需要相互知道对方的存在，只需要关注自己需要订阅的事件即可。当一个对象的状态发生变化时，它可以发布一个事件通知其他对象，其他对象可以订阅该事件，当事件发生时得到通知并执行相应的处理。
 
-在 Promise 构造函数中，Promise 的状态（pending/resolved/rejected）是同步确定的。但是 Promise 中的异步操作可能还没有完成，因此 Promise 对象本身的值可能还没有可用的值。所以，当我们在构造函数中使用 resolve/reject 时，它们并不会立即触发 then 中注册的回调函数执行。
+在 JavaScript 中，订阅-发布模式也被称为事件模型。事件模型由两个主要组件组成：事件触发器和事件监听器。事件触发器负责触发事件，而事件监听器则负责监听事件并执行相应的回调函数。
 
-而 then 方法则是异步执行的。当我们在一个 Promise 对象上调用 then 方法并注册了回调函数时，这些回调函数并不会立即执行。相反，它们会被添加到一个任务队列中，等到当前 JavaScript 上下文中的所有同步代码执行完成后再执行。
+下面是一个简单的实现订阅-发布模式的例子：
 
-这也是 Promise 非常重要的特性之一，即能够在异步任务完成后执行回调函数，避免了回调地狱等问题。
+```javascript
+class EventEmitter {
+  constructor() {
+    this._events = {};
+  }
+
+  on(event, listener) {
+    if (!this._events[event]) {
+      this._events[event] = [];
+    }
+    this._events[event].push(listener);
+  }
+
+  emit(event, ...args) {
+    if (this._events[event]) {
+      this._events[event].forEach((listener) => listener(...args));
+    }
+  }
+
+  off(event, listener) {
+    if (this._events[event]) {
+      this._events[event] = this._events[event].filter((l) => l !== listener);
+    }
+  }
+}
+```
+
+这个实现包括三个方法：
+
+* `on(event, listener)`：订阅事件，当事件被触发时执行监听器 `listener`；
+* `emit(event, ...args)`：触发事件，并将参数 `...args` 传递给监听器；
+* `off(event, listener)`：取消订阅事件，不再执行监听器 `listener`。
+
+使用方法如下：
+
+```javascript
+const emitter = new EventEmitter();
+
+// 订阅事件
+emitter.on("event", (arg1, arg2) => {
+  console.log(`event: ${arg1}, ${arg2}`);
+});
+
+// 触发事件
+emitter.emit("event", "hello", "world");
+
+// 取消订阅事件
+emitter.off("event");
+```
+
+以上代码将输出：
+
+```csharp
+csharpCopy codeevent: hello, world
+```
+
+订阅-发布模式在事件驱动的系统中非常常见，例如浏览器中的 DOM 事件、Node.js 中的异步 IO 事件等。

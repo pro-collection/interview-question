@@ -25,4 +25,5 @@ export const company = {
   mi: "小米",
   mt: "美团",
   jd: "京东",
+  netEase: '网易',
 };

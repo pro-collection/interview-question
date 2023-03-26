@@ -77,52 +77,8 @@
 
 > 2023.02.23
 > 参考文档：https://juejin.cn/post/6844903885488783374
-。
-- 第 15 题：（网易）简单讲解一下http2的多路复用
-- 第 16 题：谈谈你对TCP三次握手和四次挥手的理解
-- 第 17 题：A、B 机器正常连接后，B 机器突然重启，问 A 此时处于 TCP 什么状态
-```
-如果A 与 B 建立了正常连接后，从未相互发过数据，这个时候 B 突然机器重启，问 A 此时处于 TCP 什么状态？如何消除服务器程序中的这个状态？（超纲题，了解即可）
-```
-- 第 18 题：（微医）React 中 setState 什么时候是同步的，什么时候是异步的？
-- 第 19 题：React setState 笔试题，下面的代码输出什么？
-```ts
-class Example extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      val: 0
-    };
-  }
-  
-  componentDidMount() {
-    this.setState({val: this.state.val + 1});
-    console.log(this.state.val);    // 第 1 次 log
 
-    this.setState({val: this.state.val + 1});
-    console.log(this.state.val);    // 第 2 次 log
 
-    setTimeout(() => {
-      this.setState({val: this.state.val + 1});
-      console.log(this.state.val);  // 第 3 次 log
-
-      this.setState({val: this.state.val + 1});
-      console.log(this.state.val);  // 第 4 次 log
-    }, 0);
-  }
-
-  render() {
-    return null;
-  }
-};
-```
-- 第 20 题：介绍下 npm 模块安装机制，为什么输入 npm install 就可以自动安装对应的模块？
-- 第 21 题：有以下 3 个判断数组的方法，请分别介绍它们之间的区别和优劣
-```
-Object.prototype.toString.call() 、 instanceof 以及 Array.isArray()
-```
-- 第 22 题：介绍下重绘和回流（Repaint & Reflow），以及如何进行优化
-- 第 23 题：介绍下观察者模式和订阅-发布模式的区别，各自适用于什么场景
 - 第 24 题：聊聊 Redux 和 Vuex 的设计思想
 - 第 25 题：说说浏览器和 Node 事件循环的区别
 - 第 26 题：介绍模块化发展历程

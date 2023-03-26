@@ -1,2 +1,38 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>HTTP/2 的多路复用是一种新的协议特性，它使得多个 HTTP 请求可以通过同一个 TCP 连接并行传输。在 HTTP/1 中，每个请求都需要建立一个 TCP 连接，这会导致连接建立的开销和网络拥塞的问题。而 HTTP/2 的多路复用可以避免这些问题，提高网络的效率。</p><p>具体来说，HTTP/2 的多路复用将 HTTP 请求和响应分割为多个带有独立流 ID 的帧，然后将这些帧交错地发送到服务器和客户端。每个流都可以有自己的优先级和窗口大小控制，可以根据不同的流的优先级来调整流量，确保高优先级的流能够更快地获得资源。</p><p>HTTP/2 的多路复用的主要优点包括：</p><ul><li>减少了连接建立的次数：多路复用允许在一个 TCP 连接上同时传输多个 HTTP 请求和响应，从而减少了连接建立的开销。</li><li>提高了网络性能：多路复用能够使多个请求和响应交错地发送到服务器和客户端，从而避免了网络拥塞，提高了网络的效率。</li><li>改进了网页加载速度：多路复用能够优先处理优先级高的流，从而使得网页加载速度更快。</li></ul><p>关于实现原理，HTTP/2 的多路复用是通过二进制分帧机制实现的。在传输层之上，HTTP/2 使用了帧来传输 HTTP 消息。每个帧都包含了帧头和帧体两部分。帧头包含了帧的类型、长度和标识等信息，帧体则包含了具体的数据。</p><p>HTTP/2 中的流是一个虚拟的概念，一个流可以包含多个帧。HTTP/2 通过流 ID 来区分不同的流，每个流都有一个独立的双向传输通道。HTTP/2 中的每个流都可以有自己的优先级，服务器可以根据流的优先级来调整流量，确保高优先级的流能够更快地获得资源。</p></div>
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>订阅-发布模式是一种常用的设计模式，它可以实现对象间的解耦，让它们不需要相互知道对方的存在，只需要关注自己需要订阅的事件即可。当一个对象的状态发生变化时，它可以发布一个事件通知其他对象，其他对象可以订阅该事件，当事件发生时得到通知并执行相应的处理。</p><p>在 JavaScript 中，订阅-发布模式也被称为事件模型。事件模型由两个主要组件组成：事件触发器和事件监听器。事件触发器负责触发事件，而事件监听器则负责监听事件并执行相应的回调函数。</p><p>下面是一个简单的实现订阅-发布模式的例子：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">EventEmitter</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span> = {};
+  }
 
+  <span class="hljs-title function_">on</span>(<span class="hljs-params">event, listener</span>) {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event]) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event] = [];
+    }
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event].<span class="hljs-title function_">push</span>(listener);
+  }
+
+  <span class="hljs-title function_">emit</span>(<span class="hljs-params">event, ...args</span>) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event]) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event].<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">listener</span>) =&gt;</span> <span class="hljs-title function_">listener</span>(...args));
+    }
+  }
+
+  <span class="hljs-title function_">off</span>(<span class="hljs-params">event, listener</span>) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event]) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event] = <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event].<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">l</span>) =&gt;</span> l !== listener);
+    }
+  }
+}
+</code></div></div></pre><p>这个实现包括三个方法：</p><ul><li><code>on(event, listener)</code>：订阅事件，当事件被触发时执行监听器 <code>listener</code>；</li><li><code>emit(event, ...args)</code>：触发事件，并将参数 <code>...args</code> 传递给监听器；</li><li><code>off(event, listener)</code>：取消订阅事件，不再执行监听器 <code>listener</code>。</li></ul><p>使用方法如下：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">const</span> emitter = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventEmitter</span>();
+
+<span class="hljs-comment">// 订阅事件</span>
+emitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">"event"</span>, <span class="hljs-function">(<span class="hljs-params">arg1, arg2</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`event: <span class="hljs-subst">${arg1}</span>, <span class="hljs-subst">${arg2}</span>`</span>);
+});
+
+<span class="hljs-comment">// 触发事件</span>
+emitter.<span class="hljs-title function_">emit</span>(<span class="hljs-string">"event"</span>, <span class="hljs-string">"hello"</span>, <span class="hljs-string">"world"</span>);
+
+<span class="hljs-comment">// 取消订阅事件</span>
+emitter.<span class="hljs-title function_">off</span>(<span class="hljs-string">"event"</span>);
+</code></div></div></pre><p>以上代码将输出：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>csharp</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-csharp"><span class="hljs-keyword">event</span>: hello, world
+</code></div></div></pre><p>订阅-发布模式在事件驱动的系统中非常常见，例如浏览器中的 DOM 事件、Node.js 中的异步 IO 事件等。</p></div>

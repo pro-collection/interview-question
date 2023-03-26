@@ -1,6 +1,6 @@
 export interface WriteIssueOptions {
   title: string;
-  body?: string;
+  body: (() => string) | string;
   labels?: string[];
   milestone?: number;
 }

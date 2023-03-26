@@ -7,21 +7,23 @@ import { giteeWriteIssue } from "@src/giteeApi/issue/writeIssue";
 import { giteeMileStone } from "@src/giteeApi/issue/consts";
 import { join } from "lodash";
 
-
 const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue, {
   ...options,
   ...repoConfig.interviewRepo,
 });
 
-export const writeIssue = async (remote: WriteIssueOptions) => {
+export const writeIssue = async (remote: any) => {
   // 写入 github
-  const githubRes = await write(remote);
+  const githubRes = await write({
+    ...remote,
+    body: remote.body(),
+  });
   console.log(`yanle - logger: 写入 github - ${remote.title}`, githubRes.status);
 
   // 写入 gitee
   await giteeWriteIssue({
     title: remote.title,
-    body: remote.body,
+    body: remote.body(),
     labels: join(remote.labels, ","),
     milestone: giteeMileStone[remote.milestone as MileStone],
   });

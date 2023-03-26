@@ -75,7 +75,7 @@ const main = async () => {
   const issueLength = get(issueRes.data, "length");
 
   const issueLenDesc = issueLength ? `（${issueLength}道题）` : "";
-  const releaseName = `${date} 更新收集面试问题${issueLenDesc}`;
+  const releaseName = `${date} 更新前端面试问题总结${issueLenDesc}`;
   const releaseBody = getReleaseContent(issueRes.data, releaseName);
 
   await createRelease({ tag_name, name: releaseName, body: releaseBody });

@@ -57,7 +57,10 @@ ${item.body}
     const companyName = filter(item.labels, labelItem => includes(companyList, labelItem));
     const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName)}】`;
 
-    const simpleTitle = `${item.number}.${item.title}【${join(item.labels, "、")}】${companyString}`;
+    // 普通的标签
+    const commonLabels = filter(item.labels, label => !includes(companyList, label));
+
+    const simpleTitle = `${item.number}.${item.title}【${join(commonLabels, "、")}】${companyString}`;
     const title = isBody ? `## ${simpleTitle}` : simpleTitle;
     return `
 ${title}
@@ -70,8 +73,11 @@ ${body}
     const companyName = filter(item.labels, labelItem => includes(companyList, labelItem));
     const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName)}】`;
 
+    // 普通的标签
+    const commonLabels = filter(item.labels, label => !includes(companyList, label));
+
     // title
-    return `  - ${item.number}.${item.title}【${join(item.labels, "、")}】${companyString}`;
+    return `  - ${item.number}.${item.title}【${join(commonLabels, "、")}】${companyString}`;
   });
 
   const mapTitle = (list: any[]) => reduce(justTitle(sortBy(list, "number")), (prev, current) => prev + current + "\n", "");

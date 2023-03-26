@@ -71,71 +71,13 @@
 
 > 2023.02.22
 
-
-
-- Http 2.0和http3.0对比之前的版本, 分别做了哪些改进?
-- HTTP 3.0基于udp的话, 如何保证可靠的传输?
-- TCP和UDP最大的区别是什么?
-- CSP除了能防止加载外域脚本, 还能做什么?
-- typescript is这个关键字是做什么呢?
-
-- Https中间人攻击
-- 前端History路由配置 nginx
-
-- 截图怎么实现
-- qps达到峰值了，怎么去优化
-- js超过Number最大值的数怎么处理?
 - node 服务治理
 
 ----------
 
 > 2023.02.23
 > 参考文档：https://juejin.cn/post/6844903885488783374
-
-- 第 1 题：（滴滴、饿了么）写 React / Vue 项目时为什么要在列表组件中写 key，其作用是什么？
-- 第 2 题：['1', '2', '3'].map(parseInt) what & why ?
-- 第 3 题：（挖财）什么是防抖和节流？有什么区别？如何实现？
-- 第 4 题：介绍下 Set、Map、WeakSet 和 WeakMap 的区别？
-- 第 5 题：介绍下深度优先遍历和广度优先遍历，如何实现？
-- 第 6 题：请分别用深度优先思想和广度优先思想实现一个拷贝函数？
-- 第 7 题：ES5/ES6 的继承除了写法以外还有什么区别？
-- 第 8 题：setTimeout、Promise、Async/Await 的区别
-- 第 9 题：（头条、微医）Async/Await 如何通过同步的方式实现异步
-- 第 10 题：（头条）异步笔试题
-```ts
-// 请写出下面代码的运行结果
-async function async1() {
-  console.log('async1 start');
-  await async2();
-  console.log('async1 end');
-}
-async function async2() {
-  console.log('async2');
-}
-console.log('script start');
-setTimeout(function() {
-  console.log('setTimeout');
-}, 0)
-async1();
-new Promise(function(resolve) {
-  console.log('promise1');
-  resolve();
-}).then(function() {
-  console.log('promise2');
-});
-console.log('script end');
-```
-  
-- 第 11 题：（携程）算法手写题
-```
-已知如下数组：
-var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
-编写一个程序将数组扁平化去并除其中重复部分数据，最终得到一个升序且不重复的数组
-```
-
-- 第 12 题：（滴滴、挖财、微医、海康）JS 异步解决方案的发展历程以及优缺点。
-- 第 13 题：（微医）Promise 构造函数是同步执行还是异步执行，那么 then 方法呢？
-- 第 14 题：（兑吧）情人节福利题，如何实现一个 new
+。
 - 第 15 题：（网易）简单讲解一下http2的多路复用
 - 第 16 题：谈谈你对TCP三次握手和四次挥手的理解
 - 第 17 题：A、B 机器正常连接后，B 机器突然重启，问 A 此时处于 TCP 什么状态

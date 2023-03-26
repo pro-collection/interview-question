@@ -5,9 +5,9 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "[React] useEffect的第二个参数，如何判断依赖是否发生变化？?",
-  labels: [labels.frameWork],
-  milestone: MileStone.senior,
+  title: "Promise 构造函数是同步执行还是异步执行，那么 then 方法呢？",
+  labels: [labels.js],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };
@@ -15,8 +15,8 @@ const remote = {
 // html 写入远端
 htmlWriteIssue(remote);
 
-// 写入本地 temp.md
-// writeToTemp();
-
 // md 写入远端
 // writeIssue(remote);
+
+// 写入本地 temp.md
+// writeToTemp();

@@ -1,6 +1,6 @@
 {
   "name": "interview-question",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "想做一个很全的面试题库工程",
   "main": "index.js",
   "scripts": {

@@ -5,8 +5,8 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "手写订阅-发布模式",
-  labels: [labels.js, company.netEase, company.alibaba],
+  title: "全局作用域中，用 const 和 let 声明的变量不在 window 上，那到底在哪里？如何去获取？",
+  labels: [labels.network],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),

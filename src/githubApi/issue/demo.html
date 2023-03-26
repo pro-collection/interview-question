@@ -1,38 +1,5 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>订阅-发布模式是一种常用的设计模式，它可以实现对象间的解耦，让它们不需要相互知道对方的存在，只需要关注自己需要订阅的事件即可。当一个对象的状态发生变化时，它可以发布一个事件通知其他对象，其他对象可以订阅该事件，当事件发生时得到通知并执行相应的处理。</p><p>在 JavaScript 中，订阅-发布模式也被称为事件模型。事件模型由两个主要组件组成：事件触发器和事件监听器。事件触发器负责触发事件，而事件监听器则负责监听事件并执行相应的回调函数。</p><p>下面是一个简单的实现订阅-发布模式的例子：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">EventEmitter</span> {
-  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span> = {};
-  }
+<h3>Memory Cache 和 Disk Cache 的区别</h3>
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>在浏览器缓存中，Memory Cache 和 Disk Cache 是两种不同的缓存类型，它们有以下区别：</p><ol><li>存储位置：Memory Cache 存储在内存中，而 Disk Cache 存储在硬盘中。</li><li>读取速度：Memory Cache 读取速度比 Disk Cache 快，因为内存访问速度比硬盘访问速度快。</li><li>存储容量：Memory Cache 存储容量比较小，一般只有几十兆，而 Disk Cache 存储容量比较大，可以有数百兆或者更多。</li><li>生命周期：Memory Cache 生命周期短暂，一般只在当前会话中有效，当会话结束或者浏览器关闭时，Memory Cache 就会被清空；而 Disk Cache 生命周期比较长，数据可以被保存很长时间，即使浏览器关闭了，下次打开还可以使用。</li></ol><p>一般来说，浏览器在请求资源时，会优先从 Memory Cache 中读取，如果没有找到再去 Disk Cache 中查找。如果两种缓存中都没有找到，则会向服务器发送请求。如果需要强制刷新缓存，可以通过清空浏览器缓存来实现。</p></div>
 
-  <span class="hljs-title function_">on</span>(<span class="hljs-params">event, listener</span>) {
-    <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event]) {
-      <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event] = [];
-    }
-    <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event].<span class="hljs-title function_">push</span>(listener);
-  }
-
-  <span class="hljs-title function_">emit</span>(<span class="hljs-params">event, ...args</span>) {
-    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event]) {
-      <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event].<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">listener</span>) =&gt;</span> <span class="hljs-title function_">listener</span>(...args));
-    }
-  }
-
-  <span class="hljs-title function_">off</span>(<span class="hljs-params">event, listener</span>) {
-    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event]) {
-      <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event] = <span class="hljs-variable language_">this</span>.<span class="hljs-property">_events</span>[event].<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">l</span>) =&gt;</span> l !== listener);
-    }
-  }
-}
-</code></div></div></pre><p>这个实现包括三个方法：</p><ul><li><code>on(event, listener)</code>：订阅事件，当事件被触发时执行监听器 <code>listener</code>；</li><li><code>emit(event, ...args)</code>：触发事件，并将参数 <code>...args</code> 传递给监听器；</li><li><code>off(event, listener)</code>：取消订阅事件，不再执行监听器 <code>listener</code>。</li></ul><p>使用方法如下：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">const</span> emitter = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventEmitter</span>();
-
-<span class="hljs-comment">// 订阅事件</span>
-emitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">"event"</span>, <span class="hljs-function">(<span class="hljs-params">arg1, arg2</span>) =&gt;</span> {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`event: <span class="hljs-subst">${arg1}</span>, <span class="hljs-subst">${arg2}</span>`</span>);
-});
-
-<span class="hljs-comment">// 触发事件</span>
-emitter.<span class="hljs-title function_">emit</span>(<span class="hljs-string">"event"</span>, <span class="hljs-string">"hello"</span>, <span class="hljs-string">"world"</span>);
-
-<span class="hljs-comment">// 取消订阅事件</span>
-emitter.<span class="hljs-title function_">off</span>(<span class="hljs-string">"event"</span>);
-</code></div></div></pre><p>以上代码将输出：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>csharp</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-csharp"><span class="hljs-keyword">event</span>: hello, world
-</code></div></div></pre><p>订阅-发布模式在事件驱动的系统中非常常见，例如浏览器中的 DOM 事件、Node.js 中的异步 IO 事件等。</p></div>
+<h3>什么情况下资源会缓存在 Memory Cache， 什么情况下会缓存在 Disk Cache ?</h3>
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>浏览器中的缓存是为了提高网页访问速度和减少网络流量而存在的。缓存分为 Memory Cache 和 Disk Cache 两种。</p><p>Memory Cache 是浏览器内存缓存，资源会被缓存在内存中，由于内存读取速度快，所以 Memory Cache 的读取速度也较快。资源被缓存在 Memory Cache 中的情况有：</p><ol><li>当前页面中通过 &lt;link&gt; 或者 &lt;script&gt; 标签引入的资源；</li><li>当前页面通过 XMLHttpRequest 或 Fetch API 请求获取到的资源。</li></ol><p>Disk Cache 是浏览器磁盘缓存，资源会被缓存在磁盘中。由于磁盘读取速度相对内存较慢，所以 Disk Cache 的读取速度也较慢。资源被缓存在 Disk Cache 中的情况有：</p><ol><li>当前页面中通过 &lt;img&gt; 标签引入的资源；</li><li>当前页面中通过 &lt;audio&gt; 或 &lt;video&gt; 标签引入的资源；</li><li>当前页面中通过 iframe 加载的资源；</li><li>当前页面中通过 WebSocket 加载的资源；</li><li>通过 Service Worker 缓存的资源。</li></ol><p>一般来说，比较大的资源会被缓存到 Disk Cache 中，而较小的资源则会被缓存到 Memory Cache 中。如果需要手动清除缓存，可以在浏览器设置中找到相应选项进行操作。</p></div>

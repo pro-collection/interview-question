@@ -79,28 +79,6 @@
 > 参考文档：https://juejin.cn/post/6844903885488783374
 
 
-- 第 24 题：聊聊 Redux 和 Vuex 的设计思想
-- 第 25 题：说说浏览器和 Node 事件循环的区别
-- 第 26 题：介绍模块化发展历程
-```
-可从IIFE、AMD、CMD、CommonJS、UMD、webpack(require.ensure)、ES Module、<script type="module"> 这几个角度考虑。
-```
-- 第 27 题：全局作用域中，用 const 和 let 声明的变量不在 window 上，那到底在哪里？如何去获取？。
-- 第 28 题：cookie 和 token 都存放在 header 中，为什么不会劫持 token？
-- 第 29 题：聊聊 Vue 的双向数据绑定，Model 如何改变 View，View 又是如何改变 Model 的
-- 第 30 题：两个数组合并成一个数组
-```
-请把两个数组 ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'] 和 ['A', 'B', 'C', 'D']，
-合并为 ['A1', 'A2', 'A', 'B1', 'B2', 'B', 'C1', 'C2', 'C', 'D1', 'D2', 'D']。
-```
-- 第 31 题：改造下面的代码，使之输出0 - 9，写出你能想到的所有解法。
-```
-for (var i = 0; i< 10; i++){
-	setTimeout(() => {
-		console.log(i);
-    }, 1000)
-}
-```
 - 第 32 题：Virtual DOM 真的比操作原生 DOM 快吗？谈谈你的想法。
 - 第 33 题：下面的代码打印什么内容，为什么？
 ```
@@ -120,7 +98,7 @@ var b = 10;
 ```
 - 第 35 题：浏览器缓存读取规则
 ```
-可以分成 Service Worker、Memory Cache、Disk Cache 和 Push Cache，那请求的时候 from memory cache 和 from disk cache 的依据是什么，哪些数据什么时候存放在 Memory Cache 和 Disk Cache中？
+可以分成 Service Worker、Memory Cache、Disk Cache 和 Push Cache，那请求的时候 from memory cache 和 from disk cache 的依据是什么，哪些数据什么时候存放在 Memory Cache 和 Disk Cache 中？
 ```
 - 第 36 题：使用迭代的方式实现 flatten 函数。
 - 第 37 题：为什么 Vuex 的 mutation 和 Redux 的 reducer 中不能做异步操作？

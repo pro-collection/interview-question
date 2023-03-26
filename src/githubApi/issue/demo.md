@@ -1,63 +1,29 @@
-订阅-发布模式是一种常用的设计模式，它可以实现对象间的解耦，让它们不需要相互知道对方的存在，只需要关注自己需要订阅的事件即可。当一个对象的状态发生变化时，它可以发布一个事件通知其他对象，其他对象可以订阅该事件，当事件发生时得到通知并执行相应的处理。
+### Memory Cache 和 Disk Cache 的区别
 
-在 JavaScript 中，订阅-发布模式也被称为事件模型。事件模型由两个主要组件组成：事件触发器和事件监听器。事件触发器负责触发事件，而事件监听器则负责监听事件并执行相应的回调函数。
+在浏览器缓存中，Memory Cache 和 Disk Cache 是两种不同的缓存类型，它们有以下区别：
 
-下面是一个简单的实现订阅-发布模式的例子：
+1. 存储位置：Memory Cache 存储在内存中，而 Disk Cache 存储在硬盘中。
+2. 读取速度：Memory Cache 读取速度比 Disk Cache 快，因为内存访问速度比硬盘访问速度快。
+3. 存储容量：Memory Cache 存储容量比较小，一般只有几十兆，而 Disk Cache 存储容量比较大，可以有数百兆或者更多。
+4. 生命周期：Memory Cache 生命周期短暂，一般只在当前会话中有效，当会话结束或者浏览器关闭时，Memory Cache 就会被清空；而 Disk Cache 生命周期比较长，数据可以被保存很长时间，即使浏览器关闭了，下次打开还可以使用。
 
-```javascript
-class EventEmitter {
-  constructor() {
-    this._events = {};
-  }
+一般来说，浏览器在请求资源时，会优先从 Memory Cache 中读取，如果没有找到再去 Disk Cache 中查找。如果两种缓存中都没有找到，则会向服务器发送请求。如果需要强制刷新缓存，可以通过清空浏览器缓存来实现。
 
-  on(event, listener) {
-    if (!this._events[event]) {
-      this._events[event] = [];
-    }
-    this._events[event].push(listener);
-  }
+### 什么情况下资源会缓存在 Memory Cache， 什么情况下会缓存在 Disk Cache ?
 
-  emit(event, ...args) {
-    if (this._events[event]) {
-      this._events[event].forEach((listener) => listener(...args));
-    }
-  }
+浏览器中的缓存是为了提高网页访问速度和减少网络流量而存在的。缓存分为 Memory Cache 和 Disk Cache 两种。
 
-  off(event, listener) {
-    if (this._events[event]) {
-      this._events[event] = this._events[event].filter((l) => l !== listener);
-    }
-  }
-}
-```
+Memory Cache 是浏览器内存缓存，资源会被缓存在内存中，由于内存读取速度快，所以 Memory Cache 的读取速度也较快。资源被缓存在 Memory Cache 中的情况有：
 
-这个实现包括三个方法：
+1. 当前页面中通过 <link> 或者 <script> 标签引入的资源；
+2. 当前页面通过 XMLHttpRequest 或 Fetch API 请求获取到的资源。
 
-* `on(event, listener)`：订阅事件，当事件被触发时执行监听器 `listener`；
-* `emit(event, ...args)`：触发事件，并将参数 `...args` 传递给监听器；
-* `off(event, listener)`：取消订阅事件，不再执行监听器 `listener`。
+Disk Cache 是浏览器磁盘缓存，资源会被缓存在磁盘中。由于磁盘读取速度相对内存较慢，所以 Disk Cache 的读取速度也较慢。资源被缓存在 Disk Cache 中的情况有：
 
-使用方法如下：
+1. 当前页面中通过 <img> 标签引入的资源；
+2. 当前页面中通过 <audio> 或 <video> 标签引入的资源；
+3. 当前页面中通过 iframe 加载的资源；
+4. 当前页面中通过 WebSocket 加载的资源；
+5. 通过 Service Worker 缓存的资源。
 
-```javascript
-const emitter = new EventEmitter();
-
-// 订阅事件
-emitter.on("event", (arg1, arg2) => {
-  console.log(`event: ${arg1}, ${arg2}`);
-});
-
-// 触发事件
-emitter.emit("event", "hello", "world");
-
-// 取消订阅事件
-emitter.off("event");
-```
-
-以上代码将输出：
-
-```csharp
-csharpCopy codeevent: hello, world
-```
-
-订阅-发布模式在事件驱动的系统中非常常见，例如浏览器中的 DOM 事件、Node.js 中的异步 IO 事件等。
+一般来说，比较大的资源会被缓存到 Disk Cache 中，而较小的资源则会被缓存到 Memory Cache 中。如果需要手动清除缓存，可以在浏览器设置中找到相应选项进行操作。

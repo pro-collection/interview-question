@@ -1,4 +1,5 @@
-import { forEach, isEmpty, join, map, reduce, sortBy } from "lodash";
+import { forEach, isEmpty, join, map, reduce, sortBy, filter, includes } from "lodash";
+import { company } from "@src/githubApi/issue/consts";
 
 /**
  * 获取 创建 release note 的 文本 body
@@ -7,6 +8,8 @@ import { forEach, isEmpty, join, map, reduce, sortBy } from "lodash";
  * @param isBody
  */
 export const getReleaseContent = (issueList: any[], releaseName: string, isBody: boolean = false) => {
+  const companyList = Object.values(company);
+
   const list = map(issueList, item => {
     return {
       title: item.title,
@@ -57,9 +60,16 @@ ${body}
 `;
   });
 
-  const justTitle = (list: any[]) => map(list, item => `  - ${item.number}.${item.title}【${join(item.labels, "、")}】`);
+  const justTitle = (list: any[]) => map(list, item => {
+    // 出现该问题的公司是谁
+    const companyName = filter(item.labels, labelItem => includes(companyList, labelItem));
+    const companyString = isEmpty(companyName) ? "" : `【公司: ${join(companyName)}】`;
 
-  const mapTitle = (list: any[]) => reduce(justTitle(sortBy(list, "number")), (prev, current) => prev + current + '\n', "");
+    // title
+    return `  - ${item.number}.${item.title}【${join(item.labels, "、")}】${companyString}`;
+  });
+
+  const mapTitle = (list: any[]) => reduce(justTitle(sortBy(list, "number")), (prev, current) => prev + current + "\n", "");
 
   // 目录文件
   const index = `

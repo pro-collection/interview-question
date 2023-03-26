@@ -46,13 +46,18 @@ export const getReleaseContent = (issueList: any[], releaseName: string, isBody:
   });
 
   const itemTitle = (list: any[]) => map(list, item => {
+
     const bodyContent = `      
 ${item.body}
 `;
     const questionLink = `回答链接：${item.url}           `;
     const body = isBody ? bodyContent : questionLink;
 
-    const simpleTitle = `${item.number}.${item.title}【${join(item.labels, "、")}】`;
+    // 出现该问题的公司是谁
+    const companyName = filter(item.labels, labelItem => includes(companyList, labelItem));
+    const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName)}】`;
+
+    const simpleTitle = `${item.number}.${item.title}【${join(item.labels, "、")}】${companyString}`;
     const title = isBody ? `## ${simpleTitle}` : simpleTitle;
     return `
 ${title}
@@ -63,7 +68,7 @@ ${body}
   const justTitle = (list: any[]) => map(list, item => {
     // 出现该问题的公司是谁
     const companyName = filter(item.labels, labelItem => includes(companyList, labelItem));
-    const companyString = isEmpty(companyName) ? "" : `【公司: ${join(companyName)}】`;
+    const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName)}】`;
 
     // title
     return `  - ${item.number}.${item.title}【${join(item.labels, "、")}】${companyString}`;

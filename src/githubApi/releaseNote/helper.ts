@@ -55,7 +55,7 @@ ${item.body}
 
     // 出现该问题的公司是谁
     const companyName = filter(item.labels, labelItem => includes(companyList, labelItem));
-    const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName)}】`;
+    const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName, '、')}】`;
 
     // 普通的标签
     const commonLabels = filter(item.labels, label => !includes(companyList, label));
@@ -71,7 +71,7 @@ ${body}
   const justTitle = (list: any[]) => map(list, item => {
     // 出现该问题的公司是谁
     const companyName = filter(item.labels, labelItem => includes(companyList, labelItem));
-    const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName)}】`;
+    const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName, '、')}】`;
 
     // 普通的标签
     const commonLabels = filter(item.labels, label => !includes(companyList, label));

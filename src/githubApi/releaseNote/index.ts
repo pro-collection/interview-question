@@ -14,8 +14,6 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { base64ToString, stringToBase64 } from "@utils/helper";
 import path from "path";
-import fs from "fs";
-import { updateContentFile } from "@src/githubApi/writeTagForLocal/request";
 import { writeContentForLocal } from "@src/githubApi/writeTagForLocal";
 
 dayjs.extend(utc);

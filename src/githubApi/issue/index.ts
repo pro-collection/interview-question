@@ -5,18 +5,18 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "全局作用域中，用 const 和 let 声明的变量不在 window 上，那到底在哪里？如何去获取？",
-  labels: [labels.network],
+  title: "使用 虚拟DOM 一定会比直接操作 真实 DOM 快吗？",
+  labels: [labels.engineering, company.baidu],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };
 
 // html 写入远端
-htmlWriteIssue(remote);
+// htmlWriteIssue(remote);
 
 // md 写入远端
-// writeIssue(remote);
+writeIssue(remote);
 
 // 写入本地 temp.md
 // writeToTemp();

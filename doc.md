@@ -42,38 +42,7 @@
 > 参考文档：https://juejin.cn/post/6844903885488783374
 
 
-- 第 32 题：Virtual DOM 真的比操作原生 DOM 快吗？谈谈你的想法。
-- 第 33 题：下面的代码打印什么内容，为什么？
-```
-var b = 10;
-(function b(){
-    b = 20;
-    console.log(b); 
-})();
-```
-- 第 34 题：简单改造下面的代码，使之分别打印 10 和 20。
-```
-var b = 10;
-(function b(){
-    b = 20;
-    console.log(b); 
-})();
-```
-- 第 35 题：浏览器缓存读取规则
-```
-可以分成 Service Worker、Memory Cache、Disk Cache 和 Push Cache，那请求的时候 from memory cache 和 from disk cache 的依据是什么，哪些数据什么时候存放在 Memory Cache 和 Disk Cache 中？
-```
-- 第 36 题：使用迭代的方式实现 flatten 函数。
-- 第 37 题：为什么 Vuex 的 mutation 和 Redux 的 reducer 中不能做异步操作？
-- 第 38 题：（京东）下面代码中 a 在什么情况下会打印 1？
-```
-var a = ?;
-if(a == 1 && a == 2 && a == 3){
- 	console.log(1);
-}
-```
-- 第 39 题：介绍下 BFC 及其应用。
-- 第 40 题：在 Vue 中，子组件为何不可以修改父组件传递的 Prop
+
 - 第 41 题：下面代码输出什么
 ```
 var a = 10;

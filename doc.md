@@ -42,22 +42,6 @@
 > 参考文档：https://juejin.cn/post/6844903885488783374
 
 
-
-- 第 41 题：下面代码输出什么
-```
-var a = 10;
-(function () {
-    console.log(a)
-    a = 5
-    console.log(window.a)
-    var a = 20;
-    console.log(a)
-})()
-```
-- 第 42 题：实现一个 sleep 函数
-- 第 43 题：使用 sort() 对数组 [3, 15, 8, 29, 102, 22] 进行排序，输出结果
-- 第 44 题：介绍 HTTPS 握手过程
-- 第 45 题：HTTPS 握手过程中，客户端如何验证证书的合法性
 - 第 46 题：输出以下代码执行的结果并解释为什么
 ```
 var obj = {

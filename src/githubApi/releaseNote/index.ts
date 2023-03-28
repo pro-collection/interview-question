@@ -9,7 +9,6 @@ import {
   updatePackageJson,
 } from "./request";
 import dayjs from "dayjs";
-
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { base64ToString, stringToBase64 } from "@utils/helper";
@@ -83,7 +82,10 @@ const main = async () => {
   // 写入本地
   const contentHasBody = getReleaseContent(issueRes.data, releaseName, true);
   const bookPath = path.resolve(__dirname, "../../../books");
-  await writeContentForLocal({ path: bookPath, fileName: newVersion, content: contentHasBody });
+
+  const fileName = `${dayjs().format('YYYY-MM-DD')} 更新`
+
+  await writeContentForLocal({ path: bookPath, fileName, content: contentHasBody });
   /* ==============================  写入本地 - End   ============================== */
 };
 

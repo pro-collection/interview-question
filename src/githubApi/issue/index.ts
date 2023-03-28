@@ -5,9 +5,9 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "this指向与对象继承数组方法：输出以下代码执行的结果并解释为什么？",
-  labels: [labels.js, company.jd],
-  milestone: MileStone.senior,
+  title: "对象引用类问题：以下代码的执行结果是什么，并解释原因",
+  labels: [labels.js, company.baidu],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };

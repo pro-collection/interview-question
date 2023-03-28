@@ -42,25 +42,6 @@
 > 参考文档：https://juejin.cn/post/6844903885488783374
 
 
-- 第 46 题：输出以下代码执行的结果并解释为什么
-```
-var obj = {
-    '2': 3,
-    '3': 4,
-    'length': 2,
-    'splice': Array.prototype.splice,
-    'push': Array.prototype.push
-}
-obj.push(1)
-obj.push(2)
-console.log(obj)
-```
-- 第 47 题：双向绑定和 vuex 是否冲突
-- 第 48 题：call 和 apply 的区别是什么，哪个性能更好一些
-- 第 49 题：为什么通常在发送数据埋点请求的时候使用的是 1x1 像素的透明 gif 图片？
-- 第 50 题：（百度）实现 (5).add(3).minus(2) 功能。
-- 第 51 题：Vue 的响应式原理中 Object.defineProperty 有什么缺陷？
-- 第 52 题：怎么让一个 div 水平垂直居中
 - 第 53 题：输出以下代码的执行结果并解释为什么
 ```
 var a = {n: 1};

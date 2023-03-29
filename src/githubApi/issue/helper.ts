@@ -10,6 +10,9 @@ export const writeToTemp = async (path = "./temp.md") => {
   // 写入文件
   markdown = flow(
     value => value.replace(/javascriptCopy code/gi, ""),
+    value => value.replace(/htmlCopy code/gi, ""),
+    value => value.replace(/cssCopy code/gi, ""),
+    value => value.replace(/jsCopy code/gi, ""),
     value => value.replace(/\\. /gi, ". "),
     value => value.replace(/\\- /gi, "- "),
     value => value.replace(/复制代码/gi, ""),

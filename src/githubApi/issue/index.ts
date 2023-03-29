@@ -5,18 +5,18 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "ES6 代码转成 ES5 代码的实现思路是什么？",
-  labels: [labels.js, company.alibaba],
+  title: "canvas 与 svg 在可视化领域优劣如何",
+  labels: [labels.application, company.tencent],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };
 
 // html 写入远端
-htmlWriteIssue(remote);
+// htmlWriteIssue(remote);
 
 // md 写入远端
-// writeIssue(remote);
+writeIssue(remote);
 
 // 写入本地 temp.md
 // writeToTemp();

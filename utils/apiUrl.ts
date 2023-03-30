@@ -3,6 +3,8 @@ export const apiUrl = {
 
   writeIssue: "POST /repos/{owner}/{repo}/issues",
 
+  updateIssue: "PATCH /repos/{owner}/{repo}/issues/{issue_number}",
+
   getContent: "GET /repos/{owner}/{repo}/contents/{path}",
 
   // api 文档 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#create-or-update-file-contents

@@ -5,8 +5,8 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "如何保证用户的使用体验",
-  labels: [labels.application, company.tencent],
+  title: "如何在前端团队快速落地代码规范",
+  labels: [labels.engineering, company.tencent],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),

@@ -5,7 +5,7 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "canvas 与 svg 在可视化领域优劣如何",
+  title: "如何保证用户的使用体验",
   labels: [labels.application, company.tencent],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

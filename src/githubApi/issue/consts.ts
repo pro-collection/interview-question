@@ -14,7 +14,7 @@ export const labels = {
   chrome: "浏览器",
   frameWork: "web框架",
   engineering: "工程化",
-  application: 'web应用场景'
+  application: "web应用场景",
 };
 
 export const company = {
@@ -25,5 +25,5 @@ export const company = {
   mi: "小米",
   mt: "美团",
   jd: "京东",
-  netEase: '网易',
+  netEase: "网易",
 };

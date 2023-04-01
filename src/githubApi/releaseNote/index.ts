@@ -1,5 +1,5 @@
 import { getReleaseContent } from "./helper";
-import { split, toNumber, join, replace, get } from "lodash";
+import { split, toNumber, join, replace, get, filter } from "lodash";
 import {
   createRelease,
   createTagObjectRequest,
@@ -68,19 +68,25 @@ const main = async () => {
   const date = preDate !== currentDate ? `${preDate} - ${currentDate}` : currentDate;
   const tag_name = newVersion;
 
+  // 通过创建时间 过滤
+  const filterData = filter(issueRes.data, item => {
+    // 必须要在上一次创建时间之后
+    return dayjs(item.created_at).isAfter(createDate);
+  });
+
   // 获取一共有多少个题目
-  const issueLength = get(issueRes.data, "length");
+  const issueLength = get(filterData, "length");
 
   const issueLenDesc = issueLength ? `（${issueLength}道题）` : "";
   const releaseName = `${date} 更新前端面试问题总结${issueLenDesc}`;
-  const releaseBody = getReleaseContent(issueRes.data, releaseName);
+  const releaseBody = getReleaseContent(filterData, releaseName);
 
   await createRelease({ tag_name, name: releaseName, body: releaseBody });
   console.log("yanle - logger: 创建 Release 完成");
 
   /* ==============================  写入本地 - Start ============================== */
   // 写入本地
-  const contentHasBody = getReleaseContent(issueRes.data, releaseName, true);
+  const contentHasBody = getReleaseContent(filterData, releaseName, true);
   const bookPath = path.resolve(__dirname, "../../../books");
 
   const fileName = `${dayjs().format('YYYY-MM-DD')} 更新`

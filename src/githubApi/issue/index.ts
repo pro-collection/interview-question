@@ -16,7 +16,7 @@ const remote = {
 // htmlWriteIssue(remote);
 
 // md 写入远端
-writeIssue(remote);
+// writeIssue(remote);
 
 // 写入本地 temp.md
-// writeToTemp();
+writeToTemp();

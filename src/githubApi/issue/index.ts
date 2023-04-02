@@ -5,9 +5,9 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "如何在前端团队快速落地代码规范",
-  labels: [labels.engineering, company.tencent],
-  milestone: MileStone.senior,
+  title: "react 中， 是如何实现 下拉菜单场景， 点击区域外关闭下拉组件？",
+  labels: [labels.application, company.baidu],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };
@@ -16,7 +16,7 @@ const remote = {
 // htmlWriteIssue(remote);
 
 // md 写入远端
-// writeIssue(remote);
+writeIssue(remote);
 
 // 写入本地 temp.md
-writeToTemp();
+// writeToTemp();

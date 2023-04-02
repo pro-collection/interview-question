@@ -1,12 +1,33 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>非常抱歉，我之前的回答是错误的。在小程序中确实不能直接操作DOM元素，因为小程序的视图层采用了一种称为WXML的声明性语言，而不是直接使用HTML来构建页面。</p><p>如果您需要在小程序中实现在文本中间显示光标的效果，可以使用<code>&lt;textarea&gt;</code>组件或<code>&lt;input&gt;</code>组件，并通过<code>selectionStart</code>和<code>selectionEnd</code>属性来设置光标的位置。例如：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>html</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">view</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">textarea</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"Hello World"</span> <span class="hljs-attr">bindfocus</span>=<span class="hljs-string">"onFocus"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">textarea</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span>
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>除了上述方法外，还可以使用 <code>useRef</code> 钩子来监听鼠标点击事件。具体实现可以在下拉组件的根元素上使用 <code>ref</code> 属性来获取 DOM 元素的引用，然后在组件挂载时使用 <code>addEventListener</code> 方法绑定 <code>mousedown</code> 事件，最后在事件处理函数中判断鼠标点击的位置是否在下拉组件内，如果不在，则关闭下拉组件。</p><p>示例代码如下：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>jsx</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-jsx"><span class="hljs-keyword">import</span> { useRef, useState, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">onFocus</span>(<span class="hljs-params">event</span>) {
-    <span class="hljs-keyword">const</span> value = event.<span class="hljs-property">detail</span>.<span class="hljs-property">value</span>;
-    <span class="hljs-keyword">const</span> cursorIndex = <span class="hljs-number">6</span>; <span class="hljs-comment">// 将光标移动到“World”文本的第6个字符位置</span>
-    event.<span class="hljs-property">target</span>.<span class="hljs-title function_">setSelectionRange</span>(cursorIndex, cursorIndex);
-  }
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></div></div></pre><p>在上面的代码中，当用户点击文本框时，会触发<code>bindfocus</code>事件并调用<code>onFocus</code>函数，在函数中通过<code>setSelectionRange</code>方法将光标的位置设置在文本中间。需要注意的是，由于小程序中不支持直接操作DOM元素，因此需要通过事件处理函数来实现操作文本的效果。</p></div>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Dropdown</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [isOpen, setIsOpen] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>);
+  <span class="hljs-keyword">const</span> dropdownRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleClickOutside</span>(<span class="hljs-params">event</span>) {
+      <span class="hljs-keyword">if</span> (dropdownRef.<span class="hljs-property">current</span> &amp;&amp; !dropdownRef.<span class="hljs-property">current</span>.<span class="hljs-title function_">contains</span>(event.<span class="hljs-property">target</span>)) {
+        <span class="hljs-title function_">setIsOpen</span>(<span class="hljs-literal">false</span>);
+      }
+    }
+
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">'mousedown'</span>, handleClickOutside);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">'mousedown'</span>, handleClickOutside);
+    };
+  }, [dropdownRef]);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{dropdownRef}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setIsOpen(!isOpen)}&gt;Toggle Dropdown<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      {isOpen &amp;&amp; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Option 1<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Option 2<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Option 3<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+      )}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+</code></div></div></pre><p>这种方法可以在组件内部处理点击事件，不需要将事件处理函数传递给父组件。但是相对而言代码会比较繁琐，需要手动处理事件绑定和解绑。</p></div>

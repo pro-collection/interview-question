@@ -13,20 +13,25 @@ const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue,
 });
 
 export const writeIssue = async (remote: any) => {
-  // 写入 github
-  const githubRes = await write({
-    ...remote,
-    body: remote.body(),
-  });
-  console.log(`yanle - logger: 写入 github - ${remote.title}`, githubRes.status);
+  const allPromise = [
+    write({
+      ...remote,
+      body: remote.body(),
+    }),
+    giteeWriteIssue({
+      title: remote.title,
+      body: remote.body(),
+      labels: join(remote.labels, ","),
+      milestone: giteeMileStone[remote.milestone as MileStone],
+    }),
+  ];
 
-  // 写入 gitee
-  await giteeWriteIssue({
-    title: remote.title,
-    body: remote.body(),
-    labels: join(remote.labels, ","),
-    milestone: giteeMileStone[remote.milestone as MileStone],
-  });
+  const [res1, res2] = await Promise.all(allPromise);
+
+  // 写入 github
+
+  console.log(`yanle - logger: 写入 github - ${remote.title}`, res1?.status);
+
 };
 
 export {};

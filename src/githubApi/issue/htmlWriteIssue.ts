@@ -17,19 +17,21 @@ export const htmlWriteIssue = async (remote: any) => {
   // 写入本地
   await writeToTemp("./demo.md");
 
-  const githubRes = await write({
-    ...remote,
-    body: remote.body(),
-  });
-  console.log(`yanle - logger: 写入 github - ${remote.title}`, githubRes.status);
+  const allPromise = [
+    write({
+      ...remote,
+      body: remote.body(),
+    }),
+    giteeWriteIssue({
+      title: remote.title,
+      body: remote.body(),
+      labels: join(remote.labels, ","),
+      milestone: giteeMileStone[remote.milestone as MileStone],
+    }),
+  ];
 
-  // 写入 gitee
-  await giteeWriteIssue({
-    title: remote.title,
-    body: remote.body(),
-    labels: join(remote.labels, ","),
-    milestone: giteeMileStone[remote.milestone as MileStone],
-  });
+  const [githubRes] = await Promise.all(allPromise);
+  console.log(`yanle - logger: 写入 github - ${remote.title}`, githubRes?.status);
 };
 
 export {};

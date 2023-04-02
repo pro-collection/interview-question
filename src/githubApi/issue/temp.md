@@ -1,18 +1,40 @@
-在小程序中确实不能直接操作DOM元素，因为小程序的视图层采用了一种称为WXML的声明性语言，而不是直接使用HTML来构建页面。
+除了上述方法外，还可以使用 `useRef` 钩子来监听鼠标点击事件。具体实现可以在下拉组件的根元素上使用 `ref` 属性来获取 DOM 元素的引用，然后在组件挂载时使用 `addEventListener` 方法绑定 `mousedown` 事件，最后在事件处理函数中判断鼠标点击的位置是否在下拉组件内，如果不在，则关闭下拉组件。
 
-如果需要在小程序中实现在文本中间显示光标的效果，可以使用`<textarea>`组件或`<input>`组件，并通过`selectionStart`和`selectionEnd`属性来设置光标的位置。例如：
+示例代码如下：
 
-```html
-<view>
-  <textarea value="()" bindfocus="onFocus"></textarea>
-</view>
+```jsx
+import { useRef, useState, useEffect } from 'react';
 
-<script>
-  function onFocus(event) {
-    const value = event.detail.value;
-    event.target.setSelectionRange(value.length, value.length - 1);
-  }
-</script>
+function Dropdown() {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownRef]);
+
+  return (
+    <div ref={dropdownRef}>
+      <button onClick={() => setIsOpen(!isOpen)}>Toggle Dropdown</button>
+      {isOpen && (
+        <ul>
+          <li>Option 1</li>
+          <li>Option 2</li>
+          <li>Option 3</li>
+        </ul>
+      )}
+    </div>
+  );
+}
 ```
 
-在上面的代码中，当用户点击文本框时，会触发`bindfocus`事件并调用`onFocus`函数，在函数中通过`setSelectionRange`方法将光标的位置设置在文本中间。需要注意的是，由于小程序中不支持直接操作DOM元素，因此需要通过事件处理函数来实现操作文本的效果。
+这种方法可以在组件内部处理点击事件，不需要将事件处理函数传递给父组件。但是相对而言代码会比较繁琐，需要手动处理事件绑定和解绑。

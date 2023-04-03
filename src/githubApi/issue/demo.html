@@ -1,33 +1,80 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>除了上述方法外，还可以使用 <code>useRef</code> 钩子来监听鼠标点击事件。具体实现可以在下拉组件的根元素上使用 <code>ref</code> 属性来获取 DOM 元素的引用，然后在组件挂载时使用 <code>addEventListener</code> 方法绑定 <code>mousedown</code> 事件，最后在事件处理函数中判断鼠标点击的位置是否在下拉组件内，如果不在，则关闭下拉组件。</p><p>示例代码如下：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>jsx</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-jsx"><span class="hljs-keyword">import</span> { useRef, useState, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>设计一套前端全站请求耗时统计工具，可以遵循以下步骤：</p><ol><li><p>实现一个性能监控模块，用于记录每个请求的开始时间和结束时间，并计算耗时。</p></li><li><p>在应用入口处引入该模块，将每个请求的开始时间记录下来。</p></li><li><p>在每个请求的响应拦截器中，记录响应结束时间，并计算请求耗时。</p></li><li><p>将每个请求的耗时信息发送到服务端，以便进行进一步的统计和分析。</p></li><li><p>在服务端实现数据存储和展示，可以使用图表等方式展示请求耗时情况。</p></li><li><p>对于请求耗时较长的接口，可以进行优化和分析，如使用缓存、使用异步加载、优化查询语句等。</p></li><li><p>在前端应用中可以提供开关，允许用户自主开启和关闭全站请求耗时统计功能。</p></li></ol><p>以下是一个简单的实现示例：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>js</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-js"><span class="hljs-comment">// performance.js</span>
 
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">Dropdown</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> [isOpen, setIsOpen] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>);
-  <span class="hljs-keyword">const</span> dropdownRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+<span class="hljs-keyword">const</span> performance = {
+  <span class="hljs-attr">timings</span>: {},
+  <span class="hljs-attr">config</span>: {
+    <span class="hljs-attr">reportUrl</span>: <span class="hljs-string">'/report'</span>,
+  },
+  <span class="hljs-title function_">init</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 监听所有请求的开始时间</span>
+    <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">'fetchStart'</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">timings</span>[event.<span class="hljs-property">detail</span>.<span class="hljs-property">id</span>] = {
+        <span class="hljs-attr">startTime</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>(),
+      };
+    });
 
-  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleClickOutside</span>(<span class="hljs-params">event</span>) {
-      <span class="hljs-keyword">if</span> (dropdownRef.<span class="hljs-property">current</span> &amp;&amp; !dropdownRef.<span class="hljs-property">current</span>.<span class="hljs-title function_">contains</span>(event.<span class="hljs-property">target</span>)) {
-        <span class="hljs-title function_">setIsOpen</span>(<span class="hljs-literal">false</span>);
+    <span class="hljs-comment">// 监听所有请求的结束时间，并计算请求耗时</span>
+    <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">'fetchEnd'</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+      <span class="hljs-keyword">const</span> id = event.<span class="hljs-property">detail</span>.<span class="hljs-property">id</span>;
+      <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">timings</span>[id]) {
+        <span class="hljs-keyword">const</span> timing = <span class="hljs-variable language_">this</span>.<span class="hljs-property">timings</span>[id];
+        timing.<span class="hljs-property">endTime</span> = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>();
+        timing.<span class="hljs-property">duration</span> = timing.<span class="hljs-property">endTime</span> - timing.<span class="hljs-property">startTime</span>;
+
+        <span class="hljs-comment">// 将耗时信息发送到服务端</span>
+        <span class="hljs-keyword">const</span> reportData = {
+          <span class="hljs-attr">url</span>: event.<span class="hljs-property">detail</span>.<span class="hljs-property">url</span>,
+          <span class="hljs-attr">method</span>: event.<span class="hljs-property">detail</span>.<span class="hljs-property">method</span>,
+          <span class="hljs-attr">duration</span>: timing.<span class="hljs-property">duration</span>,
+        };
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">report</span>(reportData);
       }
-    }
+    });
+  },
+  <span class="hljs-title function_">report</span>(<span class="hljs-params">data</span>) {
+    <span class="hljs-comment">// 将耗时信息发送到服务端</span>
+    <span class="hljs-keyword">const</span> xhr = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();
+    xhr.<span class="hljs-title function_">open</span>(<span class="hljs-string">'POST'</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">config</span>.<span class="hljs-property">reportUrl</span>);
+    xhr.<span class="hljs-title function_">setRequestHeader</span>(<span class="hljs-string">'Content-Type'</span>, <span class="hljs-string">'application/json'</span>);
+    xhr.<span class="hljs-title function_">send</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(data));
+  },
+};
 
-    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">'mousedown'</span>, handleClickOutside);
-    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
-      <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">'mousedown'</span>, handleClickOutside);
-    };
-  }, [dropdownRef]);
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> performance;
+</code></div></div></pre><p>在应用入口处引入该模块：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>js</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-js"><span class="hljs-comment">// main.js</span>
 
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{dropdownRef}</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setIsOpen(!isOpen)}&gt;Toggle Dropdown<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-      {isOpen &amp;&amp; (
-        <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Option 1<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Option 2<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Option 3<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
-      )}
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
-  );
-}
-</code></div></div></pre><p>这种方法可以在组件内部处理点击事件，不需要将事件处理函数传递给父组件。但是相对而言代码会比较繁琐，需要手动处理事件绑定和解绑。</p></div>
+<span class="hljs-keyword">import</span> performance <span class="hljs-keyword">from</span> <span class="hljs-string">'./performance'</span>;
+
+performance.<span class="hljs-title function_">init</span>();
+</code></div></div></pre><p>在每个请求的响应拦截器中触发 <code>fetchEnd</code> 事件：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>js</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-js"><span class="hljs-comment">// fetch.js</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">EventBus</span> <span class="hljs-keyword">from</span> <span class="hljs-string">'./EventBus'</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">fetch</span> = (<span class="hljs-params">url, options</span>) =&gt; {
+  <span class="hljs-keyword">const</span> id = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>().<span class="hljs-title function_">toString</span>(<span class="hljs-number">36</span>).<span class="hljs-title function_">slice</span>(<span class="hljs-number">2</span>);
+  <span class="hljs-keyword">const</span> fetchStartEvent = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CustomEvent</span>(<span class="hljs-string">'fetchStart'</span>, {
+    <span class="hljs-attr">detail</span>: {
+      id,
+      url,
+      <span class="hljs-attr">method</span>: options.<span class="hljs-property">method</span> || <span class="hljs-string">'GET'</span>,
+    },
+  });
+  <span class="hljs-title class_">EventBus</span>.<span class="hljs-title function_">dispatchEvent</span>(fetchStartEvent);
+
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">fetch</span>(url, options)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> {
+      <span class="hljs-keyword">const</span> fetchEndEvent = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CustomEvent</span>(<span class="hljs-string">'fetchEnd'</span>, {
+        <span class="hljs-attr">detail</span>: {
+          id,
+          url,
+          <span class="hljs-attr">method</span>: options.<span class="hljs-property">method</span> || <span class="hljs-string">'GET'</span>,
+        },
+      });
+      <span class="hljs-title class_">EventBus</span>.<span class="hljs-title function_">dispatchEvent</span>(fetchEndEvent);
+
+      <span class="hljs-keyword">return</span> response;
+    });
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> fetch;
+</code></div></div></pre><p>在服务端实现数据存储和展示，可以使用图表等方式展示请求耗</p></div>

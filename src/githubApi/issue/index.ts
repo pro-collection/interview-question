@@ -5,9 +5,9 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "react 中， 是如何实现 下拉菜单场景， 点击区域外关闭下拉组件？",
-  labels: [labels.application, company.baidu],
-  milestone: MileStone.inProgress,
+  title: "设计一套全站请求耗时统计工具",
+  labels: [labels.application, company.alibaba],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };

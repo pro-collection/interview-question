@@ -5,9 +5,9 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "Long Tasks 了解多少？",
-  labels: [labels.chrome, company.jd],
-  milestone: MileStone.master,
+  title: "Server-sent events(SSE) 了解多少",
+  labels: [labels.application, company.jd],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };

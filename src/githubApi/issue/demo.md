@@ -1,96 +1,208 @@
-### 如果用户觉得 web 应用反应卡顿， 主要从哪几个方面来排查？
+### 什么是 Long Tasks
+主线程一次只能处理一个任务（任务按照队列执行）。**当任务超过某个确定的点时，准确的说是50毫秒，就会被称为长任务(Long Task)**。当长任务在执行时，如果用户想要尝试与页面交互或者一个重要的渲染更新需要重新发生，那么浏览器会等到Long Task执行完之后，才会处理它们。结果就会导致交互和渲染的延迟
 
-- 加载慢
-    - 资源下载慢
-    - 首屏并发请求资源过多
-    - 首屏接口慢
-    - 首屏对应的 JS 执行慢
-    - 首屏渲染慢
-    - 首屏加载静态资源过大
-    - .......
-- 执行过程慢
-    - 接口慢
-    - long tasks 太多, 阻塞 JS 执行
-    - 内存泄漏
-    - 重绘重排 过多
-    - 关键节点没有加 节流防抖
-    - .......
+所以从以上信息可以得知，如果存在Long Task，那么对于我们Load（加载时）和Runtime（运行时）的性能都有影响
+
+阻塞主线程达 50 毫秒或以上的任务会导致以下问题：            
+- 可交互时间 延迟
+- 严重不稳定的交互行为 (轻击、单击、滚动、滚轮等) 延迟（High/variable input latency）
+- 严重不稳定的事件回调延迟（High/variable event handling latency）
+- 紊乱的动画和滚动（Janky animations and scrolling）
 
 
-### 主要排查手段有哪些
-- **通过建立性能监控指标**: 通过真是用户数据反馈， 来判断用户是否卡顿， 包含网络监控、运行时性能监控、
+任何连续不间断的且主 UI 线程繁忙 50 毫秒及以上的时间区间。比如以下常规场景：
+- 长耗时的事件回调（long running event handlers）
+- 代价高昂的回流和其他重绘（expensive reflows and other re-renders）
+- 浏览器在超过 50 毫秒的事件循环的相邻循环之间所做的工作（work the browser does between different turns of the event loop that exceeds 50 ms）
 
-- **Chrome devtools: NetWork** 主要排查网络问题
-<img width="1469" alt="image" src="https://user-images.githubusercontent.com/22188674/229800903-409009dd-105a-49e2-a7c4-4ed54c92210e.png">
 
-- **Chrome devtools: Performance** 主要细查性能运行时性能，包含了 long tasks、render 次数、重排重绘、执行时间线、阻塞场景
-<img width="973" alt="image" src="https://user-images.githubusercontent.com/22188674/229800739-3b8099bb-1aca-423a-a2d7-12c151becd47.png">
+### 任务管理策略
+软件架构中有时候会将一个任务拆分成多个函数，这不仅能增强代码可读性，也让项目更容易维护，当然这样也更容易写测试。
+```js
+function saveSettings () {
+  validateForm();
+  showSpinner();
+  saveToDatabase();
+  updateUI();
+  sendAnalytics();
+}
+```
 
-- **Chrome devtools: Performance monitor** 主要监控用户运行时性能，看看是否有内存泄露
-<img width="597" alt="image" src="https://user-images.githubusercontent.com/22188674/229800314-4d1ae73a-50a2-47b0-bbf4-57d5ece7d4b7.png">
+在上面的例子中，该函数saveSettings调用了另外5个函数，包括验证表单、展示加载的动画、发送数据到后端等。理论上讲，这是很合理的架构。如果需调试这些功能，也只需要在项目中查找每个函数即可。
+然而，这样也有问题，就是js并不是为每个方法开辟一个单独的任务，因为这些方法都包含在saveSetting这个函数中，**也就是说这五个方法在一个任务中执行**          
+saveSetting这个函数调用5个函数，这个函数的执行看起来就像一个特别长的长的任务。
 
-- **React Developer Tools**: 可以用于追踪 react 应用性能、渲染次数、重排重绘
-![image](https://user-images.githubusercontent.com/22188674/229801498-3cc4fc25-64a5-4b9e-ace8-5ed7b96e4ac2.png)
+### 如何解决 Long Tasks
+那解决Long Task的方式有如下几种：
+
+- 使用setTimeout分割任务
+- 使用async/await分割任务
+- isInputPending
+- 专门编排优先级的api: Scheduler.postTask()
+- 使用 web worker，处理逻辑复杂的计算
+
+
+#### SetTimeout
+setTimeout本身就是个Task。假如我们给某个函数加上setTimeout，是不是就可以将某个任务分离出去，成为单独的Task了。
+延迟了回调的执行，而且使用该方法，即便是将delay时间设定成0，也是有效的。
+```js
+function saveSettings () {
+  // Do critical work that is user-visible:
+  validateForm();
+  showSpinner();
+  updateUI();
+
+  // Defer work that isn't user-visible to a separate task:
+  setTimeout(() => {
+    saveToDatabase();
+    sendAnalytics();
+  }, 0);
+}
+```
+
+并不是所有场景都能使用这个方法。比如，如需要在循环中处理大数据量的数据，这个任务的耗时可能就会非常长（假设有数百万的数据量）
+
+
+#### 使用async、await来创造让步点
+分解任务后，按照浏览器内部的优先级别划分，其他的任务可能优先级别调整的会更高。一种让步于主线程的方式是配合用了setTimeout的promise。
+
+```js
+function yieldToMain () {
+  return new Promise(resolve => {
+    setTimeout(resolve, 0);
+  });
+}
+```
+
+在saveSettings的函数中，可以在每次await函数yieldToMain后让步于主线程：
+
+```js
+async function saveSettings () {
+  // Create an array of functions to run:
+  const tasks = [    validateForm,    showSpinner,    saveToDatabase,    updateUI,    sendAnalytics  ]
+
+  // Loop over the tasks:
+  while (tasks.length > 0) {
+    // Shift the first task off the tasks array:
+    const task = tasks.shift();
+
+    // Run the task:
+    task();
+
+    // Yield to the main thread:
+    await yieldToMain();
+  }
+}
+```
+
+#### isInputPending
+假如有一堆的任务，但是只想在用户交互的时候才让步，该怎么办？正好有这种api--`isInputPending`
+
+isInputPending这个函数可以在任何时候调用，它能判断用户是否要与页面元素进行交互。调用isInputPending会返回布尔值，true代表要与页面元素交互，false则不交互。
+
+比如说，任务队列中有很多任务，但是不想阻挡用户输入，使用isInputPending和自定义方法yieldToMain方法，就能够保证用户交互时的input不会延迟。
+
+```js
+async function saveSettings () {
+  // 函数队列
+  const tasks = [    validateForm,    showSpinner,    saveToDatabase,    updateUI,    sendAnalytics  ];
   
-- **Lighthouse**: 全面分析网页性能的一个工具、支持浏览器插件 
-![image](https://user-images.githubusercontent.com/22188674/229803209-505d01da-d780-4a3e-abe7-e56cd942a64b.png)
+  while (tasks.length > 0) {
+    // 让步于用户输入
+    if (navigator.scheduling.isInputPending()) {
+      // 如果有用户输入在等待，则让步
+      await yieldToMain();
+    } else {
+      // Shift the the task out of the queue:
+      const task = tasks.shift();
 
-- **webpack-bundle-analyzer**: 进行产物依赖分析、包大小分析
+      // Run the task:
+      task();
+    }
+  }
+}
+```
+使用isInputPending配合让步的策略，能让浏览器有机会响应用户的重要交互，这在很多情况下，尤其是很多执行很多任务时，能够提高页面对用户的响应能力。
 
-- **抓包**: 通过抓包的方式， 看看线上请求分析、请求模拟、网络劫持之后仅仅看 JS 执行时间
-
-- **E2E测试**: 通过 E2E 进行性能预检， 每次上线前进行一系列系统操作， 看看时间耗时和线上耗时波动
-
-
-### 主要解决办法和思路
-
-**首屏加载慢的方向**          
-- 资源加载方向
-  - 使用 `tree shaking` 减少包体积
-  - 代码压缩和混淆
-  - 对于高版本浏览器， 直接使用 ES6 语法，低版本浏览器再使用 ES5（es6 语法代码量会比编译成 es5 代码量小很多， 且执行速度也快）
-  - 使用 `split chunks` 进行大包拆分、小包复用
-  - 使用 `gzip` 
-  - 使用 图片压缩
-  - 使用 雪碧图
-  - 图标使用 `iconfont` 加载
-  - 懒加载， 仅加载首屏必要资源
-  - 使用 `tailwindcss` 等技术， 复用 css 
-  - 使用 `微前端` 技术，首屏仅加载当前子应用页面，可以做到只加载整站很少的一部分代码
-  - 首屏非必要依赖尽量延后到 FMP 或者 TTI 之后再加载
-  - 组件微前端化
+另一种使用isInputPending的方式，特别是担心浏览器不支持该策略，就可以使用另一种结合时间的方式。
+```js
+async function saveSettings () {
+  // A task queue of functions
+  const tasks = [    validateForm,    showSpinner,    saveToDatabase,    updateUI,    sendAnalytics  ];
   
-- 渲染方向
-  - 尽量减少重排重绘
-  - 
-  - 减少重复渲染（useMemo、useCallback、memo 等）
-  - 减少 setState 次数（多次 setState 可以合并为一次）
-  - 尽量减少 dom 节点深度
-  
-- 网络方向
-  - 使用流式服务端渲染， 可以查看文档：https://juejin.cn/post/6953819275941380109
-  - 使用服务端渲染， 减少首屏请求
-  - 使用 SSG 静态站点生成
-  - 首屏必要数据， 不作客户端请求， 用后端模板注入
-  - 使用 BFF 进行请求聚合
-  - 使用 CDN 进行网络请求分发
-  - DNS Prefetch 
-  - 资源预加载（在闲暇时间加载后续页面所需要的资源和接口，例如：link rel preload）
-  - 启用 HTTP2 多路复用
-  - 在业务逻辑上， 首屏必要接口提前（例如在 html 加载的那一瞬间，利用一个非常小的 js 文件将首屏需要的请求发送出去, 然后缓存下来， 到业务使用的时候直接就使用即可）
-  - 使用缓存技术缓存资源与请求：强缓存、协商缓存、离线缓存、Service Worker 缓存、后端业务缓存
-  
-**运行时卡顿方向**
-- 查看是否存在有有 `long tasks`， 有计划的拆解 `long tasks`
-- 解决项目中复杂度问题： https://www.jianshu.com/p/ffbb25380904
-- 排查项目是否有内存泄露
-- 排查特定业务流程是否有慢接口
-- 高复杂计算逻辑放在 service worker 处理
+  let deadline = performance.now() + 50;
+
+  while (tasks.length > 0) {
+    // Optional chaining operator used here helps to avoid
+    // errors in browsers that don't support `isInputPending`:
+    if (navigator.scheduling?.isInputPending() || performance.now() >= deadline) {
+      // There's a pending user input, or the
+      // deadline has been reached. Yield here:
+      await yieldToMain();
+
+      // Extend the deadline:
+      deadline += 50;
+
+      // Stop the execution of the current loop and
+      // move onto the next iteration:
+      continue;
+    }
+
+    // Shift the the task out of the queue:
+    const task = tasks.shift();
+
+    // Run the task:
+    task();
+  }
+}
+```
+
+#### 专门编排优先级的api: Scheduler.postTask()
+可以参考文档： https://developer.mozilla.org/en-US/docs/Web/API/Scheduler
+
+postTask允许更细粒度的编排任务，该方法能让浏览器编排任务的优先级，以便地优先级别的任务能够让步于主线程。目前postTask使用promise，接受优先级这个参数设定。
+
+postTask方法有三个优先级别：
+
+- `background级`，适用于优先级别最低的任务
+- `user-visible级`，适用于优先级别中等的任务，如果没有入参，也是该函数的默认参数。
+- `user-blocking级`，适用于优先级别最高的任务。
+
+拿下面的代码来举例，postTask在三处分别都是最高优先级别，其他的另外两个任务优先级别都是最低。
+
+```js
+function saveSettings () {
+  // Validate the form at high priority
+  scheduler.postTask(validateForm, {priority: 'user-blocking'});
+
+  // Show the spinner at high priority:
+  scheduler.postTask(showSpinner, {priority: 'user-blocking'});
+
+  // Update the database in the background:
+  scheduler.postTask(saveToDatabase, {priority: 'background'});
+
+  // Update the user interface at high priority:
+  scheduler.postTask(updateUI, {priority: 'user-blocking'});
+
+  // Send analytics data in the background:
+  scheduler.postTask(sendAnalytics, {priority: 'background'});
+};
+```
+在上面例子中，通过这些任务的优先级的编排方式，能让高浏览器级别的任务，比如用户交互等得以触发。
+
+提醒：                 
+postTask 并不是所有浏览器都支持。可以检测是否空，或者考虑使用polyfill。
+
+
+#### web worker
+web worker是运行在Main线程之外的一个线程，叫做worker线程。我们可以把一些计算量大的任务放到worker中去处理
+
+主线程上的所有Long Task都消失了，复杂的计算都到单独的worker线程去处理了。但是workder线程仍然存在Long Task，不过没有关系，只要主线程没有Long Task，那就不影响构建、渲染了。
 
 
 
 ### 参考文档
-- https://juejin.cn/post/7096144248713510943
-- https://juejin.cn/post/6882936217609732110
-- https://juejin.cn/post/7119074496610304031
+- https://zhuanlan.zhihu.com/p/606276325
 - https://juejin.cn/post/7159807927908302884
+- https://developer.mozilla.org/zh-CN/docs/Web/API/PerformanceLongTaskTiming
+

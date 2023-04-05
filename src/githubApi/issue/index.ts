@@ -5,9 +5,9 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "如果用户说 web 应用感觉很慢，该如何排查？",
-  labels: [labels.engineering],
-  milestone: MileStone.senior,
+  title: "Long Tasks 了解多少？",
+  labels: [labels.chrome, company.jd],
+  milestone: MileStone.master,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };

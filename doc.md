@@ -2,13 +2,6 @@
 
 > 04.04
 
-- service work 与 caches
-- long tasks
-  - https://zhuanlan.zhihu.com/p/606276325
-  - https://juejin.cn/post/7159807927908302884
-  - https://developer.mozilla.org/zh-CN/docs/Web/API/PerformanceLongTaskTimingee
-  
-
 
 > 03.29 待整理
 

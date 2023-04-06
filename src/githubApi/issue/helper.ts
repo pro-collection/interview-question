@@ -1,11 +1,23 @@
 import fs from "fs";
 import h2m from "html-to-md";
-import { flow } from "lodash";
+import { flow, get, includes } from "lodash";
 
 export const writeToTemp = async (path = "./temp.md") => {
   const getHtml = fs.readFileSync("./demo.html", { encoding: "utf-8" });
 
-  let markdown = h2m(getHtml);
+  let markdown = h2m(getHtml, {
+    tagListener: (tag, props) => {
+      const hasLineNumber = includes(get(props, "attrs.class", ""), "linenumber");
+      console.log(`yanle - logger: tag: ${tag} - hasLineNumber: ${hasLineNumber}`, props);
+      if (hasLineNumber) {
+        return {
+          ...props,
+          match: "",
+        };
+      }
+      return props;
+    },
+  }, true);
 
   // 写入文件
   markdown = flow(

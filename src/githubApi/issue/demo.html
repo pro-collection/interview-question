@@ -1,430 +1,115 @@
-<div class="markdown-body cache"><style>.markdown-body{position:relative;word-break:break-word;line-height:1.75;font-weight:400;font-size:15px;overflow-x:hidden;color:#333}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:30px;margin-bottom:5px}.markdown-body h2{font-size:24px;display:inline-block;font-weight:700;background:#ef7060;color:#fff;padding:6px 8px 0 0;border-top-right-radius:6px;margin-right:2px;box-shadow:6px 3px 0 0 rgba(239,112,96,.2)}.markdown-body h2:before{content:" ";display:inline-block;width:8px}.markdown-body h2:after{content:" ";position:absolute;display:block;width:calc(100% - 50px);border-bottom:3px solid #ef7060}.markdown-body h3{font-size:18px;padding-bottom:0}.markdown-body h4{font-size:16px}.markdown-body h5{font-size:15px}.markdown-body h6{margin-top:5px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #3e3e3e;margin-top:32px;margin-bottom:32px;height:1px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:rgba(27,31,35,.05);color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:JetBranins Mono,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75;box-shadow:0 0 8px hsla(0,0%,43.1%,.45);border-radius:4px;margin:16px}.markdown-body pre:before{content:"";display:block;height:30px;width:100%;margin-bottom:-7px;background:url(data:image/png;base64,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) 10px 10px no-repeat;background-size:40px;background-color:#fdfdfd}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#fdfdfd}.markdown-body a{text-decoration:none;font-weight:700;color:#ef7060;border-bottom:1px solid #ef7060}.markdown-body a:active,.markdown-body a:hover{color:#ef2d26}.markdown-body table tr td,.markdown-body table tr th{border:1px solid #ccc;padding:5px 10px}.markdown-body table{display:block!important;width:auto;max-width:100%;overflow:auto;border-collapse:collapse}.markdown-body thead{background:#f0f0f0;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#f8f8f8}.markdown-body blockquote{margin-inline-start:0;margin-inline-end:0;border-left:3px solid #ef7060;background:#fff9f9;padding:1px 20px;margin-top:20px}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="atom-one-light">.markdown-body pre,.markdown-body pre>code.hljs{color:#383a42;background:#fafafa}.hljs-comment,.hljs-quote{color:#a0a1a7;font-style:italic}.hljs-doctag,.hljs-formula,.hljs-keyword{color:#a626a4}.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#e45649}.hljs-literal{color:#0184bb}.hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#50a14f}.hljs-built_in,.hljs-class .hljs-title{color:#c18401}.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#986801}.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#4078f2}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}.hljs-link{text-decoration:underline}</style><h2 data-id="heading-0">SSE 是什么？</h2>
-  <blockquote>
-    <p>SSE 全称是 Server Sent Event，翻译过来的意思就是 服务器派发事件。</p>
-    <p>一个网页获取新的数据通常需要发送一个请求到服务器，也就是向服务器请求的页面。</p>
-    <p>使用 server-sent 事件，服务器可以在任何时刻向我们的 Web 页面推送数据和信息。</p>
-    <p>这些被推送进来的信息可以在这个页面上作为 <em><a href="https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FEvent" target="_blank" title="https://developer.mozilla.org/zh-CN/docs/Web/API/Event" ref="nofollow noopener noreferrer">Events</a> <code>[0]</code> + data</em> 的形式来处理。</p>
-  </blockquote>
-  <h2 data-id="heading-1">白话篇</h2>
-  <p><strong>SSE</strong> 的本质其实就是一个 <strong>HTTP</strong> 的长连接，只不过它给客户端发送的不是一次性的数据包，而是一个 <strong>stream</strong> 流，格式为 text/event-stream。</p>
-  <p>所以客户端不会关闭连接，会一直等着服务器发过来的新的数据流</p>
-  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1cf6a8004cf945fa9c72e00bd6ddd1ca~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="" loading="lazy" class="medium-zoom-image"></p>
-  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c0dfcd0e7f984cf78652eac6eb3be940~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="" loading="lazy" class="medium-zoom-image"></p>
-  <h2 data-id="heading-2">SSE 与其他交互方式的区别</h2>
-  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/61063fe40b0a4a7faa61ccf42eb03d87~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="交互示意图" loading="lazy" class="medium-zoom-image"></p>
-  <h3 data-id="heading-3">SSE 与 WS 有什么区别？</h3>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <table><thead><tr><th align="left">方式</th><th align="left">协议</th><th align="left">交互通道</th><th align="left">内容编码</th><th align="left">重连</th><th align="left">事件类型</th><th align="left">总结</th></tr></thead><tbody><tr><td align="left">SSE</td><td align="left">HTTP</td><td align="left">服务端单向推送</td><td align="left">默认文本</td><td align="left">默认支持断线重连</td><td align="left">支持自定义消息类型</td><td align="left">轻量级</td></tr><tr><td align="left">WebSocket</td><td align="left">WS（基于 TCP 传输层的应用层协议，<a href="https://link.juejin.cn?target=https%3A%2F%2Ftools.ietf.org%2Fhtml%2Frfc6455" target="_blank" title="https://tools.ietf.org/html/rfc6455" ref="nofollow noopener noreferrer">RFC6455</a>  <code>[1]</code> 对于它的定义标准）</td><td align="left">双向推送</td><td align="left">默认二进制</td><td align="left">手动实现</td><td align="left">NO</td><td align="left">扩展性、功能性强大</td></tr></tbody></table>
-  <blockquote>
-    <p>TCP/IP 五层模型</p>
-    <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/acf018ad0eb1440a827ad2f78b755d24~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="" loading="lazy" class="medium-zoom-image"></p>
-  </blockquote>
-  <h2 data-id="heading-4">SSE 兼容性</h2>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <table><thead><tr><th align="center">API</th><th align="left"><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0a80690d4b3e4d08ac63b20dbe64157b~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="img" loading="lazy" class="medium-zoom-image"></th><th align="left"><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ac51fe43f90e4aab95e5fc951a8eacff~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="img" loading="lazy" class="medium-zoom-image"></th><th align="left"><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b1a6a1426b354838aa485d81e57e8054~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="img" loading="lazy" class="medium-zoom-image"></th><th align="left"><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a22892e8cc0b48fb94b6c7da936d53a2~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="img" loading="lazy" class="medium-zoom-image"></th><th align="left"><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6f42e01a44bb44788047be251d4ed04f~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="img" loading="lazy" class="medium-zoom-image"></th></tr></thead><tbody><tr><td align="center">SSE</td><td align="left">6.0</td><td align="left">79.0</td><td align="left">6.0</td><td align="left">5.0</td><td align="left">11.5</td></tr><tr><td align="center">WS</td><td align="left">4.0</td><td align="left">12</td><td align="left">11</td><td align="left">4.2</td><td align="left">12.1</td></tr></tbody></table>
-  <p>IE 不支持？兼容性不好？
-    <strong><a href="https://link.juejin.cn?target=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fevent-source-polyfill" target="_blank" title="https://www.npmjs.com/package/event-source-polyfill" ref="nofollow noopener noreferrer">event-source-polyfill</a></strong> 助你实现 <strong>SSE</strong> 梦</p>
-  <p>接下来的示例不会通过这个 event-source-polyfill 实现。</p>
-  <blockquote>
-    <p>正经人谁考虑兼容性？</p>
-    <p>狗头护体.jpg</p>
-  </blockquote>
-  <h2 data-id="heading-5">SSE 的 API</h2>
-  <h3 data-id="heading-6">属性（只读）</h3>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <table><thead><tr><th align="left">名称</th><th align="left">作用</th><th align="left">类型</th><th align="left">备注</th></tr></thead><tbody><tr><td align="left">readyState</td><td align="left">当前状态</td><td align="left">Number</td><td align="left"><code>0</code> — connecting<code>1</code> — open<code>2</code> — closed</td></tr><tr><td align="left">url</td><td align="left">当前连接的地址</td><td align="left">String</td><td align="left"></td></tr><tr><td align="left">withCredentials</td><td align="left">是否开启凭据收集</td><td align="left">Boolean</td><td align="left"></td></tr></tbody></table>
-  <h3 data-id="heading-7">方法</h3>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <table><thead><tr><th align="left">名称</th><th align="left">作用</th><th align="left">返回值</th></tr></thead><tbody><tr><td align="left">close</td><td align="left">客户端主动关闭连接</td><td align="left">-</td></tr></tbody></table>
-  <h3 data-id="heading-8">事件</h3>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <table><thead><tr><th align="left">名称</th><th align="left">作用</th><th align="left">返回值</th></tr></thead><tbody><tr><td align="left">onclose</td><td align="left">连接关闭触发</td><td align="left">event</td></tr><tr><td align="left">onopen</td><td align="left">连接开启触发</td><td align="left">event</td></tr><tr><td align="left">onmessage</td><td align="left">服务端消息推动消息触发</td><td align="left">event</td></tr></tbody></table>
-  <h2 data-id="heading-9">服务端 API</h2>
-  <h3 data-id="heading-10">字段</h3>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <table><thead><tr><th align="left">名称</th><th align="left">作用</th><th align="left">类型</th><th align="left">备注</th></tr></thead><tbody><tr><td align="left">data</td><td align="left">传输的文本</td><td align="left">String（默认）\ 可以传输JSON</td><td align="left">可以多行累加</td></tr><tr><td align="left">event</td><td align="left">事件名称</td><td align="left">String</td><td align="left">可自定义</td></tr><tr><td align="left">id</td><td align="left">当前推送 id</td><td align="left">String</td><td align="left">作为消息的标识</td></tr><tr><td align="left">retry</td><td align="left">超时重试时间</td><td align="left">Number</td><td align="left">客户端在感知 server 连接异常后。会通过 retry 设定时间进行重新连接</td></tr></tbody></table>
-  <h2 data-id="heading-11">需求评审</h2>
-  <p>我们在前面已经初步的了解了 SSE，并且知道了它的一些 API。</p>
-  <p>我们接下来需要做一件事情，了解需求</p>
-  <p>需求就是</p>
-  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4dc5305aafbb425896937c1123d3a0cb~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp?" alt="" loading="lazy" class="medium-zoom-image"></p>
-  <p>需求评审结束</p>
-  <blockquote>
-    <p>产品经理给你一张图都不错了，自己看着来吧。</p>
-  </blockquote>
-  <h2 data-id="heading-12">技术评审</h2>
-  <p>前面的 ** 产品经理竟然只给了一张图</p>
-  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a232ddefcafd447384241135914944bf~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="" loading="lazy" class="medium-zoom-image"></p>
-  <p>用户在打开窗口时，会建立一个 SSE 的连接</p>
-  <p>服务端需要将建立这次连接，保存在连接池中。</p>
-  <p>如果用户点击了构建，后台程序会执行打包命令</p>
-  <p>在打包中进行消息的推送，然后前端进行消息的展示。</p>
-  <h2 data-id="heading-13">接口评审</h2>
-  <p>GET <code>api/log/push</code> (通信 API)</p>
-  <blockquote>
-    <p>连接 SSE 的通道，用于后续消息通信</p>
-  </blockquote>
-  <hr>
-  <p>POST <code>api/project/build</code> (构建 API)</p>
-  <p>参数 <code>projectPath</code> 传入你需要构建的项目路径</p>
-  <blockquote>
-    <p>用于项目构建，构建时触发消息推送</p>
-  </blockquote>
-  <h3 data-id="heading-14">冷静一下</h3>
-  <p>等等~ 是不是说得太简单了</p>
-  <h4 data-id="heading-15">构建 API 如何帮我们打包？</h4>
-  <p>nodejs 里面有个 <code>child_process[3]</code> 模块叫做 子进程</p>
-  <p>你可以通过它执行 <code>install</code>、<code>build</code>。</p>
-  <h4 data-id="heading-16">如何触发通信 API 消息推送？</h4>
-  <p><code>child_process</code> 是可以异步推送消息</p>
-  <p>里面会有 <code>stdout</code> 和 <code>stderr</code> 钩子。</p>
-  <p>会感知到命令行的<code>正常</code>和<code>异常</code>输出。</p>
-  <p>我们在这一步进行消息的实时推送岂不美哉。</p>
-  <blockquote>
-    <p>解答完这两个疑问之后，我们就可以愉快的写代码了</p>
-  </blockquote>
-  <h2 data-id="heading-17">后端开发</h2>
-  <h3 data-id="heading-18">引入需要用到的包</h3>
-  <p>这些包看起来引了挺多，实际上与 SSE 相关的 只有 koa-sse-stream，它其实就是一个别人封装好的中间件，如果你看过阮一峰老师的 《Server-Sent Events 教程》<code>[4]</code></p>
-  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Koa</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'koa'</span>);
-<span class="hljs-keyword">const</span> router = <span class="hljs-built_in">require</span>(<span class="hljs-string">'koa-router'</span>)();
-<span class="hljs-keyword">const</span> <span class="hljs-title class_">KoaSSEStream</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'koa-sse-stream'</span>); <span class="hljs-comment">// 封装好的 SSE 中间件</span>
-<span class="hljs-keyword">const</span> child_process = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>); <span class="hljs-comment">// Node 子进程</span>
-<span class="hljs-keyword">const</span> bodyParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'koa-bodyparser'</span>);
-<span class="hljs-keyword">const</span> cors = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@koa/cors'</span>);
-<span class="hljs-keyword">const</span> moment = <span class="hljs-built_in">require</span>(<span class="hljs-string">'moment'</span>);
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">newDate</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">moment</span>().<span class="hljs-title function_">format</span>(<span class="hljs-string">'YYYY-MM-DD HH:mm:ss'</span>);
-<span class="hljs-keyword">const</span> app = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Koa</span>();
-
-app.<span class="hljs-title function_">use</span>(<span class="hljs-title function_">cors</span>());
-app.<span class="hljs-title function_">use</span>(<span class="hljs-title function_">bodyParser</span>());
-
-<span class="hljs-comment">/*
-  接下来的代码存放处
-*/</span>
-
-app.<span class="hljs-title function_">use</span>(router.<span class="hljs-title function_">routes</span>())
-app.<span class="hljs-title function_">listen</span>(<span class="hljs-number">3000</span>);
-<span class="copy-code-btn">复制代码</span></code></pre>
-  <h3 data-id="heading-19">通信 API</h3>
-  <p>在前面我们已经说过每次增加一个连接，会放到连接池中，而这个连接池相当于一个通讯录。</p>
-  <p>后续会遍历这个通讯录，进行消息的推送</p>
-  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-comment">// 连接池</span>
-<span class="hljs-keyword">const</span> clientList = [];
-<span class="hljs-comment">// koa-sse-stream 配置</span>
-<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">SSE_CONF</span> = {
-    <span class="hljs-attr">maxClients</span>: <span class="hljs-number">2</span>, <span class="hljs-comment">// 最大连接数</span>
-    <span class="hljs-attr">pingInterval</span>: <span class="hljs-number">40000</span> <span class="hljs-comment">// 重连时间</span>
-}
-router.<span class="hljs-title function_">get</span>(<span class="hljs-string">'/api/log/push'</span>, <span class="hljs-title class_">KoaSSEStream</span>(<span class="hljs-variable constant_">SSE_CONF</span>), <span class="hljs-function"><span class="hljs-params">ctx</span> =&gt;</span> {
-    <span class="hljs-comment">// 每次连接会进行一个 push</span>
-    clientList.<span class="hljs-title function_">push</span>(ctx.<span class="hljs-property">sse</span>);
-})
-<span class="copy-code-btn">复制代码</span></code></pre>
-  <h3 data-id="heading-20">构建 API</h3>
-  <p>我们在这个接口调用的时候，先进行响应，不然这个接口会一直等到构建完成之后再响应。</p>
-  <p>谁也不知道构建完成某个项目，需要花费多长时间，可能设置的请求超时时间都过了也没响应。</p>
-  <pre><code class="hljs language-js copyable" lang="js">router.<span class="hljs-title function_">post</span>(<span class="hljs-string">'/api/project/build'</span>, <span class="hljs-function"><span class="hljs-params">ctx</span> =&gt;</span> {
-    <span class="hljs-comment">// 接收项目绝对路径</span>
-    <span class="hljs-keyword">const</span> { projectPath } = ctx.<span class="hljs-property">request</span>.<span class="hljs-property">body</span>;
-    <span class="hljs-keyword">try</span> {
-        <span class="hljs-comment">// 先响应</span>
-        ctx.<span class="hljs-property">body</span> = {
-            <span class="hljs-attr">msg</span>: <span class="hljs-string">'开始构建，请留意下方的构建信息。'</span>
-        }
-        <span class="hljs-comment">// 再执行构建</span>
-        <span class="hljs-title function_">buildProject</span>(projectPath)
-    } <span class="hljs-keyword">catch</span> (error) {
-        ctx.<span class="hljs-property">body</span> = {
-            <span class="hljs-attr">msg</span>: error
-        }
-    }
-})
-<span class="copy-code-btn">复制代码</span></code></pre>
-  <h3 data-id="heading-21">child_process 执行打包命令</h3>
-  <p>简单的封装了一个执行脚本的函数，后面再通过 callback 进行消息的推送</p>
-  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-comment">/**
- * 执行命令
- * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} script 需要执行的脚本
- * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} callback 回调函数
- * <span class="hljs-doctag">@returns</span>
- */</span>
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">implementCommand</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">script, callback</span>) =&gt; {
-    <span class="hljs-title function_">callback</span>(script)
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-        <span class="hljs-keyword">try</span> {
-            <span class="hljs-keyword">const</span> sh = child_process.<span class="hljs-title function_">exec</span>(script, <span class="hljs-function">(<span class="hljs-params">error, stdout, stderr</span>) =&gt;</span> {
-                <span class="hljs-comment">// 这里的 stdout stderr 在执行之后才会触发</span>
-                <span class="hljs-keyword">if</span> (error) {
-                    <span class="hljs-title function_">reject</span>(error);
-                    <span class="hljs-title function_">callback</span>(error)
-                }
-                <span class="hljs-title function_">resolve</span>()
-            });
-            <span class="hljs-comment">// 成功的推送</span>
-            sh.<span class="hljs-property">stdout</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">'data'</span>, <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
-                <span class="hljs-title function_">callback</span>(data)
-            })
-            <span class="hljs-comment">// 错误的推送</span>
-            sh.<span class="hljs-property">stderr</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">'data'</span>, <span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
-                <span class="hljs-title function_">callback</span>(error)
-            })
-        } <span class="hljs-keyword">catch</span> (error) {
-            <span class="hljs-title function_">callback</span>(error)
-            <span class="hljs-title function_">reject</span>()
-        }
-    })
-}
-
-<span class="copy-code-btn">复制代码</span></code></pre>
-  <h3 data-id="heading-22">打包项目 + 消息推送</h3>
-  <p><code>buildProject</code> 只负责整合需要执行哪些命令</p>
-  <p>整合之后调用 <code>implementCommand</code> 执行命令</p>
-  <p><code>implementCommand</code> 会执行 <code>messagePush</code> 进行消息推送。</p>
-  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-comment">/**
- * 打包项目
- * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} projectPath 打包路径
- */</span>
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">buildProject</span> = <span class="hljs-keyword">async</span> projectPath =&gt; {
-    <span class="hljs-comment">// 执行 install 命令</span>
-    <span class="hljs-keyword">await</span> <span class="hljs-title function_">implementCommand</span>(<span class="hljs-string">`cd <span class="hljs-subst">${projectPath}</span> &amp;&amp; yarn install`</span>, messagePush)
-    <span class="hljs-comment">// 执行 build 命令</span>
-    <span class="hljs-keyword">await</span> <span class="hljs-title function_">implementCommand</span>(<span class="hljs-string">`cd <span class="hljs-subst">${projectPath}</span> &amp;&amp; yarn build`</span>, messagePush)
-    <span class="hljs-title function_">messagePush</span>(<span class="hljs-string">'打包完成！！！'</span>)
-}
-
-<span class="hljs-comment">/**
- * 消息推送
- * <span class="hljs-doctag">@param</span> {<span class="hljs-type">String</span>} content 需要推送的内容
- */</span>
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">messagePush</span> = content =&gt; {
-    clientList.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">sse</span> =&gt;</span> sse.<span class="hljs-title function_">send</span>(<span class="hljs-string">`[<span class="hljs-subst">${currentTime()}</span>] <span class="hljs-subst">${content}</span>`</span>))
-    <span class="hljs-comment">// send 自定义事件写法</span>
-    <span class="hljs-comment">// clientList.forEach(sse =&gt; sse.send({ data: content, event: 'push' }))</span>
-}
-
-<span class="copy-code-btn">复制代码</span></code></pre>
-  <h3 data-id="heading-23">服务端执行过程示意图</h3>
-  <p>到这里服务端就已经全部完成了，看得出来构建 + 消息推送是最麻烦的一步，所以我画了个草图。</p>
-  <p>什么？看不懂？放过我吧，就这水平...
-    <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d21c5c66026345599d261e07c831056a~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="" loading="lazy" class="medium-zoom-image"></p>
-  <h2 data-id="heading-24">前端开发</h2>
-  <blockquote>
-    <p>本次需求，前端比较简单，只需要三步</p>
-    <ul>
-      <li>连接 SSE (调用 通信 API)</li>
-      <li>构建项目 (调用构建 API)</li>
-      <li>接收到 SSE 的推送进行内容展示</li>
-    </ul>
-  </blockquote>
-  <h3 data-id="heading-25">HTML 结构</h3>
-  <pre><code class="hljs language-html copyable" lang="html"><span class="hljs-comment">&lt;!-- 输入项目的路径 --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"C:/xxx"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"dirPath"</span>&gt;</span>
-<span class="hljs-comment">&lt;!-- 构建点击的按钮 --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"buildSubmit"</span>&gt;</span>构建<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-<span class="hljs-comment">&lt;!-- 输出内容的载体 --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">pre</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">code</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"app"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">pre</span>&gt;</span>
-<span class="copy-code-btn">复制代码</span></code></pre>
-  <h3 data-id="heading-26">开启 SSE 连接</h3>
-  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-comment">// 通过 new EventSource 开启 SSE</span>
-<span class="hljs-keyword">const</span> source = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventSource</span>(<span class="hljs-string">`http://127.0.0.1:3000/api/log/push`</span>);
-<span class="hljs-comment">// 监听 message 事件</span>
-source.<span class="hljs-property">onmessage</span> = <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
-  <span class="hljs-comment">// 挂到载体上面</span>
-  app.<span class="hljs-property">innerHTML</span> += <span class="hljs-string">`<span class="hljs-subst">${event.data}</span> \n`</span>
-}
-<span class="copy-code-btn">复制代码</span></code></pre>
-  <h3 data-id="heading-27">调用构建 API</h3>
-  <p>通过构建按钮点击之后触发调用构建接口</p>
-  <pre><code class="hljs language-js copyable" lang="js">buildSubmit.<span class="hljs-property">onclick</span> = <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-comment">// 构建之前清空载体</span>
-  app.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">''</span>;
-  <span class="hljs-keyword">const</span> projectPath = dirPath.<span class="hljs-property">value</span>;
-  <span class="hljs-comment">// 做了个简单校验</span>
-  <span class="hljs-keyword">if</span>(!projectPath) <span class="hljs-keyword">return</span> <span class="hljs-title function_">alert</span>(<span class="hljs-string">'目标打包路径不能为空'</span>);
-  <span class="hljs-comment">// 发起请求</span>
-  $.<span class="hljs-title function_">ajax</span>({
-    <span class="hljs-attr">url</span>: <span class="hljs-string">'http://127.0.0.1:3000/api/project/build'</span>,
-      <span class="hljs-attr">method</span>: <span class="hljs-string">'post'</span>,
-      <span class="hljs-attr">data</span>: {
-        projectPath <span class="hljs-comment">// 项目路径</span>
-      },
-      <span class="hljs-comment">// 成功回调</span>
-      <span class="hljs-attr">success</span>: <span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
-        <span class="hljs-title function_">alert</span>(res.<span class="hljs-property">msg</span>)
-      }
-  })
-}
-<span class="copy-code-btn">复制代码</span></code></pre>
-  <blockquote>
-    <p>到这里我们就已经开发完了这个需求，
-      大家可以动手去试一试</p>
-    <p>当然这只是 SSE 一些基本的使用而已。</p>
-  </blockquote>
-  <h2 data-id="heading-28">写在后面</h2>
-  <p>如果大家对这篇文章有任何质疑，可以留言或者私信给我。我将逐一回复(我了解的就回复的快一些，不知道的，我会查询资料再进行回复，就可以稍微慢一些~)</p>
-  <h2 data-id="heading-29">注解</h2>
-  <p><code>[0]</code> <strong>Event</strong> -- <a href="https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FEvent" target="_blank" title="https://developer.mozilla.org/zh-CN/docs/Web/API/Event" ref="nofollow noopener noreferrer">developer.mozilla.org/zh-CN/docs/…</a></p>
-  <p><code>[1]</code> <strong>RFC6455</strong> -- <a href="https://link.juejin.cn?target=https%3A%2F%2Fwww.rfc-editor.org%2Frfc%2Frfc6455" target="_blank" title="https://www.rfc-editor.org/rfc/rfc6455" ref="nofollow noopener noreferrer">www.rfc-editor.org/rfc/rfc6455</a></p>
-  <p><code>[2]</code> <strong>event-source-polyfill</strong> -- <a href="https://link.juejin.cn?target=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fevent-source-polyfill" target="_blank" title="https://www.npmjs.com/package/event-source-polyfill" ref="nofollow noopener noreferrer">www.npmjs.com/package/eve…</a></p>
-  <p><code>[3]</code> <strong>child_process</strong> -- <a href="https://link.juejin.cn?target=https%3A%2F%2Fnodejs.org%2Fdist%2Flatest-v16.x%2Fdocs%2Fapi%2Fchild_process.html" target="_blank" title="https://nodejs.org/dist/latest-v16.x/docs/api/child_process.html" ref="nofollow noopener noreferrer">nodejs.org/dist/latest…</a></p>
-  <p><code>[4]</code> <strong>Server-Sent Events 教程</strong> -- <a href="https://link.juejin.cn?target=http%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2017%2F05%2Fserver-sent_events.html" target="_blank" title="http://www.ruanyifeng.com/blog/2017/05/server-sent_events.html" ref="nofollow noopener noreferrer">www.ruanyifeng.com/blog/2017/0…</a></p></div>
+<div class="markdown-body"><p>如果在条件语句中使用hooks，React会抛出 error。</p>
+  <p>这与React Hooks的底层设计的数据结构相关，先抛出结论：<strong>react用链表来严格保证hooks的顺序</strong>。</p>
+  <p>一个典型的useState使用场景：</p>
+  <pre><div class="codeBox___24JI7"><button class="copyBtn___3UMAO">复制</button><div style="color: rgb(197, 200, 198); text-shadow: rgba(0, 0, 0, 0.3) 0px 1px; font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none; padding: 1em; margin: 0.5em 0px; overflow: auto; border-radius: 0.3em; background: rgb(29, 31, 33);"><code class="language-js" style="color: rgb(197, 200, 198); text-shadow: rgba(0, 0, 0, 0.3) 0px 1px; font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none;"><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">1</span><span class="token" style="color: rgb(150, 203, 254);">const</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">[</span><span>name</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>setName</span><span class="token" style="color: rgb(197, 200, 198);">]</span><span> </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> </span><span class="token" style="color: rgb(218, 208, 133);">useState</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(168, 255, 96);">'leo'</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">2</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">3</span><span></span><span class="token spread" style="color: rgb(237, 237, 237);">...</span><span class="token spread" style="color: rgb(237, 237, 237);">...</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">4</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">5</span><span></span><span class="token method property-access" style="color: rgb(218, 208, 133);">setName</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(168, 255, 96);">'Lily'</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">;</span></code></div></div></pre>
+  <p>那么hooks在这两条语句分别作了什么？</p>
+  <p><div class="ant-image"><img class="ant-image-img" src="https://pic.rmb.bdstatic.com/bjh/89d2fa7124b06495bbbfd4b5758bd6e5.png"><div class="ant-image-mask"><div class="ant-image-mask-info"><span role="img" aria-label="eye" class="anticon anticon-eye"><svg viewBox="64 64 896 896" focusable="false" data-icon="eye" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M942.2 486.2C847.4 286.5 704.1 186 512 186c-192.2 0-335.4 100.5-430.2 300.3a60.3 60.3 0 000 51.5C176.6 737.5 319.9 838 512 838c192.2 0 335.4-100.5 430.2-300.3 7.7-16.2 7.7-35 0-51.5zM512 766c-161.3 0-279.4-81.8-362.7-254C232.6 339.8 350.7 258 512 258c161.3 0 279.4 81.8 362.7 254C791.5 684.2 673.4 766 512 766zm-4-430c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm0 288c-61.9 0-112-50.1-112-112s50.1-112 112-112 112 50.1 112 112-50.1 112-112 112z"></path></svg></span>预览</div></div></div></p>
+  <p>上图是 <code>useState</code> 首次渲染的路径，其中，跟我们问题相关的是 <code>mountState</code> 这个过程，简而言之，这个过程初始化了一个hooks，并且将其追加到链表结尾。</p>
+  <pre><div class="codeBox___24JI7"><button class="copyBtn___3UMAO">复制</button><div style="color: rgb(197, 200, 198); text-shadow: rgba(0, 0, 0, 0.3) 0px 1px; font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none; padding: 1em; margin: 0.5em 0px; overflow: auto; border-radius: 0.3em; background: rgb(29, 31, 33);"><code class="language-js" style="color: rgb(197, 200, 198); text-shadow: rgba(0, 0, 0, 0.3) 0px 1px; font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none;"><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">1</span><span class="token" style="color: rgb(124, 124, 124);">// 进入 mounState 逻辑</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">2</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">3</span><span></span><span class="token" style="color: rgb(150, 203, 254);">function</span><span> </span><span class="token" style="color: rgb(218, 208, 133);">mountState</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token parameter">initialState</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">{</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">4</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">5</span><span>  </span><span class="token" style="color: rgb(124, 124, 124);">// 将新的 hook 对象追加进链表尾部</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">6</span><span>  </span><span class="token" style="color: rgb(150, 203, 254);">var</span><span> hook </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> </span><span class="token" style="color: rgb(218, 208, 133);">mountWorkInProgressHook</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">7</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">8</span><span>  </span><span class="token" style="color: rgb(124, 124, 124);">// initialState 可以是一个回调，若是回调，则取回调执行后的值</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">9</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">10</span><span>  </span><span class="token control-flow" style="color: rgb(150, 203, 254);">if</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(150, 203, 254);">typeof</span><span> initialState </span><span class="token" style="color: rgb(237, 237, 237);">===</span><span> </span><span class="token" style="color: rgb(168, 255, 96);">'function'</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">{</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">11</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">12</span><span>    </span><span class="token" style="color: rgb(124, 124, 124);">// $FlowFixMe: Flow doesn't like mixed types</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">13</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">14</span><span>    initialState </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> </span><span class="token" style="color: rgb(218, 208, 133);">initialState</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">15</span><span>  </span><span class="token" style="color: rgb(197, 200, 198);">}</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">16</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">17</span><span>  </span><span class="token" style="color: rgb(124, 124, 124);">// 创建当前 hook 对象的更新队列，这一步主要是为了能够依序保留 dispatch</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">18</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">19</span><span>  </span><span class="token" style="color: rgb(150, 203, 254);">const</span><span> queue </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> hook</span><span class="token" style="color: rgb(197, 200, 198);">.</span><span class="token property-access">queue</span><span> </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">{</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">20</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">21</span><span>    last</span><span class="token" style="color: rgb(237, 237, 237);">:</span><span> </span><span class="token null nil" style="color: rgb(150, 203, 254);">null</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">22</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">23</span><span>    dispatch</span><span class="token" style="color: rgb(237, 237, 237);">:</span><span> </span><span class="token null nil" style="color: rgb(150, 203, 254);">null</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">24</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">25</span><span>    lastRenderedReducer</span><span class="token" style="color: rgb(237, 237, 237);">:</span><span> basicStateReducer</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">26</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">27</span><span>    lastRenderedState</span><span class="token" style="color: rgb(237, 237, 237);">:</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">(</span><span>initialState</span><span class="token" style="color: rgb(237, 237, 237);">:</span><span> any</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">28</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">29</span><span>  </span><span class="token" style="color: rgb(197, 200, 198);">}</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">30</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">31</span><span>  </span><span class="token" style="color: rgb(124, 124, 124);">// 将 initialState 作为一个“记忆值”存下来</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">32</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">33</span><span>  hook</span><span class="token" style="color: rgb(197, 200, 198);">.</span><span class="token property-access">memoizedState</span><span> </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> hook</span><span class="token" style="color: rgb(197, 200, 198);">.</span><span class="token property-access">baseState</span><span> </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> initialState</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">34</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">35</span><span>  </span><span class="token" style="color: rgb(124, 124, 124);">// dispatch 是由上下文中一个叫 dispatchAction 的方法创建的，这里不必纠结这个方法具体做了什么</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">36</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">37</span><span>  </span><span class="token" style="color: rgb(150, 203, 254);">var</span><span> dispatch </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> queue</span><span class="token" style="color: rgb(197, 200, 198);">.</span><span class="token property-access">dispatch</span><span> </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> dispatchAction</span><span class="token" style="color: rgb(197, 200, 198);">.</span><span class="token method property-access" style="color: rgb(218, 208, 133);">bind</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token null nil" style="color: rgb(150, 203, 254);">null</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span> currentlyRenderingFiber$</span><span class="token" style="color: rgb(255, 115, 253);">1</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span> queue</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">38</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">39</span><span>  </span><span class="token" style="color: rgb(124, 124, 124);">// 返回目标数组，dispatch 其实就是示例中常常见到的 setXXX 这个函数，想不到吧？哈哈</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">40</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">41</span><span>  </span><span class="token control-flow" style="color: rgb(150, 203, 254);">return</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">[</span><span>hook</span><span class="token" style="color: rgb(197, 200, 198);">.</span><span class="token property-access">memoizedState</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span> dispatch</span><span class="token" style="color: rgb(197, 200, 198);">]</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">42</span><span></span><span class="token" style="color: rgb(197, 200, 198);">}</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">43</span>
+</code></div></div></pre>
+  <p>从这段源码中我们可以看出，mounState 的主要工作是初始化 Hooks。在整段源码中，最需要关注的是 <code>mountWorkInProgressHook</code> 方法，它为我们道出了 Hooks 背后的数据结构组织形式。以下是 <code>mountWorkInProgressHook</code> 方法的源码：</p>
+  <pre><div class="codeBox___24JI7"><button class="copyBtn___3UMAO">复制</button><div style="color: rgb(197, 200, 198); text-shadow: rgba(0, 0, 0, 0.3) 0px 1px; font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none; padding: 1em; margin: 0.5em 0px; overflow: auto; border-radius: 0.3em; background: rgb(29, 31, 33);"><code class="language-js" style="color: rgb(197, 200, 198); text-shadow: rgba(0, 0, 0, 0.3) 0px 1px; font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none;"><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">1</span><span class="token" style="color: rgb(150, 203, 254);">function</span><span> </span><span class="token" style="color: rgb(218, 208, 133);">mountWorkInProgressHook</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">{</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">2</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">3</span><span>  </span><span class="token" style="color: rgb(124, 124, 124);">// 注意，单个 hook 是以对象的形式存在的</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">4</span><span>  </span><span class="token" style="color: rgb(150, 203, 254);">var</span><span> hook </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">{</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">5</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">6</span><span>    memoizedState</span><span class="token" style="color: rgb(237, 237, 237);">:</span><span> </span><span class="token null nil" style="color: rgb(150, 203, 254);">null</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">7</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">8</span><span>    baseState</span><span class="token" style="color: rgb(237, 237, 237);">:</span><span> </span><span class="token null nil" style="color: rgb(150, 203, 254);">null</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">9</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">10</span><span>    baseQueue</span><span class="token" style="color: rgb(237, 237, 237);">:</span><span> </span><span class="token null nil" style="color: rgb(150, 203, 254);">null</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">11</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">12</span><span>    queue</span><span class="token" style="color: rgb(237, 237, 237);">:</span><span> </span><span class="token null nil" style="color: rgb(150, 203, 254);">null</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">13</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">14</span><span>    next</span><span class="token" style="color: rgb(237, 237, 237);">:</span><span> </span><span class="token null nil" style="color: rgb(150, 203, 254);">null</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">15</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">16</span><span>  </span><span class="token" style="color: rgb(197, 200, 198);">}</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">17</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">18</span><span>  </span><span class="token control-flow" style="color: rgb(150, 203, 254);">if</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">(</span><span>workInProgressHook </span><span class="token" style="color: rgb(237, 237, 237);">===</span><span> </span><span class="token null nil" style="color: rgb(150, 203, 254);">null</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">{</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">19</span><span>    </span><span class="token" style="color: rgb(124, 124, 124);">// 这行代码每个 React 版本不太一样，但做的都是同一件事：将 hook 作为链表的头节点处理</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">20</span><span>    firstWorkInProgressHook </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> workInProgressHook </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> hook</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">21</span><span>  </span><span class="token" style="color: rgb(197, 200, 198);">}</span><span> </span><span class="token control-flow" style="color: rgb(150, 203, 254);">else</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">{</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">22</span><span>    </span><span class="token" style="color: rgb(124, 124, 124);">// 若链表不为空，则将 hook 追加到链表尾部</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">23</span><span>    workInProgressHook </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> workInProgressHook</span><span class="token" style="color: rgb(197, 200, 198);">.</span><span class="token property-access">next</span><span> </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> hook</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">24</span><span>  </span><span class="token" style="color: rgb(197, 200, 198);">}</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">25</span><span>  </span><span class="token" style="color: rgb(124, 124, 124);">// 返回当前的 hook</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">26</span><span>  </span><span class="token control-flow" style="color: rgb(150, 203, 254);">return</span><span> workInProgressHook</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">27</span><span></span><span class="token" style="color: rgb(197, 200, 198);">}</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 2.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">28</span>
+</code></div></div></pre>
+  <p>到这里可以看出，hook 相关的所有信息收敛在一个 hook 对象里，而 hook 对象之间以单向链表的形式相互串联。</p>
+  <p>接着，我们来看更新过程</p>
+  <p><div class="ant-image"><img class="ant-image-img" src="https://pic.rmb.bdstatic.com/bjh/1cc5bd4c72e4f22d1aa828df3c831f2d.png"><div class="ant-image-mask"><div class="ant-image-mask-info"><span role="img" aria-label="eye" class="anticon anticon-eye"><svg viewBox="64 64 896 896" focusable="false" data-icon="eye" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M942.2 486.2C847.4 286.5 704.1 186 512 186c-192.2 0-335.4 100.5-430.2 300.3a60.3 60.3 0 000 51.5C176.6 737.5 319.9 838 512 838c192.2 0 335.4-100.5 430.2-300.3 7.7-16.2 7.7-35 0-51.5zM512 766c-161.3 0-279.4-81.8-362.7-254C232.6 339.8 350.7 258 512 258c161.3 0 279.4 81.8 362.7 254C791.5 684.2 673.4 766 512 766zm-4-430c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm0 288c-61.9 0-112-50.1-112-112s50.1-112 112-112 112 50.1 112 112-50.1 112-112 112z"></path></svg></span>预览</div></div></div></p>
+  <p>上图中，需要注意的是updateState的过程：按顺序去遍历之前构建好的链表，取出对应的数据信息进行渲染。</p>
+  <p>我们把 mountState 和 updateState 做的事情放在一起来看：mountState（首次渲染）构建链表并渲染；updateState 依次遍历链表并渲染。</p>
+  <p>hooks 的渲染是通过“依次遍历”来定位每个 hooks 内容的。如果前后两次读到的链表在顺序上出现差异，那么渲染的结果自然是不可控的。</p>
+  <p>这个现象有点像我们构建了一个长度确定的数组，数组中的每个坑位都对应着一块确切的信息，后续每次从数组里取值的时候，只能够通过索引（也就是位置）来定位数据。也正因为如此，在许多文章里，都会直截了当地下这样的定义：Hooks 的本质就是数组。但读完这一课时的内容你就会知道，Hooks 的本质其实是链表。</p>
+  <p>我们举个例子：</p>
+  <pre><div class="codeBox___24JI7"><button class="copyBtn___3UMAO">复制</button><div style="color: rgb(197, 200, 198); text-shadow: rgba(0, 0, 0, 0.3) 0px 1px; font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none; padding: 1em; margin: 0.5em 0px; overflow: auto; border-radius: 0.3em; background: rgb(29, 31, 33);"><code class="language-js" style="color: rgb(197, 200, 198); text-shadow: rgba(0, 0, 0, 0.3) 0px 1px; font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none;"><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">1</span><span>    </span><span class="token" style="color: rgb(150, 203, 254);">let</span><span> mounted </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> </span><span class="token" style="color: rgb(153, 204, 153);">false</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">2</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">3</span><span>    </span><span class="token control-flow" style="color: rgb(150, 203, 254);">if</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(237, 237, 237);">!</span><span>mounted</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">{</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">4</span><span>        </span><span class="token" style="color: rgb(124, 124, 124);">// eslint-disable-next-line</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">5</span><span>        </span><span class="token" style="color: rgb(150, 203, 254);">const</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">[</span><span>name</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>setName</span><span class="token" style="color: rgb(197, 200, 198);">]</span><span> </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> </span><span class="token" style="color: rgb(218, 208, 133);">useState</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(168, 255, 96);">'leo'</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">6</span><span>        </span><span class="token" style="color: rgb(150, 203, 254);">const</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">[</span><span>age</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>setAge</span><span class="token" style="color: rgb(197, 200, 198);">]</span><span> </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> </span><span class="token" style="color: rgb(218, 208, 133);">useState</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(255, 115, 253);">18</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">7</span><span>        mounted </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> </span><span class="token" style="color: rgb(153, 204, 153);">true</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">8</span><span>    </span><span class="token" style="color: rgb(197, 200, 198);">}</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">9</span><span>    </span><span class="token" style="color: rgb(150, 203, 254);">const</span><span> </span><span class="token" style="color: rgb(197, 200, 198);">[</span><span>career</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>setCareer</span><span class="token" style="color: rgb(197, 200, 198);">]</span><span> </span><span class="token" style="color: rgb(237, 237, 237);">=</span><span> </span><span class="token" style="color: rgb(218, 208, 133);">useState</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(168, 255, 96);">'码农'</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">10</span><span>    </span><span class="token console" style="color: rgb(255, 255, 182); text-decoration: underline;">console</span><span class="token" style="color: rgb(197, 200, 198);">.</span><span class="token method property-access" style="color: rgb(218, 208, 133);">log</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(168, 255, 96);">'career'</span><span class="token" style="color: rgb(197, 200, 198);">,</span><span>career</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">11</span><span>    </span><span class="token spread" style="color: rgb(237, 237, 237);">...</span><span class="token spread" style="color: rgb(237, 237, 237);">...</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">12</span>
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">13</span><span>    </span><span class="token" style="color: rgb(237, 237, 237);">&lt;</span><span>div onClick</span><span class="token" style="color: rgb(237, 237, 237);">=</span><span class="token" style="color: rgb(197, 200, 198);">{</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token arrow" style="color: rgb(237, 237, 237);">=&gt;</span><span class="token" style="color: rgb(218, 208, 133);">setName</span><span class="token" style="color: rgb(197, 200, 198);">(</span><span class="token" style="color: rgb(168, 255, 96);">'Lily'</span><span class="token" style="color: rgb(197, 200, 198);">)</span><span class="token" style="color: rgb(197, 200, 198);">}</span><span class="token" style="color: rgb(237, 237, 237);">&gt;</span><span>
+</span><span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">14</span>    点我点我点我
+<span class="linenumber react-syntax-highlighter-line-number" style="display: inline-block; min-width: 3.25em; padding-right: 1em; text-align: right; user-select: none; color: rgb(124, 124, 124);">15</span><span>    </span><span class="token" style="color: rgb(237, 237, 237);">&lt;</span><span>div</span><span class="token" style="color: rgb(237, 237, 237);">&gt;</span></code></div></div></pre>
+  <p>点击div后，我们期望的输出是 "码农"，然而事实上(尽管会error，但是打印还是执行)打印的为 "Lily"</p>
+  <p>原因是，三个useState在初始化的时候已经构建好了一个三个节点的链表结构，依次为：
+    <code>name('leo') --&gt; age(18) --&gt; career('码农')</code></p>
+  <p>每个节点都已经派发了一个与之对应的update操作，因此执行setName时候，三个节点就修改为了
+    <code>name('Lily') --&gt; age(18) --&gt; career('码农')</code></p>
+  <p>然后执行update渲染操作，从链表依次取出值，此时，条件语句的不再执行，第一个取值操作会从链表的第一个，也就是name对应的hooks对象进行取值：此时取到的为 <code>name:Lily</code></p>
+  <p>必须按照顺序调用从根本上来说是因为 useState 这个钩子在设计层面并没有“状态命名”这个动作，也就是说你每生成一个新的状态，React 并不知道这个状态名字叫啥，所以需要通过顺序来索引到对应的状态值</p></div>

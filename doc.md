@@ -47,52 +47,10 @@
 > 2023.02.23
 > 参考文档：https://juejin.cn/post/6844903885488783374
 
-
-- 第 96 题：介绍下前端加密的常见场景和方法
-- 第 97 题：React 和 Vue 的 diff 时间复杂度从 O(n^3) 优化到 O(n) ，那么 O(n^3) 和 O(n) 是如何计算出来的？
-- 第 98 题：（京东）写出如下代码的打印结果
-```
-function changeObjProperty(o) {
-  o.siteUrl = "http://www.baidu.com"
-  o = new Object()
-  o.siteUrl = "http://www.google.com"
-} 
-let webSite = new Object();
-changeObjProperty(webSite);
-console.log(webSite.siteUrl);
-```
-- 第 99 题：（bilibili）编程算法题
-```
-用 JavaScript 写一个函数，输入 int 型，返回整数逆序后的字符串。
-如：输入整型 1234，返回字符串“4321”。要求必须使用递归函数调用，不能用全局变量，输入函数必须只有一个参数传入，必须返回字符串。
-```
-- 第 100 题：（京东）请写出如下代码的打印结果
-```ts
-function Foo() {
-    Foo.a = function() {
-        console.log(1)
-    }
-    this.a = function() {
-        console.log(2)
-    }
-}
-Foo.prototype.a = function() {
-    console.log(3)
-}
-Foo.a = function() {
-    console.log(4)
-}
-Foo.a();
-let obj = new Foo();
-obj.a();
-Foo.a();
-```
-
 --------------------
 
 > 2023.02.24
 
-- 跨域问题如何解决？
 - 路由匹配实现页面的跳转，这个是怎么做的？（history模式 、hash模式 、abstract路由模式）
 - 小程序的大概原理?
 - 简单的讲一下CSS中的盒模型，怎么触发？有什么效果？

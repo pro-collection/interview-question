@@ -5,8 +5,8 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "[Vue] 在 v-for 时给每项元素绑定事件需要用事件代理吗？为什么？",
-  labels: [labels.frameWork],
+  title: "前端路由的实现原理",
+  labels: [labels.frameWork, company.tencent],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),

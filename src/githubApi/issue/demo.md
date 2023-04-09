@@ -1,70 +1,164 @@
-### Vue 并没有在源码中做代理
+在使用Vue、React等前端框架时，我们都会发现项目中只有一个HTML文件，并且在该HTML中都存在一个根标签，起到了类似于容器的作用。容器内部的内容就由我们后续编写的每个视图决定，页面的切换就是容器中视图的切换。
 
-vue 并没有在源码中做代理， 至少是 2.x 是没有做事件代理的。但是理论上来说使用事件代理性能会更好一点。
+前端路由的实现原理简单来说，就是在不跳转或者刷新页面的前提下，为SPA应用中的每个视图匹配一个特殊的URL，之后的刷新、前进、后退等操作均通过这个特殊的URL实现。为实现上述要求，需要满足：
 
-阅读 vue 源码的过程中，并没有发现 vue 会自动做事件代理，但是一般给 v-for 绑定事件时，都会让节点指向同一个事件处理程序（第二种情况可以运行，但是 eslint 会警告），一定程度上比每生成一个节点都绑定一个不同的事件处理程序性能好，但是监听器的数量仍不会变，所以使用事件代理会更好一点。
+改变URL且不会向服务器发起请求；
 
-react 是委托到 document 上, 然后自己生成了合成事件, 冒泡到 document 的时候进入合成事件, 然后他通过 getParent() 获取该事件源的所有合成事件, 触发完毕之后继续冒泡。但是一些特殊的比如focus这种必须放在input这些dom上。
+可以监听到URL的变化，并渲染与之匹配的视图。
 
-### 为何事件代理会让性能好一些                                                 
+主要有Hash路由和History路由两种实现方式。下文对两者的基本原理进行简单介绍，并分别实现了一个简易的路由Demo。
 
-说一下我个人理解，先说结论，可以使用
+### Hash路由
+原理就是通过键值对的形式保存路由及对应要执行的回调函数，当监听到页面hash发生改变时，根据最新的hash值调用注册好的回调函数，即改变页面。
 
-事件代理作用主要是 2 个
+#### 创建路由
+```js
+class Routers{
+  constructor(){
+    // 保存路由信息
+    this.routes = {};
+    this.currentUrl = '';
+    window.addEventListener('load', this.refresh, false);
+    window.addEventListener('hashchange', this.refresh, false);
+  }
 
-1. 将事件处理程序代理到父节点，减少内存占用率
-2. 动态生成子节点时能自动绑定事件处理程序到父节点
+  // 用于注册路由的函数
+  route = (path, callback) => {
+    this.routes[path] = callback || function(){};
+  }
 
-这里我生成了十万个 span 节点，通过 performance monitor 来监控内存占用率和事件监听器的数量，对比以下 3 种情况
+  // 监听事件的回调，负责当页面hash改变时执行对应hash值的回调函数
+  refresh = () => {
+    this.currentUrl = location.hash.slice(1) || '/';
+    this.routes[this.currentUrl]();
+  }
+}
 
-1. 不使用事件代理，每个 span 节点绑定一个 click 事件，并指向同一个事件处理程序
-```html
-<div>
-  <span 
-    v-for="(item,index) of 100000" 
-    :key="index" 
-    @click="handleClick">
-    {{item}}
-  </span>
-</div>
+window.Router = new Routers();
 ```
 
-2. 不使用事件代理，每个 span 节点绑定一个 click 事件，并指向不同的事件处理程序
-```html
-<div>
-  <span 
-    v-for="(item,index) of 100000" 
-    :key="index" 
-    @click="function () {}">
-    {{item}}
-  </span>
-</div>
+#### 注册路由
+使用route方法添加对应的路由及其回调函数即可。以下代码实现了一个根据不同hash改变页面颜色的路由，模拟了页面的切换，在实际的SPA应用中，对应的就是页面内容的变化了。
+
+```js
+var content = document.querySelector('body');
+
+function changeBgColor(color){
+  content.style.background = color;
+}
+
+// 添加路由
+Router.route('/', () => {
+  changeBgColor('yellow');
+});
+Router.route('/red', () => {
+  changeBgColor('red');
+});
+Router.route('/green', () => {
+  changeBgColor('green');
+});
+Router.route('/blue', () => {
+  changeBgColor('blue');
+});
 ```
 
-3. 使用事件代理
-```html
-<div  @click="handleClick">
-  <span 
-    v-for="(item,index) of 100000"  
-    :key="index">
-    {{item}}
-  </span>
-</div>
+
+### History路由
+在H5之前，浏览器的history仅支持页面之前的跳转，包括前进和后退等功能。
+
+在HTML5中，新增以下API：
+```js
+history.pushState();			// 添加新状态到历史状态栈
+history.replaceState();		// 用新状态代替当前状态
+history.state;						// 获取当前状态对象
 ```
 
-可以通过 chrome devtools performance monitor 查看内存使用情况                           
+history.pushState()和history.replaceState()均接收三个参数：
 
-可以看到使用事件代理无论是监听器数量和内存占用率都比前两者要少                 
+- state：一个与指定网址相关的状态对象，popstate事件触发时，该对象会传入回调函数。如果不需要这个对象，此处可以填null。
+- title：新页面的标题，但是所有浏览器目前都忽略这个值，因此这里可以填null。
+- url：新的网址，必须与当前页面处在同一个域。浏览器的地址栏将显示这个网址
 
-### 为什么 Vue 不适用事件委托
+由于history.pushState()和 history.replaceState()都具有在改变页面URL的同时，不刷新页面的能力，因此也可以用来实现前端路由。
 
-首先我们需要知道事件代理主要有什么作用？
+#### 创建路由类
+```js
+class Routers{
+  constructor(){
+    this.routes = {};
+    window.addEventListener('popstate', e => {
+      const path = e.state && e.state.path;
+      this.routes[path] && this.routes[path]();
+    })
+  }
 
-1. 事件代理能够避免我们逐个的去给元素新增和删除事件
-2. 事件代理比每一个元素都绑定一个事件性能要更好
+  init(path){
+    history.replaceState({path: path}, null, path);
+    this.routes[path] && this.routes[path]();
+  }
 
-从vue的角度上来看上面两点
+  route(path, callback){
+    this.routes[path] = callback || function(){};
+  }
 
-- 在v-for中，我们直接用一个for循环就能在模板中将每个元素都绑定上事件，并且当组件销毁时，vue也会自动给我们将所有的事件处理器都移除掉。所以事件代理能做到的第一点vue已经给我们做到了                         
-- 在v-for中，给元素绑定的都是相同的事件，所以除非上千行的元素需要加上事件，其实和使用事件代理的性能差别不大，所以也没必要用事件代理                       
+  go(path){
+    history.pushState({path: path}, null, path);
+    this.routes[path] && this.routes[path]();
+  }
+}
 
+window.Router = new Routers();
+```
+
+
+#### 注册路由
+```js
+function changeBgColor(color){
+  content.style.background = color;
+}
+
+Router.route(location.pathname, () => {
+  changeBgColor('yellow');
+});
+Router.route('/red', () => {
+  changeBgColor('red');
+});
+Router.route('/green', () => {
+  changeBgColor('green');
+});
+Router.route('/blue', () => {
+  changeBgColor('blue');
+});
+
+const content = document.querySelector('body');
+Router.init(location.pathname);
+```
+
+
+#### 触发事件
+在使用hash实现的路由中，我们通过hashchange事件来监听hash的变化，但是上述代码中history的改变本身不会触发任何事件，因此无法直接监听history的改变来改变页面。因此，对于不同的情况，我们选择不同的解决方案：
+
+- 点击浏览器的前进或者后退按钮：监听popstate事件，获取相应路径并执行回调函数
+- 点击a标签：阻止其默认行为，获取其href属性，手动调用history.pushState()，并执行相应回调。
+
+```js
+const ul = document.querySelector('ul');
+
+ul.addEventListener('click', e => {
+  if(e.target.tagName === 'A'){
+    e.preventDefault();
+    Router.go(e.target.getAttribute('href'));
+  }
+})
+```
+
+### 对比
+基于hash的路由：
+
+缺点：
+- 看起来比较丑
+- 会导致锚点功能失效
+
+优点：                  
+- 兼容性更好
+- 无需服务器配合

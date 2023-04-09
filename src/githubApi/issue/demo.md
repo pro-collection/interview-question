@@ -1,49 +1,102 @@
-### 首先问题说"for循环优于forEach"并不完全正确
+### 题目如下
 
-循环次数不够多的时候， forEach 性能优于 for
+以下数据结构中，id 代表部门编号，name 是部门名称，parentId 是父部门编号，为 0 代表一级部门，现在要求实现一个 convert 方法，把原始 list 转换成树形结构，parentId 为多少就挂载在该 id 的属性
+children 数组下，结构如下：
+
 ```js
-// 循环十万次
-let arrs = new Array(100000);
+// 原始 list 如下
+let list = [
+  { id: 1, name: '部门A', parentId: 0 },
+  { id: 2, name: '部门B', parentId: 0 },
+  { id: 3, name: '部门C', parentId: 1 },
+  { id: 4, name: '部门D', parentId: 1 },
+  { id: 5, name: '部门E', parentId: 2 },
+  { id: 6, name: '部门F', parentId: 3 },
+  { id: 7, name: '部门G', parentId: 2 },
+  { id: 8, name: '部门H', parentId: 4 }
+];
+const result = convert(list);
 
-console.time('for');
-for (let i = 0; i < arrs.length; i++) {};
-console.timeEnd('for'); // for: 2.36474609375 ms
-
-console.time('forEach');
-arrs.forEach((arr) => {});
-console.timeEnd('forEach'); // forEach: 0.825927734375 ms
+// 转换后的结果如下
+let result = [
+  {
+    id: 1,
+    name: '部门A',
+    parentId: 0,
+    children: [
+      {
+        id: 3,
+        name: '部门C',
+        parentId: 1,
+        children: [
+          {
+            id: 6,
+            name: '部门F',
+            parentId: 3
+          }, {
+            id: 16,
+            name: '部门L',
+            parentId: 3
+          }
+        ]
+      },
+      {
+        id: 4,
+        name: '部门D',
+        parentId: 1,
+        children: [
+          {
+            id: 8,
+            name: '部门H',
+            parentId: 4
+          }
+        ]
+      }
+    ]
+  },
+  ···
+]
+;
 ```
 
-循环次数越大， for 的性能优势越明显
+### 解法
+
+解法1：                                   
+大型找爹现场                      
+时间复杂度O(n^2)
+
 ```js
-// 循环 1 亿次
-let arrs = new Array(100000000);
+function convert(arr) {
+  return arr.filter((child) => {
+    child.children = arr.filter(item => item.parentId === child.id)
+    return child.parentId === 0
+  })
+}
 
-console.time('for');
-for (let i = 0; i < arrs.length; i++) {};
-console.timeEnd('for'); // for: 72.7099609375 ms
-
-console.time('forEach');
-arrs.forEach((arr) => {});
-console.timeEnd('forEach'); // forEach: 923.77392578125 ms
+console.log(convert(list))
 ```
 
-### 先做一下对比
+解法2：                        
+先遍历出hash表O(n)                       
+再遍历找爹O(n)                   
+时间复杂度：O(2n)=O(n)                    
+大型找爹现场，找到爹就把自己push到爹的房里，如果没有房间先造一个
 
-|对比类型|for|forEach|
-|:---|:---|:---|
-|遍历|for循环按顺序遍历|forEach 使用 iterator 迭代器遍历|
-|数据结构|for循环是随机访问元素|forEach 是顺序链表访问元素|
-|性能上|对于arraylist，是顺序表，使用for循环可以顺序访问，速度较快；使用foreach会比for循环稍慢一些|对于linkedlist，是单链表，使用for循环每次都要从第一个元素读取next域来读取，速度非常慢；使用foreach可以直接读取当前结点，数据较快|
-
-### 结论
-for 性能优于 forEach ， 主要原因如下：
-1. foreach相对于for循环，代码减少了，但是foreach依赖IEnumerable。在运行的时候效率低于for循环。
-2. for循环没有额外的函数调用栈和上下文，所以它的实现最为简单。forEach：对于forEach来说，它的函数签名中包含了参数和上下文，所以性能会低于 for 循环。
-
-### 参考文档
-- https://zhuanlan.zhihu.com/p/461523927
-- [javascript 中 for 的性能比 forEach 的性能要好，为何还要使用 forEach？ - 李十三的回答 - 知乎](https://www.zhihu.com/question/556786869/answer/2706658837)
-- https://juejin.cn/post/6844904159938887687
-  
-  
+```js
+function convert(arr) {
+  const res = []
+  const map = arr.reduce((obj, item) => (obj[item.id] = item, obj), {})
+  for (let item of arr) {
+    if (item.parentId === 0) {
+      res.push(item)
+      continue
+    }
+    if (map.hasOwnProperty(item.parentId)) {
+      const parent = map[item.parentId]
+      parent.children = parent.children || []
+      parent.children.push(item)
+    }
+  }
+  return res
+}
+```

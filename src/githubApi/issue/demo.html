@@ -1,309 +1,203 @@
-<div class="markdown-body html"><style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#252933}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;line-height:38px;margin-bottom:5px}.markdown-body h2{font-size:22px;line-height:34px;padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:20px;line-height:28px}.markdown-body h4{font-size:18px;line-height:26px}.markdown-body h5{font-size:17px;line-height:24px}.markdown-body h6{font-size:16px;line-height:24px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="juejin">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><h2 class="heading" data-id="heading-0">一、前言 - webpack热更新</h2>
-  <blockquote>
-    <p><code>Hot Module Replacement</code>，简称<code>HMR</code>，无需完全刷新整个页面的同时，更新模块。<code>HMR</code>的好处，在日常开发工作中体会颇深：<strong>节省宝贵的开发时间、提升开发体验</strong>。</p>
-  </blockquote>
-  <p>刷新我们一般分为两种：</p>
-  <ul>
-    <li>一种是页面刷新，不保留页面状态，就是简单粗暴，直接<code>window.location.reload()</code>。</li>
-    <li>另一种是基于<code>WDS (Webpack-dev-server)</code>的模块热替换，只需要局部刷新页面上发生变化的模块，同时可以保留当前的页面状态，比如复选框的选中状态、输入框的输入等。</li>
-  </ul>
-  <p><code>HMR</code>作为一个<code>Webpack</code>内置的功能，可以通过<code>HotModuleReplacementPlugin</code>或<code>--hot</code>开启。那么，<code>HMR</code>到底是怎么实现热更新的呢？下面让我们来了解一下吧！</p>
-  <h2 class="heading" data-id="heading-1">二、webpack的编译构建过程</h2>
-  <p>项目启动后，进行构建打包，控制台会输出构建过程，我们可以观察到生成了一个 <strong>Hash值</strong>：<code>a93fd735d02d98633356</code>。
-  </p><figure><img alt="首次构建控制台输出日志" src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec043909c70b12~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure>
-  然后，在我们每次修改代码保存后，控制台都会出现 <code>Compiling…</code>字样，触发新的编译中...可以在控制台中观察到：<p></p>
-  <ul>
-    <li><strong>新的Hash值</strong>：<code>a61bdd6e82294ed06fa3</code></li>
-    <li><strong>新的json文件</strong>： <code>a93fd735d02d98633356.hot-update.json</code></li>
-    <li><strong>新的js文件</strong>：<code>index.a93fd735d02d98633356.hot-update.js</code></li>
-  </ul>
-  <p></p><figure><img alt="修改代码的编译日志" src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec04454e1167f7~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure><p></p>
-  <p>首先，我们知道<code>Hash</code>值代表每一次编译的标识。其次，根据新生成文件名可以发现，上次输出的<code>Hash</code>值会作为本次编译新生成的文件标识。依次类推，本次输出的<code>Hash</code>值会被作为下次热更新的标识。</p>
-  <p>然后看一下，新生成的文件是什么？每次修改代码，紧接着触发重新编译，然后浏览器就会发出 2 次请求。请求的便是本次新生成的 2 个文件。如下：
-  </p><figure><img alt="浏览器请求" src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec04289af752da~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure>
-  首先看<code>json</code>文件，返回的结果中，<code>h</code>代表本次新生成的<code>Hash</code>值，用于下次文件热更新请求的前缀。<code>c</code>表示当前要热更新的文件对应的是<code>index</code>模块。<p></p>
-  <p>再看下生成的<code>js</code>文件，那就是本次修改的代码，重新编译打包后的。
-  </p><figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec04316d6ac5e3~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure>
-  还有一种情况是，如果没有任何代码改动，直接保存文件，控制台也会输出编译打包信息的。<p></p>
-  <ul>
-    <li><strong>新的Hash值</strong>：<code>d2e4208eca62aa1c5389</code></li>
-    <li><strong>新的json文件</strong>：<code>a61bdd6e82294ed06fa3.hot-update.json</code></li>
-  </ul>
-  <p></p><figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec04bd0d47eae4~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure><p></p>
-  <p>但是我们发现，并没有生成新的<code>js</code>文件，因为没有改动任何代码，同时浏览器发出的请求，可以看到<code>c</code>值为空，代表本次没有需要更新的代码。
-  </p><figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec04c7b158cb3b~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure><p></p>
-  <p>小声说下，<code>webapck</code>以前的版本这种情况<code>hash</code>值是不会变的，后面可能出于什么原因改版了。细节不用在意，了解原理才是真谛!!!</p>
-  <p>最后思考下🤔，浏览器是如何知道本地代码重新编译了，并迅速请求了新生成的文件？是谁告知了浏览器？浏览器获得这些文件又是如何热更新成功的？那让我们带着疑问看下热更新的过程，从源码的角度看原理。</p>
-  <h2 class="heading" data-id="heading-2">三、热更新实现原理</h2>
-  <p>相信大家都会配置<code>webpack-dev-server</code>热更新，我就不示意例子了。自己网上查下即可。接下来我们就来看下<code>webpack-dev-server</code>是如何实现热更新的？（源码都是精简过的，第一行会注明代码路径，看完最好结合源码食用一次）。</p>
-  <h3 class="heading" data-id="heading-3">1. webpack-dev-server启动本地服务</h3>
-  <p>我们根据<code>webpack-dev-server</code>的<code>package.json</code>中的<code>bin</code>命令，可以找到命令的入口文件<code>bin/webpack-dev-server.js</code>。</p>
-  <pre><code class="hljs javaScript copyable hljs language-pgsql" lang="pgsql">// node_modules/webpack-dev-<span class="hljs-keyword">server</span>/bin/webpack-dev-<span class="hljs-keyword">server</span>.js
-
-// 生成webpack编译主引擎 compiler
-let compiler = webpack(config);
-
-// 启动本地服务
-let <span class="hljs-keyword">server</span> = <span class="hljs-built_in">new</span> <span class="hljs-keyword">Server</span>(compiler, <span class="hljs-keyword">options</span>, <span class="hljs-keyword">log</span>);
-<span class="hljs-keyword">server</span>.<span class="hljs-keyword">listen</span>(<span class="hljs-keyword">options</span>.port, <span class="hljs-keyword">options</span>.host, (err) =&gt; {
-    <span class="hljs-keyword">if</span> (err) {throw err};
-});<span class="copy-code-btn">复制代码</span></code></pre><p>本地服务代码：</p>
-  <pre><code class="hljs javascript copyable hljs language-javascript" lang="javascript"><span class="hljs-comment">// node_modules/webpack-dev-server/lib/Server.js</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">Server</span> {
-    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
-        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">setupApp</span>();
-        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">createServer</span>();
-    }
-
-    <span class="hljs-title function_">setupApp</span>(<span class="hljs-params"></span>) {
-        <span class="hljs-comment">// 依赖了express</span>
-    	<span class="hljs-variable language_">this</span>.<span class="hljs-property">app</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_">express</span>();
-    }
-
-    <span class="hljs-title function_">createServer</span>(<span class="hljs-params"></span>) {
-        <span class="hljs-variable language_">this</span>.<span class="hljs-property">listeningApp</span> = http.<span class="hljs-title function_">createServer</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">app</span>);
-    }
-    <span class="hljs-title function_">listen</span>(<span class="hljs-params">port, hostname, fn</span>) {
-        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">listeningApp</span>.<span class="hljs-title function_">listen</span>(port, hostname, <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
-            <span class="hljs-comment">// 启动express服务后，启动websocket服务</span>
-            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">createSocketServer</span>();
-        }
-    }
-}<span class="copy-code-btn">复制代码</span></code></pre><p>这一小节代码主要做了三件事：</p>
-  <ul>
-    <li>启动<code>webpack</code>，生成<code>compiler</code>实例。<code>compiler</code>上有很多方法，比如可以启动 <code>webpack</code> 所有<strong>编译</strong>工作，以及<strong>监听</strong>本地文件的变化。</li>
-    <li>使用<code>express</code>框架启动本地<code>server</code>，让浏览器可以请求本地的<strong>静态资源</strong>。</li>
-    <li>本地<code>server</code>启动之后，再去启动<code>websocket</code>服务，如果不了解<code>websocket</code>，建议简单了解一下<a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2017%2F05%2Fwebsocket.html" title="https://www.ruanyifeng.com/blog/2017/05/websocket.html" ref="nofollow noopener noreferrer">websocket速成</a>。通过<code>websocket</code>，可以建立本地服务和浏览器的双向通信。这样就可以实现当本地文件发生变化，立马告知浏览器可以热更新代码啦！</li>
-  </ul>
-  <p>上述代码主要干了三件事，但是源码在启动服务前又做了很多事，接下来便看看<code>webpack-dev-server/lib/Server.js</code>还做了哪些事？</p>
-  <h3 class="heading" data-id="heading-4">2. 修改webpack.config.js的entry配置</h3>
-  <p>启动本地服务前，调用了<code>updateCompiler(this.compiler)</code>方法。这个方法中有 2 段关键性代码。一个是获取<code>websocket</code>客户端代码路径，另一个是根据配置获取<code>webpack</code>热更新代码路径。</p>
-  <pre><code class="hljs javascript copyable hljs language-javascript" lang="javascript"><span class="hljs-comment">// 获取websocket客户端代码</span>
-<span class="hljs-keyword">const</span> clientEntry = <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">require</span>.resolve(
-    <span class="hljs-string">'../../client/'</span>
-)}</span>?<span class="hljs-subst">${domain}</span><span class="hljs-subst">${sockHost}</span><span class="hljs-subst">${sockPath}</span><span class="hljs-subst">${sockPort}</span>`</span>;
-
-<span class="hljs-comment">// 根据配置获取热更新代码</span>
-<span class="hljs-keyword">let</span> hotEntry;
-<span class="hljs-keyword">if</span> (options.<span class="hljs-property">hotOnly</span>) {
-    hotEntry = <span class="hljs-built_in">require</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">'webpack/hot/only-dev-server'</span>);
-} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (options.<span class="hljs-property">hot</span>) {
-    hotEntry = <span class="hljs-built_in">require</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">'webpack/hot/dev-server'</span>);
-}<span class="copy-code-btn">复制代码</span></code></pre><p>修改后的<code>webpack</code>入口配置如下：</p>
-  <pre><code class="hljs javascript copyable hljs language-awk" lang="awk"><span class="hljs-regexp">//</span> 修改后的entry入口
-{ entry:
-    { index:
-        [
-            <span class="hljs-regexp">//</span> 上面获取的clientEntry
-            <span class="hljs-string">'xxx/node_modules/webpack-dev-server/client/index.js?http://localhost:8080'</span>,
-            <span class="hljs-regexp">//</span> 上面获取的hotEntry
-            <span class="hljs-string">'xxx/node_modules/webpack/hot/dev-server.js'</span>,
-            <span class="hljs-regexp">//</span> 开发配置的入口
-            <span class="hljs-string">'./src/index.js'</span>
-    	],
-    },
-}      <span class="copy-code-btn">复制代码</span></code></pre><p>为什么要新增了 2 个文件？在入口默默增加了 2 个文件，那就意味会一同打包到<code>bundle</code>文件中去，也就是线上运行时。</p>
-  <p><strong>（1）webpack-dev-server/client/index.js</strong></p>
-  <p>首先这个文件用于<code>websocket</code>的，因为<code>websoket</code>是双向通信，如果不了解<code>websocket</code>，建议简单了解一下<a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2017%2F05%2Fwebsocket.html" title="https://www.ruanyifeng.com/blog/2017/05/websocket.html" ref="nofollow noopener noreferrer">websocket速成</a>。我们在第 1 步 <code>webpack-dev-server</code>初始化 的过程中，启动的是本地服务端的<code>websocket</code>。那客户端也就是我们的浏览器，浏览器还没有和服务端通信的代码呢？总不能让开发者去写吧hhhhhh。因此我们需要把<code>websocket</code>客户端通信代码偷偷塞到我们的代码中。客户端具体的代码后面会在合适的时机细讲哦。</p>
-  <p><strong>（2）webpack/hot/dev-server.js</strong></p>
-  <p>这个文件主要是用于检查更新逻辑的，这里大家知道就好，代码后面会在合适的时机（<strong>第5步</strong>）细讲。</p>
-  <h3 class="heading" data-id="heading-5">3. 监听webpack编译结束</h3>
-  <p>修改好入口配置后，又调用了<code>setupHooks</code>方法。这个方法是用来注册监听事件的，监听每次<code>webpack</code>编译完成。</p>
-  <pre><code class="hljs javascript copyable hljs language-javascript" lang="javascript"><span class="hljs-comment">// node_modules/webpack-dev-server/lib/Server.js</span>
-<span class="hljs-comment">// 绑定监听事件</span>
-<span class="hljs-title function_">setupHooks</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-keyword">const</span> {done} = compiler.<span class="hljs-property">hooks</span>;
-    <span class="hljs-comment">// 监听webpack的done钩子，tapable提供的监听方法</span>
-    done.<span class="hljs-title function_">tap</span>(<span class="hljs-string">'webpack-dev-server'</span>, <span class="hljs-function">(<span class="hljs-params">stats</span>) =&gt;</span> {
-        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">_sendStats</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">sockets</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getStats</span>(stats));
-        <span class="hljs-variable language_">this</span>.<span class="hljs-property">_stats</span> = stats;
-    });
-};<span class="copy-code-btn">复制代码</span></code></pre><p>当监听到一次<code>webpack</code>编译结束，就会调用<code>_sendStats</code>方法通过<code>websocket</code>给浏览器发送通知，<code>ok</code>和<code>hash</code>事件，这样浏览器就可以拿到最新的<code>hash</code>值了，做检查更新逻辑。</p>
-  <pre><code class="hljs bash copyable hljs language-reasonml" lang="reasonml"><span class="hljs-comment">// 通过websoket给客户端发消息</span>
-<span class="hljs-constructor">_sendStats()</span> {
-    this.sock<span class="hljs-constructor">Write(<span class="hljs-params">sockets</span>, '<span class="hljs-params">hash</span>', <span class="hljs-params">stats</span>.<span class="hljs-params">hash</span>)</span>;
-    this.sock<span class="hljs-constructor">Write(<span class="hljs-params">sockets</span>, '<span class="hljs-params">ok</span>')</span>;
-}<span class="copy-code-btn">复制代码</span></code></pre><h3 class="heading" data-id="heading-6">4. webpack监听文件变化</h3>
-  <p>每次修改代码，就会触发编译。说明我们还需要监听本地代码的变化，主要是通过<code>setupDevMiddleware</code>方法实现的。</p>
-  <p>这个方法主要执行了<code>webpack-dev-middleware</code>库。很多人分不清<code>webpack-dev-middleware</code>和<code>webpack-dev-server</code>的区别。其实就是因为<code>webpack-dev-server</code>只负责启动服务和前置准备工作，所有文件相关的操作都抽离到<code>webpack-dev-middleware</code>库了，主要是本地文件的<strong>编译</strong>和<strong>输出</strong>以及<strong>监听</strong>，无非就是职责的划分更清晰了。</p>
-  <p>那我们来看下<code>webpack-dev-middleware</code>源码里做了什么事:</p>
-  <pre><code class="hljs javascript copyable hljs language-awk" lang="awk"><span class="hljs-regexp">//</span> node_modules<span class="hljs-regexp">/webpack-dev-middleware/i</span>ndex.js
-compiler.watch(options.watchOptions, (err) =&gt; {
-    <span class="hljs-keyword">if</span> (err) { <span class="hljs-regexp">/*错误处理*/</span> }
-});
-
-<span class="hljs-regexp">//</span> 通过“memory-fs”库将打包后的文件写入内存
-setFs(context, compiler); <span class="copy-code-btn">复制代码</span></code></pre><p>（1）调用了<code>compiler.watch</code>方法，在第 1 步中也提到过，<code>compiler</code>的强大。这个方法主要就做了 2 件事：</p>
-  <ul>
-    <li>首先对本地文件代码进行编译打包，也就是<code>webpack</code>的一系列编译流程。</li>
-    <li>其次编译结束后，开启对本地文件的监听，当文件发生变化，重新编译，编译完成之后继续监听。</li>
-  </ul>
-  <p>为什么代码的改动保存会自动编译，重新打包？这一系列的重新检测编译就归功于<code>compiler.watch</code>这个方法了。监听本地文件的变化主要是通过<strong>文件的生成时间</strong>是否有变化，这里就不细讲了。</p>
-  <p>（2）执行<code>setFs</code>方法，这个方法主要目的就是将编译后的文件打包到内存。这就是为什么在开发的过程中，你会发现<code>dist</code>目录没有打包后的代码，因为都在内存中。原因就在于访问内存中的代码比访问文件系统中的文件更快，而且也减少了代码写入文件的开销，这一切都归功于<code>memory-fs</code>。</p>
-  <h3 class="heading" data-id="heading-7">5. 浏览器接收到热更新的通知</h3>
-  <p>我们已经可以监听到文件的变化了，当文件发生变化，就触发重新编译。同时还监听了每次编译结束的事件。当监听到一次<code>webpack</code>编译结束，<code>_sendStats</code>方法就通过<code>websoket</code>给浏览器发送通知，检查下是否需要热更新。下面重点讲的就是<code>_sendStats</code>方法中的<code>ok</code>和<code>hash</code>事件都做了什么。</p>
-  <p>那浏览器是如何接收到<code>websocket</code>的消息呢？回忆下第 2 步骤增加的入口文件，也就是<code>websocket</code>客户端代码。</p>
-  <pre><code class="hljs javascript copyable hljs language-1c" lang="1c">'xxx/node_modules/webpack-dev-server/client/index.js?http://localhost:<span class="hljs-number">8080</span>'<span class="copy-code-btn">复制代码</span></code></pre><p>这个文件的代码会被打包到<code>bundle.js</code>中，运行在浏览器中。来看下这个文件的核心代码吧。</p>
-  <pre><code class="hljs javascript copyable hljs language-awk" lang="awk"><span class="hljs-regexp">//</span> webpack-dev-server<span class="hljs-regexp">/client/i</span>ndex.js
-var socket = require(<span class="hljs-string">'./socket'</span>);
-var onSocketMessage = {
-    hash: <span class="hljs-keyword">function</span> hash(_hash) {
-        <span class="hljs-regexp">//</span> 更新currentHash值
-        status.currentHash = _hash;
-    },
-    ok: <span class="hljs-keyword">function</span> ok() {
-        sendMessage(<span class="hljs-string">'Ok'</span>);
-        <span class="hljs-regexp">//</span> 进行更新检查等操作
-        reloadApp(options, status);
-    },
-};
-<span class="hljs-regexp">//</span> 连接服务地址socketUrl，?http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number">8080</span>，本地服务地址
-socket(socketUrl, onSocketMessage);
-
-<span class="hljs-keyword">function</span> reloadApp() {
-	<span class="hljs-keyword">if</span> (hot) {
-        log.info(<span class="hljs-string">'[WDS] App hot update...'</span>);
-
-        <span class="hljs-regexp">//</span> hotEmitter其实就是EventEmitter的实例
-        var hotEmitter = require(<span class="hljs-string">'webpack/hot/emitter'</span>);
-        hotEmitter.emit(<span class="hljs-string">'webpackHotUpdate'</span>, currentHash);
-    }
-}<span class="copy-code-btn">复制代码</span></code></pre><p><code>socket</code>方法建立了<code>websocket</code>和服务端的连接，并注册了 2 个监听事件。</p>
-  <ul>
-    <li><code>hash</code>事件，更新最新一次打包后的<code>hash</code>值。</li>
-    <li><code>ok</code>事件，进行热更新检查。</li>
-  </ul>
-  <p>热更新检查事件是调用<code>reloadApp</code>方法。比较奇怪的是，这个方法又利用<code>node.js</code>的<code>EventEmitter</code>，发出<code>webpackHotUpdate</code>消息。这是为什么？为什么不直接进行检查更新呢？</p>
-  <p>个人理解就是为了更好的维护代码，以及职责划分的更明确。<code>websocket</code>仅仅用于客户端（浏览器）和服务端进行通信。而真正做事情的活还是交回给了<code>webpack</code>。</p>
-  <p>那<code>webpack</code>怎么做的呢？再来回忆下第 2 步。入口文件还有一个文件没有讲到，就是：</p>
-  <pre><code class="hljs javascript copyable hljs language-scheme" lang="scheme"><span class="hljs-symbol">'xxx/node_modules/webpack/hot/dev-server.js</span>'<span class="copy-code-btn">复制代码</span></code></pre><p>这个文件的代码同样会被打包到<code>bundle.js</code>中，运行在浏览器中。这个文件做了什么就显而易见了吧！先瞄一眼代码：</p>
-  <pre><code class="hljs javascript copyable hljs language-javascript" lang="javascript"><span class="hljs-comment">// node_modules/webpack/hot/dev-server.js</span>
-<span class="hljs-keyword">var</span> check = <span class="hljs-keyword">function</span> <span class="hljs-title function_">check</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-variable language_">module</span>.<span class="hljs-property">hot</span>.<span class="hljs-title function_">check</span>(<span class="hljs-literal">true</span>)
-        .<span class="hljs-title function_">then</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">updatedModules</span>) {
-            <span class="hljs-comment">// 容错，直接刷新页面</span>
-            <span class="hljs-keyword">if</span> (!updatedModules) {
-                <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-title function_">reload</span>();
-                <span class="hljs-keyword">return</span>;
-            }
-
-            <span class="hljs-comment">// 热更新结束，打印信息</span>
-            <span class="hljs-keyword">if</span> (<span class="hljs-title function_">upToDate</span>()) {
-                <span class="hljs-title function_">log</span>(<span class="hljs-string">"info"</span>, <span class="hljs-string">"[HMR] App is up to date."</span>);
-            }
-    })
-        .<span class="hljs-title function_">catch</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>) {
-            <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-title function_">reload</span>();
-        });
-};
-
-<span class="hljs-keyword">var</span> hotEmitter = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./emitter"</span>);
-hotEmitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">"webpackHotUpdate"</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params">currentHash</span>) {
-    lastHash = currentHash;
-    <span class="hljs-title function_">check</span>();
-});<span class="copy-code-btn">复制代码</span></code></pre><p>这里<code>webpack</code>监听到了<code>webpackHotUpdate</code>事件，并获取最新了最新的<code>hash</code>值，然后终于进行检查更新了。检查更新呢调用的是<code>module.hot.check</code>方法。那么问题又来了，<code>module.hot.check</code>又是哪里冒出来了的！答案是<code>HotModuleReplacementPlugin</code>搞得鬼。这里留个疑问，继续往下看。</p>
-  <h3 class="heading" data-id="heading-8">6. HotModuleReplacementPlugin</h3>
-  <p>前面好像一直是<code>webpack-dev-server</code>做的事，那<code>HotModuleReplacementPlugin</code>在热更新过程中又做了什么伟大的事业呢？</p>
-  <p>首先你可以对比下，配置热更新和不配置时<code>bundle.js</code>的区别。内存中看不到？直接执行<code>webpack</code>命令就可以看到生成的<code>bundle.js</code>文件啦。不要用<code>webpack-dev-server</code>启动就好了。</p>
-  <p>（1）没有配置的。
-  </p><figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec0c9e8fd12349~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure>
-  （2）配置了<code>HotModuleReplacementPlugin</code>或<code>--hot</code>的。
-  <figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec0c90092fa0ac~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure>
-  哦~ 我们发现<code>moudle</code>新增了一个属性为<code>hot</code>，再看<code>hotCreateModule</code>方法。
-  这不就找到<code>module.hot.check</code>是哪里冒出来的。
-  <figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec0dc36018973f~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure><p></p>
-  <p>经过对比打包后的文件，<code>__webpack_require__</code>中的<code>moudle</code>以及代码行数的不同。我们都可以发现<code>HotModuleReplacementPlugin</code>原来也是默默的塞了很多代码到<code>bundle.js</code>中呀。这和第 2 步骤很是相似哦！为什么，因为检查更新是在浏览器中操作呀。这些代码必须在运行时的环境。</p>
-  <p>你也可以直接看浏览器<code>Sources</code>下的代码，会发现<code>webpack</code>和<code>plugin</code>偷偷加的代码都在哦。在这里调试也很方便。
-  </p><figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec0d4634af2b3c~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure>
-  <code>HotModuleReplacementPlugin</code>如何做到的？这里我就不讲了，因为这需要你对<code>tapable</code>以及<code>plugin</code>机制有一定了解，可以看下我写的文章<a target="_blank" href="https://juejin.cn/post/6844904004435050503" title="https://juejin.cn/post/6844904004435050503">Webpack插件机制之Tapable-源码解析</a>。当然你也可以选择跳过，只关心热更新机制即可，毕竟信息量太大。<p></p>
-  <h3 class="heading" data-id="heading-9">7. moudle.hot.check 开始热更新</h3>
-  <p>通过第 6 步，我们就可以知道<code>moudle.hot.check</code>方法是如何来的啦。那都做了什么？之后的源码都是<code>HotModuleReplacementPlugin</code>塞入到<code>bundle.js</code>中的哦，我就不写文件路径了。</p>
-  <ul>
-    <li>利用上一次保存的<code>hash</code>值，调用<code>hotDownloadManifest</code>发送<code>xxx/hash.hot-update.json</code>的<code>ajax</code>请求；</li>
-    <li>请求结果获取热更新模块，以及下次热更新的<code>Hash</code> 标识，并进入热更新准备阶段。</li>
-  </ul>
-  <pre><code class="hljs javascript copyable hljs language-abnf" lang="abnf"><span class="hljs-attribute">hotAvailableFilesMap</span> <span class="hljs-operator">=</span> update.c<span class="hljs-comment">; // 需要更新的文件</span>
-<span class="hljs-attribute">hotUpdateNewHash</span> <span class="hljs-operator">=</span> update.h<span class="hljs-comment">; // 更新下次热更新hash值</span>
-hotSetStatus(<span class="hljs-string">"prepare"</span>)<span class="hljs-comment">; // 进入热更新准备状态</span><span class="copy-code-btn">复制代码</span></code></pre><ul>
-    <li>调用<code>hotDownloadUpdateChunk</code>发送<code>xxx/hash.hot-update.js</code> 请求，通过<code>JSONP</code>方式。</li>
-  </ul>
-  <pre><code class="hljs javascript copyable hljs language-javascript" lang="javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">hotDownloadUpdateChunk</span>(<span class="hljs-params">chunkId</span>) {
-    <span class="hljs-keyword">var</span> script = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">"script"</span>);
-    script.<span class="hljs-property">charset</span> = <span class="hljs-string">"utf-8"</span>;
-    script.<span class="hljs-property">src</span> = __webpack_require__.<span class="hljs-property">p</span> + <span class="hljs-string">""</span> + chunkId + <span class="hljs-string">"."</span> + hotCurrentHash + <span class="hljs-string">".hot-update.js"</span>;
-    <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span>) script.<span class="hljs-property">crossOrigin</span> = <span class="hljs-literal">null</span>;
-    <span class="hljs-variable language_">document</span>.<span class="hljs-property">head</span>.<span class="hljs-title function_">appendChild</span>(script);
- }<span class="copy-code-btn">复制代码</span></code></pre><p>这个函数体为什么要单独拿出来，因为这里要解释下为什么使用<code>JSONP</code>获取最新代码？主要是因为<code>JSONP</code>获取的代码可以直接执行。为什么要直接执行？我们来回忆下<code>/hash.hot-update.js</code>的代码格式是怎么样的。
-  </p><figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec04316d6ac5e3~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure><p></p>
-  <p>可以发现，新编译后的代码是在一个<code>webpackHotUpdate</code>函数体内部的。也就是要立即执行<code>webpackHotUpdate</code>这个方法。</p>
-  <p>再看下<code>webpackHotUpdate</code>这个方法。</p>
-  <pre><code class="hljs javascript copyable hljs language-ada" lang="ada">window[<span class="hljs-string">"webpackHotUpdate"</span>] = <span class="hljs-keyword">function</span> <span class="hljs-title"></span>(chunkId, moreModules) {
-    hotAddUpdateChunk(chunkId, moreModules);
-} ;<span class="copy-code-btn">复制代码</span></code></pre><ul>
-    <li><code>hotAddUpdateChunk</code>方法会把更新的模块<code>moreModules</code>赋值给全局全量<code>hotUpdate</code>。</li>
-    <li><code>hotUpdateDownloaded</code>方法会调用<code>hotApply</code>进行代码的替换。</li>
-  </ul>
-  <pre><code class="hljs javascript copyable hljs language-reasonml" lang="reasonml"><span class="hljs-keyword">function</span> hot<span class="hljs-constructor">AddUpdateChunk(<span class="hljs-params">chunkId</span>, <span class="hljs-params">moreModules</span>)</span> {
-    <span class="hljs-comment">// 更新的模块moreModules赋值给全局全量hotUpdate</span>
-    <span class="hljs-keyword">for</span> (var moduleId <span class="hljs-keyword">in</span> moreModules) {
-        <span class="hljs-keyword">if</span> (<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Object</span>.</span></span>prototype.hasOwnProperty.call(moreModules, moduleId)) {
-	    hotUpdate<span class="hljs-literal">[<span class="hljs-identifier">moduleId</span>]</span> = moreModules<span class="hljs-literal">[<span class="hljs-identifier">moduleId</span>]</span>;
-        }
-    }
-    <span class="hljs-comment">// 调用hotApply进行模块的替换</span>
-    hot<span class="hljs-constructor">UpdateDownloaded()</span>;
-}<span class="copy-code-btn">复制代码</span></code></pre><h3 class="heading" data-id="heading-10">8. hotApply 热更新模块替换</h3>
-  <p>热更新的核心逻辑就在<code>hotApply</code>方法了。
-    <code>hotApply</code>代码有将近 400 行，还是挑重点讲了，看哭😭</p>
-  <h4 class="heading" data-id="heading-11">①删除过期的模块，就是需要替换的模块</h4>
-  <p>通过<code>hotUpdate</code>可以找到旧模块</p>
-  <pre><code class="hljs javaScript copyable hljs language-cpp" lang="cpp">var queue = outdatedModules.<span class="hljs-built_in">slice</span>();
-<span class="hljs-keyword">while</span> (queue.length &gt; <span class="hljs-number">0</span>) {
-    moduleId = queue.<span class="hljs-built_in">pop</span>();
-    <span class="hljs-comment">// 从缓存中删除过期的模块</span>
-    <span class="hljs-keyword">module</span> = installedModules[moduleId];
-    <span class="hljs-comment">// 删除过期的依赖</span>
-    <span class="hljs-keyword">delete</span> outdatedDependencies[moduleId];
-
-    <span class="hljs-comment">// 存储了被删掉的模块id，便于更新代码</span>
-    outdatedSelfAcceptedModules.<span class="hljs-built_in">push</span>({
-        <span class="hljs-keyword">module</span>: moduleId
-    });
-}<span class="copy-code-btn">复制代码</span></code></pre><h4 class="heading" data-id="heading-12">②将新的模块添加到 modules 中</h4>
-  <pre><code class="hljs javaScript copyable hljs language-inform7" lang="inform7">appliedUpdate<span class="hljs-comment">[moduleId]</span> = hotUpdate<span class="hljs-comment">[moduleId]</span>;
-for (moduleId in appliedUpdate) {
-    if (Object.prototype.hasOwnProperty.call(appliedUpdate, moduleId)) {
-        modules<span class="hljs-comment">[moduleId]</span> = appliedUpdate<span class="hljs-comment">[moduleId]</span>;
-    }
-}<span class="copy-code-btn">复制代码</span></code></pre><h4 class="heading" data-id="heading-13">③通过__webpack_require__执行相关模块的代码</h4>
-  <pre><code class="hljs javaScript copyable hljs language-abnf" lang="abnf">for (i <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-comment">; i &lt; outdatedSelfAcceptedModules.length; i++) {</span>
-    var item <span class="hljs-operator">=</span> outdatedSelfAcceptedModules[i]<span class="hljs-comment">;</span>
-    moduleId <span class="hljs-operator">=</span> item.module<span class="hljs-comment">;</span>
-    try {
-        // 执行最新的代码
-        __webpack_require__(moduleId)<span class="hljs-comment">;</span>
-    } catch (err) {
-        // ...容错处理
-    }
+<article class="article fmt article-content "><p>在实现vue双向数据绑定之前，先了解Proxy相关的概念和用法</p><h3 id="item-1">proxy概念</h3><p><code>Proxy</code> 对象用于定义基本操作的自定义行为（如属性查找、赋值、枚举、函数调用等）。</p><h3 id="item-2">一些术语</h3><ul><li>handle</li></ul><p>包含捕捉器（trap）的占位符对象，可译为处理器对象</p><ul><li>traps</li></ul><p>提供属性访问的方法。这类似于操作系统中捕获器的概念。</p><ul><li>target</li></ul><p>被 Proxy 代理虚拟化的对象。</p><h3 id="item-3">语法</h3><p><code>const p = new Proxy(target, handler)</code></p><ul><li>target</li></ul><p>要使用 Proxy 包装的目标对象（可以是任何类型的对象，包括原生数组，函数，甚至另一个代理）。</p><ul><li>handle</li></ul><p>一个通常以函数作为属性的对象，各属性中的函数分别定义了在执行各种操作时代理 p 的行为。</p><h3 id="item-4">使用proxy实现数据劫持</h3><div class="widget-codetool" style="display: none;">
+  <div class="widget-codetool--inner">
+    <button type="button" class="btn btn-dark far fa-copy rounded-0 sflex-center copyCode" data-toggle="tooltip" data-placement="top" data-clipboard-text="let data = {
+    name: YoLinDeng,
+    height: '176cm'
 }
-<span class="copy-code-btn">复制代码</span></code></pre><p><code>hotApply</code>的确比较复杂，知道大概流程就好了，这一小节，要求你对webpack打包后的文件如何执行的有一些了解，大家可以自去看下。</p>
-  <h2 class="heading" data-id="heading-14">四、总结</h2>
-  <p>还是以阅读源码的形式画的图，①-④的小标记，是文件发生变化的一个流程。
-  </p><figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/1/16ec13499800dfce~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure><p></p>
-  <h2 class="heading" data-id="heading-15">写在最后</h2>
-  <p>本次是以阅读源码的方式讲解原理，是因为觉得热更新这块涉及的知识量比较多。所以知识把关键性代码拿出来，因为每一个块细节说起来都能写一篇文章了，大家可以自己对着源码再理解下。</p>
-  <p>还是建议提前了解以下知识会更好理解热更新：</p>
-  <ul>
-    <li><strong>websocket</strong>：<a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2017%2F05%2Fwebsocket.html" title="https://www.ruanyifeng.com/blog/2017/05/websocket.html" ref="nofollow noopener noreferrer">websocket基础知识了解</a></li>
-    <li>打包后的<code>bundle</code>文件如何运行的。</li>
-    <li><code>webpack</code>启动流程，<code>webpack</code>生命周期。</li>
-    <li><strong>tapable</strong>: <a target="_blank" href="https://juejin.cn/post/6844904004435050503" title="https://juejin.cn/post/6844904004435050503">Webpack插件机制之Tapable-源码解析</a></li>
-  </ul>
-  <h2 class="heading" data-id="heading-16">参考链接</h2>
-  <ul>
-    <li><a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2FJocs%2Fjocs.github.io%2Fissues%2F15" title="https://github.com/Jocs/jocs.github.io/issues/15" ref="nofollow noopener noreferrer">Webpack Hot Module Replacement 的原理解析</a></li>
-    <li><a target="_blank" href="https://juejin.cn/post/6844903953092591630" title="https://juejin.cn/post/6844903953092591630">看完这篇，面试再也不怕被问 Webpack 热更新</a></li>
-  </ul>
-  <p>参考的文章大家也可以看下，但是由于源码版本不同，所以不要太纠结与细节。</p>
-  <p>原创不易，走过路过点个赞吧~😊</p>
-</div>
+
+const p = new Proxy(data, {
+    get(target, prop) {
+        return Reflect.get(...arguments)
+    },
+    set(target, prop, newValue) {
+        return Reflect.set(...arguments)
+    }
+})" title="" data-bs-original-title="复制" aria-label="复制"></button>
+  </div>
+</div><pre class="hljs language-javascript"><span class="hljs-keyword">let</span> data = {
+    <span class="hljs-attr">name</span>: <span class="hljs-title class_">YoLinDeng</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-string">'176cm'</span>
+}
+
+<span class="hljs-keyword">const</span> p = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(data, {
+    <span class="hljs-title function_">get</span>(<span class="hljs-params">target, prop</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(...<span class="hljs-variable language_">arguments</span>)
+    },
+    <span class="hljs-title function_">set</span>(<span class="hljs-params">target, prop, newValue</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">set</span>(...<span class="hljs-variable language_">arguments</span>)
+    }
+})</pre><h3 id="item-5">关于vue中数据响应式的原理</h3><h4>对数据进行侦测</h4><ul><li>在vue2.X中，实现一个<code>observe</code>类，对于对象数据，通过<code>Object.defineProperty</code>来劫持对象的属性，实现<code>getter</code>和<code>setter</code>方法，这样就可以在getter的时候知道谁（订阅者）读取了数据，即谁依赖了当前的数据，将它通过<code>Dep类</code>（订阅器）收集统一管理，在setter的时候调用Dep类中的<code>notify</code>方法通知所以相关的订阅者进行更新视图。如果对象的属性也是一个对象的话，则需要递归调用<code>observe</code>进行处理。</li><li>对于数组则需要另外处理，通过实现一个拦截器类，并将它挂载到数组数据的原型上，当调用<code>push/pop/shift/unshift/splice/sort/reverse</code>修改数组数据时候，相当于调用的是拦截器中重新定义的方法，这样在拦截器中就可以侦测到数据改变了，并通知订阅者更新视图。</li><li>vue3中使用Proxy替代了Object.defineProperty，优点在于可以直接监听对象而非属性、可以直接监听数组的变化、多达13种拦截方法。缺点是兼容性还不够好。Proxy作为新标准将受到浏览器厂商重点持续的性能优化。</li></ul><h4>对模板字符串进行编译</h4><ul><li>实现Compile解析器类，将<code>template</code>中的模板字符串通过正则等方式进行处理生成对应的ast（抽象语法树），通过调用定义的不同钩子函数进行处理，包括开始标签（<code>start</code>）并判断是否自闭和以及解析属性、结束标签（<code>end</code>）、文本（<code>chars</code>）、注释（<code>comment</code>）</li><li>将通过html解析与文本解析的ast进行优化处理，在静态节点上打标记，为后面<code>dom-diff</code>算法中性能优化使用，即在对比前后vnode的时候会跳过静态节点不作对比。</li><li>最后根据处理好的ast生产<code>render</code>函数，在组件挂载的时候调用<code>render</code>函数就可以得到虚拟dom。</li></ul><h4>虚拟dom</h4><ul><li>vnode的类型包括注释节点、文本节点、元素节点、组件节点、函数式组件节点、克隆节点，<code>VNode</code>可以描述的多种节点类型，它们本质上都是<code>VNode</code>类的实例，只是在实例化的时候传入的属性参数不同而已。</li><li>通过将模板字符串编译生成虚拟dom并缓存起来，当数据发生变化时，通过对比变化前后虚拟dom，以变化后的虚拟dom为基准，更新旧的虚拟dom，使它和新的一样。把dom-diff过程叫做<code>patch</code>的过程，其主要做了三件事，分别是创建/删除/更新节点。</li><li>对于子节点的更新策略，vue中为了避免双重循环数据量大时候造成时间复杂度高带来的性能问题，而选择先从子节点数组中4个特殊位置进行对比，分别是：新前与旧前，新后与旧后，新后与旧前，新前与旧后。如果四种情况都没有找到相同的节点，则再通过循环方式查找。</li></ul><h3 id="item-6">实现简易的vue双向数据绑定</h3><p>vue的双向数据绑定主要是指，数据变化更新视图变化，视图变化更新数据。<br><strong>实现代码如下</strong></p><div class="widget-codetool" style="display: none;">
+  <div class="widget-codetool--inner">
+    <button type="button" class="btn btn-dark far fa-copy rounded-0 sflex-center copyCode" data-toggle="tooltip" data-placement="top" data-clipboard-text="<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+  <meta charset=&quot;UTF-8&quot;>
+  <meta name=&quot;viewport&quot; content=&quot;width= , initial-scale=1.0&quot;>
+  <title>Document</title>
+  <script src=&quot;myVue.js&quot;></script>
+</head>
+<body>
+  <div id=&quot;app&quot;>
+    {{name}}
+    <div>{{message}}</div>
+    <input type=&quot;text&quot; v-model=&quot;test&quot;>
+    <span>{{test}}</span>
+  </div>
+  <script>
+    let vm = new vue({
+      el: '#app',
+      data: {
+        name: 'YoLinDeng',
+        message: '打篮球',
+        test: '双向绑定数据'
+      }
+    })
+    // console.log(vm._data)
+  </script>
+</body>
+</html>" title="" data-bs-original-title="复制" aria-label="复制"></button>
+  </div>
+</div><pre class="hljs language-handlebars"><span class="language-xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"en"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"viewport"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"width= , initial-scale=1.0"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Document<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"myVue.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"app"</span>&gt;</span>
+    </span><span class="hljs-template-variable">{{<span class="hljs-name">name</span>}}</span><span class="language-xml">
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span></span><span class="hljs-template-variable">{{<span class="hljs-name">message</span>}}</span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">v-model</span>=<span class="hljs-string">"test"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span></span><span class="hljs-template-variable">{{<span class="hljs-name">test</span>}}</span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+    <span class="hljs-keyword">let</span> vm = <span class="hljs-keyword">new</span> <span class="hljs-title function_">vue</span>({
+      <span class="hljs-attr">el</span>: <span class="hljs-string">'#app'</span>,
+      <span class="hljs-attr">data</span>: {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'YoLinDeng'</span>,
+        <span class="hljs-attr">message</span>: <span class="hljs-string">'打篮球'</span>,
+        <span class="hljs-attr">test</span>: <span class="hljs-string">'双向绑定数据'</span>
+      }
+    })
+    <span class="hljs-comment">// console.log(vm._data)</span>
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span></pre><div class="widget-codetool" style="display: none;">
+  <div class="widget-codetool--inner">
+    <button type="button" class="btn btn-dark far fa-copy rounded-0 sflex-center copyCode" data-toggle="tooltip" data-placement="top" data-clipboard-text="class vue extends EventTarget {
+  constructor(option) {
+    super()
+    this.option = option
+    this._data = this.option.data
+    this.el = document.querySelector(this.option.el)
+    this.compileNode(this.el)
+    this.observe(this._data)
+  }
+  // 实现监听器方法
+  observe(data) {
+    const context = this
+    // 使用proxy代理，劫持数据
+    this._data = new Proxy(data, {
+      set(target, prop, newValue) {
+        // 自定义事件
+        let event = new CustomEvent(prop, {
+          detail: newValue
+        })
+        // 发布自定义事件
+        context.dispatchEvent(event)
+        return Reflect.set(...arguments)
+      }
+    })
+  }
+  // 实现解析器方法，解析模板
+  compileNode(el) {
+    let child = el.childNodes
+    let childArr = [...child]
+    childArr.forEach(node => {
+      if (node.nodeType === 3) {
+        let text = node.textContent
+        let reg = /\{\{\s*([^\s\{\}]+)\s*\}\}/g
+        if (reg.test(text)) {
+          let $1 = RegExp.$1
+          this._data[$1] &amp;&amp; (node.textContent = text.replace(reg, this._data[$1]))
+          // 监听数据更改事件
+          this.addEventListener($1, e => {
+            node.textContent = text.replace(reg, e.detail)
+          })
+        }
+      } else if (node.nodeType === 1) { // 如果是元素节点
+        let attr = node.attributes
+        // 判断属性中是否含有v-model
+        if (attr.hasOwnProperty('v-model')) {
+          let keyName = attr['v-model'].nodeValue
+          node.value = this._data[keyName]
+          node.addEventListener('input', e => {
+            this._data[keyName] = node.value
+          })
+        }
+        // 递归调用解析器方法
+        this.compileNode(node)
+      }
+    })
+  }
+}" title="" data-bs-original-title="复制" aria-label="复制"></button>
+  </div>
+</div><pre class="hljs language-kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">vue</span> <span class="hljs-title">extends</span> <span class="hljs-title">EventTarget</span> {
+  <span class="hljs-keyword">constructor</span>(option) {
+    <span class="hljs-keyword">super</span>()
+    <span class="hljs-keyword">this</span>.option = option
+    <span class="hljs-keyword">this</span>._data = <span class="hljs-keyword">this</span>.option.<span class="hljs-keyword">data</span>
+    <span class="hljs-keyword">this</span>.el = document.querySelector(<span class="hljs-keyword">this</span>.option.el)
+    <span class="hljs-keyword">this</span>.compileNode(<span class="hljs-keyword">this</span>.el)
+    <span class="hljs-keyword">this</span>.observe(<span class="hljs-keyword">this</span>._data)
+  }
+  <span class="hljs-comment">// 实现监听器方法</span>
+  observe(<span class="hljs-keyword">data</span>) {
+    <span class="hljs-keyword">const</span> context = <span class="hljs-keyword">this</span>
+    <span class="hljs-comment">// 使用proxy代理，劫持数据</span>
+    <span class="hljs-keyword">this</span>._data = new Proxy(<span class="hljs-keyword">data</span>, {
+      <span class="hljs-keyword">set</span>(target, prop, newValue) {
+        <span class="hljs-comment">// 自定义事件</span>
+        let event = new CustomEvent(prop, {
+          detail: newValue
+        })
+        <span class="hljs-comment">// 发布自定义事件</span>
+        context.dispatchEvent(event)
+        <span class="hljs-keyword">return</span> Reflect.<span class="hljs-keyword">set</span>(...arguments)
+      }
+    })
+  }
+  <span class="hljs-comment">// 实现解析器方法，解析模板</span>
+  compileNode(el) {
+    let child = el.childNodes
+    let childArr = [...child]
+    childArr.forEach(node =&gt; {
+      <span class="hljs-keyword">if</span> (node.nodeType === <span class="hljs-number">3</span>) {
+        let text = node.textContent
+        let reg = /\{\{\s*([^\s\{\}]+)\s*\}\}/g
+        <span class="hljs-keyword">if</span> (reg.test(text)) {
+          let $<span class="hljs-number">1</span> = RegExp.$<span class="hljs-number">1</span>
+          <span class="hljs-keyword">this</span>._data[$<span class="hljs-number">1</span>] &amp;&amp; (node.textContent = text.replace(reg, <span class="hljs-keyword">this</span>._data[$<span class="hljs-number">1</span>]))
+          <span class="hljs-comment">// 监听数据更改事件</span>
+          <span class="hljs-keyword">this</span>.addEventListener($<span class="hljs-number">1</span>, e =&gt; {
+            node.textContent = text.replace(reg, e.detail)
+          })
+        }
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (node.nodeType === <span class="hljs-number">1</span>) { <span class="hljs-comment">// 如果是元素节点</span>
+        let attr = node.attributes
+        <span class="hljs-comment">// 判断属性中是否含有v-model</span>
+        <span class="hljs-keyword">if</span> (attr.hasOwnProperty(<span class="hljs-string">'v-model'</span>)) {
+          let keyName = attr[<span class="hljs-string">'v-model'</span>].nodeValue
+          node.value = <span class="hljs-keyword">this</span>._data[keyName]
+          node.addEventListener(<span class="hljs-string">'input'</span>, e =&gt; {
+            <span class="hljs-keyword">this</span>._data[keyName] = node.value
+          })
+        }
+        <span class="hljs-comment">// 递归调用解析器方法</span>
+        <span class="hljs-keyword">this</span>.compileNode(node)
+      }
+    })
+  }
+}</pre></article>

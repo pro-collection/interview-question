@@ -5,9 +5,9 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "实现 convert 方法，把原始 list 转换成树形结构，要求尽可能降低时间复杂度",
-  labels: [labels.js],
-  milestone: MileStone.inProgress,
+  title: "[Webpack] webpack热更新原理是什么？",
+  labels: [labels.engineering],
+  milestone: MileStone.master,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };

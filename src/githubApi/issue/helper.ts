@@ -44,6 +44,7 @@ export const commitPush = async (title: string) => {
 
   // 遍历执行
   for (let i = 0; i < commandList.length; i++) {
+    console.log("yanle - logger: 执行command", commandList[i]);
     await execPromise(commandList[i]);
   }
 

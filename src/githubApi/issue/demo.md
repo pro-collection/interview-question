@@ -1,183 +1,158 @@
-### 该话题涉及的相关内容
+vue3 的响应式库是独立出来的，它可以很方便的集成进 React， 作为 React 的状态管理库使用！
 
-- 原理：Proxy、track、trigger
-- 新增属性
-- 遍历后新增
-- 遍历后删除或者清空
-- 获取 keys
-- 删除对象属性
-- 判断属性是否存在
-- 性能
-
-推荐阅读文档： https://juejin.cn/post/6844904122479542285
-
-### 响应式仓库
-
-Vue3 不同于 Vue2 也体现在源码结构上，Vue3 把耦合性比较低的包分散在 `packages` 目录下单独发布成 `npm` 包。 这也是目前很流行的一种大型项目管理方式 `Monorepo`。
-
-其中负责响应式部分的仓库就是 `@vue/reactivity`，它不涉及 Vue 的其他的任何部分，是非常非常 「正交」 的一种实现方式。
-
-甚至可以`轻松的集成进 React` https://juejin.cn/post/6844904095594381325
-
-### 区别
-
-Proxy 和 Object.defineProperty 的使用方法看似很相似，其实 Proxy 是在 「更高维度」 上去拦截属性的修改的，怎么理解呢？
-
-Vue2 中，对于给定的 data，如 `{ count: 1 }`，是需要根据具体的 key 也就是 `count`，去对「修改 data.count 」 和 「读取 data.count」进行拦截，也就是
-
-```javascript
-Object.defineProperty(data, 'count', {
-  get() {},
-  set() {},
-})
-```
-
-必须预先知道要拦截的 key 是什么，这也就是为什么 Vue2 里对于对象上的新增属性无能为力。
-
-而 Vue3 所使用的 Proxy，则是这样拦截的：
-
-```javascript
-new Proxy(data, {
-  get(key) { },
-  set(key, value) { },
-})
-
-```
-
-可以看到，根本不需要关心具体的 key，它去拦截的是 「修改 data 上的任意 key」 和 「读取 data 上的任意 key」。
-
-所以，不管是已有的 key 还是新增的 key，都逃不过它的魔爪。
-
-但是 Proxy 更加强大的地方还在于 Proxy 除了 get 和 set，还可以拦截更多的操作符。
-
-### 简单的例子🌰
-
-先写一个 Vue3 响应式的最小案例，本文的相关案例都只会用 `reactive` 和 `effect` 这两个 api。如果你了解过 React 中的 `useEffect`，相信你会对这个概念秒懂，Vue3 的 `effect` 不过就是去掉了手动声明依赖的「进化版」的 `useEffect`。
-
-React 中手动声明 `[data.count]` 这个依赖的步骤被 Vue3 内部直接做掉了，在 `effect` 函数内部读取到 `data.count` 的时候，它就已经被收集作为依赖了。
-
-Vue3：
-
-```kotlin
-// 响应式数据
-const data = reactive({
-  count: 1
-})
-
-// 观测变化
-effect(() => console.log('count changed', data.count))
-
-// 触发 console.log('count changed', data.count) 重新执行
-data.count = 2
-
-```
-
-React：
-
-```scss
-// 数据
-const [data, setData] = useState({
-  count: 1
-})
-
-// 观测变化 需要手动声明依赖
-useEffect(() => {
-  console.log('count changed', data.count)
-}, [data.count])
-
-// 触发 console.log('count changed', data.count) 重新执行
-setData({
-  count: 2
-})
-
-```
-
-也可以把 `effect` 中的回调函数联想到视图的重新渲染、 watch 的回调函数等等…… 它们是同样基于这套响应式机制的。
-
-而本文的核心目的，就是探究这个基于 Proxy 的 reactive api，到底能强大到什么程度，能监听到用户对于什么程度的修改。
-
-### 讲讲原理
-
-先最小化的讲解一下响应式的原理，其实就是在 Proxy 第二个参数 `handler` 也就是陷阱操作符中，拦截各种取值、赋值操作，依托 `track` 和 `trigger` 两个函数进行依赖收集和派发更新。
-
-`track` 用来在读取时收集依赖。
-
-`trigger` 用来在更新时触发依赖。
-
-### track
-
-```vbnet
-function track(target: object, type: TrackOpTypes, key: unknown) {
-  const depsMap = targetMap.get(target);
-  // 收集依赖时 通过 key 建立一个 set
-  let dep = new Set()
-  targetMap.set(ITERATE_KEY, dep)
-  // 这个 effect 可以先理解为更新函数 存放在 dep 里
-  dep.add(effect)
-}
-
-```
-
-`target` 是原对象。
-
-`type` 是本次收集的类型，也就是收集依赖的时候用来标识是什么类型的操作，比如上文依赖中的类型就是 `get`，这个后续会详细讲解。
-
-`key` 是指本次访问的是数据中的哪个 key，比如上文例子中收集依赖的 key 就是 `count`
-
-首先全局会存在一个 `targetMap`，它用来建立 `数据 -> 依赖` 的映射，它是一个 WeakMap 数据结构。
-
-而 `targetMap` 通过数据 `target`，可以获取到 `depsMap`，它用来存放这个数据对应的所有响应式依赖。
-
-`depsMap` 的每一项则是一个 Set 数据结构，而这个 Set 就存放着对应 key 的更新函数。
-
-是不是有点绕？我们用一个具体的例子来举例吧。
-
-```ini
-const target = { count: 1}
-const data = reactive(target)
-
-const effection = effect(() => {
-  console.log(data.count)
-})
-
-```
-
-对于这个例子的依赖关系，
-
-1. 全局的 `targetMap` 是：
-
-```js
-targetMap: {
-  { count: 1 }: dep
-}
-
-```
-
-2. dep 则是
-
-```js
-dep: {
-  count: Set { effection }
-}
-
-```
-
-这样一层层的下去，就可以通过 `target` 找到 `count` 对应的更新函数 `effection` 了。
-
-### trigger
-
-这里是最小化的实现，仅仅为了便于理解原理，实际上要复杂很多，
-
-其实 `type` 的作用很关键，先记住，后面会详细讲。
-
+### 使用示范
+定义 store
 ```typescript
-export function trigger(
-  target: object,
-  type: TriggerOpTypes,
-  key?: unknown,
-) {
-  // 简化来说 就是通过 key 找到所有更新函数 依次执行
-  const dep = targetMap.get(target)
-  dep.get(key).forEach(effect => effect())
-}
+// store.ts
+import { reactive, computed, effect } from '@vue/reactivity';
+
+export const state = reactive({
+  count: 0,
+});
+
+const plusOne = computed(() => state.count + 1);
+
+effect(() => {
+  console.log('plusOne changed: ', plusOne);
+});
+
+const add = () => (state.count += 1);
+
+export const mutations = {
+  // mutation
+  add,
+};
+
+export const store = {
+  state,
+  computed: {
+    plusOne,
+  },
+};
+
+export type Store = typeof store;
 ```
+
+消费使用
+```js
+// Index.tsx
+import { Provider, useStore } from 'rxv'
+import { mutations, store, Store } from './store.ts'
+function Count() {
+  const countState = useStore((store: Store) => {
+    const { state, computed } = store;
+    const { count } = state;
+    const { plusOne } = computed;
+
+    return {
+      count,
+      plusOne,
+    };
+  });
+
+  return (
+    <Card hoverable style={{ marginBottom: 24 }}>
+      <h1>计数器</h1>
+      <div className="chunk">
+        <div className="chunk">store中的count现在是 {countState.count}</div>
+        <div className="chunk">computed值中的plusOne现在是 {countState.plusOne.value}</div>
+         <Button onClick={mutations.add}>add</Button>
+      </div>
+    </Card>
+  );
+}
+
+export default () => {
+  return (
+    <Provider value={store}>
+       <Count />
+    </Provider>
+  );
+};
+```
+
+可以看出，store的定义只用到了@vue/reactivity，而rxv只是在组件中做了一层桥接，连通了Vue3和React，正如它名字的含义：React x Vue。
+
+### 如何实现
+只要effect能接入到React系统中，那么其他的api都没什么问题，因为它们只是去收集effect的依赖，去通知effect触发更新。
+
+effect接受的是一个函数，而且effect还支持通过传入schedule参数来自定义依赖更新的时候需要触发什么函数，
+
+而rxv的核心api: useStore接受的也是一个函数selector，它会让用户自己选择在组件中需要访问的数据。
+
+把selector包装在effect中执行，去收集依赖。
+
+指定依赖发生更新时，需要调用的函数是当前正在使用useStore的这个组件的forceUpdate强制渲染函数。
+
+简单的看一下核心实现
+
+share.ts
+```typescript
+export const useForceUpdate = () => {
+  const [, forceUpdate] = useReducer(s => s + 1, 0);
+  return forceUpdate;
+};
+
+export const useEffection = (...effectArgs: Parameters<typeof effect>) => {
+  // 用一个ref存储effection
+  // effect函数只需要初始化执行一遍
+  const effectionRef = useRef<ReactiveEffect>();
+  if (!effectionRef.current) {
+    effectionRef.current = effect(...effectArgs);
+  }
+
+  // 卸载组件后取消effect
+  const stopEffect = () => {
+    stop(effectionRef.current!);
+  };
+  useEffect(() => stopEffect, []);
+
+  return effectionRef.current
+};
+```
+
+核心逻辑在此
+```typescript
+import React, { useContext } from 'react';
+import { useForceUpdate, useEffection } from './share';
+
+type Selector<T, S> = (store: T) => S;
+
+const StoreContext = React.createContext<any>(null);
+
+const useStoreContext = () => {
+  const contextValue = useContext(StoreContext);
+  if (!contextValue) {
+    throw new Error(
+      'could not find store context value; please ensure the component is wrapped in a <Provider>',
+    );
+  }
+  return contextValue;
+};
+
+/**
+ * 在组件中读取全局状态
+ * 需要通过传入的函数收集依赖
+ */
+export const useStore = <T, S>(selector: Selector<T, S>): S => {
+  const forceUpdate = useForceUpdate();
+  const store = useStoreContext();
+
+  const effection = useEffection(() => selector(store), {
+    scheduler: job => {
+      if (job() === undefined) return;
+      forceUpdate();
+    },
+    lazy: true,
+  });
+
+  const value = effection();
+  return value;
+};
+
+export const Provider = StoreContext.Provider;
+```
+
+参考文档：
+- https://github.com/sl1673495/react-composition-api
+- https://juejin.cn/post/6844904054192078855

@@ -6,7 +6,7 @@ import repoConfig from "@utils/repoConfig";
 import { MileStone } from "@src/githubApi/issue/consts";
 import { giteeWriteIssue } from "@src/giteeApi/issue/writeIssue";
 import { giteeMileStone } from "@src/giteeApi/issue/consts";
-import { writeToTemp } from "@src/githubApi/issue/helper";
+import { commitPush, writeToTemp } from "@src/githubApi/issue/helper";
 
 const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue, {
   ...options,
@@ -32,6 +32,8 @@ export const htmlWriteIssue = async (remote: any) => {
 
   const [githubRes] = await Promise.all(allPromise);
   console.log(`yanle - logger: 写入 github - ${remote.title}`, githubRes?.status);
+
+  await commitPush(remote.title);
 };
 
 export {};

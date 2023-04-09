@@ -5,9 +5,9 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "[Vue] vue3 的响应式库是独立出来的，它单独使用的时候是什么效果",
-  labels: [labels.frameWork, company.tencent],
-  milestone: MileStone.master,
+  title: "ts 中 type 和 interface的区别",
+  labels: [labels.ts, company.tencent],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };

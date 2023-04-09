@@ -1,158 +1,70 @@
-vue3 的响应式库是独立出来的，它可以很方便的集成进 React， 作为 React 的状态管理库使用！
+### 相同点
 
-### 使用示范
-定义 store
+1. 都可以描述一个对象或者函数
+
+- interface
+
 ```typescript
-// store.ts
-import { reactive, computed, effect } from '@vue/reactivity';
-
-export const state = reactive({
-  count: 0,
-});
-
-const plusOne = computed(() => state.count + 1);
-
-effect(() => {
-  console.log('plusOne changed: ', plusOne);
-});
-
-const add = () => (state.count += 1);
-
-export const mutations = {
-  // mutation
-  add,
-};
-
-export const store = {
-  state,
-  computed: {
-    plusOne,
-  },
-};
-
-export type Store = typeof store;
-```
-
-消费使用
-```js
-// Index.tsx
-import { Provider, useStore } from 'rxv'
-import { mutations, store, Store } from './store.ts'
-function Count() {
-  const countState = useStore((store: Store) => {
-    const { state, computed } = store;
-    const { count } = state;
-    const { plusOne } = computed;
-
-    return {
-      count,
-      plusOne,
-    };
-  });
-
-  return (
-    <Card hoverable style={{ marginBottom: 24 }}>
-      <h1>计数器</h1>
-      <div className="chunk">
-        <div className="chunk">store中的count现在是 {countState.count}</div>
-        <div className="chunk">computed值中的plusOne现在是 {countState.plusOne.value}</div>
-         <Button onClick={mutations.add}>add</Button>
-      </div>
-    </Card>
-  );
+interface User {
+  name: string
+  age: number
 }
 
-export default () => {
-  return (
-    <Provider value={store}>
-       <Count />
-    </Provider>
-  );
-};
+interface SetUser {
+  (name: string, age: number): void;
+}
 ```
 
-可以看出，store的定义只用到了@vue/reactivity，而rxv只是在组件中做了一层桥接，连通了Vue3和React，正如它名字的含义：React x Vue。
+- ts
 
-### 如何实现
-只要effect能接入到React系统中，那么其他的api都没什么问题，因为它们只是去收集effect的依赖，去通知effect触发更新。
-
-effect接受的是一个函数，而且effect还支持通过传入schedule参数来自定义依赖更新的时候需要触发什么函数，
-
-而rxv的核心api: useStore接受的也是一个函数selector，它会让用户自己选择在组件中需要访问的数据。
-
-把selector包装在effect中执行，去收集依赖。
-
-指定依赖发生更新时，需要调用的函数是当前正在使用useStore的这个组件的forceUpdate强制渲染函数。
-
-简单的看一下核心实现
-
-share.ts
 ```typescript
-export const useForceUpdate = () => {
-  const [, forceUpdate] = useReducer(s => s + 1, 0);
-  return forceUpdate;
+type User = {
+  name: string
+  age: number
 };
 
-export const useEffection = (...effectArgs: Parameters<typeof effect>) => {
-  // 用一个ref存储effection
-  // effect函数只需要初始化执行一遍
-  const effectionRef = useRef<ReactiveEffect>();
-  if (!effectionRef.current) {
-    effectionRef.current = effect(...effectArgs);
-  }
-
-  // 卸载组件后取消effect
-  const stopEffect = () => {
-    stop(effectionRef.current!);
-  };
-  useEffect(() => stopEffect, []);
-
-  return effectionRef.current
-};
+type SetUser = (name: string, age: number) => void;
 ```
 
-核心逻辑在此
+2. 都允许拓展（extends） interface 和 type 都可以拓展，并且两者并不是相互独立的，也就是说 interface 可以 extends type, type 也可以 extends interface 。
+
+### 差异点
+
+- **type**
+    - type 可以声明基本类型别名，联合类型，元组等类型
+    - type 语句中还可以使用 typeof 获取实例的 类型进行赋值
+    - 其他骚操作
+
 ```typescript
-import React, { useContext } from 'react';
-import { useForceUpdate, useEffection } from './share';
-
-type Selector<T, S> = (store: T) => S;
-
-const StoreContext = React.createContext<any>(null);
-
-const useStoreContext = () => {
-  const contextValue = useContext(StoreContext);
-  if (!contextValue) {
-    throw new Error(
-      'could not find store context value; please ensure the component is wrapped in a <Provider>',
-    );
-  }
-  return contextValue;
-};
-
-/**
- * 在组件中读取全局状态
- * 需要通过传入的函数收集依赖
- */
-export const useStore = <T, S>(selector: Selector<T, S>): S => {
-  const forceUpdate = useForceUpdate();
-  const store = useStoreContext();
-
-  const effection = useEffection(() => selector(store), {
-    scheduler: job => {
-      if (job() === undefined) return;
-      forceUpdate();
-    },
-    lazy: true,
-  });
-
-  const value = effection();
-  return value;
-};
-
-export const Provider = StoreContext.Provider;
+type StringOrNumber = string | number;
+type Text = string | { text: string };
+type NameLookup = Dictionary<string, Person>;
+type Callback<T> = (data: T) => void;
+type Pair<T> = [T, T];
+type Coordinates = Pair<number>;
+type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
 ```
 
-参考文档：
-- https://github.com/sl1673495/react-composition-api
-- https://juejin.cn/post/6844904054192078855
+- **interface**
+    - interface 能够声明合并
+```typescript
+interface User {
+  name: string
+  age: number
+}
+
+interface User {
+  sex: string
+}
+
+/*
+User 接口为 {
+  name: string
+  age: number
+  sex: string 
+}
+*/
+```
+
+一般来说，如果不清楚什么时候用interface/type，能用 interface 实现，就用 interface , 如果不能就用 type 。
+

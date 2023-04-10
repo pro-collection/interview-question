@@ -5,8 +5,8 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "ts 中 type 和 interface的区别",
-  labels: [labels.ts, company.tencent],
+  title: "实现一个类似关键字new功能的函数",
+  labels: [labels.js],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
   // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),

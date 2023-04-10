@@ -1,70 +1,18 @@
-### 相同点
+在js中new关键字主要做了：首先创建一个空对象，这个对象会作为执行new构造函数之后返回的对象实例，将创建的空对象原型`（__proto__）`指向构造函数的prototype属性，同时将这个空对象赋值给构造函数内部的this，并执行构造函数逻辑，根据构造函数的执行逻辑，返回初始创建的对象或构造函数的显式返回值。
 
-1. 都可以描述一个对象或者函数
-
-- interface
-
-```typescript
-interface User {
-  name: string
-  age: number
+```js
+function newFn(...args) {
+  const constructor = args.shift();
+  const obj = Object.create(constructor.prototype);
+  const result = constructor.apply(obj, args);
+  return typeof result === "object" && result !== null ? result : obj;
 }
 
-interface SetUser {
-  (name: string, age: number): void;
+function Person(name) {
+  this.name = name;
 }
+
+const p = newFn(Person, "Jerome");
+
+console.log("p.name :>> ", p.name); // p.name :>>  Jerome
 ```
-
-- ts
-
-```typescript
-type User = {
-  name: string
-  age: number
-};
-
-type SetUser = (name: string, age: number) => void;
-```
-
-2. 都允许拓展（extends） interface 和 type 都可以拓展，并且两者并不是相互独立的，也就是说 interface 可以 extends type, type 也可以 extends interface 。
-
-### 差异点
-
-- **type**
-    - type 可以声明基本类型别名，联合类型，元组等类型
-    - type 语句中还可以使用 typeof 获取实例的 类型进行赋值
-    - 其他骚操作
-
-```typescript
-type StringOrNumber = string | number;
-type Text = string | { text: string };
-type NameLookup = Dictionary<string, Person>;
-type Callback<T> = (data: T) => void;
-type Pair<T> = [T, T];
-type Coordinates = Pair<number>;
-type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
-```
-
-- **interface**
-    - interface 能够声明合并
-```typescript
-interface User {
-  name: string
-  age: number
-}
-
-interface User {
-  sex: string
-}
-
-/*
-User 接口为 {
-  name: string
-  age: number
-  sex: string 
-}
-*/
-```
-
-一般来说，如果不清楚什么时候用interface/type，能用 interface 实现，就用 interface , 如果不能就用 type 。
-

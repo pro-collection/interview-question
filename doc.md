@@ -51,7 +51,6 @@
 
 > 2023.02.24
 
-- ts 中 type 和 interface的区别
 - ts 中 enum常规枚举和常量枚举的区别
 - ts 中 void定义的变量类型
 - vue 中 watch和computed的区分

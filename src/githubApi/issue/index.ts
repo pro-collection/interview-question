@@ -5,9 +5,12 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "[Vue] watch 和 computed 的区别和理解",
-  labels: [labels.frameWork, company.tencent],
-  milestone: MileStone.inProgress,
+  title: "大文件上传了解多少",
+  labels: [
+    labels.application,
+    company.baidu,
+  ],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -5,11 +5,10 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "const 和 readonly 的区别",
-  labels: [labels.ts, company.tencent],
+  title: "[Vue] watch 和 computed 的区别和理解",
+  labels: [labels.frameWork, company.tencent],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
-  // body: () => fs.readFileSync('/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/05、flex布局的学习/README.md', { encoding: "utf8" }),
 };
 
 // html 写入远端

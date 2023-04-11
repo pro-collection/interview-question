@@ -1,427 +1,47 @@
-<div class="markdown-body cache html"><style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#252933}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;line-height:38px;margin-bottom:5px}.markdown-body h2{font-size:22px;line-height:34px;padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:20px;line-height:28px}.markdown-body h4{font-size:18px;line-height:26px}.markdown-body h5{font-size:17px;line-height:24px}.markdown-body h6{font-size:16px;line-height:24px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><h2 data-id="heading-0">前言</h2>
-  <p>大家都知道，Vue2 里的响应式其实有点像是一个半完全体，对于对象上新增的属性无能为力，对于数组则需要拦截它的原型方法来实现响应式。</p>
-  <p>举个例子：</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">let</span> vm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Vue</span>({
-  <span class="hljs-title function_">data</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-keyword">return</span> {
-        <span class="hljs-attr">a</span>: <span class="hljs-number">1</span>
-    }
-  }
-})
-
-<span class="hljs-comment">// ❌  oops，没反应！</span>
-vm.<span class="hljs-property">b</span> = <span class="hljs-number">2</span>
-<span class="copy-code-btn">复制代码</span></code></pre><pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">let</span> vm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Vue</span>({
-  <span class="hljs-title function_">data</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-keyword">return</span> {
-        <span class="hljs-attr">a</span>: <span class="hljs-number">1</span>
-    }
-  },
-  <span class="hljs-attr">watch</span>: {
-    <span class="hljs-title function_">b</span>(<span class="hljs-params"></span>) {
-      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'change !!'</span>)
-    }
-  }
-})
-
-<span class="hljs-comment">// ❌  oops，没反应！</span>
-vm.<span class="hljs-property">b</span> = <span class="hljs-number">2</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>这种时候，Vue 提供了一个 api：<code>this.$set</code>，来使得新增的属性也拥有响应式的效果。</p>
-  <p>但是对于很多新手来说，很多时候需要小心翼翼的去判断到底什么情况下需要用 <code>$set</code>，什么时候可以直接触发响应式。</p>
-  <p>总之，在 Vue3 中，这些都将成为过去。本篇文章会带你仔细讲解，proxy 到底会给 Vue3 带来怎么样的便利。并且会从源码级别，告诉你这些都是如何实现的。</p>
-  <h2 data-id="heading-1">响应式仓库</h2>
-  <p>Vue3 不同于 Vue2 也体现在源码结构上，Vue3 把耦合性比较低的包分散在 <code>packages</code> 目录下单独发布成 <code>npm</code> 包。 这也是目前很流行的一种大型项目管理方式 <code>Monorepo</code>。</p>
-  <p>其中负责响应式部分的仓库就是 <a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fvuejs%2Fvue-next%2Ftree%2Fmaster%2Fpackages%2Freactivity" title="https://github.com/vuejs/vue-next/tree/master/packages/reactivity" ref="nofollow noopener noreferrer">@vue/reactivity</a>，它不涉及 Vue 的其他的任何部分，是非常非常 「正交」 的一种实现方式。</p>
-  <p>甚至可以<a target="_blank" href="https://juejin.cn/post/6844904095594381325" title="https://juejin.cn/post/6844904095594381325">轻松的集成进 React</a>。</p>
-  <p>这也使得本篇的分析可以更加聚焦的分析这一个仓库，排除其他无关部分。</p>
-  <h2 data-id="heading-2">区别</h2>
-  <p>Proxy 和 Object.defineProperty 的使用方法看似很相似，其实 Proxy 是在 「更高维度」 上去拦截属性的修改的，怎么理解呢？</p>
-  <p>Vue2 中，对于给定的 data，如 <code>{ count: 1 }</code>，是需要根据具体的 key 也就是 <code>count</code>，去对「修改 data.count 」 和 「读取 data.count」进行拦截，也就是</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(data, <span class="hljs-string">'count'</span>, {
-  <span class="hljs-title function_">get</span>(<span class="hljs-params"></span>) {},
-  <span class="hljs-title function_">set</span>(<span class="hljs-params"></span>) {},
-})
-<span class="copy-code-btn">复制代码</span></code></pre><p>必须预先知道要拦截的 key 是什么，这也就是为什么 Vue2 里对于对象上的新增属性无能为力。</p>
-  <p>而 Vue3 所使用的 Proxy，则是这样拦截的：</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(data, {
-  <span class="hljs-title function_">get</span>(<span class="hljs-params">key</span>) { },
-  <span class="hljs-title function_">set</span>(<span class="hljs-params">key, value</span>) { },
-})
-<span class="copy-code-btn">复制代码</span></code></pre><p>可以看到，根本不需要关心具体的 key，它去拦截的是 「修改 data 上的任意 key」 和 「读取 data 上的任意 key」。</p>
-  <p>所以，不管是已有的 key  还是新增的 key，都逃不过它的魔爪。</p>
-  <p>但是 Proxy 更加强大的地方还在于 Proxy 除了 get 和 set，还可以拦截更多的操作符。</p>
-  <h2 data-id="heading-3">简单的例子🌰</h2>
-  <p>先写一个 Vue3 响应式的最小案例，本文的相关案例都只会用 <code>reactive</code> 和 <code>effect</code> 这两个 api。如果你了解过 React 中的 <code>useEffect</code>，相信你会对这个概念秒懂，Vue3 的 <code>effect</code> 不过就是去掉了手动声明依赖的「进化版」的 <code>useEffect</code>。</p>
-  <p>React 中手动声明 <code>[data.count]</code> 这个依赖的步骤被 Vue3 内部直接做掉了，在 <code>effect</code> 函数内部读取到 <code>data.count</code> 的时候，它就已经被收集作为依赖了。</p>
-  <p>Vue3：</p>
-  <pre><code lang="kotlin" class="hljs language-kotlin copyable"><span class="hljs-comment">// 响应式数据</span>
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">data</span> = reactive({
-  count: <span class="hljs-number">1</span>
-})
-
-<span class="hljs-comment">// 观测变化</span>
-effect(() =&gt; console.log(<span class="hljs-string">'count changed'</span>, <span class="hljs-keyword">data</span>.count))
-
-<span class="hljs-comment">// 触发 console.log('count changed', data.count) 重新执行</span>
-<span class="hljs-keyword">data</span>.count = <span class="hljs-number">2</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>React：</p>
-  <pre><code lang="scss" class="hljs language-scss copyable"><span class="hljs-comment">// 数据</span>
-const <span class="hljs-selector-attr">[data, setData]</span> = <span class="hljs-built_in">useState</span>({
-  count: <span class="hljs-number">1</span>
-})
-
-<span class="hljs-comment">// 观测变化 需要手动声明依赖</span>
-<span class="hljs-built_in">useEffect</span>(() =&gt; {
-  console<span class="hljs-selector-class">.log</span>('count changed', data.count)
-}, <span class="hljs-selector-attr">[data.count]</span>)
-
-<span class="hljs-comment">// 触发 console.log('count changed', data.count) 重新执行</span>
-<span class="hljs-built_in">setData</span>({
-  count: <span class="hljs-number">2</span>
-})
-<span class="copy-code-btn">复制代码</span></code></pre><p>其实看到这个案例，聪明的你也可以把 <code>effect</code> 中的回调函数联想到视图的重新渲染、 watch 的回调函数等等…… 它们是同样基于这套响应式机制的。</p>
-  <p>而本文的核心目的，就是探究这个基于 Proxy 的 reactive api，到底能强大到什么程度，能监听到用户对于什么程度的修改。</p>
-  <h2 data-id="heading-4">先讲讲原理</h2>
-  <p>先最小化的讲解一下响应式的原理，其实就是在 Proxy 第二个参数 <code>handler</code> 也就是<a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FProxy%2Fhandler" title="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler" ref="nofollow noopener noreferrer">陷阱操作符</a>中，拦截各种取值、赋值操作，依托 <code>track</code> 和 <code>trigger</code> 两个函数进行依赖收集和派发更新。</p>
-  <p><code>track</code> 用来在读取时收集依赖。</p>
-  <p><code>trigger</code> 用来在更新时触发依赖。</p>
-  <h3 data-id="heading-5">track</h3>
-  <pre><code lang="vbnet" class="hljs language-vbnet copyable"><span class="hljs-keyword">function</span> track(target: <span class="hljs-type">object</span>, type: TrackOpTypes, <span class="hljs-keyword">key</span>: unknown) {
-  <span class="hljs-keyword">const</span> depsMap = targetMap.<span class="hljs-keyword">get</span>(target);
-  // 收集依赖时 通过 <span class="hljs-keyword">key</span> 建立一个 <span class="hljs-keyword">set</span>
-  <span class="hljs-keyword">let</span> dep = <span class="hljs-built_in">new</span> <span class="hljs-keyword">Set</span>()
-  targetMap.<span class="hljs-keyword">set</span>(ITERATE_KEY, dep)
-  // 这个 effect 可以先理解为更新函数 存放在 dep 里
-  dep.add(effect)
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p><code>target</code> 是原对象。</p>
-  <p><code>type</code> 是本次收集的类型，也就是收集依赖的时候用来标识是什么类型的操作，比如上文依赖中的类型就是 <code>get</code>，这个后续会详细讲解。</p>
-  <p><code>key</code> 是指本次访问的是数据中的哪个 key，比如上文例子中收集依赖的 key 就是 <code>count</code></p>
-  <p>首先全局会存在一个 <code>targetMap</code>，它用来建立 <code>数据 -&gt; 依赖</code> 的映射，它是一个 WeakMap 数据结构。</p>
-  <p>而 <code>targetMap</code> 通过数据 <code>target</code>，可以获取到 <code>depsMap</code>，它用来存放这个数据对应的所有响应式依赖。</p>
-  <p><code>depsMap</code> 的每一项则是一个 Set 数据结构，而这个 Set 就存放着对应 key 的更新函数。</p>
-  <p>是不是有点绕？我们用一个具体的例子来举例吧。</p>
-  <pre><code lang="ini" class="hljs language-ini copyable">const <span class="hljs-attr">target</span> = { count: <span class="hljs-number">1</span>}
-const <span class="hljs-attr">data</span> = reactive(target)
-
-const <span class="hljs-attr">effection</span> = effect(() =&gt; {
-  console.log(data.count)
-})
-<span class="copy-code-btn">复制代码</span></code></pre><p>对于这个例子的依赖关系，</p>
+<div class="markdown-body cache html"><style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#252933}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;line-height:38px;margin-bottom:5px}.markdown-body h2{font-size:22px;line-height:34px;padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:20px;line-height:28px}.markdown-body h4{font-size:18px;line-height:26px}.markdown-body h5{font-size:17px;line-height:24px}.markdown-body h6{font-size:16px;line-height:24px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="juejin">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><p><strong>计算属性computed :</strong></p>
   <ol>
-    <li>全局的 <code>targetMap</code> 是：</li>
+    <li>
+      <p>支持缓存，只有依赖数据发生改变，才会重新进行计算，计算属性可用于快速计算视图（View）中显示的属性。这些计算将被缓存，并且只在需要时更新。computed是计算属性的; 它会根据所依赖的数据动态显示新的计算结果, 该计算结果会被缓存起来。computed的值在getter执行后是会被缓存的。如果所依赖的数据发生改变时候, 就会重新调用getter来计算最新的结果。</p>
+    </li>
+    <li>
+      <p>不支持异步，当computed内有异步操作时无效，无法监听数据的变化</p>
+    </li>
+    <li>
+      <p>computed 属性值会默认走缓存，计算属性是基于它们的响应式依赖进行缓存的，也就是基于data中声明过或者父组件传递的props中的数据通过计算得到的值</p>
+    </li>
+    <li>
+      <p>如果一个属性是由其他属性计算而来的，这个属性依赖其他属性，是一个多对一或者一对一，一般用computed</p>
+    </li>
+    <li>
+      <p>如果computed属性属性值是函数，那么默认会走get方法；函数的返回值就是属性的属性值；在computed中的，属性都有一个get和一个set方法，当数据变化时，调用set方法。</p>
+    </li>
+    <li>
+      <p>适用于一些重复使用数据或复杂及费时的运算。我们可以把它放入computed中进行计算, 然后会在computed中缓存起来, 下次就可以直接获取了。</p>
+    </li>
+    <li>
+      <p>如果我们需要的数据依赖于其他的数据的话, 我们可以把该数据设计为computed中。</p>
+    </li>
+    <li>
+      <p>computed 是基于响应性依赖来进行缓存的。只有在响应式依赖发生改变时它们才会重新求值, 也就是说, 当msg属性值没有发生改变时, 多次访问 reversedMsg 计算属性会立即返回之前缓存的计算结果, 而不会再次执行computed中的函数。但是methods方法中是每次调用, 都会执行函数的, methods它不是响应式的。</p>
+    </li>
+    <li>
+      <p>computed中的成员可以只定义一个函数作为只读属性, 也可以定义成 get/set变成可读写属性, 但是methods中的成员没有这样的。</p>
+    </li>
   </ol>
-  <pre><code lang="css" class="hljs language-css copyable">targetMap: {
-  { count: <span class="hljs-number">1</span> }: dep
-}
-<span class="copy-code-btn">复制代码</span></code></pre><ol start="2">
-    <li>dep 则是</li>
-  </ol>
-  <pre><code lang="css" class="hljs language-css copyable">dep: {
-  count: Set { effection }
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>这样一层层的下去，就可以通过 <code>target</code> 找到 <code>count</code> 对应的更新函数 <code>effection</code> 了。</p>
-  <h3 data-id="heading-6">trigger</h3>
-  <p>这里是最小化的实现，仅仅为了便于理解原理，实际上要复杂很多，</p>
-  <p>其实 <code>type</code> 的作用很关键，先记住，后面会详细讲。</p>
-  <pre><code lang="typescript" class="hljs language-typescript copyable"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">
-  target: <span class="hljs-built_in">object</span>,
-  <span class="hljs-keyword">type</span>: TriggerOpTypes,
-  key?: <span class="hljs-built_in">unknown</span>,
-</span>) {
-  <span class="hljs-comment">// 简化来说 就是通过 key 找到所有更新函数 依次执行</span>
-  <span class="hljs-keyword">const</span> dep = targetMap.<span class="hljs-title function_">get</span>(target)
-  dep.<span class="hljs-title function_">get</span>(key).<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">effect</span> =&gt;</span> <span class="hljs-title function_">effect</span>())
-}
-<span class="copy-code-btn">复制代码</span></code></pre><h2 data-id="heading-7">新增属性</h2>
-  <p>这个上文已经讲了，由于 Proxy 完全不关心具体的 key，所以没问题。</p>
-  <pre><code lang="kotlin" class="hljs language-kotlin copyable"><span class="hljs-comment">// 响应式数据</span>
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">data</span> = reactive({
-  count: <span class="hljs-number">1</span>
-})
-
-<span class="hljs-comment">// 观测变化</span>
-effect(() =&gt; console.log(<span class="hljs-string">'newCount changed'</span>, <span class="hljs-keyword">data</span>.newCount))
-
-<span class="hljs-comment">// ✅ 触发响应</span>
-<span class="hljs-keyword">data</span>.newCount = <span class="hljs-number">2</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>数组新增索引：</p>
-  <pre><code lang="scss" class="hljs language-scss copyable"><span class="hljs-comment">// 响应式数据</span>
-const data = <span class="hljs-built_in">reactive</span>([])
-
-<span class="hljs-comment">// 观测变化</span>
-<span class="hljs-built_in">effect</span>(() =&gt; console<span class="hljs-selector-class">.log</span>('data[<span class="hljs-number">1</span>] changed', data[<span class="hljs-number">1</span>]))
-
-<span class="hljs-comment">// ✅ 触发响应</span>
-data<span class="hljs-selector-attr">[1]</span> = <span class="hljs-number">5</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>数组调用原生方法：</p>
-  <pre><code lang="scss" class="hljs language-scss copyable">const data = <span class="hljs-built_in">reactive</span>([])
-<span class="hljs-built_in">effect</span>(() =&gt; console<span class="hljs-selector-class">.log</span>('c', data[<span class="hljs-number">1</span>]))
-
-<span class="hljs-comment">// 没反应</span>
-data<span class="hljs-selector-class">.push</span>(<span class="hljs-number">1</span>)
-
-<span class="hljs-comment">// ✅ 触发响应 因为修改了下标为 1 的值</span>
-data<span class="hljs-selector-class">.push</span>(<span class="hljs-number">2</span>)
-<span class="copy-code-btn">复制代码</span></code></pre><p>其实这一个案例就比较有意思了，我们仅仅是在调用 push，但是等到数组的第二项被 push的时候，我们之前关注 <code>data[1]</code> 为依赖的回调函数也执行了，这是什么原理呢？写个简单的 Proxy 就知道了。</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">const</span> raw = []
-<span class="hljs-keyword">const</span> arr = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(raw, {
-  <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key</span>) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'get'</span>, key)
-    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key)
-  },
-  <span class="hljs-title function_">set</span>(<span class="hljs-params">target, key, value</span>) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'set'</span>, key)
-    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">set</span>(target, key, value)
-  }
-})
-
-arr.<span class="hljs-title function_">push</span>(<span class="hljs-number">1</span>)
-<span class="copy-code-btn">复制代码</span></code></pre><p>在这个案例中，我们只是打印出了对于 <code>raw</code> 这个数组上的所有 get、set 操作，并且调用 <a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fes6.ruanyifeng.com%2F%3Fsearch%3Dreflect%26x%3D0%26y%3D0%23docs%2Freflect" title="https://es6.ruanyifeng.com/?search=reflect&amp;x=0&amp;y=0#docs/reflect" ref="nofollow noopener noreferrer">Reflect</a> 这个 api 原样处理取值和赋值操作后返回。看看 <code>arr.push(1)</code> 后控制台打印出了什么？</p>
-  <pre><code lang="arduino" class="hljs language-arduino copyable">get push
-get length
-set <span class="hljs-number">0</span>
-set length
-<span class="copy-code-btn">复制代码</span></code></pre><p>原来一个小小的 push，会触发两对 get 和 set，我们来想象一下流程：</p>
-  <ol>
-    <li>读取 push 方法</li>
-    <li>读取 arr 原有的 length 属性</li>
-    <li>对于数组第 0 项赋值</li>
-    <li>对于 length 属性赋值</li>
-  </ol>
-  <p>这里的重点是第三步，对于第 index 项的赋值，那么下次再 push，可以想象也就是对于第 1 项触发 set 操作。</p>
-  <p>而我们在例子中读取 <code>data[1]</code>，是一定会把对于 <code>1</code> 这个下标的依赖收集起来的，这也就清楚的解释了为什么 push 的时候也能精准的触发响应式依赖的执行。</p>
-  <p>对了，记住这个对于 length 的 set 操作，后面也会用到，很重要。</p>
-  <h2 data-id="heading-8">遍历后新增</h2>
-  <pre><code lang="scss" class="hljs language-scss copyable"><span class="hljs-comment">// 响应式数据</span>
-const data = <span class="hljs-built_in">reactive</span>([])
-
-<span class="hljs-comment">// 观测变化</span>
-<span class="hljs-built_in">effect</span>(() =&gt; console<span class="hljs-selector-class">.log</span>('data map +<span class="hljs-number">1</span>', data.map(item =&gt; item + <span class="hljs-number">1</span>))
-
-<span class="hljs-comment">// ✅ 触发响应 打印出 [2]</span>
-data<span class="hljs-selector-class">.push</span>(<span class="hljs-number">1</span>)
-<span class="copy-code-btn">复制代码</span></code></pre><p>这个拦截很神奇，但是也很合理，转化成现实里的一个例子来看，</p>
-  <p>假设我们要根据学生 id 的集合 <code>ids</code>， 去请求学生详细信息，那么仅仅是需要这样写即可：</p>
-  <pre><code lang="scss" class="hljs language-scss copyable">const state = <span class="hljs-built_in">reactive</span>({})
-const ids = <span class="hljs-built_in">reactive</span>([<span class="hljs-number">1</span>])
-
-<span class="hljs-built_in">effect</span>(async () =&gt; {
-  state<span class="hljs-selector-class">.students</span> = await axios<span class="hljs-selector-class">.get</span>('students/batch', ids.map(id =&gt; ({ id })))
-})
-
-<span class="hljs-comment">// ✅ 触发响应 </span>
-ids<span class="hljs-selector-class">.push</span>(<span class="hljs-number">2</span>)
-<span class="copy-code-btn">复制代码</span></code></pre><p>这样，每次调用各种 api 改变 ids 数组，都会重新发送请求获取最新的学生列表。</p>
-  <p>如果我在监听函数中调用了 map、forEach 等 api，</p>
-  <p>说明我关心这个数组的长度变化，那么 push 的时候触发响应是完全正确的。</p>
-  <p>但是它是如何实现的呢？感觉似乎很复杂啊。</p>
-  <p>因为 effect 第一次执行的时候， <code>data</code> 还是个空数组，怎么会 push 的时候能触发更新呢？</p>
-  <p>还是用刚刚的小测试，看看 map 的时候会发生什么事情。</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">const</span> raw = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
-<span class="hljs-keyword">const</span> arr = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(raw, {
-  <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key</span>) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'get'</span>, key)
-    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key)
-  },
-  <span class="hljs-title function_">set</span>(<span class="hljs-params">target, key, value</span>) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'set'</span>, key)
-    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">set</span>(target, key, value)
-  }
-})
-
-arr.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">v</span> =&gt;</span> v + <span class="hljs-number">1</span>)
-<span class="copy-code-btn">复制代码</span></code></pre><pre><code lang="arduino" class="hljs language-arduino copyable">get map
-get length
-get constructor
-get <span class="hljs-number">0</span>
-get <span class="hljs-number">1</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>和 push 的部分有什么相同的？找一下线索，我们发现 map 的时候会触发 <code>get length</code>，而在触发更新的时候， Vue3 内部会对 「新增 key」 的操作进行特殊处理，这里是新增了 <code>0</code> 这个下标的值，会走到 <code>trigger</code>  中这样的一段逻辑里去：</p>
-  <p><a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fvuejs%2Fvue-next%2Fblob%2F0764c33d3da8c06d472893a4e451e33394726a42%2Fpackages%2Freactivity%2Fsrc%2Feffect.ts%23L214-L219" title="https://github.com/vuejs/vue-next/blob/0764c33d3da8c06d472893a4e451e33394726a42/packages/reactivity/src/effect.ts#L214-L219" ref="nofollow noopener noreferrer">源码地址</a></p>
-  <pre><code lang="csharp" class="hljs language-csharp copyable"><span class="hljs-comment">// 简化版</span>
-<span class="hljs-keyword">if</span> (isAddOrDelete) {
-  <span class="hljs-keyword">add</span>(depsMap.<span class="hljs-keyword">get</span>(<span class="hljs-string">'length'</span>))
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>把之前读取 length 时收集到的依赖拿到，然后触发函数。</p>
-  <p>这就一目了然了，我们在 <code>effect</code> 里 map 操作读取了 length，收集了 length 的依赖。</p>
-  <p>在新增 key 的时候， 触发 length 收集到的依赖，触发回调函数即可。</p>
-  <p>对了，对于 <code>for of</code> 操作，也一样可行：</p>
-  <pre><code lang="kotlin" class="hljs language-kotlin copyable"><span class="hljs-comment">// 响应式数据</span>
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">data</span> = reactive([])
-
-<span class="hljs-comment">// 观测变化</span>
-effect(() =&gt; {
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> of <span class="hljs-keyword">data</span>) {
-    console.log(<span class="hljs-string">'val'</span>, <span class="hljs-keyword">val</span>)
-  }
-})
-
-<span class="hljs-comment">// ✅ 触发响应 打印出 val 1</span>
-<span class="hljs-keyword">data</span>.push(<span class="hljs-number">1</span>)
-<span class="copy-code-btn">复制代码</span></code></pre><p>可以按我们刚刚的小试验自己跑一下拦截, <code>for of</code> 也会触发 <code>length</code> 的读取。</p>
-  <p><code>length</code> 真是个好同志…… 帮了大忙了。</p>
-  <h2 data-id="heading-9">遍历后删除或者清空</h2>
-  <p>注意上面的源码里的判断条件是 <code>isAddOrDelete</code>，所以删除的时候也是同理，借助了 <code>length</code> 上收集到的依赖。</p>
-  <pre><code lang="csharp" class="hljs language-csharp copyable"><span class="hljs-comment">// 简化版</span>
-<span class="hljs-keyword">if</span> (isAddOrDelete) {
-  <span class="hljs-keyword">add</span>(depsMap.<span class="hljs-keyword">get</span>(<span class="hljs-string">'length'</span>))
-}
-<span class="copy-code-btn">复制代码</span></code></pre><pre><code lang="scss" class="hljs language-scss copyable">const arr = <span class="hljs-built_in">reactive</span>([<span class="hljs-number">1</span>])
-
-<span class="hljs-built_in">effect</span>(() =&gt; {
-  console<span class="hljs-selector-class">.log</span>('arr', arr.map(v =&gt; v))
-})
-
-<span class="hljs-comment">// ✅ 触发响应 </span>
-arr<span class="hljs-selector-class">.length</span> = <span class="hljs-number">0</span>
-
-<span class="hljs-comment">// ✅ 触发响应 </span>
-arr<span class="hljs-selector-class">.splice</span>(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)
-<span class="copy-code-btn">复制代码</span></code></pre><p>真的是什么操作都能响应，爱了爱了。</p>
-  <h2 data-id="heading-10">获取 keys</h2>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">const</span> obj = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">a</span>: <span class="hljs-number">1</span> })
-
-<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'keys'</span>, <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">ownKeys</span>(obj))
-})
-
-<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'keys'</span>, <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(obj))
-})
-
-<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> obj) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(key)
-  }
-})
-
-<span class="hljs-comment">// ✅ 触发所有响应 </span>
-obj.<span class="hljs-property">b</span> = <span class="hljs-number">2</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>这几种获取 key 的方式都能成功的拦截，其实这是因为 Vue 内部拦截了 <code>ownKeys</code> 操作符。</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ITERATE_KEY</span> = <span class="hljs-title class_">Symbol</span>( <span class="hljs-string">'iterate'</span> );
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">ownKeys</span>(<span class="hljs-params">target</span>) {
-    <span class="hljs-title function_">track</span>(target, <span class="hljs-string">"iterate"</span>, <span class="hljs-variable constant_">ITERATE_KEY</span>);
-    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">ownKeys</span>(target);
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p><code>ITERATE_KEY</code> 就作为一个特殊的标识符，表示这是读取 key 的时候收集到的依赖。它会被作为依赖收集的 key。</p>
-  <p>那么在触发更新时，其实就对应这段源码：</p>
-  <pre><code lang="scss" class="hljs language-scss copyable">if (isAddOrDelete) {
-    <span class="hljs-built_in">add</span>(depsMap.get(isArray(target) ? 'length' : ITERATE_KEY));
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>其实就是我们聊数组的时候，代码简化掉的那部分。判断非数组，则触发 <code>ITERATE_KEY</code> 对应的依赖。</p>
-  <p>小彩蛋：</p>
-  <p><code>Reflect.ownKeys</code>、 <code>Object.keys</code> 和 <code>for in</code> 其实行为是不同的，</p>
-  <p><code>Reflect.ownKeys</code> 可以收集到 <code>Symbol</code> 类型的 key，不可枚举的 key。</p>
-  <p>举例来说:</p>
-  <pre><code lang="css" class="hljs language-css copyable"><span class="hljs-selector-tag">var</span> <span class="hljs-selector-tag">a</span> = {
-  <span class="hljs-selector-attr">[Symbol(2)]</span>: <span class="hljs-number">2</span>,
-}
-
-<span class="hljs-selector-tag">Object</span><span class="hljs-selector-class">.defineProperty</span>(<span class="hljs-selector-tag">a</span>, '<span class="hljs-selector-tag">b</span>', {
-  enumerable: false,
-})
-
-Reflect<span class="hljs-selector-class">.ownKeys</span>(<span class="hljs-selector-tag">a</span>) // <span class="hljs-selector-attr">[Symbol(2), <span class="hljs-string">'b'</span>]</span>
-<span class="hljs-selector-tag">Object</span><span class="hljs-selector-class">.keys</span>(<span class="hljs-selector-tag">a</span>) // <span class="hljs-selector-attr">[]</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>回看刚刚提到的 <code>ownKeys</code> 拦截，</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ownKeys</span>(<span class="hljs-params">target</span>) {
-    <span class="hljs-title function_">track</span>(target, <span class="hljs-string">"iterate"</span>, <span class="hljs-variable constant_">ITERATE_KEY</span>);
-    <span class="hljs-comment">// 这里直接返回 Reflect.ownKeys(target)</span>
-    <span class="hljs-keyword">return</span>  <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">ownKeys</span>(target);
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>内部直接之间返回了 <code>Reflect.ownKeys(target)</code>，按理来说这个时候 <code>Object.keys</code> 的操作经过了这个拦截，也会按照 <code>Reflect.ownKeys</code> 的行为去返回值。</p>
-  <p>然而最后返回的结果却还是 <code>Object.keys</code> 的结果，这是比较神奇的一点。</p>
-  <h2 data-id="heading-11">删除对象属性</h2>
-  <p>有了上面 <code>ownKeys</code> 的基础，我们再来看看这个例子</p>
-  <pre><code lang="scss" class="hljs language-scss copyable">const obj = <span class="hljs-built_in">reactive</span>({ a: <span class="hljs-number">1</span>, b: <span class="hljs-number">2</span>})
-
-<span class="hljs-built_in">effect</span>(() =&gt; {
-  console<span class="hljs-selector-class">.log</span>(Object.keys(obj))
-})
-
-<span class="hljs-comment">// ✅ 触发响应 </span>
-delete obj<span class="hljs-selector-attr">[<span class="hljs-string">'b'</span>]</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>这也是个神奇的操作，原理在于对于 <code>deleteProperty</code> 操作符的拦截：</p>
-  <pre><code lang="vbnet" class="hljs language-vbnet copyable"><span class="hljs-keyword">function</span> deleteProperty(target: <span class="hljs-type">object</span>, <span class="hljs-keyword">key</span>: <span class="hljs-type">string</span> | symbol): <span class="hljs-type">boolean</span> {
-  <span class="hljs-keyword">const</span> result = Reflect.deleteProperty(target, <span class="hljs-keyword">key</span>)
-  trigger(target, TriggerOpTypes.DELETE, <span class="hljs-keyword">key</span>)
-  <span class="hljs-keyword">return</span> result
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>这里又用到了 <code>TriggerOpTypes.DELETE</code> 的类型，根据上面的经验，一定对它有一些特殊的处理。</p>
-  <p>其实还是 <code>trigger</code> 中的那段逻辑：</p>
-  <pre><code lang="csharp" class="hljs language-csharp copyable"><span class="hljs-keyword">const</span> isAddOrDelete = type === TriggerOpTypes.ADD || type === TriggerOpTypes.<span class="hljs-function">DELETE
-<span class="hljs-title">if</span> (<span class="hljs-params">isAddOrDelete</span>)</span> {
-  <span class="hljs-keyword">add</span>(depsMap.<span class="hljs-keyword">get</span>(isArray(target) ? <span class="hljs-string">'length'</span> : ITERATE_KEY))
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>这里的 target 不是数组，所以还是会去触发 <code>ITERATE_KEY</code> 收集的依赖，也就是上面例子中刚提到的对于 key 的读取收集到的依赖。</p>
-  <h2 data-id="heading-12">判断属性是否存在</h2>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">const</span> obj = <span class="hljs-title function_">reactive</span>({})
-
-<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'has'</span>, <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">has</span>(obj, <span class="hljs-string">'a'</span>))
-})
-
-<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'has'</span>, <span class="hljs-string">'a'</span> <span class="hljs-keyword">in</span> obj)
-})
-
-<span class="hljs-comment">// ✅ 触发两次响应 </span>
-obj.<span class="hljs-property">a</span> = <span class="hljs-number">1</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>这个就很简单了，就是利用了 <code>has</code> 操作符的拦截。</p>
-  <pre><code lang="vbnet" class="hljs language-vbnet copyable"><span class="hljs-keyword">function</span> has(target, <span class="hljs-keyword">key</span>) {
-  <span class="hljs-keyword">const</span> result = Reflect.has(target, <span class="hljs-keyword">key</span>);
-  track(target, <span class="hljs-string">"has"</span>, <span class="hljs-keyword">key</span>);
-  <span class="hljs-keyword">return</span> result;
-}
-<span class="copy-code-btn">复制代码</span></code></pre><h2 data-id="heading-13">性能</h2>
-  <ol>
-    <li>首先 Proxy 作为浏览器的新标准，性能上是一定会得到厂商的大力优化的，拭目以待。</li>
-    <li>Vue3 对于响应式数据，不再像 Vue2 中那样递归对所有的子数据进行响应式定义了，而是再获取到深层数据的时候再去利用 <code>reactive</code> 进一步定义响应式，这对于大量数据的初始化场景来说收益会非常大。</li>
-  </ol>
-  <p>比如，对于</p>
-  <pre><code lang="php" class="hljs language-php copyable"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">obj</span> = <span class="hljs-title function_ invoke__">reactive</span>({
-  <span class="hljs-attr">foo</span>: {
-    <span class="hljs-attr">bar</span>: <span class="hljs-number">1</span>
-  }
-})
-<span class="copy-code-btn">复制代码</span></code></pre><p>初始化定义 <code>reactive</code> 的时候，只会对 <code>obj</code> 浅层定义响应式，而真正读取到 <code>obj.foo</code> 的时候，才会对 <code>foo</code> 这一层对象定义响应式，简化源码如下：</p>
-  <pre><code lang="vbnet" class="hljs language-vbnet copyable"><span class="hljs-keyword">function</span> <span class="hljs-keyword">get</span>(target: <span class="hljs-type">object</span>, <span class="hljs-keyword">key</span>: <span class="hljs-type">string</span> | symbol, receiver: <span class="hljs-type">object</span>) {
-  <span class="hljs-keyword">const</span> res = Reflect.<span class="hljs-keyword">get</span>(target, <span class="hljs-keyword">key</span>, receiver)
-  // 这段就是惰性定义
-  <span class="hljs-keyword">return</span> isObject(res)
-    ? reactive(res)
-    : res
-}
-<span class="copy-code-btn">复制代码</span></code></pre><h2 data-id="heading-14">推荐阅读</h2>
-  <p>其实 Vue3 对于 <code>Map</code> 和 <code>Set</code> 这两种数据类型也是完全支持响应式的，对于它们的原型方法也都做了完善的拦截，限于篇幅原因本文不再赘述。</p>
-  <p>说实话 Vue3 的响应式部分代码逻辑分支还是有点过多，对于代码理解不是很友好，因为它还会涉及到 <code>readonly</code> 等只读化的操作，如果看完这篇文章你对于 Vue3 的响应式原理非常感兴趣的话，建议从简化版的库入手去读源码。</p>
-  <p>这里我推荐 <a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fnx-js%2Fobserver-util" title="https://github.com/nx-js/observer-util" ref="nofollow noopener noreferrer">observer-util</a>，我解读过这个库的源码，和 Vue3 的实现原理基本上是一模一样！但是简单了很多。麻雀虽小，五脏俱全。里面的注释也很齐全。</p>
-  <p>当然，如果你的英文不是很熟练，也可以看我精心用 TypeScript + 中文注释基于 <code>observer-util</code> 重写的这套代码：
-    <a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fsl1673495%2Ftypescript-proxy-reactive" title="https://github.com/sl1673495/typescript-proxy-reactive" ref="nofollow noopener noreferrer">typescript-proxy-reactive</a></p>
-  <p>对于这个库的解读，可以看我之前的两篇文章：</p>
-  <p><a target="_blank" href="https://juejin.cn/post/6844904050014552072" title="https://juejin.cn/post/6844904050014552072">带你彻底搞懂Vue3的Proxy响应式原理！TypeScript从零实现基于Proxy的响应式库。</a></p>
-  <p><a target="_blank" href="https://juejin.cn/post/6844904050912133133" title="https://juejin.cn/post/6844904050912133133">带你彻底搞懂Vue3的Proxy响应式原理！基于函数劫持实现Map和Set的响应式</a></p>
-  <p>在第二篇文章里，你也可以对于 Map 和 Set 可以做什么拦截操作，获得源码级别的理解。</p>
-  <h2 data-id="heading-15">总结</h2>
-  <p>Vue3 的 Proxy 真的很强大，把 Vue2 里我认为心智负担很大的一部分给解决掉了。（在我刚上手 Vue 的时候，我是真的不知道什么情况下该用 <code>$set</code>），它的 <code>composition-api</code> 又可以完美对标 <code>React Hook</code>，并且得益于响应式系统的强大，在某些方面是优胜于它的。<a target="_blank" href="https://juejin.cn/post/6844903877574295560" title="https://juejin.cn/post/6844903877574295560">精读《Vue3.0 Function API》</a></p>
-  <p>希望这篇文章能在 Vue3 正式到来之前，提前带你熟悉 Vue3 的一些新特性。</p>
-  <h2 data-id="heading-16">扩展阅读</h2>
-  <p>Proxy 的拦截器里有个 receiver 参数，在本文中为了简化没有体现出来，它是用来做什么的？国内的网站比较少能找到这个资料：</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(raw, {
-  <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key, receiver</span>) {
-    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key, receiver)
-  }
-})
-<span class="copy-code-btn">复制代码</span></code></pre><p>可以看 StackOverflow 上的问答：<a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F37563495%2Fwhat-is-a-receiver-in-javascript%2F37565299%2337565299" title="https://stackoverflow.com/questions/37563495/what-is-a-receiver-in-javascript/37565299#37565299" ref="nofollow noopener noreferrer">what-is-a-receiver-in-javascript</a></p>
-  <p>也可以看我的总结
-    <a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fsl1673495%2Fnotes%2Fissues%2F52" title="https://github.com/sl1673495/notes/issues/52" ref="nofollow noopener noreferrer">Proxy 和 Reflect 中的 receiver 到底是什么？</a></p>
-  <h2 data-id="heading-17">广告时间</h2>
-  <p>优秀的小册作者修言大佬为前端想学算法的小伙伴们推出了一本零基础也能入门的算法小册，帮助你掌握一些基础算法核心思想或简单算法问题，这本小册我参与了内测过程，也给修言大大提出了很多意见。他的目标就是做面向算法零基础前端人群的「保姆式服务」，非常贴心了~</p>
-  <p></p><figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/4/15/171796ee1494573c~tplv-t2oaga2asx-zoom-in-crop-mark:4536:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure><p></p>
-  <h2 data-id="heading-18">求点赞</h2>
-  <p>如果本文对你有帮助，就点个赞支持下吧，你的「赞」是我持续进行创作的动力，让我知道你喜欢看我的文章吧~</p>
-  <h2 data-id="heading-19">❤️感谢大家</h2>
-  <p>关注公众号「前端从进阶到入院」即可加我好友，我拉你进「前端进阶交流群」，大家一起共同交流和进步。</p>
-  <p></p><figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/4/5/17149cbcaa96ff26~tplv-t2oaga2asx-zoom-in-crop-mark:4536:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure><p></p>
-</div>
+  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/633e51a8d84649299e2e5b5187caf2b2~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="1158910-20180801214632214-356594092.png" loading="lazy" class="medium-zoom-image"></p>
+  <p><strong>侦听属性watch：</strong></p>
+  <p>1.watch它是一个对data的数据监听回调, 当依赖的data的数据变化时, 会执行回调。在回调中会传入newVal和oldVal两个参数。Vue实列将会在实例化时调用$watch(), 他会遍历watch对象的每一个属性。watch的使用场景是：当在data中的某个数据发生变化时, 我们需要做一些操作, 或者当需要在数据变化时执行异步或开销较大的操作时. 我们就可以使用watch来进行监听。watch普通监听和深度监听不支持缓存，数据变，直接会触发相应的操作；</p>
+  <p>2.watch里面有一个属性为deep，含义是：是否深度监听某个对象的值, 该值默认为false。watch支持异步；</p>
+  <p>3.监听的函数接收两个参数，第一个参数是最新的值；第二个参数是输入之前的值；</p>
+  <p>4.当一个属性发生变化时，需要执行对应的操作；一对多；</p>
+  <p>5.监听数据必须是data中声明过或者父组件传递过来的props中的数据，当数据变化时，触发其他操作，函数有两个参数，</p>
+  <p>immediate：组件加载立即触发回调函数执行，
+    deep: 深度监听，为了发现对象内部值的变化，复杂类型的数据时使用，例如数组中的对象内容的改变，注意监听数组的变动不需要这么做。注意：deep无法监听到数组的变动和对象的新增，参考vue数组变异,只有以响应式的方式触发才会被监听到。</p>
+  <p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/350b7f63bbc5486aa34078706a0946a1~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="1158910-20180801214632214-356594092.png" loading="lazy" class="medium-zoom-image"></p>
+  <p>监听的对象也可以写成字符串的形式：</p>
+  <p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1160bd4a3b6b4d7d955ccd8ca0a1c7d7~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="1158910-20180801214632214-356594092.png" loading="lazy" class="medium-zoom-image"></p>
+  <p><strong>watch 和 computed的区别是：</strong></p>
+  <p>相同点：他们两者都是观察页面数据变化的。</p>
+  <p>不同点：computed只有当依赖的数据变化时才会计算, 当数据没有变化时, 它会读取缓存数据。
+    watch每次都需要执行函数。watch更适用于数据变化时的异步操作。</p>
+  <p>当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的。这是和computed最大的区别，请勿滥用。</p></div>

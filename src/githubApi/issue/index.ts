@@ -5,7 +5,7 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "枚举和常量枚举的区别",
+  title: "const 和 readonly 的区别",
   labels: [labels.ts, company.tencent],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

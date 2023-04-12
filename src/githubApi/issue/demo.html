@@ -1,42 +1,146 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>洋葱模型是一种常用的中间件模型，例如在 Express 框架中就广泛应用了这种模型。这种模型的特点是请求被传递到下一个中间件之前，需要先经过当前中间件处理，然后再逐层返回。</p><p>下面是一个简单的洋葱模型的示例代码：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">middleware1</span>(<span class="hljs-params">next</span>) {
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span>(<span class="hljs-params">ctx</span>) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'middleware1 before'</span>);
-    <span class="hljs-title function_">next</span>(ctx);
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'middleware1 after'</span>);
-  }
-}
+<div class="markdown-body cache"><style>@charset "UTF-8";.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:14px;overflow-x:hidden;color:var(--cyanosis-base-color);transition:color .35s;--cyanosis-base-color:#353535;--cyanosis-title-color:#005bb7;--cyanosis-strong-color:#2196f3;--cyanosis-em-color:#4fc3f7;--cyanosis-del-color:#ccc;--cyanosis-link-color:#3da8f5;--cyanosis-linkh-color:#007fff;--cyanosis-border-color:#bedcff;--cyanosis-border-color-2:#ececec;--cyanosis-bg-color:#fff;--cyanosis-blockquote-color:#8c8c8c;--cyanosis-blockquote-bg-color:#f0fdff;--cyanosis-code-color:#c2185b;--cyanosis-code-bg-color:#fff4f4;--cyanosis-code-pre-color:#f8f8f8;--cyanosis-table-border-color:#c3e0fd;--cyanosis-table-th-color:#dff0ff;--cyanosis-table-tht-color:#005bb7;--cyanosis-table-tr-nc-color:#f7fbff;--cyanosis-table-trh-color:#e0edf7;--cyanosis-slct-title-color:#005bb7;--cyanosis-slct-titlebg-color:rgba(175,207,247,0.25);--cyanosis-slct-text-color:#c80000;--cyanosis-slct-bg-color:rgba(175,207,247,0.25);--cyanosis-slct-del-color:#999;--cyanosis-slct-elbg-color:#e8ebec;--cyanosis-slct-codebg-color:#ffeaeb;--cyanosis-slct-prebg-color:rgba(160,200,255,0.25)}.markdown-body.__dark{--cyanosis-base-color:#cacaca;--cyanosis-title-color:#ddd;--cyanosis-strong-color:#fe9900;--cyanosis-em-color:#ffd28e;--cyanosis-del-color:#ccc;--cyanosis-link-color:#ffb648;--cyanosis-linkh-color:#fe9900;--cyanosis-border-color:#ffe3ba;--cyanosis-border-color-2:#ffcb7b;--cyanosis-bg-color:#2f2f2f;--cyanosis-blockquote-color:#c7c7c7;--cyanosis-blockquote-bg-color:rgba(255,199,116,0.1);--cyanosis-code-color:#000;--cyanosis-code-bg-color:#ffcb7b;--cyanosis-code-pre-color:rgba(255,227,185,0.5);--cyanosis-table-border-color:#fe9900;--cyanosis-table-th-color:#ffb648;--cyanosis-table-tht-color:#000;--cyanosis-table-tr-nc-color:#6d5736;--cyanosis-table-trh-color:#947443;--cyanosis-slct-title-color:#000;--cyanosis-slct-titlebg-color:#fe9900;--cyanosis-slct-text-color:#00c888;--cyanosis-slct-bg-color:rgba(175,207,247,0.25);--cyanosis-slct-del-color:#999;--cyanosis-slct-elbg-color:#000;--cyanosis-slct-codebg-color:#ffcb7b;--cyanosis-slct-prebg-color:rgba(160,200,255,0.25)}.markdown-body h1{padding-bottom:4px;font-size:30px}.markdown-body h1,.markdown-body h2{margin-top:36px;margin-bottom:10px;line-height:1.5;color:var(--cyanosis-title-color);transition:color .35s}.markdown-body h2{position:relative;padding-left:10px;padding-right:10px;padding-bottom:10px;font-size:24px;border-bottom:1px solid var(--cyanosis-border-color-2)}.markdown-body h2:before{content:"「";position:absolute;top:-6px;left:-14px}.markdown-body h2:after{content:"」";position:relative;top:6px;right:auto}.markdown-body h3{position:relative;padding-bottom:0;margin-top:30px;margin-bottom:10px;font-size:20px;line-height:1.5;color:var(--cyanosis-title-color);padding-left:6px;transition:color .35s}.markdown-body h3:before{content:"»";padding-right:6px;color:var(--cyanosis-strong-color)}.markdown-body h4{margin-top:24px;font-size:16px}.markdown-body h4,.markdown-body h5{padding-bottom:0;margin-bottom:10px;line-height:1.5;color:var(--cyanosis-title-color);padding-left:6px;transition:color .35s}.markdown-body h5{margin-top:18px;font-size:14px}.markdown-body h6{padding-bottom:0;margin-top:12px;margin-bottom:10px;font-size:12px;line-height:1.5;color:var(--cyanosis-title-color);padding-left:6px;transition:color .35s}.markdown-body p{line-height:inherit;margin-top:16px;margin-bottom:16px}.markdown-body img{max-width:100%}.markdown-body hr{position:relative;width:98%;height:1px;margin-top:32px;margin-bottom:32px;background-image:linear-gradient(90deg,var(--cyanosis-link-color),rgba(255,0,0,.3),hsla(0,0%,100%,.1),rgba(255,0,0,.3),var(--cyanosis-link-color));border-width:0;overflow:visible}.markdown-body hr:after{content:"";position:absolute;margin:auto;left:0;right:0;bottom:0;top:0;display:inline-block;width:60px;height:20px;background-color:var(--cyanosis-bg-color);background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAgCAYAAABgrToAAAADoklEQVRYR82XTYgcRRTHf2933Q1RjAa9eFO8JHoJ8RQVBQ2iBwXBET0YEUTXNVmNQtTpmeqaWV0XNRq/o4KoECSCEPSg4CF+BYUkIIiCoCJCPIhC/Ihh2Z0nVV27VnZnenumW9i6ddV7//frV69fVQurfMgq56NawFTPAU6QyomqXrw6wIZeyhCPebA5buNR+akKyGoAjd6BshthnYdSjqNcRVuOlIUsD2j0SuA94IwuMHdh5ZUykOUBXfSGbmKI54EtAeYIHSZoy5dl4JxvNYBOKdW1KE8BQ8AkVk6WhasWsAiN0TX9gveXQaPP+Aytpc4u+bMI06JNohsYYYYOR2lJWtS3OKDRfcAtQfgDoI6Vo4UCGb0OmAEuDvZvYmVbEd/igC3dzDz7gQu8sPA9kJDK27mBmjqBeLjTg90PDFOjWawFFQd06kZHEfaj3LAIpTRpSXsZ5E06zEYP9sDimnAApYaV2SLZG/wjMeqAkijwW4xQJ5Gf/ZzRC8OW3hiBTGGlURRswW55Bh/Ssxljrwew8l1PQaM14GngvGDzBUKdDsMeTtgU5o8B92PFlUf3YXUrHa7Fys6lBqcCGnX15YQ2A18FyPd7Crd1A3M8C1wdbH4DD3hWeP6IEXbQkG97ajR1HPFnuPP5jFFq1OWX7hl8WM9l1AO648uNfwLk7tytMeogty+xeQ4rO3r6bdcx1nuwOGsHmaXGtPzae4uzGnLH1kQkvpdZGrHjssBZJrL+pqS05KWc8tgITAPXRzYvYOXe/C2OV43eDcRBDtIhoS2f9wzc0Cv8Wls+zoFzUC5zF0U241h5uZtPfptp6OUM8wbK+cH5GEpCS17P3fJei0Z3+npTxryJ8CPzbKMtn/ZyWbkPGl0PuFPkmkjkcb4h4R2ZLwRq1H0ALmvjkf2HwK1Y+T1PY2XABe/sHJ6MxN5lnoSpnC/UGbsTaI5phK2R7x6s3Ffk5YoDOrWm3onwJHBmEP86bPmBrsGaenNoIdnxCH+gPEhLXi0Cl1VBvyPVLSh7gEuC62yAfOIUqabWEaaiucMIk6RyqJ+Q/QM69V26jjW86Gvov/EaoyT8zRCn+Xq7PVrbx0nuYUaO9wM3WAbjCE1NEUw09Um4UV+2OKfYfu5/S19gsAzGKqm6LE5FrShbdS0ku465DjDwKA/oQht19ejqbaEVuRbiLhuHByYLjtUAZpDutzP7cYdHsPJXWbjyNVgFwQoa1WXwf4Jd9YD/Ap80+yE7+u9aAAAAAElFTkSuQmCC);background-repeat:no-repeat;background-size:auto 100%;background-position-x:center;transition:background-color .5s}.markdown-body code{padding:.065em .4em;font-size:.87em;color:var(--cyanosis-code-color);word-break:break-word;overflow-x:auto;background-color:var(--cyanosis-code-bg-color);border-radius:2px}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{display:block;padding:16px 12px;margin:0;font-size:12px;color:#333;word-break:normal;overflow-x:auto;background:var(--cyanosis-code-pre-color)}.markdown-body pre>code::-webkit-scrollbar{width:4px;height:4px}.markdown-body pre>code::-webkit-scrollbar-track{background-color:var(--cyanosis-border-color)}.markdown-body pre>code::-webkit-scrollbar-thumb{background-color:var(--cyanosis-strong-color);border-radius:10px}.markdown-body a{position:relative;text-decoration:none;color:var(--cyanosis-link-color);border-bottom:1px solid var(--cyanosis-border-color)}.markdown-body a:hover{border-bottom-color:var(--cyanosis-linkh-color)}.markdown-body a:active,.markdown-body a:hover{color:var(--cyanosis-linkh-color)}.markdown-body a:after{position:absolute;content:"";top:100%;left:0;width:100%;opacity:0;border-bottom:1px solid var(--cyanosis-border-color);transition:top .3s,opacity .3s;transform:translateZ(0)}.markdown-body a:hover:after{top:0;opacity:1;border-bottom-color:var(--cyanosis-linkh-color)}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid var(--cyanosis-table-border-color);border-spacing:0;border-collapse:collapse}.markdown-body table thead{color:#000;text-align:left;font-size:14px;background:#f6f6f6}.markdown-body table tr:nth-child(2n){background-color:var(--cyanosis-table-tr-nc-color)}.markdown-body table tr:hover{background-color:var(--cyanosis-table-trh-color)}.markdown-body table td,.markdown-body table th{padding:12px 8px;line-height:24px;border:1px solid var(--cyanosis-table-border-color)}.markdown-body table th{color:var(--cyanosis-table-tht-color);background-color:var(--cyanosis-table-th-color)}.markdown-body table td{min-width:120px}.markdown-body blockquote{color:var(--cyanosis-blockquote-color);border-left:4px solid var(--cyanosis-strong-color);background-color:var(--cyanosis-blockquote-bg-color);padding:1px 20px;margin:22px 0;transition:color .35s}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body b,.markdown-body blockquote>b,.markdown-body blockquote>strong,.markdown-body strong{color:var(--cyanosis-strong-color)}.markdown-body em,.markdown-body i{color:var(--cyanosis-em-color)}.markdown-body del{color:var(--cyanosis-del-color)}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:4px}.markdown-body ol li{padding-left:6px}.markdown-body details>summary{outline:none;color:var(--cyanosis-title-color);font-size:20px;font-weight:bolder;border-bottom:1px solid var(--cyanosis-border-color);cursor:pointer}.markdown-body details>p{padding:10px 20px;margin:10px 0 0;color:#666;background-color:var(--cyanosis-blockquote-bg-color);border:2px dashed var(--cyanosis-strong-color)}.markdown-body h1::selection,.markdown-body h2::selection,.markdown-body h3::selection,.markdown-body h4::selection,.markdown-body h5::selection,.markdown-body h6::selection{color:var(--cyanosis-slct-title-color);background-color:var(--cyanosis-slct-titlebg-color)}.markdown-body ol li::selection,.markdown-body p::selection,.markdown-body ul li::selection{color:var(--cyanosis-slct-text-color);background-color:var(--cyanosis-slct-bg-color)}.markdown-body a::selection,.markdown-body b::selection,.markdown-body em::selection,.markdown-body i::selection,.markdown-body strong::selection{background-color:var(--cyanosis-slct-elbg-color)}.markdown-body del::selection{color:var(--cyanosis-slct-del-color);background-color:var(--cyanosis-slct-elbg-color)}.markdown-body table thead th::selection{background-color:transparent}.markdown-body table tbody td::selection{background-color:var(--cyanosis-slct-bg-color)}.markdown-body code::selection{background-color:var(--cyanosis-slct-codebg-color)}.markdown-body pre>code::selection{background-color:var(--cyanosis-slct-prebg-color)}.markdown-body .contains-task-list{padding-left:14px;list-style:none}.markdown-body .contains-task-list input[type=checkbox]{position:relative}.markdown-body .contains-task-list input[type=checkbox]:before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;width:inherit;height:inherit;background:#f0f8ff;border:1px solid #add6ff;border-radius:2px;box-sizing:border-box;z-index:1}.markdown-body .contains-task-list input[type=checkbox]:checked:after{content:"✓";position:absolute;top:-12px;left:0;right:0;bottom:0;width:0;height:0;color:#f55;font-size:20px;font-weight:700;z-index:2}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="a11y-dark">.hljs-comment,.hljs-quote{color:#d4d0ab}.hljs-deletion,.hljs-name,.hljs-regexp,.hljs-selector-class,.hljs-selector-id,.hljs-tag,.hljs-template-variable,.hljs-variable{color:#ffa07a}.hljs-built_in,.hljs-builtin-name,.hljs-link,.hljs-literal,.hljs-meta,.hljs-number,.hljs-params,.hljs-type{color:#f5ab35}.hljs-attribute{color:gold}.hljs-addition,.hljs-bullet,.hljs-string,.hljs-symbol{color:#abe338}.hljs-section,.hljs-title{color:#00e0e0}.hljs-keyword,.hljs-selector-tag{color:#dcc6e0}.markdown-body pre,.markdown-body pre>code.hljs{background:#2b2b2b;color:#f8f8f2}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}@media screen and (-ms-high-contrast:active){.hljs-addition,.hljs-attribute,.hljs-built_in,.hljs-builtin-name,.hljs-bullet,.hljs-comment,.hljs-link,.hljs-literal,.hljs-meta,.hljs-number,.hljs-params,.hljs-quote,.hljs-string,.hljs-symbol,.hljs-type{color:highlight}.hljs-keyword,.hljs-selector-tag{font-weight:700}}</style><h2 data-id="heading-0">一、运行流程</h2>
+  <p><code>webpack</code>&nbsp;的运行流程是一个串行的过程，它的工作流程就是将各个插件串联起来</p>
+  <p>在运行过程中会广播事件，插件只需要监听它所关心的事件，就能加入到这条<code>webpack</code>机制中，去改变<code>webpack</code>的运作，使得整个系统扩展性良好</p>
+  <p>从启动到结束会依次执行以下三大步骤：</p>
+  <ul>
+    <li>初始化流程：从配置文件和&nbsp;<code>Shell</code>&nbsp;语句中读取与合并参数，并初始化需要使用的插件和配置插件等执行环境所需要的参数</li>
+    <li>编译构建流程：从 Entry 发出，针对每个 Module 串行调用对应的 Loader 去翻译文件内容，再找到该 Module 依赖的 Module，递归地进行编译处理</li>
+    <li>输出流程：对编译后的 Module 组合成 Chunk，把 Chunk 转换成文件，输出到文件系统</li>
+  </ul>
+  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0fa342b2bd1d459db573a585485c9d61~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="" loading="lazy" class="medium-zoom-image"></p>
+  <h3 data-id="heading-1">初始化流程</h3>
+  <p>从配置文件和&nbsp;<code>Shell</code>&nbsp;语句中读取与合并参数，得出最终的参数</p>
+  <p>配置文件默认下为<code>webpack.config.js</code>，也或者通过命令的形式指定配置文件，主要作用是用于激活<code>webpack</code>的加载项和插件</p>
+  <p>关于文件配置内容分析，如下注释：</p>
+  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-keyword">var</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);
+<span class="hljs-keyword">var</span> node_modules = path.<span class="hljs-title function_">resolve</span>(__dirname, <span class="hljs-string">'node_modules'</span>);
+<span class="hljs-keyword">var</span> pathToReact = path.<span class="hljs-title function_">resolve</span>(node_modules, <span class="hljs-string">'react/dist/react.min.js'</span>);
 
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">middleware2</span>(<span class="hljs-params">next</span>) {
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span>(<span class="hljs-params">ctx</span>) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'middleware2 before'</span>);
-    <span class="hljs-title function_">next</span>(ctx);
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'middleware2 after'</span>);
-  }
-}
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">middleware3</span>(<span class="hljs-params">next</span>) {
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span>(<span class="hljs-params">ctx</span>) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'middleware3 before'</span>);
-    <span class="hljs-title function_">next</span>(ctx);
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'middleware3 after'</span>);
-  }
-}
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">compose</span>(<span class="hljs-params">middlewares</span>) {
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span>(<span class="hljs-params">ctx</span>) {
-    <span class="hljs-keyword">function</span> <span class="hljs-title function_">dispatch</span>(<span class="hljs-params">i</span>) {
-      <span class="hljs-keyword">if</span> (i === middlewares.<span class="hljs-property">length</span>) {
-        <span class="hljs-keyword">return</span>;
-      }
-      <span class="hljs-keyword">const</span> middleware = middlewares[i];
-      <span class="hljs-keyword">const</span> next = dispatch.<span class="hljs-title function_">bind</span>(<span class="hljs-literal">null</span>, i + <span class="hljs-number">1</span>);
-      <span class="hljs-title function_">middleware</span>(next)(ctx);
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-comment">// 入口文件，是模块构建的起点，同时每一个入口文件对应最后生成的一个 chunk。</span>
+  <span class="hljs-attr">entry</span>: <span class="hljs-string">'./path/to/my/entry/file.js'</span>，
+  <span class="hljs-comment">// 文件路径指向(可加快打包过程)。</span>
+  <span class="hljs-attr">resolve</span>: {
+    <span class="hljs-attr">alias</span>: {
+      <span class="hljs-string">'react'</span>: pathToReact
     }
-    <span class="hljs-title function_">dispatch</span>(<span class="hljs-number">0</span>);
-  }
+  },
+  <span class="hljs-comment">// 生成文件，是模块构建的终点，包括输出文件与输出路径。</span>
+  <span class="hljs-attr">output</span>: {
+    <span class="hljs-attr">path</span>: path.<span class="hljs-title function_">resolve</span>(__dirname, <span class="hljs-string">'build'</span>),
+    <span class="hljs-attr">filename</span>: <span class="hljs-string">'[name].js'</span>
+  },
+  <span class="hljs-comment">// 这里配置了处理各模块的 loader ，包括 css 预处理 loader ，es6 编译 loader，图片处理 loader。</span>
+  <span class="hljs-attr">module</span>: {
+    <span class="hljs-attr">loaders</span>: [
+      {
+        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/.js$/</span>,
+        <span class="hljs-attr">loader</span>: <span class="hljs-string">'babel'</span>,
+        <span class="hljs-attr">query</span>: {
+          <span class="hljs-attr">presets</span>: [<span class="hljs-string">'es2015'</span>, <span class="hljs-string">'react'</span>]
+        }
+      }
+    ],
+    <span class="hljs-attr">noParse</span>: [pathToReact]
+  },
+  <span class="hljs-comment">// webpack 各插件对象，在 webpack 的事件流中执行对应的方法。</span>
+  <span class="hljs-attr">plugins</span>: [
+    <span class="hljs-keyword">new</span> webpack.<span class="hljs-title class_">HotModuleReplacementPlugin</span>()
+  ]
+};
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <p><code>webpack</code>&nbsp;将&nbsp;<code>webpack.config.js</code>&nbsp;中的各个配置项拷贝到&nbsp;<code>options</code>&nbsp;对象中，并加载用户配置的&nbsp;<code>plugins</code>
+    <br>
+    完成上述步骤之后，则开始初始化<code>Compiler</code>编译对象，该对象掌控者<code>webpack</code>声明周期，不执行具体的任务，只是进行一些调度工作</p>
+  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Compiler</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Tapable</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">context</span>) {
+        <span class="hljs-variable language_">super</span>();
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">hooks</span> = {
+            <span class="hljs-attr">beforeCompile</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">AsyncSeriesHook</span>([<span class="hljs-string">"params"</span>]),
+            <span class="hljs-attr">compile</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">SyncHook</span>([<span class="hljs-string">"params"</span>]),
+            <span class="hljs-attr">afterCompile</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">AsyncSeriesHook</span>([<span class="hljs-string">"compilation"</span>]),
+            <span class="hljs-attr">make</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">AsyncParallelHook</span>([<span class="hljs-string">"compilation"</span>]),
+            <span class="hljs-attr">entryOption</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">SyncBailHook</span>([<span class="hljs-string">"context"</span>, <span class="hljs-string">"entry"</span>])
+            <span class="hljs-comment">// 定义了很多不同类型的钩子</span>
+        };
+        <span class="hljs-comment">// ...</span>
+    }
 }
 
-<span class="hljs-keyword">const</span> middlewares = [middleware1, middleware2, middleware3];
-<span class="hljs-keyword">const</span> composed = <span class="hljs-title function_">compose</span>(middlewares);
-<span class="hljs-title function_">composed</span>({});
-</code></div></div></pre><p>这个示例中有三个中间件函数 <code>middleware1</code>、<code>middleware2</code> 和 <code>middleware3</code>，它们都是接受一个 <code>next</code> 函数作为参数的高阶函数。当这个中间件被执行时，它将接受一个 <code>ctx</code> 对象作为参数，并且调用 <code>next(ctx)</code> 将请求传递给下一个中间件。</p><p><code>compose</code> 函数接受一个中间件函数数组作为参数，返回一个新的函数，这个函数可以将请求传递给第一个中间件函数。每个中间件函数都将接收一个 <code>next</code> 函数作为参数，并返回一个新的函数，这个新的函数将接收 <code>ctx</code> 对象作为参数，并且在调用 <code>next(ctx)</code> 之前和之后都会执行一些操作。当 <code>next(ctx)</code> 被调用时，请求将被传递到下一个中间件函数。</p><p>在 <code>composed</code> 函数中，我们将一个空的 <code>ctx</code> 对象作为参数传递给第一个中间件函数。<code>dispatch</code> 函数递归地调用中间件数组中的每一个中间件函数，并将 <code>ctx</code> 对象和下一个中间件函数作为参数传递。当最后一个中间件函数完成处理时，递归调用结束，请求处理完成。</p><p>这是一个简单的示例，实际的洋葱模型可能更加复杂。</p></div>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">webpack</span>(<span class="hljs-params">options</span>) {
+  <span class="hljs-keyword">var</span> compiler = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Compiler</span>();
+  ...<span class="hljs-comment">// 检查options,若watch字段为true,则开启watch线程</span>
+  <span class="hljs-keyword">return</span> compiler;
+}
+...
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <p><code>Compiler</code>&nbsp;对象继承自&nbsp;<code>Tapable</code>，初始化时定义了很多钩子函数</p>
+  <h3 data-id="heading-2">编译构建流程</h3>
+  <p>根据配置中的&nbsp;<code>entry</code>&nbsp;找出所有的入口文件</p>
+  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">entry</span>: <span class="hljs-string">'./src/file.js'</span>
+}
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <p>初始化完成后会调用<code>Compiler</code>的<code>run</code>来真正启动<code>webpack</code>编译构建流程，主要流程如下：</p>
+  <ul>
+    <li><code>compile</code>&nbsp;开始编译</li>
+    <li><code>make</code>&nbsp;从入口点分析模块及其依赖的模块，创建这些模块对象</li>
+    <li><code>build-module</code>&nbsp;构建模块</li>
+    <li><code>seal</code>&nbsp;封装构建结果</li>
+    <li><code>emit</code>&nbsp;把各个chunk输出到结果文件</li>
+  </ul>
+  <h4 data-id="heading-3">compile 编译</h4>
+  <p>执行了<code>run</code>方法后，首先会触发<code>compile</code>，主要是构建一个<code>Compilation</code>对象</p>
+  <p>该对象是编译阶段的主要执行者，主要会依次下述流程：执行模块创建、依赖收集、分块、打包等主要任务的对象</p>
+  <h4 data-id="heading-4">make 编译模块</h4>
+  <p>当完成了上述的<code>compilation</code>对象后，就开始从<code>Entry</code>入口文件开始读取，主要执行<code>_addModuleChain()</code>函数，如下：</p>
+  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-title function_">_addModuleChain</span>(<span class="hljs-params">context, dependency, onModule, callback</span>) {
+   ...
+   <span class="hljs-comment">// 根据依赖查找对应的工厂函数</span>
+   <span class="hljs-keyword">const</span> <span class="hljs-title class_">Dep</span> = <span class="hljs-comment">/** <span class="hljs-doctag">@type</span> {<span class="hljs-type">DepConstructor</span>} */</span> (dependency.<span class="hljs-property">constructor</span>);
+   <span class="hljs-keyword">const</span> moduleFactory = <span class="hljs-variable language_">this</span>.<span class="hljs-property">dependencyFactories</span>.<span class="hljs-title function_">get</span>(<span class="hljs-title class_">Dep</span>);
+
+   <span class="hljs-comment">// 调用工厂函数NormalModuleFactory的create来生成一个空的NormalModule对象</span>
+   moduleFactory.<span class="hljs-title function_">create</span>({
+       <span class="hljs-attr">dependencies</span>: [dependency]
+       ...
+   }, <span class="hljs-function">(<span class="hljs-params">err, <span class="hljs-variable language_">module</span></span>) =&gt;</span> {
+       ...
+       <span class="hljs-keyword">const</span> <span class="hljs-title function_">afterBuild</span> = (<span class="hljs-params"></span>) =&gt; {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">processModuleDependencies</span>(<span class="hljs-variable language_">module</span>, <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+         <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">return</span> <span class="hljs-title function_">callback</span>(err);
+         <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, <span class="hljs-variable language_">module</span>);
+           });
+    };
+
+       <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">buildModule</span>(<span class="hljs-variable language_">module</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+           ...
+           <span class="hljs-title function_">afterBuild</span>();
+       })
+   })
+}
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <p>过程如下：</p>
+  <p><code>_addModuleChain</code>中接收参数<code>dependency</code>传入的入口依赖，使用对应的工厂函数<code>NormalModuleFactory.create</code>方法生成一个空的<code>module</code>对象</p>
+  <p>回调中会把此<code>module</code>存入<code>compilation.modules</code>对象和<code>dependencies.module</code>对象中，由于是入口文件，也会存入<code>compilation.entries</code>中</p>
+  <p>随后执行<code>buildModule</code>进入真正的构建模块<code>module</code>内容的过程</p>
+  <h4 data-id="heading-5">build module 完成模块编译</h4>
+  <p>这里主要调用配置的<code>loaders</code>，将我们的模块转成标准的<code>JS</code>模块</p>
+  <p>在用<code>Loader</code>&nbsp;对一个模块转换完后，使用&nbsp;<code>acorn</code>&nbsp;解析转换后的内容，输出对应的抽象语法树（<code>AST</code>），以方便&nbsp;<code>Webpack</code>后面对代码的分析</p>
+  <p>从配置的入口模块开始，分析其&nbsp;<code>AST</code>，当遇到<code>require</code>等导入其它模块语句时，便将其加入到依赖的模块列表，同时对新找出的依赖模块递归分析，最终搞清所有模块的依赖关系</p>
+  <h3 data-id="heading-6">输出流程</h3>
+  <h4 data-id="heading-7">seal 输出资源</h4>
+  <p><code>seal</code>方法主要是要生成<code>chunks</code>，对<code>chunks</code>进行一系列的优化操作，并生成要输出的代码</p>
+  <p><code>webpack</code>&nbsp;中的&nbsp;<code>chunk</code>&nbsp;，可以理解为配置在&nbsp;<code>entry</code>&nbsp;中的模块，或者是动态引入的模块</p>
+  <p>根据入口和模块之间的依赖关系，组装成一个个包含多个模块的&nbsp;<code>Chunk</code>，再把每个&nbsp;<code>Chunk</code>&nbsp;转换成一个单独的文件加入到输出列表</p>
+  <h4 data-id="heading-8">emit 输出完成</h4>
+  <p>在确定好输出内容后，根据配置确定输出的路径和文件名</p>
+  <pre><code class="hljs language-js copyable" lang="js"><span class="hljs-attr">output</span>: {
+    <span class="hljs-attr">path</span>: path.<span class="hljs-title function_">resolve</span>(__dirname, <span class="hljs-string">'build'</span>),
+        <span class="hljs-attr">filename</span>: <span class="hljs-string">'[name].js'</span>
+}
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <p>在&nbsp;<code>Compiler</code>&nbsp;开始生成文件前，钩子&nbsp;<code>emit</code>&nbsp;会被执行，这是我们修改最终文件的最后一个机会</p>
+  <p>从而<code>webpack</code>整个打包过程则结束了</p>
+  <h3 data-id="heading-9">小结</h3>
+  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d3fdf537128d462f8d8812643482c0d9~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="" loading="lazy" class="medium-zoom-image"></p></div>

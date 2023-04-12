@@ -49,39 +49,10 @@
 
 --------------------
 
-----------------------
-
-> 2023.02.25
-
-- 浏览器: from memory cache、from disk cache 有什么区别？
-  https://juejin.cn/post/6844904006452510734
-- editorconfig、prettier
-- cookie https://juejin.cn/post/6914109129267740686
-    - cookie存储在哪里？
-    - cookie是如何工作的？
-    - cookie和session的区别？
-    - 什么是session级别的cookie？
-    - cookie可以被谁来操作？
-    - cookie各属性详解
-    - js和服务端对cookie的操作有什么不同？
-    - js如何操作cookie
-    - 服务端如何读写cookie
-    - Cookie 大小和数量的限制
-    - 查看浏览器是否打开 Cookie 功能
-    - cookie 的共享策略是什么
-    - 跨域请求（CORS）中的cookie
-    - cookie的编码
-    - cookie与web安全
-    - 不同的浏览器共享cookie吗?
-    - cookie和localStorage/sessionStorage的差异
-    - 哪些信息适合放到cookie中
-
 --------------
 
 > 2023.02.26
 
-- 面试问题收集：https://github.com/lgwebdream/FE-Interview/issues
-- 2021年前端面试必读文章【超三百篇文章/赠复习导图】：https://juejin.cn/post/6844904116339261447
 
 
 

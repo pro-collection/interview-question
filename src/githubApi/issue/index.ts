@@ -5,10 +5,10 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "大文件上传了解多少",
+  title: "手写代码：简单实现一个洋葱模式中间件",
   labels: [
-    labels.application,
-    company.baidu,
+    labels.js,
+    // company.baidu,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -5,13 +5,12 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  // title: "[webpack] 核心库 - tapable 的设计思路",
-  title: "[webpack] 构建流程是怎么样的？",
+  title: "[webpack] 核心库 - tapable 的设计思路与实现原理是什么？",
   labels: [
     labels.engineering,
     // company.baidu,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.master,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -1,288 +1,179 @@
-<div class="markdown-body cache html"><style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#333}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;margin-bottom:5px}.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{font-size:20px}.markdown-body h2{padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:18px;padding-bottom:0}.markdown-body h6{margin-top:5px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><p>本文来自<a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fxin-tan.com%2Fpassages%2F2019-10-21-react-hooks%2F" title="https://xin-tan.com/passages/2019-10-21-react-hooks/" ref="nofollow noopener noreferrer">《一文彻底搞懂react hooks的原理和实现》</a>，如果觉得不错，欢迎给<a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fdongyuanxin%2Fblog" title="https://github.com/dongyuanxin/blog" ref="nofollow noopener noreferrer">Github仓库</a>一个star。</p>
-  <h2 data-id="heading-0">摘要</h2>
-  <p>当使用 Hook 特性编写组件的时候时候，总能感觉到它的简洁和方便。当然，「天下没有免费的午餐」，它牺牲了可读性并且存在内存泄漏风险（最后有提到）。但这并不妨碍探索它的魔力。</p>
-  <p>在正式开始前，希望您读过 Hook 的文档或者在项目使用过它。但如果只对函数编程感兴趣，也可能有所收获。</p>
-  <p>为了让行文更流畅，我打算先抛出几个问题，这些问题会在源码实现的过程中，逐步解决：</p>
+<div class="markdown-body cache html"><style>@charset "UTF-8";.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:14px;overflow-x:hidden;color:var(--cyanosis-base-color);transition:color .35s;--cyanosis-base-color:#353535;--cyanosis-title-color:#005bb7;--cyanosis-strong-color:#2196f3;--cyanosis-em-color:#4fc3f7;--cyanosis-del-color:#ccc;--cyanosis-link-color:#3da8f5;--cyanosis-linkh-color:#007fff;--cyanosis-border-color:#bedcff;--cyanosis-border-color-2:#ececec;--cyanosis-bg-color:#fff;--cyanosis-blockquote-color:#8c8c8c;--cyanosis-blockquote-bg-color:#f0fdff;--cyanosis-code-color:#c2185b;--cyanosis-code-bg-color:#fff4f4;--cyanosis-code-pre-color:#f8f8f8;--cyanosis-table-border-color:#c3e0fd;--cyanosis-table-th-color:#dff0ff;--cyanosis-table-tht-color:#005bb7;--cyanosis-table-tr-nc-color:#f7fbff;--cyanosis-table-trh-color:#e0edf7;--cyanosis-slct-title-color:#005bb7;--cyanosis-slct-titlebg-color:rgba(175,207,247,0.25);--cyanosis-slct-text-color:#c80000;--cyanosis-slct-bg-color:rgba(175,207,247,0.25);--cyanosis-slct-del-color:#999;--cyanosis-slct-elbg-color:#e8ebec;--cyanosis-slct-codebg-color:#ffeaeb;--cyanosis-slct-prebg-color:rgba(160,200,255,0.25)}.markdown-body.__dark{--cyanosis-base-color:#cacaca;--cyanosis-title-color:#ddd;--cyanosis-strong-color:#fe9900;--cyanosis-em-color:#ffd28e;--cyanosis-del-color:#ccc;--cyanosis-link-color:#ffb648;--cyanosis-linkh-color:#fe9900;--cyanosis-border-color:#ffe3ba;--cyanosis-border-color-2:#ffcb7b;--cyanosis-bg-color:#2f2f2f;--cyanosis-blockquote-color:#c7c7c7;--cyanosis-blockquote-bg-color:rgba(255,199,116,0.1);--cyanosis-code-color:#000;--cyanosis-code-bg-color:#ffcb7b;--cyanosis-code-pre-color:rgba(255,227,185,0.5);--cyanosis-table-border-color:#fe9900;--cyanosis-table-th-color:#ffb648;--cyanosis-table-tht-color:#000;--cyanosis-table-tr-nc-color:#6d5736;--cyanosis-table-trh-color:#947443;--cyanosis-slct-title-color:#000;--cyanosis-slct-titlebg-color:#fe9900;--cyanosis-slct-text-color:#00c888;--cyanosis-slct-bg-color:rgba(175,207,247,0.25);--cyanosis-slct-del-color:#999;--cyanosis-slct-elbg-color:#000;--cyanosis-slct-codebg-color:#ffcb7b;--cyanosis-slct-prebg-color:rgba(160,200,255,0.25)}.markdown-body h1{padding-bottom:4px;font-size:30px}.markdown-body h1,.markdown-body h2{margin-top:36px;margin-bottom:10px;line-height:1.5;color:var(--cyanosis-title-color);transition:color .35s}.markdown-body h2{position:relative;padding-left:10px;padding-right:10px;padding-bottom:10px;font-size:24px;border-bottom:1px solid var(--cyanosis-border-color-2)}.markdown-body h2:before{content:"「";position:absolute;top:-6px;left:-14px}.markdown-body h2:after{content:"」";position:relative;top:6px;right:auto}.markdown-body h3{position:relative;padding-bottom:0;margin-top:30px;margin-bottom:10px;font-size:20px;line-height:1.5;color:var(--cyanosis-title-color);padding-left:6px;transition:color .35s}.markdown-body h3:before{content:"»";padding-right:6px;color:var(--cyanosis-strong-color)}.markdown-body h4{margin-top:24px;font-size:16px}.markdown-body h4,.markdown-body h5{padding-bottom:0;margin-bottom:10px;line-height:1.5;color:var(--cyanosis-title-color);padding-left:6px;transition:color .35s}.markdown-body h5{margin-top:18px;font-size:14px}.markdown-body h6{padding-bottom:0;margin-top:12px;margin-bottom:10px;font-size:12px;line-height:1.5;color:var(--cyanosis-title-color);padding-left:6px;transition:color .35s}.markdown-body p{line-height:inherit;margin-top:16px;margin-bottom:16px}.markdown-body img{max-width:100%}.markdown-body hr{position:relative;width:98%;height:1px;margin-top:32px;margin-bottom:32px;background-image:linear-gradient(90deg,var(--cyanosis-link-color),rgba(255,0,0,.3),hsla(0,0%,100%,.1),rgba(255,0,0,.3),var(--cyanosis-link-color));border-width:0;overflow:visible}.markdown-body hr:after{content:"";position:absolute;margin:auto;left:0;right:0;bottom:0;top:0;display:inline-block;width:60px;height:20px;background-color:var(--cyanosis-bg-color);background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAgCAYAAABgrToAAAADoklEQVRYR82XTYgcRRTHf2933Q1RjAa9eFO8JHoJ8RQVBQ2iBwXBET0YEUTXNVmNQtTpmeqaWV0XNRq/o4KoECSCEPSg4CF+BYUkIIiCoCJCPIhC/Ihh2Z0nVV27VnZnenumW9i6ddV7//frV69fVQurfMgq56NawFTPAU6QyomqXrw6wIZeyhCPebA5buNR+akKyGoAjd6BshthnYdSjqNcRVuOlIUsD2j0SuA94IwuMHdh5ZUykOUBXfSGbmKI54EtAeYIHSZoy5dl4JxvNYBOKdW1KE8BQ8AkVk6WhasWsAiN0TX9gveXQaPP+Aytpc4u+bMI06JNohsYYYYOR2lJWtS3OKDRfcAtQfgDoI6Vo4UCGb0OmAEuDvZvYmVbEd/igC3dzDz7gQu8sPA9kJDK27mBmjqBeLjTg90PDFOjWawFFQd06kZHEfaj3LAIpTRpSXsZ5E06zEYP9sDimnAApYaV2SLZG/wjMeqAkijwW4xQJ5Gf/ZzRC8OW3hiBTGGlURRswW55Bh/Ssxljrwew8l1PQaM14GngvGDzBUKdDsMeTtgU5o8B92PFlUf3YXUrHa7Fys6lBqcCGnX15YQ2A18FyPd7Crd1A3M8C1wdbH4DD3hWeP6IEXbQkG97ajR1HPFnuPP5jFFq1OWX7hl8WM9l1AO648uNfwLk7tytMeogty+xeQ4rO3r6bdcx1nuwOGsHmaXGtPzae4uzGnLH1kQkvpdZGrHjssBZJrL+pqS05KWc8tgITAPXRzYvYOXe/C2OV43eDcRBDtIhoS2f9wzc0Cv8Wls+zoFzUC5zF0U241h5uZtPfptp6OUM8wbK+cH5GEpCS17P3fJei0Z3+npTxryJ8CPzbKMtn/ZyWbkPGl0PuFPkmkjkcb4h4R2ZLwRq1H0ALmvjkf2HwK1Y+T1PY2XABe/sHJ6MxN5lnoSpnC/UGbsTaI5phK2R7x6s3Ffk5YoDOrWm3onwJHBmEP86bPmBrsGaenNoIdnxCH+gPEhLXi0Cl1VBvyPVLSh7gEuC62yAfOIUqabWEaaiucMIk6RyqJ+Q/QM69V26jjW86Gvov/EaoyT8zRCn+Xq7PVrbx0nuYUaO9wM3WAbjCE1NEUw09Um4UV+2OKfYfu5/S19gsAzGKqm6LE5FrShbdS0ku465DjDwKA/oQht19ejqbaEVuRbiLhuHByYLjtUAZpDutzP7cYdHsPJXWbjyNVgFwQoa1WXwf4Jd9YD/Ap80+yE7+u9aAAAAAElFTkSuQmCC);background-repeat:no-repeat;background-size:auto 100%;background-position-x:center;transition:background-color .5s}.markdown-body code{padding:.065em .4em;font-size:.87em;color:var(--cyanosis-code-color);word-break:break-word;overflow-x:auto;background-color:var(--cyanosis-code-bg-color);border-radius:2px}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{display:block;padding:16px 12px;margin:0;font-size:12px;color:#333;word-break:normal;overflow-x:auto;background:var(--cyanosis-code-pre-color)}.markdown-body pre>code::-webkit-scrollbar{width:4px;height:4px}.markdown-body pre>code::-webkit-scrollbar-track{background-color:var(--cyanosis-border-color)}.markdown-body pre>code::-webkit-scrollbar-thumb{background-color:var(--cyanosis-strong-color);border-radius:10px}.markdown-body a{position:relative;text-decoration:none;color:var(--cyanosis-link-color);border-bottom:1px solid var(--cyanosis-border-color)}.markdown-body a:hover{border-bottom-color:var(--cyanosis-linkh-color)}.markdown-body a:active,.markdown-body a:hover{color:var(--cyanosis-linkh-color)}.markdown-body a:after{position:absolute;content:"";top:100%;left:0;width:100%;opacity:0;border-bottom:1px solid var(--cyanosis-border-color);transition:top .3s,opacity .3s;transform:translateZ(0)}.markdown-body a:hover:after{top:0;opacity:1;border-bottom-color:var(--cyanosis-linkh-color)}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid var(--cyanosis-table-border-color);border-spacing:0;border-collapse:collapse}.markdown-body table thead{color:#000;text-align:left;font-size:14px;background:#f6f6f6}.markdown-body table tr:nth-child(2n){background-color:var(--cyanosis-table-tr-nc-color)}.markdown-body table tr:hover{background-color:var(--cyanosis-table-trh-color)}.markdown-body table td,.markdown-body table th{padding:12px 8px;line-height:24px;border:1px solid var(--cyanosis-table-border-color)}.markdown-body table th{color:var(--cyanosis-table-tht-color);background-color:var(--cyanosis-table-th-color)}.markdown-body table td{min-width:120px}.markdown-body blockquote{color:var(--cyanosis-blockquote-color);border-left:4px solid var(--cyanosis-strong-color);background-color:var(--cyanosis-blockquote-bg-color);padding:1px 20px;margin:22px 0;transition:color .35s}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body b,.markdown-body blockquote>b,.markdown-body blockquote>strong,.markdown-body strong{color:var(--cyanosis-strong-color)}.markdown-body em,.markdown-body i{color:var(--cyanosis-em-color)}.markdown-body del{color:var(--cyanosis-del-color)}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:4px}.markdown-body ol li{padding-left:6px}.markdown-body details>summary{outline:none;color:var(--cyanosis-title-color);font-size:20px;font-weight:bolder;border-bottom:1px solid var(--cyanosis-border-color);cursor:pointer}.markdown-body details>p{padding:10px 20px;margin:10px 0 0;color:#666;background-color:var(--cyanosis-blockquote-bg-color);border:2px dashed var(--cyanosis-strong-color)}.markdown-body h1::selection,.markdown-body h2::selection,.markdown-body h3::selection,.markdown-body h4::selection,.markdown-body h5::selection,.markdown-body h6::selection{color:var(--cyanosis-slct-title-color);background-color:var(--cyanosis-slct-titlebg-color)}.markdown-body ol li::selection,.markdown-body p::selection,.markdown-body ul li::selection{color:var(--cyanosis-slct-text-color);background-color:var(--cyanosis-slct-bg-color)}.markdown-body a::selection,.markdown-body b::selection,.markdown-body em::selection,.markdown-body i::selection,.markdown-body strong::selection{background-color:var(--cyanosis-slct-elbg-color)}.markdown-body del::selection{color:var(--cyanosis-slct-del-color);background-color:var(--cyanosis-slct-elbg-color)}.markdown-body table thead th::selection{background-color:transparent}.markdown-body table tbody td::selection{background-color:var(--cyanosis-slct-bg-color)}.markdown-body code::selection{background-color:var(--cyanosis-slct-codebg-color)}.markdown-body pre>code::selection{background-color:var(--cyanosis-slct-prebg-color)}.markdown-body .contains-task-list{padding-left:14px;list-style:none}.markdown-body .contains-task-list input[type=checkbox]{position:relative}.markdown-body .contains-task-list input[type=checkbox]:before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;width:inherit;height:inherit;background:#f0f8ff;border:1px solid #add6ff;border-radius:2px;box-sizing:border-box;z-index:1}.markdown-body .contains-task-list input[type=checkbox]:checked:after{content:"✓";position:absolute;top:-12px;left:0;right:0;bottom:0;width:0;height:0;color:#f55;font-size:20px;font-weight:700;z-index:2}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="atom-one-dark">.markdown-body pre,.markdown-body pre>code.hljs{color:#abb2bf;background:#282c34}.hljs-comment,.hljs-quote{color:#5c6370;font-style:italic}.hljs-doctag,.hljs-formula,.hljs-keyword{color:#c678dd}.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#e06c75}.hljs-literal{color:#56b6c2}.hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#98c379}.hljs-built_in,.hljs-class .hljs-title{color:#e6c07b}.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#d19a66}.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#61aeee}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}.hljs-link{text-decoration:underline}</style><h2 data-id="heading-0">前言</h2>
+  <p>在React中，我们经常在子组件中调用父组件的方法，一般用props回调即可。但是有时候也需要在父组件中调用子组件的方法，通过这种方法实现高内聚。有多种方法，请按需服用。</p>
+  <h3 data-id="heading-1">类组件中</h3>
+  <h4 data-id="heading-2">React.createRef()</h4>
   <ul>
-    <li>🤔️ useState 的实现原理</li>
-    <li>🤔️ 为什么不能在循环、判断内部使用 Hook</li>
-    <li>🤔️ useEffect 的实现原理</li>
-    <li>🤔️ useEffect 的应用场景</li>
-    <li>🤔️ <code>Class</code> vs <code>Hooks</code></li>
+    <li>
+      <p>优点：通俗易懂，用ref指向。</p>
+    </li>
+    <li>
+      <p>缺点：使用了HOC的子组件不可用，无法指向真是子组件</p>
+      <p>比如一些常用的写法，mobx的@observer包裹的子组件就不适用此方法。</p>
+    </li>
   </ul>
-  <p>⚠️ 代码均由<code>TypeScript</code>来实现，文中全部 demos 均在 <a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgist.github.com%2Fdongyuanxin%2F4281ee21eafdc0197d6ddea27bfbdbfd" title="https://gist.github.com/dongyuanxin/4281ee21eafdc0197d6ddea27bfbdbfd" ref="nofollow noopener noreferrer">gist.github.com/dongyuanxin…</a></p>
-  <h2 data-id="heading-1">useState 的实现原理</h2>
-  <p>当调用 useState 的时候，会返回形如 <code>(变量, 函数)</code> 的一个元祖。并且 state 的初始值就是外部调用 useState 的时候，传入的参数。</p>
-  <p>理清楚了传参和返回值，再来看下 useState 还做了些什么。正如下面代码所示，当点击按钮的时候，执行<code>setNum</code>，状态 num 被更新，<strong>并且 UI 视图更新</strong>。显然，useState 返回的用于更改状态的函数，自动调用了<code>render</code>方法来触发视图更新。</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> [num, setNum] = useState &lt; number &gt; <span class="hljs-number">0</span>;
+  <pre><code class="hljs language-scala copyable" lang="scala"><span class="hljs-keyword">import</span> <span class="hljs-type">React</span>, { <span class="hljs-type">Component</span> } from 'react';
 
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>num: {num}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum(num + 1)}&gt;加 1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
-  );
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>有了上面的探索，借助闭包，封装一个 <code>setState</code> 如下：</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">function</span> <span class="hljs-title function_">render</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">render</span>(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>, <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">"root"</span>));
-}
-
-<span class="hljs-keyword">let</span> <span class="hljs-attr">state</span>: any;
-
-<span class="hljs-keyword">function</span> useState&lt;T&gt;(<span class="hljs-attr">initialState</span>: T): [T, <span class="hljs-function">(<span class="hljs-params">newState: T</span>) =&gt;</span> <span class="hljs-keyword">void</span>] {
-  state = state || initialState;
-
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">setState</span>(<span class="hljs-params">newState: T</span>) {
-    state = newState;
-    <span class="hljs-title function_">render</span>();
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Sub</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  callback() {
+    console.log('执行回调');
   }
-
-  <span class="hljs-keyword">return</span> [state, setState];
+  render() {
+    <span class="hljs-keyword">return</span> &lt;div&gt;子组件&lt;/div&gt;;
+  }
 }
 
-<span class="hljs-title function_">render</span>(); <span class="hljs-comment">// 首次渲染</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>这是一个简易能用的<code>useState</code>雏形了。它也解决了文章开始提到的「🤔️ useState 的实现原理」这个问题。但如果在函数内声明多个 state，在当前代码中，只有第一个 state 是生效的(请看<code>state = state || initialState;</code>))。</p>
-  <h2 data-id="heading-2">为什么不能在循环、判断内部使用 Hook</h2>
-  <p>先不要考虑题目提及的问题。思路还是回到如何让 useState 支持多个 state。<a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fmedium.com%2F%40ryardley%2Freact-hooks-not-magic-just-arrays-cd4f1857236e" title="https://medium.com/@ryardley/react-hooks-not-magic-just-arrays-cd4f1857236e" ref="nofollow noopener noreferrer">《React hooks: not magic, just arrays》</a>中提及，React Hook 看起来非常 Magic 的实现，本质上还是通过 Array 来实现的。</p>
-  <p>前面 useState 的简单实现里，初始的状态是保存在一个全局变量中的。以此类推，多个状态，应该是保存在一个专门的全局容器中。这个容器，就是一个朴实无华的 Array 对象。具体过程如下：</p>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Super</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  constructor(props) {
+    <span class="hljs-keyword">super</span>(props);
+    <span class="hljs-keyword">this</span>.sub = <span class="hljs-type">React</span>.createRef();
+  }
+  handleOnClick() {
+    <span class="hljs-keyword">this</span>.sub.callback();
+  }
+  render() {
+    <span class="hljs-keyword">return</span> (
+      &lt;div&gt;
+        &lt;<span class="hljs-type">Sub</span> ref={<span class="hljs-keyword">this</span>.sub}&gt;&lt;/<span class="hljs-type">Sub</span>&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <h4 data-id="heading-3">ref的函数式声明</h4>
   <ul>
-    <li>第一次渲染时候，根据 useState 顺序，逐个声明 state 并且将其放入全局 Array 中。每次声明 state，都要将 cursor 增加 1。</li>
-    <li>更新 state，触发再次渲染的时候。<strong>cursor 被重置为 0</strong>。按照 useState 的声明顺序，依次拿出最新的 state 的值，视图更新。</li>
+    <li>优点：ref写法简洁</li>
+    <li>缺点：使用了HOC的子组件不可用，无法指向真是子组件（同上）</li>
   </ul>
-  <p>请看下面这张图，每次使用 useState，都会向 STATE 容器中添加新的状态。</p>
-  <p></p><figure><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/10/22/16df33d45b7c0214~tplv-t2oaga2asx-zoom-in-crop-mark:4536:0:0:0.awebp" loading="lazy" class="medium-zoom-image"><figcaption></figcaption></figure><p></p>
-  <p>实现的代码如下：</p>
-  <pre><code lang="typescript" class="hljs language-typescript copyable"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"react"</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"react-dom"</span>;
+  <p>使用方法和上述的一样，就是定义ref的方式不同。</p>
+  <pre><code class="hljs language-csharp copyable" lang="csharp">...
 
-<span class="hljs-keyword">const</span> <span class="hljs-attr">states</span>: <span class="hljs-built_in">any</span>[] = [];
-<span class="hljs-keyword">let</span> <span class="hljs-attr">cursor</span>: <span class="hljs-built_in">number</span> = <span class="hljs-number">0</span>;
+&lt;Sub <span class="hljs-keyword">ref</span>={<span class="hljs-keyword">ref</span> =&gt; <span class="hljs-keyword">this</span>.sub = <span class="hljs-keyword">ref</span>}&gt;&lt;/Sub&gt;
 
-<span class="hljs-keyword">function</span> useState&lt;T&gt;(<span class="hljs-attr">initialState</span>: T): [T, <span class="hljs-function">(<span class="hljs-params">newState: T</span>) =&gt;</span> <span class="hljs-built_in">void</span>] {
-  <span class="hljs-keyword">const</span> currenCursor = cursor;
-  states[currenCursor] = states[currenCursor] || initialState; <span class="hljs-comment">// 检查是否渲染过</span>
+...
 
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">setState</span>(<span class="hljs-params">newState: T</span>) {
-    states[currenCursor] = newState;
-    <span class="hljs-title function_">render</span>();
-  }
-
-  ++cursor; <span class="hljs-comment">// update: cursor</span>
-  <span class="hljs-keyword">return</span> [states[currenCursor], setState];
-}
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> [num, setNum] = useState &lt; <span class="hljs-built_in">number</span> &gt; <span class="hljs-number">0</span>;
-  <span class="hljs-keyword">const</span> [num2, setNum2] = useState &lt; <span class="hljs-built_in">number</span> &gt; <span class="hljs-number">1</span>;
-
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>num: {num}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum(num + 1)}&gt;加 1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum(num - 1)}&gt;减 1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">hr</span> /&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>num2: {num2}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum2(num2 * 2)}&gt;扩大一倍<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum2(num2 / 2)}&gt;缩小一倍<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
-  );
-}
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">render</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">render</span>(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>, <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">"root"</span>));
-  cursor = <span class="hljs-number">0</span>; <span class="hljs-comment">// 重置cursor</span>
-}
-
-<span class="hljs-title function_">render</span>(); <span class="hljs-comment">// 首次渲染</span>
-<span class="copy-code-btn">复制代码</span></code></pre><p>此时，如果想在循环、判断等不在函数组件顶部的地方使用 Hook，如下所示：</p>
-  <pre><code lang="typescript" class="hljs language-typescript copyable"><span class="hljs-keyword">let</span> tag = <span class="hljs-literal">true</span>;
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> [num, setNum] = useState &lt; <span class="hljs-built_in">number</span> &gt; <span class="hljs-number">0</span>;
-
-  <span class="hljs-comment">// 只有初次渲染，才执行</span>
-  <span class="hljs-keyword">if</span> (tag) {
-    <span class="hljs-keyword">const</span> [unusedNum] = useState &lt; <span class="hljs-built_in">number</span> &gt; <span class="hljs-number">1</span>;
-    tag = <span class="hljs-literal">false</span>;
-  }
-
-  <span class="hljs-keyword">const</span> [num2, setNum2] = useState &lt; <span class="hljs-built_in">number</span> &gt; <span class="hljs-number">2</span>;
-
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>num: {num}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum(num + 1)}&gt;加 1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum(num - 1)}&gt;减 1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">hr</span> /&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>num2: {num2}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum2(num2 * 2)}&gt;扩大一倍<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum2(num2 / 2)}&gt;缩小一倍<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
-  );
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>由于在条件判断的逻辑中，重置了<code>tag=false</code>，因此此后的渲染不会再进入条件判断语句。看起来好像没有问题？但是，由于 useState 是基于 Array+Cursor 来实现的，第一次渲染时候，state 和 cursor 的对应关系如下表：</p>
-  <table>
-    <thead>
-    <tr>
-      <th>变量名</th>
-      <th>cursor</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td>num</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>unusedNum</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>num2</td>
-      <td>2</td>
-    </tr>
-    </tbody>
-  </table>
-  <p>当点击事件触发再次渲染，并不会进入条件判断中的 useState。所以，cursor=2 的时候对应的变量是 num2。而其实 num2 对应的 cursor 应该是 3。就会导致<code>setNum2</code>并不起作用。</p>
-  <p>到此，解决了文章开头提出的「🤔️ 为什么不能在循环、判断内部使用 Hook」。在使用 Hook 的时候，请在函数组件顶部使用！</p>
-  <h2 data-id="heading-3">useEffect 的实现原理</h2>
-  <p>在探索 useEffect 原理的时候，一直被一个问题困扰：useEffect 作用和用途是什么？当然，用于函数的副作用这句话谁都会讲。举个例子吧：</p>
-  <pre><code lang="scss" class="hljs language-scss copyable">function <span class="hljs-built_in">App</span>() {
-  const <span class="hljs-selector-attr">[num, setNum]</span> = <span class="hljs-built_in">useState</span>(<span class="hljs-number">0</span>);
-
-  <span class="hljs-built_in">useEffect</span>(() =&gt; {
-    <span class="hljs-comment">// 模拟异步请求后端数据</span>
-    <span class="hljs-built_in">setTimeout</span>(() =&gt; {
-      <span class="hljs-built_in">setNum</span>(num + <span class="hljs-number">1</span>);
-    }, <span class="hljs-number">1000</span>);
-  }, <span class="hljs-selector-attr">[]</span>);
-
-  return &lt;<span class="hljs-selector-tag">div</span>&gt;{!num ? "请求后端数据..." : `后端数据是 ${num}`}&lt;/<span class="hljs-selector-tag">div</span>&gt;;
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>这段代码，虽然这样组织可读性更高，毕竟可以将这个请求理解为函数的副作用。<strong>但这并不是必要的</strong>。完全可以不使用<code>useEffect</code>，直接使用<code>setTimeout</code>，并且它的回调函数中更新函数组件的 state。</p>
-  <p>在阅读<a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Foverreacted.io%2Fzh-hans%2Fa-complete-guide-to-useeffect%2F" title="https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/" ref="nofollow noopener noreferrer">A Complete Guide to useEffect</a>和<a target="_blank" href="https://link.juejin.cn?target=http%3A%2F%2Freact.html.cn%2Fdocs%2Fhooks-custom.html" title="http://react.html.cn/docs/hooks-custom.html" ref="nofollow noopener noreferrer">构建你自己的 Hooks</a>之后，我才理解 useEffect 的存在的必要性和意义。</p>
-  <p>在 useEffect 的第二个参数中，我们可以指定一个数组，如果下次渲染时，数组中的元素没变，那么就不会触发这个副作用（可以类比 Class 类的关于 nextprops 和 prevProps 的生命周期）。好处显然易见，<strong>相比于直接裸写在函数组件顶层，useEffect 能根据需要，避免多余的 render</strong>。</p>
-  <p>下面是一个不包括销毁副作用功能的 useEffect 的 TypeScript 实现：</p>
-  <pre><code lang="ini" class="hljs language-ini copyable">// 还是利用 Array + Cursor的思路
-const allDeps: any<span class="hljs-section">[]</span><span class="hljs-section">[]</span> = <span class="hljs-section">[]</span><span class="hljs-comment">;</span>
-let effectCursor: <span class="hljs-attr">number</span> = <span class="hljs-number">0</span><span class="hljs-comment">;</span>
-
-function useEffect(callback: () =&gt; void, deps: any<span class="hljs-section">[]</span>) {
-  if (!allDeps<span class="hljs-section">[effectCursor]</span>) {
-    // 初次渲染：赋值 + 调用回调函数
-    allDeps<span class="hljs-section">[effectCursor]</span> = deps<span class="hljs-comment">;</span>
-    ++effectCursor<span class="hljs-comment">;</span>
-    callback()<span class="hljs-comment">;</span>
-    return<span class="hljs-comment">;</span>
-  }
-
-  const <span class="hljs-attr">currenEffectCursor</span> = effectCursor<span class="hljs-comment">;</span>
-  const <span class="hljs-attr">rawDeps</span> = allDeps[currenEffectCursor]<span class="hljs-comment">;</span>
-  // 检测依赖项是否发生变化，发生变化需要重新render
-  const <span class="hljs-attr">isChanged</span> = rawDeps.some(
-    (dep: any, index: number) =&gt; dep !== deps<span class="hljs-section">[index]</span>
-  )<span class="hljs-comment">;</span>
-  if (isChanged) {
-    callback()<span class="hljs-comment">;</span>
-    allDeps<span class="hljs-section">[effectCursor]</span> = deps<span class="hljs-comment">; // 感谢 juejin@carlzzz 的指正</span>
-  }
-  ++effectCursor<span class="hljs-comment">;</span>
-}
-
-function render() {
-  ReactDOM.render(&lt;App /&gt;, document.getElementById("root"))<span class="hljs-comment">;</span>
-  <span class="hljs-attr">effectCursor</span> = <span class="hljs-number">0</span><span class="hljs-comment">; // 注意将 effectCursor 重置为0</span>
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>对于 useEffect 的实现，配合下面案例的使用会更容易理解。当然，你也可以在这个 useEffect 中发起异步请求，并在接受数据后，调用 state 的更新函数，不会发生爆栈的情况。</p>
-  <pre><code lang="typescript" class="hljs language-typescript copyable"><span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> [num, setNum] = useState &lt; <span class="hljs-built_in">number</span> &gt; <span class="hljs-number">0</span>;
-  <span class="hljs-keyword">const</span> [num2] = useState &lt; <span class="hljs-built_in">number</span> &gt; <span class="hljs-number">1</span>;
-
-  <span class="hljs-comment">// 多次触发</span>
-  <span class="hljs-comment">// 每次点击按钮，都会触发 setNum 函数</span>
-  <span class="hljs-comment">// 副作用检测到 num 变化，会自动调用回调函数</span>
-  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"num update: "</span>, num);
-  }, [num]);
-
-  <span class="hljs-comment">// 仅第一次触发</span>
-  <span class="hljs-comment">// 只会在compoentDidMount时，触发一次</span>
-  <span class="hljs-comment">// 副作用函数不会多次执行</span>
-  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"num2 update: "</span>, num2);
-  }, [num2]);
-
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>num: {num}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum(num + 1)}&gt;加 1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setNum(num - 1)}&gt;减 1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
-  );
-}
-<span class="copy-code-btn">复制代码</span></code></pre><p>⚠️ useEffect 第一个回调函数可以返回一个用于销毁副作用的函数，相当于 Class 组件的 unmount 生命周期。这里为了方便说明，没有进行实现。</p>
-  <p>在这一小节中，尝试解答了 「🤔️ useEffect 的实现原理」和 「🤔️ useEffect 的应用场景」这两个问题。</p>
-  <h2 data-id="heading-4">Class VS Hooks</h2>
-  <p>虽然 Hooks 看起来更酷炫，更简洁。但是在实际开发中我更倾向于使用 Class 来声明组件。两种方法的对比如下：</p>
-  <table>
-    <thead>
-    <tr>
-      <th>Class</th>
-      <th>Hooks</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td>代码逻辑清晰（构造函数、componentDidMount 等）</td>
-      <td>需要配合变量名和注释</td>
-    </tr>
-    <tr>
-      <td>不容易内存泄漏</td>
-      <td>容易发生内存泄漏</td>
-    </tr>
-    </tbody>
-  </table>
-  <p>总的来说，Hooks 对代码编写的要求较高，在没有有效机制保证代码可读性、规避风险的情况下，Class 依然是我的首选。关于内存泄漏，下面是一个例子（目前还没找到方法规避这种向全局传递状态更新函数的做法）：</p>
-  <pre><code lang="javascript" class="hljs language-javascript copyable"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">"react"</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"react-dom"</span>;
-
-<span class="hljs-keyword">let</span> <span class="hljs-attr">func</span>: any;
-<span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">typeof</span> func === <span class="hljs-string">"function"</span> &amp;&amp; <span class="hljs-title function_">func</span>(<span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>());
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"interval"</span>);
-}, <span class="hljs-number">1000</span>);
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> [num, setNum] = useState &lt; number &gt; <span class="hljs-number">0</span>;
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> func !== <span class="hljs-string">"function"</span>) {
-    func = setNum;
-  }
-  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{num}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
-}
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">render</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">render</span>(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>, <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">"root"</span>));
-}
-
-<span class="hljs-title function_">render</span>();
-<span class="copy-code-btn">复制代码</span></code></pre><h2 data-id="heading-5">参考链接</h2>
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <h4 data-id="heading-4">使用props自定义onRef属性</h4>
   <ul>
-    <li><a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fmedium.com%2F%40ryardley%2Freact-hooks-not-magic-just-arrays-cd4f1857236e" title="https://medium.com/@ryardley/react-hooks-not-magic-just-arrays-cd4f1857236e" ref="nofollow noopener noreferrer">React hooks: not magic, just arrays</a></li>
-    <li><a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Foverreacted.io%2Fzh-hans%2Fa-complete-guide-to-useeffect%2F" title="https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/" ref="nofollow noopener noreferrer">A Complete Guide to useEffect</a></li>
-    <li><a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Foverreacted.io%2Fzh-hans%2Fa-complete-guide-to-useeffect%2F" title="https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/" ref="nofollow noopener noreferrer">useEffect 完整指南</a></li>
-    <li><a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fbrickspert%2Fblog%2Fissues%2F26" title="https://github.com/brickspert/blog/issues/26" ref="nofollow noopener noreferrer">React Hooks 原理</a>: <code>useEffect</code>实现有问题，回调函数调用 state 的更新函数，会爆栈</li>
+    <li>优点：假如子组件是嵌套了HOC，也可以指向真实子组件。</li>
+    <li>缺点：需要自定义props属性</li>
   </ul>
-  <p>文章中多有见解不到当之处，欢迎讨论和指正。</p>
-</div>
+  <pre><code class="hljs language-typescript copyable" lang="typescript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { <span class="hljs-title class_">Component</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> { observer } <span class="hljs-keyword">from</span> <span class="hljs-string">'mobx-react'</span>
+
+<span class="hljs-meta">@observer</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Sub</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Component</span> {
+	<span class="hljs-title function_">componentDidMount</span>(<span class="hljs-params"></span>){
+    <span class="hljs-comment">// 将子组件指向父组件的变量</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">props</span>.<span class="hljs-property">onRef</span> &amp;&amp; <span class="hljs-variable language_">this</span>.<span class="hljs-property">props</span>.<span class="hljs-title function_">onRef</span>(<span class="hljs-variable language_">this</span>);
+	}
+	<span class="hljs-title function_">callback</span>(<span class="hljs-params"></span>){
+		<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"执行我"</span>)
+	}
+	<span class="hljs-title function_">render</span>(<span class="hljs-params"></span>){
+		<span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>子组件<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>);
+	}
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Super</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Component</span> {
+	<span class="hljs-title function_">handleOnClick</span>(<span class="hljs-params"></span>){
+       <span class="hljs-comment">// 可以调用子组件方法</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">Sub</span>.<span class="hljs-title function_">callback</span>();
+	}
+	<span class="hljs-title function_">render</span>(<span class="hljs-params"></span>){
+		<span class="hljs-keyword">return</span> (
+          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{this.handleOnClick}</span>&gt;</span>click<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">Sub</span> <span class="hljs-attr">onRef</span>=<span class="hljs-string">{</span> <span class="hljs-attr">node</span> =&gt;</span> this.Sub = node }&gt;<span class="hljs-tag">&lt;/<span class="hljs-name">Sub</span>&gt;</span>
+	   	  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>)
+	}
+}
+
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <h3 data-id="heading-5">函数组件、Hook组件</h3>
+  <h4 data-id="heading-6">useImperativeHandle</h4>
+  <ul>
+    <li>优点：
+      1、写法简单易懂
+      2、假如子组件嵌套了HOC，也可以指向真实子组件</li>
+    <li>缺点：
+      1、需要自定义props属性
+      2、需要自定义暴露的方法</li>
+  </ul>
+  <pre><code class="hljs language-javascript copyable" lang="javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { useImperativeHandle } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> { observer } <span class="hljs-keyword">from</span> <span class="hljs-string">'mobx-react'</span>
+
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Parent</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">let</span> <span class="hljs-title class_">ChildRef</span> = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createRef</span>();
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleOnClick</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-title class_">ChildRef</span>.<span class="hljs-property">current</span>.<span class="hljs-title function_">func</span>();
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleOnClick}</span>&gt;</span>click<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Child</span> <span class="hljs-attr">onRef</span>=<span class="hljs-string">{ChildRef}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+};
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Child</span> = <span class="hljs-title function_">observer</span>(<span class="hljs-function"><span class="hljs-params">props</span> =&gt;</span> {
+  <span class="hljs-comment">//用useImperativeHandle暴露一些外部ref能访问的属性</span>
+  <span class="hljs-title function_">useImperativeHandle</span>(props.<span class="hljs-property">onRef</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// 需要将暴露的接口返回出去</span>
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">func</span>: func,
+    };
+  });
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">func</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'执行我'</span>);
+  }
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>子组件<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+});
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Parent</span>;
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <h4 data-id="heading-7">forwardRef</h4>
+  <p>使用forwardRef抛出子组件的ref</p>
+  <p>这个方法其实更适合自定义HOC。但问题是，withRouter、connect、Form.create等方法并不能抛出ref，假如Child本身就需要嵌套这些方法，那基本就不能混着用了。forwardRef本身也是用来抛出子元素，如input等原生元素的ref的，并不适合做组件ref抛出，因为组件的使用场景太复杂了。</p>
+  <pre><code class="hljs language-javascript copyable" lang="javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { useRef, useImperativeHandle } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
+<span class="hljs-keyword">import</span> { observer } <span class="hljs-keyword">from</span> <span class="hljs-string">'mobx-react'</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">FancyInput</span> = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">forwardRef</span>(<span class="hljs-function">(<span class="hljs-params">props, ref</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> inputRef = <span class="hljs-title function_">useRef</span>();
+  <span class="hljs-title function_">useImperativeHandle</span>(ref, <span class="hljs-function">() =&gt;</span> ({
+    <span class="hljs-attr">focus</span>: <span class="hljs-function">() =&gt;</span> {
+      inputRef.<span class="hljs-property">current</span>.<span class="hljs-title function_">focus</span>();
+    }
+  }));
+
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{inputRef}</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> /&gt;</span></span>
+});
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Sub</span> = <span class="hljs-title function_">observer</span>(<span class="hljs-title class_">FancyInput</span>)
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = props =&gt; {
+  <span class="hljs-keyword">const</span> fancyInputRef = <span class="hljs-title function_">useRef</span>();
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">FancyInput</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{fancyInputRef}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
+        <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> fancyInputRef.current.focus()}
+      &gt;父组件调用子组件的 focus<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>;
+
+<span class="copy-code-btn">复制代码</span></code></pre>
+  <h2 data-id="heading-8">总结</h2>
+  <p>父组件调子组件函数有两种情况</p>
+  <ul>
+    <li>子组件无HOC嵌套：推荐使用ref直接调用</li>
+    <li>有HOC嵌套：推荐使用自定义props的方式</li>
+  </ul></div>

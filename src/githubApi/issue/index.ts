@@ -5,10 +5,10 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "[React] Hooks 实现原理是什么, 简单描述一下",
+  title: "[React] 父组件调用子组件的方法",
   labels: [
     labels.frameWork,
-    company.baidu,
+    company.tencent,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

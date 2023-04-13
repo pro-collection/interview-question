@@ -1,95 +1,194 @@
-在探索 useEffect 原理的时候，一直被一个问题困扰：useEffect 作用和用途是什么？当然，用于函数的副作用这句话谁都会讲。举个例子吧：
+在React中，我们经常在子组件中调用父组件的方法，一般用props回调即可。但是有时候也需要在父组件中调用子组件的方法，通过这种方法实现高内聚。有多种方法，请按需服用。
 
-```typescript jsx
-function App() {
-  const [num, setNum] = useState(0);
+### 类组件中
 
-  useEffect(() => {
-    // 模拟异步请求后端数据
-    setTimeout(() => {
-      setNum(num + 1);
-    }, 1000);
-  }, []);
+#### React.createRef()
 
-  return <div>{!num ? "请求后端数据..." : `后端数据是 ${num}`}</div>;
-}
-```
+* 优点：通俗易懂，用ref指向。
 
-这段代码，虽然这样组织可读性更高，毕竟可以将这个请求理解为函数的副作用。**但这并不是必要的**。完全可以不使用`useEffect`，直接使用`setTimeout`，并且它的回调函数中更新函数组件的 state。
+* 缺点：使用了HOC的子组件不可用，无法指向真是子组件
 
-在 useEffect 的第二个参数中，我们可以指定一个数组，如果下次渲染时，数组中的元素没变，那么就不会触发这个副作用（可以类比 Class 类的关于 nextprops 和 prevProps 的生命周期）。好处显然易见，**相比于直接裸写在函数组件顶层，useEffect 能根据需要，避免多余的 render**。
+  比如一些常用的写法，mobx的@observer包裹的子组件就不适用此方法。
 
-下面是一个不包括销毁副作用功能的 useEffect 的 TypeScript 实现：
+```scala
+import React, { Component } from 'react';
 
-```ini
-// 还是利用 Array + Cursor的思路
-const allDeps: any[][] = [];
-let effectCursor: number = 0;
-
-function useEffect(callback: () => void, deps: any[]) {
-  if (!allDeps[effectCursor]) {
-    // 初次渲染：赋值 + 调用回调函数
-    allDeps[effectCursor] = deps;
-    ++effectCursor;
-    callback();
-    return;
+class Sub extends Component {
+  callback() {
+    console.log('执行回调');
   }
-
-  const currenEffectCursor = effectCursor;
-  const rawDeps = allDeps[currenEffectCursor];
-  // 检测依赖项是否发生变化，发生变化需要重新render
-  const isChanged = rawDeps.some(
-    (dep: any, index: number) => dep !== deps[index]
-  );
-  if (isChanged) {
-    callback();
-    allDeps[effectCursor] = deps; // 感谢 juejin@carlzzz 的指正
+  render() {
+    return <div>子组件</div>;
   }
-  ++effectCursor;
 }
 
-function render() {
-  ReactDOM.render(<App />, document.getElementById("root"));
-  effectCursor = 0; // 注意将 effectCursor 重置为0
+class Super extends Component {
+  constructor(props) {
+    super(props);
+    this.sub = React.createRef();
+  }
+  handleOnClick() {
+    this.sub.callback();
+  }
+  render() {
+    return (
+      <div>
+        <Sub ref={this.sub}></Sub>
+      </div>
+    );
+  }
 }
+
 
 ```
 
-对于 useEffect 的实现，配合下面案例的使用会更容易理解。当然，你也可以在这个 useEffect 中发起异步请求，并在接受数据后，调用 state 的更新函数，不会发生爆栈的情况。
+#### ref的函数式声明
 
-```typescript jsx
-function App() {
-  const [num, setNum] = useState < number > 0;
-  const [num2] = useState < number > 1;
+* 优点：ref写法简洁
+* 缺点：使用了HOC的子组件不可用，无法指向真是子组件（同上）
 
-  // 多次触发
-  // 每次点击按钮，都会触发 setNum 函数
-  // 副作用检测到 num 变化，会自动调用回调函数
-  useEffect(() => {
-    console.log("num update: ", num);
-  }, [num]);
+使用方法和上述的一样，就是定义ref的方式不同。
 
-  // 仅第一次触发
-  // 只会在compoentDidMount时，触发一次
-  // 副作用函数不会多次执行
-  useEffect(() => {
-    console.log("num2 update: ", num2);
-  }, [num2]);
+```csharp
+...
+
+<Sub ref={ref => this.sub = ref}></Sub>
+
+...
+
+
+```
+
+#### 使用props自定义onRef属性
+
+* 优点：假如子组件是嵌套了HOC，也可以指向真实子组件。
+* 缺点：需要自定义props属性
+
+```typescript
+import React, { Component } from 'react';
+import { observer } from 'mobx-react'
+
+@observer
+class Sub extends Component {
+	componentDidMount(){
+    // 将子组件指向父组件的变量
+		this.props.onRef && this.props.onRef(this);
+	}
+	callback(){
+		console.log("执行我")
+	}
+	render(){
+		return (<div>子组件</div>);
+	}
+}
+
+class Super extends Component {
+	handleOnClick(){
+       // 可以调用子组件方法
+		this.Sub.callback();
+	}
+	render(){
+		return (
+          <div>
+			<div onClick={this.handleOnClick}>click</div>
+			<Sub onRef={ node => this.Sub = node }></Sub>
+	   	  </div>)
+	}
+}
+
+
+```
+
+### 函数组件、Hook组件
+
+#### useImperativeHandle
+
+* 优点： 1、写法简单易懂 2、假如子组件嵌套了HOC，也可以指向真实子组件
+* 缺点： 1、需要自定义props属性 2、需要自定义暴露的方法
+
+```javascript
+import React, { useImperativeHandle } from 'react';
+import { observer } from 'mobx-react'
+
+
+const Parent = () => {
+  let ChildRef = React.createRef();
+
+  function handleOnClick() {
+    ChildRef.current.func();
+  }
 
   return (
     <div>
-      <div>num: {num}</div>
-      <div>
-        <button onClick={() => setNum(num + 1)}>加 1</button>
-        <button onClick={() => setNum(num - 1)}>减 1</button>
-      </div>
+      <button onClick={handleOnClick}>click</button>
+      <Child onRef={ChildRef} />
     </div>
   );
-}
+};
+
+const Child = observer(props => {
+  //用useImperativeHandle暴露一些外部ref能访问的属性
+  useImperativeHandle(props.onRef, () => {
+    // 需要将暴露的接口返回出去
+    return {
+      func: func,
+    };
+  });
+  function func() {
+    console.log('执行我');
+  }
+  return <div>子组件</div>;
+});
+
+export default Parent;
 
 ```
 
-useEffect 第一个回调函数可以返回一个用于销毁副作用的函数，相当于 Class 组件的 unmount 生命周期。这里为了方便说明，没有进行实现。
+#### forwardRef
 
-参考文档：
-- https://juejin.cn/post/6844903975838285838
+使用forwardRef抛出子组件的ref
+
+这个方法其实更适合自定义HOC。但问题是，withRouter、connect、Form.create等方法并不能抛出ref，假如Child本身就需要嵌套这些方法，那基本就不能混着用了。forwardRef本身也是用来抛出子元素，如input等原生元素的ref的，并不适合做组件ref抛出，因为组件的使用场景太复杂了。
+
+```javascript
+import React, { useRef, useImperativeHandle } from 'react';
+import ReactDOM from 'react-dom';
+import { observer } from 'mobx-react'
+
+const FancyInput = React.forwardRef((props, ref) => {
+  const inputRef = useRef();
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current.focus();
+    }
+  }));
+
+  return <input ref={inputRef} type="text" />
+});
+
+const Sub = observer(FancyInput)
+
+const App = props => {
+  const fancyInputRef = useRef();
+
+  return (
+    <div>
+      <FancyInput ref={fancyInputRef} />
+      <button
+        onClick={() => fancyInputRef.current.focus()}
+      >父组件调用子组件的 focus</button>
+    </div>
+  )
+}
+
+export default App;
+
+
+```
+
+### 总结
+
+父组件调子组件函数有两种情况
+
+* 子组件无HOC嵌套：推荐使用ref直接调用
+* 有HOC嵌套：推荐使用自定义props的方式

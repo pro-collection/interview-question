@@ -1,164 +1,95 @@
-### Webpack Tapable 的设计思路 
+在探索 useEffect 原理的时候，一直被一个问题困扰：useEffect 作用和用途是什么？当然，用于函数的副作用这句话谁都会讲。举个例子吧：
 
-Webpack Tapable 的设计思路主要基于观察者模式（Observer Pattern）和发布-订阅模式（Publish-Subscribe Pattern），用于解耦各个插件之间的依赖关系，让插件能够独立作用于特定的钩子（Hook），从而实现可扩展性和灵活性。
+```typescript jsx
+function App() {
+  const [num, setNum] = useState(0);
 
-具体来说，Tapable 采用了钩子（Hook）的概念，每个钩子对应一组事件，Webpack 在不同的时刻触发这些钩子，插件可以注册自己的事件处理函数到对应的钩子上，以实现各种功能。
+  useEffect(() => {
+    // 模拟异步请求后端数据
+    setTimeout(() => {
+      setNum(num + 1);
+    }, 1000);
+  }, []);
 
-为了避免插件之间的耦合，Tapable 将事件处理函数按照钩子类型分为同步钩子（Sync Hook）、异步钩子（Async Hook）、单向异步钩子（Async Parallel Hook）和多向异步钩子（Async Series Hook）四种类型。这样，不同类型的钩子对应着不同的事件处理顺序和调用方式，插件在注册自己的事件处理函数时，可以选择不同的钩子类型来适应不同的应用场景。
-
-除此之外，Tapable 还提供了一些辅助方法和工具函数，用于方便地创建和管理钩子、向钩子注册事件处理函数、调用钩子的事件处理函数等。这些工具函数的设计思路也遵循了解耦、简单易用的原则，为插件开发提供了很大的便利性。
-
-### Tapable 的使用
-
-Webpack Tapable 的使用分为三个步骤：
-
-1. 定义一个新的 Tapable 实例：在 Webpack 插件中定义一个新的 Tapable 实例，并定义需要监听的事件。
-
-```javascript
-const { SyncHook } = require('tapable');
-
-class MyPlugin {
-  constructor() {
-    this.hooks = {
-      beforeRun: new SyncHook(['compiler']),
-      done: new SyncHook(['stats'])
-    };
-  }
-
-  apply(compiler) {
-    this.hooks.beforeRun.tap('MyPlugin', compiler => {
-      console.log('Webpack is starting to run...');
-    });
-
-    this.hooks.done.tap('MyPlugin', stats => {
-      console.log('Webpack has finished running.');
-    });
-  }
+  return <div>{!num ? "请求后端数据..." : `后端数据是 ${num}`}</div>;
 }
 ```
 
-2. 触发事件：在 Webpack 的编译过程中，调用 Tapable 实例的触发方法，触发事件。
+这段代码，虽然这样组织可读性更高，毕竟可以将这个请求理解为函数的副作用。**但这并不是必要的**。完全可以不使用`useEffect`，直接使用`setTimeout`，并且它的回调函数中更新函数组件的 state。
 
-```javascript
-compiler.hooks.beforeRun.call(compiler);
-// Webpack is starting to run...
+在 useEffect 的第二个参数中，我们可以指定一个数组，如果下次渲染时，数组中的元素没变，那么就不会触发这个副作用（可以类比 Class 类的关于 nextprops 和 prevProps 的生命周期）。好处显然易见，**相比于直接裸写在函数组件顶层，useEffect 能根据需要，避免多余的 render**。
 
-compiler.run((err, stats) => {
-  if (err) {
-    console.error(err);
+下面是一个不包括销毁副作用功能的 useEffect 的 TypeScript 实现：
+
+```ini
+// 还是利用 Array + Cursor的思路
+const allDeps: any[][] = [];
+let effectCursor: number = 0;
+
+function useEffect(callback: () => void, deps: any[]) {
+  if (!allDeps[effectCursor]) {
+    // 初次渲染：赋值 + 调用回调函数
+    allDeps[effectCursor] = deps;
+    ++effectCursor;
+    callback();
     return;
   }
 
-  console.log(stats);
-  compiler.hooks.done.call(stats);
-  // Webpack has finished running.
-});
-```
-
-3. 注册插件：在 Webpack 的配置文件中，将插件实例注册到 Webpack 中。
-
-```javascript
-const MyPlugin = require('./my-plugin');
-
-module.exports = {
-  plugins: [new MyPlugin()]
-};
-```
-
-以上是使用 Tapable 的基本流程，通过 Tapable 可以监听到编译过程中的各个事件，并对编译过程进行修改，从而实现各种插件。以下是一些常见的 Tapable 类型和用法：
-
-* SyncHook：同步 Hook，按照注册的顺序同步执行所有回调函数。
-
-```javascript
-const { SyncHook } = require('tapable');
-
-const hook = new SyncHook(['arg1', 'arg2']);
-
-hook.tap('MyPlugin', (arg1, arg2) => {
-  console.log(`Hook is triggered with arguments: ${arg1}, ${arg2}`);
-});
-
-hook.tap('MyPlugin', (arg1, arg2) => {
-  console.log('Second callback is called');
-});
-
-hook.call('Hello', 'world');
-// Hook is triggered with arguments: Hello, world
-// Second callback is called
-```
-
-* AsyncParallelHook：异步 Hook，按照注册的顺序异步执行所有回调函数，不关心回调函数的返回值。
-
-```javascript
-const { AsyncParallelHook } = require('tapable');
-
-const hook = new AsyncParallelHook(['arg1', 'arg2']);
-
-hook.tap('MyPlugin', (arg1, arg2, callback) => {
-  setTimeout(() => {
-    console.log(`Hook is triggered with arguments: ${arg1}, ${arg2}`);
+  const currenEffectCursor = effectCursor;
+  const rawDeps = allDeps[currenEffectCursor];
+  // 检测依赖项是否发生变化，发生变化需要重新render
+  const isChanged = rawDeps.some(
+    (dep: any, index: number) => dep !== deps[index]
+  );
+  if (isChanged) {
     callback();
-  }, 1000);
-});
-
-hook.tap('MyPlugin', (arg1, arg2, callback) => {
-  setTimeout(() => {
-    console.log('Second callback is called');
-    callback();
-  }, 500)
-})
-```
-
-
-### Tapable 是如何实现的？代码简单实现一下？
-
-Webpack Tapable 是基于发布-订阅模式的一个插件系统，它提供了一组钩子函数，让插件可以在相应的时机执行自己的逻辑。
-
-下面是一个简单的自定义 Tapable 的实现：
-
-```javascript
-class Tapable {
-  constructor() {
-    this.hooks = {};
+    allDeps[effectCursor] = deps; // 感谢 juejin@carlzzz 的指正
   }
-
-  // 注册事件监听函数
-  tap(name, callback) {
-    if (!this.hooks[name]) {
-      this.hooks[name] = [];
-    }
-    this.hooks[name].push(callback);
-  }
-
-  // 触发事件
-  call(name, ...args) {
-    const callbacks = this.hooks[name];
-    if (callbacks && callbacks.length) {
-      callbacks.forEach((callback) => callback(...args));
-    }
-  }
+  ++effectCursor;
 }
+
+function render() {
+  ReactDOM.render(<App />, document.getElementById("root"));
+  effectCursor = 0; // 注意将 effectCursor 重置为0
+}
+
 ```
 
-在这个例子中，我们定义了一个 `Tapable` 类，它有一个 `hooks` 对象属性，用于存储各个事件对应的监听函数。然后我们定义了 `tap` 方法，用于注册事件监听函数，以及 `call` 方法，用于触发事件。
+对于 useEffect 的实现，配合下面案例的使用会更容易理解。当然，你也可以在这个 useEffect 中发起异步请求，并在接受数据后，调用 state 的更新函数，不会发生爆栈的情况。
 
-下面是一个使用自定义 Tapable 的例子：
+```typescript jsx
+function App() {
+  const [num, setNum] = useState < number > 0;
+  const [num2] = useState < number > 1;
 
-```javascript
-const tapable = new Tapable();
+  // 多次触发
+  // 每次点击按钮，都会触发 setNum 函数
+  // 副作用检测到 num 变化，会自动调用回调函数
+  useEffect(() => {
+    console.log("num update: ", num);
+  }, [num]);
 
-tapable.tap('event1', (arg1, arg2) => {
-  console.log('event1 is triggered with arguments:', arg1, arg2);
-});
+  // 仅第一次触发
+  // 只会在compoentDidMount时，触发一次
+  // 副作用函数不会多次执行
+  useEffect(() => {
+    console.log("num2 update: ", num2);
+  }, [num2]);
 
-tapable.tap('event2', (arg1, arg2) => {
-  console.log('event2 is triggered with arguments:', arg1, arg2);
-});
+  return (
+    <div>
+      <div>num: {num}</div>
+      <div>
+        <button onClick={() => setNum(num + 1)}>加 1</button>
+        <button onClick={() => setNum(num - 1)}>减 1</button>
+      </div>
+    </div>
+  );
+}
 
-tapable.call('event1', 'hello', 'world');
-tapable.call('event2', 'foo', 'bar');
 ```
 
-在这个例子中，我们定义了两个事件 `event1` 和 `event2`，并为它们注册了监听函数。当我们调用 `call` 方法触发事件时，注册的监听函数就会依次执行。
+useEffect 第一个回调函数可以返回一个用于销毁副作用的函数，相当于 Class 组件的 unmount 生命周期。这里为了方便说明，没有进行实现。
 
-这个自定义 Tapable 的实现虽然简单，但它体现了 Tapable 的设计思路和核心功能。在实际使用中，Webpack 的 Tapable 提供了更多的功能和钩子，可以满足不同场景的需求。
+参考文档：
+- https://juejin.cn/post/6844903975838285838

@@ -34,8 +34,6 @@
 
 > 2023.04.14 整理文档
 - [「前端发动机」深入 React hooks — 原理 & 实现](https://juejin.cn/post/6844903981836140552)
-- https://juejin.cn/post/6895546761255845901
-- https://juejin.cn/post/6858276396968951822
 
 
 发现题库羊毛

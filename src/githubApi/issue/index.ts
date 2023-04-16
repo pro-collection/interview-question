@@ -5,9 +5,9 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "[webpack] 分包的方式有哪些？",
+  title: "[React] useState 是如何实现的？",
   labels: [
-    labels.engineering,
+    labels.frameWork,
     // company.tencent,
   ],
   milestone: MileStone.senior,

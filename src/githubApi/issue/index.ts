@@ -5,12 +5,12 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "[React] 父组件调用子组件的方法",
+  title: "[webpack] 异步加载原理是啥",
   labels: [
-    labels.frameWork,
+    labels.engineering,
     company.tencent,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

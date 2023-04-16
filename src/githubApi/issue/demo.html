@@ -1,26 +1,27 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>当 Promise 还没有被 resolve 或 reject 时，我们可以使用 <code>AbortController</code> 来取消 Promise。<code>AbortController</code> 是一个新的 Web API，它可以用来取消任何异步操作，包括 Promise。下面是一个简单的示例：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
-<span class="hljs-keyword">const</span> signal = controller.<span class="hljs-property">signal</span>;
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>移动端适配问题是指如何让网页在不同的移动设备上显示效果相同。下面是一些常见的 H5 移动端适配方案：</p><ol><li>使用 viewport 标签</li></ol><p>通过设置 viewport 标签的 meta 属性，来控制页面的缩放比例和宽度，以适配不同的设备。例如：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css">&lt;meta name="viewport" <span class="hljs-attribute">content</span>="<span class="hljs-attribute">width</span>=device-<span class="hljs-attribute">width</span>, initial-scale=<span class="hljs-number">1.0</span>"&gt;
+</code></div></div></pre><p>其中 <code>width=device-width</code> 表示设置 viewport 的宽度为设备宽度，<code>initial-scale=1.0</code> 表示初始缩放比例为 1。</p><ol start="2"><li>使用 CSS3 的媒体查询</li></ol><p>通过 CSS3 的媒体查询，根据不同的设备宽度设置不同的样式，以适配不同的设备。例如：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>arduino</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-arduino">@<span class="hljs-function">media screen <span class="hljs-title">and</span> <span class="hljs-params">(max-width: <span class="hljs-number">640</span>px)</span> </span>{
+  <span class="hljs-comment">/* 样式 */</span>
+}
+</code></div></div></pre><p>其中 <code>max-width</code> 表示最大宽度，当屏幕宽度小于等于 640px 时，应用这些样式。</p><ol start="3"><li>使用 rem 单位</li></ol><p>通过将 px 转化为 rem 单位，根据不同的设备字体大小设置不同的样式，以适配不同的设备。例如：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css"><span class="hljs-selector-tag">html</span> {
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">16px</span>;
+}
 
-<span class="hljs-keyword">const</span> promise = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> timeout = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-title function_">resolve</span>(<span class="hljs-string">"Promise resolved"</span>);
-  }, <span class="hljs-number">5000</span>);
+<span class="hljs-keyword">@media</span> screen <span class="hljs-keyword">and</span> (<span class="hljs-attribute">max-width</span>: <span class="hljs-number">640px</span>) {
+  <span class="hljs-selector-tag">html</span> {
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">14px</span>;
+  }
+}
 
-  <span class="hljs-comment">// 监听 signal 的 abort 事件，当 abort 被触发时，清除定时器，并 reject Promise</span>
-  signal.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">"abort"</span>, <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-built_in">clearTimeout</span>(timeout);
-    <span class="hljs-title function_">reject</span>(<span class="hljs-string">"Promise aborted"</span>);
-  });
-});
+<span class="hljs-selector-tag">div</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">10rem</span>;
+}
+</code></div></div></pre><p>其中 <code>font-size: 16px</code> 表示将网页的基准字体大小设置为 16px，<code>font-size: 14px</code> 表示在屏幕宽度小于等于 640px 时将基准字体大小设置为 14px，<code>div</code> 元素的 <code>width: 10rem</code> 表示该元素的宽度为 10 个基准字体大小。</p><ol start="4"><li>使用 flexible 布局方案</li></ol><p>通过使用 flexible 布局方案，将 px 转化为 rem 单位，并且动态计算根节点的字体大小，以适配不同的设备。例如使用 lib-flexible 库：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>arduino</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-arduino"><span class="hljs-comment">// index.html</span>
+&lt;script src=<span class="hljs-string">"https://cdn.bootcdn.net/ajax/libs/lib-flexible/0.3.4/flexible.js"</span>&gt;&lt;/script&gt;
 
-<span class="hljs-comment">// 3 秒后取消 Promise</span>
-<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
-  controller.<span class="hljs-title function_">abort</span>();
-}, <span class="hljs-number">3000</span>);
-
-promise.<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value); <span class="hljs-comment">// 不会打印，因为 Promise 已经被取消了</span>
-}).<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error); <span class="hljs-comment">// 打印 "Promise aborted"</span>
-});
-</code></div></div></pre><p>在上面的示例中，我们创建了一个新的 <code>AbortController</code> 对象，然后使用 <code>signal</code> 属性将其传递给 Promise 的构造函数。接着，我们在 Promise 内部使用 <code>signal.addEventListener()</code> 方法监听 <code>abort</code> 事件，当事件触发时，清除定时器，并 reject Promise。最后，我们通过 <code>controller.abort()</code> 方法在 3 秒后取消 Promise。当 Promise 被取消时，它将会执行 <code>catch()</code> 方法中的回调函数，并打印 "Promise aborted"。</p></div>
+<span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'lib-flexible/flexible.js'</span>
+</code></div></div></pre><p>其中 <code>flexible.js</code> 会在页面加载时动态计算根节点的字体大小，并将 px 转化为 rem 单位。在样式中可以直接使用 px 单位，例如：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css"><span class="hljs-selector-tag">div</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">100px</span>;
+}
+</code></div></div></pre><p>这个 div 元素的大小会根据设备屏幕的宽度进行适配。</p></div>

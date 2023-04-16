@@ -5,9 +5,9 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "promise 是否可以取消？",
+  title: "H5 如何解决移动端适配问题",
   labels: [
-    labels.js,
+    labels.application,
     company.baidu,
   ],
   milestone: MileStone.inProgress,

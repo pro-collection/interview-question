@@ -1,27 +1,48 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>移动端适配问题是指如何让网页在不同的移动设备上显示效果相同。下面是一些常见的 H5 移动端适配方案：</p><ol><li>使用 viewport 标签</li></ol><p>通过设置 viewport 标签的 meta 属性，来控制页面的缩放比例和宽度，以适配不同的设备。例如：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css">&lt;meta name="viewport" <span class="hljs-attribute">content</span>="<span class="hljs-attribute">width</span>=device-<span class="hljs-attribute">width</span>, initial-scale=<span class="hljs-number">1.0</span>"&gt;
-</code></div></div></pre><p>其中 <code>width=device-width</code> 表示设置 viewport 的宽度为设备宽度，<code>initial-scale=1.0</code> 表示初始缩放比例为 1。</p><ol start="2"><li>使用 CSS3 的媒体查询</li></ol><p>通过 CSS3 的媒体查询，根据不同的设备宽度设置不同的样式，以适配不同的设备。例如：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>arduino</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-arduino">@<span class="hljs-function">media screen <span class="hljs-title">and</span> <span class="hljs-params">(max-width: <span class="hljs-number">640</span>px)</span> </span>{
-  <span class="hljs-comment">/* 样式 */</span>
-}
-</code></div></div></pre><p>其中 <code>max-width</code> 表示最大宽度，当屏幕宽度小于等于 640px 时，应用这些样式。</p><ol start="3"><li>使用 rem 单位</li></ol><p>通过将 px 转化为 rem 单位，根据不同的设备字体大小设置不同的样式，以适配不同的设备。例如：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css"><span class="hljs-selector-tag">html</span> {
-  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">16px</span>;
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>通过 Less 实现网页换肤可以使用 CSS 变量和 Less 变量。CSS 变量的语法如下：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css"><span class="hljs-selector-pseudo">:root</span> {
+  <span class="hljs-attr">--primary-color</span>: <span class="hljs-number">#007bff</span>;
 }
 
-<span class="hljs-keyword">@media</span> screen <span class="hljs-keyword">and</span> (<span class="hljs-attribute">max-width</span>: <span class="hljs-number">640px</span>) {
-  <span class="hljs-selector-tag">html</span> {
-    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">14px</span>;
-  }
+<span class="hljs-selector-class">.btn</span> {
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-built_in">var</span>(--primary-color);
+}
+</code></div></div></pre><p>而 Less 变量则是通过 Less 预编译器提供的变量语法来实现的，如下所示：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>less</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-less"><span class="hljs-variable">@primary-color:</span> <span class="hljs-number">#007bff</span>;
+
+<span class="hljs-selector-class">.btn</span> {
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-variable">@primary-color</span>;
+}
+</code></div></div></pre><p>通过 Less 变量来实现网页换肤的方式可以在运行时使用 JavaScript 来修改 Less 变量的值，从而实现换肤效果。具体步骤如下：</p><ol><li>使用 Less 预编译器来编译 Less 文件为 CSS 文件。</li><li>在 HTML 文件中引入编译后的 CSS 文件。</li><li>在 JavaScript 中动态修改 Less 变量的值。</li><li>使用 JavaScript 将新的 Less 变量值注入到编译后的 CSS 文件中。</li><li>将注入后的 CSS 样式应用到页面上。</li></ol><p>以下是一段实现通过 Less 变量来实现网页换肤的示例代码：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>less</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-less"><span class="hljs-comment">// base.less 文件</span>
+<span class="hljs-variable">@primary-color:</span> <span class="hljs-number">#007bff</span>;
+
+<span class="hljs-selector-class">.btn</span> {
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-variable">@primary-color</span>;
 }
 
-<span class="hljs-selector-tag">div</span> {
-  <span class="hljs-attribute">width</span>: <span class="hljs-number">10rem</span>;
-}
-</code></div></div></pre><p>其中 <code>font-size: 16px</code> 表示将网页的基准字体大小设置为 16px，<code>font-size: 14px</code> 表示在屏幕宽度小于等于 640px 时将基准字体大小设置为 14px，<code>div</code> 元素的 <code>width: 10rem</code> 表示该元素的宽度为 10 个基准字体大小。</p><ol start="4"><li>使用 flexible 布局方案</li></ol><p>通过使用 flexible 布局方案，将 px 转化为 rem 单位，并且动态计算根节点的字体大小，以适配不同的设备。例如使用 lib-flexible 库：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>arduino</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-arduino"><span class="hljs-comment">// index.html</span>
-&lt;script src=<span class="hljs-string">"https://cdn.bootcdn.net/ajax/libs/lib-flexible/0.3.4/flexible.js"</span>&gt;&lt;/script&gt;
-
-<span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">import</span> <span class="hljs-string">'lib-flexible/flexible.js'</span>
-</code></div></div></pre><p>其中 <code>flexible.js</code> 会在页面加载时动态计算根节点的字体大小，并将 px 转化为 rem 单位。在样式中可以直接使用 px 单位，例如：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css"><span class="hljs-selector-tag">div</span> {
-  <span class="hljs-attribute">width</span>: <span class="hljs-number">100px</span>;
-  <span class="hljs-attribute">height</span>: <span class="hljs-number">100px</span>;
-}
-</code></div></div></pre><p>这个 div 元素的大小会根据设备屏幕的宽度进行适配。</p></div>
+<span class="hljs-comment">// dark.less 文件</span>
+<span class="hljs-variable">@primary-color:</span> <span class="hljs-number">#343a40</span>;
+</code></div></div></pre><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>html</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-html"><span class="hljs-comment">&lt;!-- index.html 文件 --&gt;</span>
+<span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>网页换肤示例<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet/less"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/css"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"base.less"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet/less"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/css"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"dark.less"</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"btn"</span>&gt;</span>按钮<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"less.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">changeSkin</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-comment">// 修改 Less 变量的值</span>
+      less.<span class="hljs-title function_">modifyVars</span>({
+        <span class="hljs-string">'@primary-color'</span>: <span class="hljs-string">'#28a745'</span>
+      }).<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'换肤成功'</span>);
+      }).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">'换肤失败'</span>);
+      });
+    }
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></div></div></pre><p>在上面的示例代码中，我们引入了两个 Less 文件，一个是 <code>base.less</code>，一个是 <code>dark.less</code>。其中 <code>base.less</code> 定义了一些基础的样式，而 <code>dark.less</code> 则是定义了一个暗黑色的主题样式。在 JavaScript 中，我们使用 <code>less.modifyVars</code> 方法来修改 Less 变量的值，从而实现了换肤的效果。当然，这只是一个简单的示例代码，实际的换肤功能还需要根据实际需求来进行设计和实现。</p></div>

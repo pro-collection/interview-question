@@ -5,7 +5,7 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "H5 如何解决移动端适配问题",
+  title: "站点一键换肤的实现方式有哪些？",
   labels: [
     labels.application,
     company.baidu,

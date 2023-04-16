@@ -1,48 +1,19 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>通过 Less 实现网页换肤可以使用 CSS 变量和 Less 变量。CSS 变量的语法如下：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css"><span class="hljs-selector-pseudo">:root</span> {
-  <span class="hljs-attr">--primary-color</span>: <span class="hljs-number">#007bff</span>;
-}
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>可以通过 <code>window.performance</code> 对象来监听页面资源加载进度。该对象提供了各种方法来获取资源加载的详细信息。</p><p>可以使用 <code>performance.getEntries()</code> 方法获取页面上所有的资源加载信息。可以使用该方法来监测每个资源的加载状态，计算加载时间，并据此来实现一个资源加载进度条。</p><p>下面是一个简单的实现方式：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">const</span> resources = <span class="hljs-variable language_">window</span>.<span class="hljs-property">performance</span>.<span class="hljs-title function_">getEntriesByType</span>(<span class="hljs-string">'resource'</span>);
+<span class="hljs-keyword">const</span> totalResources = resources.<span class="hljs-property">length</span>;
+<span class="hljs-keyword">let</span> loadedResources = <span class="hljs-number">0</span>;
 
-<span class="hljs-selector-class">.btn</span> {
-  <span class="hljs-attribute">background-color</span>: <span class="hljs-built_in">var</span>(--primary-color);
-}
-</code></div></div></pre><p>而 Less 变量则是通过 Less 预编译器提供的变量语法来实现的，如下所示：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>less</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-less"><span class="hljs-variable">@primary-color:</span> <span class="hljs-number">#007bff</span>;
+resources.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">resource</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (resource.<span class="hljs-property">initiatorType</span> !== <span class="hljs-string">'xmlhttprequest'</span>) {
+    <span class="hljs-comment">// 排除 AJAX 请求</span>
+    resource.<span class="hljs-property">onload</span> = <span class="hljs-function">() =&gt;</span> {
+      loadedResources++;
+      <span class="hljs-keyword">const</span> progress = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>((loadedResources / totalResources) * <span class="hljs-number">100</span>);
+      <span class="hljs-title function_">updateProgress</span>(progress);
+    };
+  }
+});
 
-<span class="hljs-selector-class">.btn</span> {
-  <span class="hljs-attribute">background-color</span>: <span class="hljs-variable">@primary-color</span>;
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">updateProgress</span>(<span class="hljs-params">progress</span>) {
+  <span class="hljs-comment">// 更新进度条</span>
 }
-</code></div></div></pre><p>通过 Less 变量来实现网页换肤的方式可以在运行时使用 JavaScript 来修改 Less 变量的值，从而实现换肤效果。具体步骤如下：</p><ol><li>使用 Less 预编译器来编译 Less 文件为 CSS 文件。</li><li>在 HTML 文件中引入编译后的 CSS 文件。</li><li>在 JavaScript 中动态修改 Less 变量的值。</li><li>使用 JavaScript 将新的 Less 变量值注入到编译后的 CSS 文件中。</li><li>将注入后的 CSS 样式应用到页面上。</li></ol><p>以下是一段实现通过 Less 变量来实现网页换肤的示例代码：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>less</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-less"><span class="hljs-comment">// base.less 文件</span>
-<span class="hljs-variable">@primary-color:</span> <span class="hljs-number">#007bff</span>;
-
-<span class="hljs-selector-class">.btn</span> {
-  <span class="hljs-attribute">background-color</span>: <span class="hljs-variable">@primary-color</span>;
-}
-
-<span class="hljs-comment">// dark.less 文件</span>
-<span class="hljs-variable">@primary-color:</span> <span class="hljs-number">#343a40</span>;
-</code></div></div></pre><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>html</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-html"><span class="hljs-comment">&lt;!-- index.html 文件 --&gt;</span>
-<span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>网页换肤示例<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet/less"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/css"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"base.less"</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet/less"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/css"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"dark.less"</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"btn"</span>&gt;</span>按钮<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"less.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-    <span class="hljs-keyword">function</span> <span class="hljs-title function_">changeSkin</span>(<span class="hljs-params"></span>) {
-      <span class="hljs-comment">// 修改 Less 变量的值</span>
-      less.<span class="hljs-title function_">modifyVars</span>({
-        <span class="hljs-string">'@primary-color'</span>: <span class="hljs-string">'#28a745'</span>
-      }).<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
-        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'换肤成功'</span>);
-      }).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> {
-        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">'换肤失败'</span>);
-      });
-    }
-  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
-</code></div></div></pre><p>在上面的示例代码中，我们引入了两个 Less 文件，一个是 <code>base.less</code>，一个是 <code>dark.less</code>。其中 <code>base.less</code> 定义了一些基础的样式，而 <code>dark.less</code> 则是定义了一个暗黑色的主题样式。在 JavaScript 中，我们使用 <code>less.modifyVars</code> 方法来修改 Less 变量的值，从而实现了换肤的效果。当然，这只是一个简单的示例代码，实际的换肤功能还需要根据实际需求来进行设计和实现。</p></div>
+</code></div></div></pre><p>该代码会遍历所有资源，并注册一个 <code>onload</code> 事件处理函数。当每个资源加载完成后，会更新 <code>loadedResources</code> 变量，并计算当前的进度百分比，然后调用 <code>updateProgress()</code> 函数来更新进度条。需要注意的是，这里排除了 AJAX 请求，因为它们不属于页面资源。</p><p>当所有资源加载完成后，页面就会完全加载。</p></div>

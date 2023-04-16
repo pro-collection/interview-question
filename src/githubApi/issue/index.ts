@@ -5,7 +5,7 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "站点一键换肤的实现方式有哪些？",
+  title: "如何实现网页加载进度条？",
   labels: [
     labels.application,
     company.baidu,

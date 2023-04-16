@@ -5,7 +5,7 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "[webpack] 异步加载原理是啥",
+  title: "[webpack] externals 作用是啥？",
   labels: [
     labels.engineering,
     company.tencent,
@@ -15,10 +15,10 @@ const remote = {
 };
 
 // html 写入远端
-// htmlWriteIssue(remote);
+htmlWriteIssue(remote);
 
 // md 写入远端
-writeIssue(remote);
+// writeIssue(remote);
 
 // 写入本地 temp.md
 // writeToTemp();

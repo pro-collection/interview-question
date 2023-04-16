@@ -1,39 +1,26 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>Webpack DllPlugin 是用于将某些库（例如第三方库）提前编译和打包，以便在开发和生产构建过程中减少依赖项的分析时间，提高打包速度的插件。</p><p>具体来说，DllPlugin 分为两个步骤：第一步是生成一个包含库的映射文件（manifest.json），第二步是在开发或生产构建中使用该映射文件来引入预编译的库。</p><p>DllPlugin 的基本原理是将库单独编译成一个或多个 dll 文件（动态链接库），同时生成一个 manifest.json 文件记录这些库文件的名称、路径等信息。在开发或生产构建过程中，通过引用 manifest.json 文件，将已经预编译好的库文件引入到项目中。这样可以避免在每次打包时都去分析和打包第三方库，提高构建速度。</p><p>下面是一个简单的例子：</p><p>在 webpack.config.dll.js 中定义打包的库：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>lua</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-lua">const <span class="hljs-built_in">path</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);
-const webpack = <span class="hljs-built_in">require</span>(<span class="hljs-string">'webpack'</span>);
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>当 Promise 还没有被 resolve 或 reject 时，我们可以使用 <code>AbortController</code> 来取消 Promise。<code>AbortController</code> 是一个新的 Web API，它可以用来取消任何异步操作，包括 Promise。下面是一个简单的示例：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
+<span class="hljs-keyword">const</span> signal = controller.<span class="hljs-property">signal</span>;
 
-<span class="hljs-built_in">module</span>.exports = {
-  mode: <span class="hljs-string">'production'</span>,
-  entry: {
-    vendor: [<span class="hljs-string">'react'</span>, <span class="hljs-string">'react-dom'</span>, <span class="hljs-string">'lodash'</span>]
-  },
-  <span class="hljs-built_in">output</span>: {
-    <span class="hljs-built_in">path</span>: <span class="hljs-built_in">path</span>.join(__dirname, <span class="hljs-string">'dist'</span>),
-    filename: <span class="hljs-string">'[name].dll.js'</span>,
-    library: <span class="hljs-string">'[name]'</span>
-  },
-  plugins: [
-    new webpack.DllPlugin({
-      name: <span class="hljs-string">'[name]'</span>,
-      <span class="hljs-built_in">path</span>: <span class="hljs-built_in">path</span>.join(__dirname, <span class="hljs-string">'dist'</span>, <span class="hljs-string">'[name].manifest.json'</span>)
-    })
-  ]
-};
-</code></div></div></pre><p>然后运行 <code>webpack --config webpack.config.dll.js</code>，会生成 <code>vendor.dll.js</code> 和 <code>vendor.manifest.json</code> 文件。</p><p>在开发或生产环境中，通过引入生成的 manifest.json 文件，将预编译好的库文件引入项目中：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>lua</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-lua">const <span class="hljs-built_in">path</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);
-const webpack = <span class="hljs-built_in">require</span>(<span class="hljs-string">'webpack'</span>);
+<span class="hljs-keyword">const</span> promise = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> timeout = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">resolve</span>(<span class="hljs-string">"Promise resolved"</span>);
+  }, <span class="hljs-number">5000</span>);
 
-<span class="hljs-built_in">module</span>.exports = {
-  mode: <span class="hljs-string">'production'</span>,
-  entry: {
-    app: <span class="hljs-string">'./src/index.js'</span>
-  },
-  <span class="hljs-built_in">output</span>: {
-    <span class="hljs-built_in">path</span>: <span class="hljs-built_in">path</span>.join(__dirname, <span class="hljs-string">'dist'</span>),
-    filename: <span class="hljs-string">'[name].js'</span>
-  },
-  plugins: [
-    new webpack.DllReferencePlugin({
-      manifest: <span class="hljs-built_in">require</span>(<span class="hljs-string">'./dist/vendor.manifest.json'</span>)
-    })
-  ]
-};
-</code></div></div></pre><p>这样，在打包过程中，webpack 会自动将 <code>vendor.dll.js</code> 中包含的第三方库从项目中分离出来，而不需要重复打包和分析这些库。</p></div>
+  <span class="hljs-comment">// 监听 signal 的 abort 事件，当 abort 被触发时，清除定时器，并 reject Promise</span>
+  signal.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">"abort"</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-built_in">clearTimeout</span>(timeout);
+    <span class="hljs-title function_">reject</span>(<span class="hljs-string">"Promise aborted"</span>);
+  });
+});
+
+<span class="hljs-comment">// 3 秒后取消 Promise</span>
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  controller.<span class="hljs-title function_">abort</span>();
+}, <span class="hljs-number">3000</span>);
+
+promise.<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value); <span class="hljs-comment">// 不会打印，因为 Promise 已经被取消了</span>
+}).<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error); <span class="hljs-comment">// 打印 "Promise aborted"</span>
+});
+</code></div></div></pre><p>在上面的示例中，我们创建了一个新的 <code>AbortController</code> 对象，然后使用 <code>signal</code> 属性将其传递给 Promise 的构造函数。接着，我们在 Promise 内部使用 <code>signal.addEventListener()</code> 方法监听 <code>abort</code> 事件，当事件触发时，清除定时器，并 reject Promise。最后，我们通过 <code>controller.abort()</code> 方法在 3 秒后取消 Promise。当 Promise 被取消时，它将会执行 <code>catch()</code> 方法中的回调函数，并打印 "Promise aborted"。</p></div>

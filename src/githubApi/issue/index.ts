@@ -5,12 +5,12 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "[React] useState 是如何实现的？",
+  title: "promise 是否可以取消？",
   labels: [
-    labels.frameWork,
-    // company.tencent,
+    labels.js,
+    company.baidu,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

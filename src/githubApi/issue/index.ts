@@ -5,20 +5,20 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 
 const remote = {
-  title: "[webpack] externals 作用是啥？",
+  title: "[webpack] 分包的方式有哪些？",
   labels: [
     labels.engineering,
-    company.tencent,
+    // company.tencent,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 
 // html 写入远端
-htmlWriteIssue(remote);
+// htmlWriteIssue(remote);
 
 // md 写入远端
-// writeIssue(remote);
+writeIssue(remote);
 
 // 写入本地 temp.md
 // writeToTemp();

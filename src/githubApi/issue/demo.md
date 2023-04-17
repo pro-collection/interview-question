@@ -1,100 +1,34 @@
-### 监听静态资源加载情况
-可以通过 `window.performance` 对象来监听页面资源加载进度。该对象提供了各种方法来获取资源加载的详细信息。
+`forwardRef` 是 React 提供的一个高阶函数，它可以让你在函数组件中访问子组件的 ref，并把该 ref 传递给子组件。
 
-可以使用 `performance.getEntries()` 方法获取页面上所有的资源加载信息。可以使用该方法来监测每个资源的加载状态，计算加载时间，并据此来实现一个资源加载进度条。
+使用 `forwardRef` 的主要场景是，当你需要访问子组件的 DOM 节点或实例时，比如要操作子组件的滚动条、聚焦输入框等等。在这些场景下，需要用到 `ref`，而 `ref` 又不能直接在函数组件中使用。
 
-下面是一个简单的实现方式：
+下面是 `forwardRef` 的基本使用方式：
 
-```javascript
-const resources = window.performance.getEntriesByType('resource');
-const totalResources = resources.length;
-let loadedResources = 0;
+```jsx
+jsxCopy codeimport React, { forwardRef } from 'react';
 
-resources.forEach((resource) => {
-  if (resource.initiatorType !== 'xmlhttprequest') {
-    // 排除 AJAX 请求
-    resource.onload = () => {
-      loadedResources++;
-      const progress = Math.round((loadedResources / totalResources) * 100);
-      updateProgress(progress);
-    };
-  }
+const MyComponent = forwardRef((props, ref) => {
+  return <input type="text" ref={ref} />;
 });
 
-function updateProgress(progress) {
-  // 更新进度条
+function App() {
+  const inputRef = React.createRef();
+
+  const handleClick = () => {
+    inputRef.current.focus();
+  };
+
+  return (
+    <div>
+      <MyComponent ref={inputRef} />
+      <button onClick={handleClick}>Focus Input</button>
+    </div>
+  );
 }
 ```
 
-该代码会遍历所有资源，并注册一个 `onload` 事件处理函数。当每个资源加载完成后，会更新 `loadedResources` 变量，并计算当前的进度百分比，然后调用 `updateProgress()` 函数来更新进度条。需要注意的是，这里排除了 AJAX 请求，因为它们不属于页面资源。
+在上面的例子中，我们创建了一个 `MyComponent` 组件，并通过 `forwardRef` 来包裹它。这样，`MyComponent` 就可以在 props 中接收一个 `ref` 属性，而 `forwardRef` 将会将该属性转发到子组件中。
 
-当所有资源加载完成后，页面就会完全加载。
+在 `App` 组件中，我们创建了一个 `inputRef` 对象，并将它作为 `MyComponent` 的 `ref` 属性传递给了 `MyComponent` 组件。然后，我们在 `handleClick` 函数中使用 `inputRef` 来聚焦输入框。
 
-
-
-### 实现进度条
-
-网页加载进度条可以通过前端技术实现，一般的实现思路是通过监听浏览器的页面加载事件和资源加载事件，来实时更新进度条的状态。下面介绍两种实现方式。
-
-#### 1. 使用原生进度条
-
-在 HTML5 中提供了 `progress` 元素，可以通过它来实现一个原生的进度条。
-
-```html
-<progress id="progressBar" value="0" max="100"></progress>
-```
-
-然后在 JavaScript 中，监听页面加载事件和资源加载事件，实时更新 `progress` 元素的 `value` 属性。
-
-```javascript
-const progressBar = document.getElementById('progressBar');
-
-window.addEventListener('load', () => {
-  progressBar.value = 100;
-});
-
-document.addEventListener('readystatechange', () => {
-  const progress = Math.floor((document.readyState / 4) * 100);
-  progressBar.value = progress;
-});
-```
-
-#### 2. 使用第三方库
-
-使用第三方库可以更加方便地实现网页加载进度条，下面以 `nprogress` 库为例：
-
-1. 安装 `nprogress` 库
-
-```bash
-bashCopy codenpm install nprogress --save
-```
-
-2. 在页面中引入 `nprogress.css` 和 `nprogress.js`
-
-```html
-<link rel="stylesheet" href="/node_modules/nprogress/nprogress.css">
-<script src="/node_modules/nprogress/nprogress.js"></script>
-```
-
-3. 在 JavaScript 中初始化 `nprogress` 并监听页面加载事件和资源加载事件
-
-```javascript
-// 初始化 nprogress
-NProgress.configure({ showSpinner: false });
-
-// 监听页面加载事件
-window.addEventListener('load', () => {
-  NProgress.done();
-});
-
-// 监听资源加载事件
-document.addEventListener('readystatechange', () => {
-  if (document.readyState === 'interactive') {
-    NProgress.start();
-  } else if (document.readyState === 'complete') {
-    NProgress.done();
-  }
-});
-```
-
-使用 `nprogress` 可以自定义进度条的样式，同时也提供了更多的 API 供我们使用，比如说手动控制进度条的显示和隐藏，以及支持 Promise 和 Ajax 请求的进度条等等。
+需要注意的是，`forwardRef` 的回调函数接收两个参数：`props` 和 `ref`。其中，`props` 是组件的属性对象，`ref` 是回调函数中定义的 ref 对象。在函数组件中，我们必须将 `ref` 传递给要访问的子组件，否则 `ref` 将无法访问到子组件的 DOM 节点或实例。

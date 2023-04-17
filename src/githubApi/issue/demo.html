@@ -1,19 +1,21 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>可以通过 <code>window.performance</code> 对象来监听页面资源加载进度。该对象提供了各种方法来获取资源加载的详细信息。</p><p>可以使用 <code>performance.getEntries()</code> 方法获取页面上所有的资源加载信息。可以使用该方法来监测每个资源的加载状态，计算加载时间，并据此来实现一个资源加载进度条。</p><p>下面是一个简单的实现方式：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">const</span> resources = <span class="hljs-variable language_">window</span>.<span class="hljs-property">performance</span>.<span class="hljs-title function_">getEntriesByType</span>(<span class="hljs-string">'resource'</span>);
-<span class="hljs-keyword">const</span> totalResources = resources.<span class="hljs-property">length</span>;
-<span class="hljs-keyword">let</span> loadedResources = <span class="hljs-number">0</span>;
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p><code>forwardRef</code> 是 React 提供的一个高阶函数，它可以让你在函数组件中访问子组件的 ref，并把该 ref 传递给子组件。</p><p>使用 <code>forwardRef</code> 的主要场景是，当你需要访问子组件的 DOM 节点或实例时，比如要操作子组件的滚动条、聚焦输入框等等。在这些场景下，需要用到 <code>ref</code>，而 <code>ref</code> 又不能直接在函数组件中使用。</p><p>下面是 <code>forwardRef</code> 的基本使用方式：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>jsx</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-jsx"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { forwardRef } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 
-resources.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">resource</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (resource.<span class="hljs-property">initiatorType</span> !== <span class="hljs-string">'xmlhttprequest'</span>) {
-    <span class="hljs-comment">// 排除 AJAX 请求</span>
-    resource.<span class="hljs-property">onload</span> = <span class="hljs-function">() =&gt;</span> {
-      loadedResources++;
-      <span class="hljs-keyword">const</span> progress = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>((loadedResources / totalResources) * <span class="hljs-number">100</span>);
-      <span class="hljs-title function_">updateProgress</span>(progress);
-    };
-  }
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">MyComponent</span> = <span class="hljs-title function_">forwardRef</span>(<span class="hljs-function">(<span class="hljs-params">props, ref</span>) =&gt;</span> {
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{ref}</span> /&gt;</span></span>;
 });
 
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">updateProgress</span>(<span class="hljs-params">progress</span>) {
-  <span class="hljs-comment">// 更新进度条</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> inputRef = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createRef</span>();
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleClick</span> = (<span class="hljs-params"></span>) =&gt; {
+    inputRef.<span class="hljs-property">current</span>.<span class="hljs-title function_">focus</span>();
+  };
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">MyComponent</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{inputRef}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleClick}</span>&gt;</span>Focus Input<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
 }
-</code></div></div></pre><p>该代码会遍历所有资源，并注册一个 <code>onload</code> 事件处理函数。当每个资源加载完成后，会更新 <code>loadedResources</code> 变量，并计算当前的进度百分比，然后调用 <code>updateProgress()</code> 函数来更新进度条。需要注意的是，这里排除了 AJAX 请求，因为它们不属于页面资源。</p><p>当所有资源加载完成后，页面就会完全加载。</p></div>
+</code></div></div></pre><p>在上面的例子中，我们创建了一个 <code>MyComponent</code> 组件，并通过 <code>forwardRef</code> 来包裹它。这样，<code>MyComponent</code> 就可以在 props 中接收一个 <code>ref</code> 属性，而 <code>forwardRef</code> 将会将该属性转发到子组件中。</p><p>在 <code>App</code> 组件中，我们创建了一个 <code>inputRef</code> 对象，并将它作为 <code>MyComponent</code> 的 <code>ref</code> 属性传递给了 <code>MyComponent</code> 组件。然后，我们在 <code>handleClick</code> 函数中使用 <code>inputRef</code> 来聚焦输入框。</p><p>需要注意的是，<code>forwardRef</code> 的回调函数接收两个参数：<code>props</code> 和 <code>ref</code>。其中，<code>props</code> 是组件的属性对象，<code>ref</code> 是回调函数中定义的 ref 对象。在函数组件中，我们必须将 <code>ref</code> 传递给要访问的子组件，否则 <code>ref</code> 将无法访问到子组件的 DOM 节点或实例。</p></div>

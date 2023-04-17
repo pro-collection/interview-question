@@ -15,3 +15,6 @@ export const search = async (search: string) => {
   return get(res, "data.total_count", 0);
 };
 
+// search("网页加载进度条").then(res => {
+//   console.log('yanle - logger: res', res);
+// })

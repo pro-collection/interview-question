@@ -27,6 +27,9 @@ export const apiUrl = {
   // 更新一个 tag
   // api https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#update-an-issue
   updateTag: "PATCH /repos/{owner}/{repo}/issues/{issue_number}",
+
+  // https://docs.github.com/en/rest/search?apiVersion=2022-11-28#search-issues-and-pull-requests
+  searchIssue: "GET /search/issues",
 };
 
 /**

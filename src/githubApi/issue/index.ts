@@ -6,10 +6,10 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "CDN 了解多少？",
-  key_world: "CDN",
+  title: "git merge 和 git rebase 区别",
+  key_world: "rebase merge 区别",
   labels: [
-    labels.network,
+    labels.application,
     // company.baidu,
   ],
   milestone: MileStone.inProgress,
@@ -26,10 +26,10 @@ const main = async () => {
   console.log("yanle - logger: title", remote.title);
 
   // html 写入远端
-  // htmlWriteIssue(remote);
+  htmlWriteIssue(remote);
 
   // md 写入远端
-  writeIssue(remote);
+  // writeIssue(remote);
 
   // 写入本地 temp.md
   // writeToTemp();

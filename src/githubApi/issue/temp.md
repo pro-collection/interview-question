@@ -1,30 +1,11 @@
-可以通过 `window.performance` 对象来监听页面资源加载进度。该对象提供了各种方法来获取资源加载的详细信息。
+CDN 缓存策略指的是在 CDN 服务器上缓存哪些资源以及缓存的有效期等相关规则。常见的 CDN 缓存策略有以下几种：
 
-可以使用 `performance.getEntries()` 方法获取页面上所有的资源加载信息。可以使用该方法来监测每个资源的加载状态，计算加载时间，并据此来实现一个资源加载进度条。
+1. 强制缓存：在资源的有效期内，浏览器每次请求该资源时，都直接从浏览器缓存中获取，不发送请求到服务器。可以通过设置响应头的 Cache-Control 和 Expires 字段实现。
 
-下面是一个简单的实现方式：
+2. 协商缓存：在资源的有效期过期后，浏览器向服务器发起请求，并通过 If-Modified-Since 或者 If-None-Match 等字段验证资源是否有更新。如果资源未更新，服务器返回 304 Not Modified 响应，浏览器直接从本地缓存中获取资源。可以通过设置响应头的 Last-Modified 和 ETag 字段实现。
 
-```javascript
-const resources = window.performance.getEntriesByType('resource');
-const totalResources = resources.length;
-let loadedResources = 0;
+3. CDN 边缘缓存：CDN 服务器缓存来自源站的资源，并将其分发给全球各地的用户。当用户请求某个资源时，CDN 服务器会根据缓存策略判断是否需要重新向源站请求资源。常见的缓存策略包括时间戳缓存、版本号缓存、目录级别缓存、参数级别缓存等。
 
-resources.forEach((resource) => {
-  if (resource.initiatorType !== 'xmlhttprequest') {
-    // 排除 AJAX 请求
-    resource.onload = () => {
-      loadedResources++;
-      const progress = Math.round((loadedResources / totalResources) * 100);
-      updateProgress(progress);
-    };
-  }
-});
+4. 客户端缓存：客户端缓存是指浏览器在本地缓存响应资源，下次请求该资源时可以直接从本地获取。可以通过设置响应头的 Cache-Control 和 Expires 字段实现。
 
-function updateProgress(progress) {
-  // 更新进度条
-}
-```
-
-该代码会遍历所有资源，并注册一个 `onload` 事件处理函数。当每个资源加载完成后，会更新 `loadedResources` 变量，并计算当前的进度百分比，然后调用 `updateProgress()` 函数来更新进度条。需要注意的是，这里排除了 AJAX 请求，因为它们不属于页面资源。
-
-当所有资源加载完成后，页面就会完全加载。
+5. 源站缓存：源站缓存是指将静态资源放到应用服务器上缓存，在应用服务器上缓存的时间要短于 CDN 边缘缓存的时间。当 CDN 服务器的缓存过期或者未命中时，CDN 服务器会向源站发起请求获取最新的资源，并将其缓存到 CDN 服务器上。

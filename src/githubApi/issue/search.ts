@@ -1,22 +1,16 @@
-import { octokit } from "@utils/requestKit";
 import { apiUrl } from "@utils/apiUrl";
-import repoConfig from "@utils/repoConfig";
 import { get } from "lodash";
 import dayjs from "dayjs";
+import axios from "axios";
 
-const request = (q: string) => octokit.request(`${apiUrl.searchIssue}?q=${q}`, {
-  ...repoConfig.interviewRepo,
+const request = (q: string, created: string) => axios.request({
+  url: apiUrl.searchIssue(q, created),
+  method: "get",
 });
 
 export const search = async (search: string) => {
-  const created = dayjs().subtract(6, "month").format("YYYY-MM-DD");
-  const query = `${search}+created:>${created}&page=1&per_page=1`;
-  console.log('yanle - logger: query', query);
-  const res = await request(query);
-  console.log('yanle - logger: res', res.data);
+  const created = dayjs().subtract(1, "year").format("YYYY-MM-DD");
+  const res = await request(search, created);
   return get(res, "data.total_count", 0);
 };
 
-search("forwardRef").then(res => {
-  console.log('yanle - logger: res', res);
-})

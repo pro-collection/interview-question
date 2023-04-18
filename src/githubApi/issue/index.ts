@@ -18,9 +18,10 @@ const remote = {
 
 const main = async () => {
   const count = await search(remote.key_world);
-  remote.title = count && remote.key_world ? `${remote.title}【热度: ${count}】` : remote.title;
+  remote.title = count && remote.key_world ? `${remote.title}【热度: ${count?.toLocaleString() || count}】` : remote.title;
 
-  console.log('yanle - logger: title', remote.title);
+  // 输出 title
+  console.log("yanle - logger: title", remote.title);
 
   // html 写入远端
   htmlWriteIssue(remote);

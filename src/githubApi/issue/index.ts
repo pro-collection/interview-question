@@ -6,11 +6,11 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] forwardRef 作用是什么？",
-  key_world: "react forwardRef",
+  title: "数字千分化的实现方式有哪些？用代码实现一下",
+  key_world: "数字千分化",
   labels: [
-    labels.application,
-    company.baidu,
+    labels.js,
+    // company.baidu,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

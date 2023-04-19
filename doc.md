@@ -1,9 +1,13 @@
 ## 问题收集
 
+> 04.19 整理
+
+react 新特性
+  - https://juejin.cn/post/7094037148088664078
+  - https://juejin.cn/post/7027995169211285512
+
 > 04.04 待整理
 
-- https://juejin.cn/post/7137261512296497182
-- https://juejin.cn/post/7177045936298786872
 - https://juejin.cn/post/7204307381689532474
 - https://juejin.cn/post/7204594495996198968
 - https://juejin.cn/post/7016593221815910408

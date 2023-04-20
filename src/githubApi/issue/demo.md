@@ -149,3 +149,8 @@ useSyncExternalStore 是一个新的 Hook，它允许外部存储支持并发读
 
 useInsertionEffect 是一个新的 Hook ，允许 CSS-in-JS 库解决在渲染中注入样式的性能问题。除非你已经建立了一个 CSS-in-JS 库，否则我们不希望你使用它。这个 Hook 将在 DOM 被变更后运行，但在 layout effect 读取新布局之前。这解决了一个在 React 17 及以下版本中已经存在的问题，但在 React 18 中更加重要，因为 React 在并发渲染时向浏览器让步，给它一个重新计算布局的机会。
 
+
+### 参考文档
+- https://zh-hans.legacy.reactjs.org/blog/2022/03/29/react-v18.html
+- https://juejin.cn/post/7094037148088664078
+- https://juejin.cn/post/7027995169211285512

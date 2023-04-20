@@ -26,10 +26,10 @@ const main = async () => {
   console.log("yanle - logger: title", remote.title);
 
   // html 写入远端
-  htmlWriteIssue(remote);
+  // htmlWriteIssue(remote);
 
   // md 写入远端
-  // writeIssue(remote);
+  writeIssue(remote);
 
   // 写入本地 temp.md
   // writeToTemp();

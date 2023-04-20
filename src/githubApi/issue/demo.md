@@ -153,13 +153,136 @@ useSyncExternalStore 是一个新的 Hook，它允许外部存储支持并发读
 useInsertionEffect 是一个新的 Hook ，允许 CSS-in-JS 库解决在渲染中注入样式的性能问题。除非你已经建立了一个 CSS-in-JS 库，否则我们不希望你使用它。这个 Hook 将在 DOM 被变更后运行，但在
 layout effect 读取新布局之前。这解决了一个在 React 17 及以下版本中已经存在的问题，但在 React 18 中更加重要，因为 React 在并发渲染时向浏览器让步，给它一个重新计算布局的机会。
 
+### Concurrent Mode（并发模式）
+
+Concurrent Mode（以下简称 CM）翻译叫并发模式，这个概念我们或许已经听过很多次了，实际上，在去年这个概念已经很成熟了，在 React 17 中就可以通过一些试验性的api开启 CM。
+
+并发模式可帮助应用保持响应，并根据用户的设备性能和网速进行适当的调整，该模式通过使渲染可中断来修复阻塞渲染限制。在 Concurrent 模式中，React 可以同时更新多个状态。
+
+说的太复杂可能有点拗口，总结一句话就是：**React 17 和 React 18 的区别就是：从同步不可中断更新变成了异步可中断更新。**
+
+为了更好的管理root节点，React 18 引入了一个新的 root API，新的 root API 还支持 new concurrent renderer（并发模式的渲染），它允许你进入concurrent mode（并发模式）。
+
+```jsx
+// React 17
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+const root = document.getElementById('root')
+!;
+
+ReactDOM.render(<App />, root);
+
+// React 18
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+const root = document.getElementById('root')
+!;
+
+ReactDOM.createRoot(root).render(<App />);
+```
+
+在 React 18 中，提供了新的 root api，我们只需要把 render 升级成 createRoot(root).render(<App />) 就可以开启并发模式了。
+
+那么这个时候，可能有同学会提问：开启并发模式就是开启了并发更新么？
+
+NO！ 在 React 17 中一些实验性功能里面，开启并发模式就是开启了并发更新，但是在 React 18 正式版发布后，由于官方策略调整，React 不再依赖并发模式开启并发更新了。
+
+换句话说：**开启了并发模式，并不一定开启了并发更新！**
+
+一句话总结：**在 18 中，不再有多种模式，而是以是否使用并发特性作为是否开启并发更新的依据。**
+
+可以从架构角度来概括下，当前一共有两种架构：
+
+- 采用不可中断的递归方式更新的 `Stack Reconciler`（老架构）
+- 采用可中断的遍历方式更新的 `Fiber Reconciler`（新架构）
+
+新架构可以选择是否开启并发更新，所以当前市面上所有 React 版本有四种情况：
+
+- 老架构（v15及之前版本）
+- 新架构，未开启并发更新，与情况1行为一致（v16、v17 默认属于这种情况）
+- 新架构，未开启并发更新，但是启用了并发模式和一些新功能（比如 Automatic Batching，v18 默认属于这种情况）
+- 新架构，开启并发模式，开启并发更新
+
+**并发特性指开启并发模式后才能使用的特性**，比如：
+
+- useDeferredValue
+- useTransition
+
+![1](https://foruda.gitee.com/images/1682007325938364918/c6174e9f_7819612.png)
+
+#### startTransition 并发特性举例
+
+这个新的 API 可以通过将特定更新标记为“过渡”来显著改善用户交互，简单来说，就是被 startTransition 回调包裹的 setState 触发的渲染被标记为不紧急渲染，这些渲染可能被其他紧急渲染所抢占。
+
+```tsx
+import React, { useState, useEffect, useTransition } from 'react';
+
+const App: React.FC = () => {
+  const [list, setList] = useState<any[]>([]);
+  const [isPending, startTransition] = useTransition();
+  useEffect(() => {
+    // 使用了并发特性，开启并发更新
+    startTransition(() => {
+      setList(new Array(10000).fill(null));
+    });
+  }, []);
+  return (
+    <>
+      {list.map((_, i) => (
+        <div key={i}>{i}</div>
+      ))}
+    </>
+  );
+};
+
+export default App;
+```
+
+#### useDeferredValue 并发特性举例
+
+从介绍上来看 useDeferredValue 与 useTransition 是否感觉很相似呢？
+
+相同：useDeferredValue 本质上和内部实现与 useTransition 一样，都是标记成了延迟更新任务。 不同：useTransition 是把更新任务变成了延迟更新任务，而 useDeferredValue
+是产生一个新的值，这个值作为延时状态。（一个用来包装方法，一个用来包装值）
+
+所以，上面 startTransition 的例子，我们也可以用 useDeferredValue 来实现：
+
+```jsx
+import React, { useState, useEffect, useDeferredValue } from 'react';
+
+const App: React.FC = () => {
+  const [list, setList] = useState < any[] > ([]);
+  useEffect(() => {
+    setList(new Array(10000).fill(null));
+  }, []);
+  // 使用了并发特性，开启并发更新
+  const deferredList = useDeferredValue(list);
+  return (
+    <>
+      {deferredList.map((_, i) => (
+        <div key={i}>{i}</div>
+      ))}
+    </>
+  );
+};
+
+export default App;
+```
+
+此时我们的任务被拆分到每一帧不同的 task 中，JS脚本执行时间大体在5ms左右，这样浏览器就有剩余时间执行样式布局和样式绘制，减少掉帧的可能性。
+
+
 ### setState 自动批处理
 
 React 18 通过在默认情况下执行批处理来实现了开箱即用的性能改进。
 
 批处理是指为了获得更好的性能，在数据层，将多个状态更新批量处理，合并成一次更新（在视图层，将多个渲染合并成一次渲染）。
 
-#### 在 React 18 之前：
+#### 在 React 18 之前：有一些情况下并不会合并更新
 
 在React 18 之前，我们只在 React 事件处理函数 中进行批处理更新。默认情况下，在 `promise、setTimeout、原生事件处理函数中`、或任`何其它事件内`的更新都不会进行批处理：
 
@@ -252,6 +375,128 @@ const App: React.FC = () => {
 export default App;
 ```
 
+#### 在 React 18 中: 合并更新
+
+在 React 18 上面的三个例子只会有一次 render，因为所有的更新都将自动批处理。这样无疑是很好的提高了应用的整体性能。
+
+不过以下例子会在 React 18 中执行两次 render：
+
+```typescript jsx
+import React, { useState } from 'react';
+
+// React 18
+const App: React.FC = () => {
+  console.log('App组件渲染了！');
+  const [count1, setCount1] = useState(0);
+  const [count2, setCount2] = useState(0);
+  return (
+    <div
+      onClick={async () => {
+        await setCount1(count => count + 1);
+        setCount2(count => count + 1);
+      }}
+    >
+      <div>count1： {count1}</div>
+      <div>count2： {count2}</div>
+    </div>
+  );
+};
+
+export default App;
+```
+
+总结：
+
+- 在 18 之前，只有在react事件处理函数中，才会自动执行批处理，其它情况会多次更新
+- 在 18 之后，任何情况都会自动执行批处理，多次更新始终合并为一次
+
+### flushSync
+
+批处理是一个破坏性改动，如果你想退出批量更新，你可以使用 flushSync：
+
+```typescript jsx
+import React, { useState } from 'react';
+import { flushSync } from 'react-dom';
+
+const App: React.FC = () => {
+  const [count1, setCount1] = useState(0);
+  const [count2, setCount2] = useState(0);
+  return (
+    <div
+      onClick={() => {
+        flushSync(() => {
+          setCount1(count => count + 1);
+        });
+        // 第一次更新
+        flushSync(() => {
+          setCount2(count => count + 1);
+        });
+        // 第二次更新
+      }}
+    >
+      <div>count1： {count1}</div>
+      <div>count2： {count2}</div>
+    </div>
+  );
+};
+
+export default App;
+```
+
+### 其他
+
+#### Suspense 不再需要 fallback 来捕获
+
+空的 fallback 属性的处理方式做了改变：不再跳过 缺失值 或 值为null 的 fallback 的 Suspense 边界。
+
+**更新前**
+
+以前，如果你的 Suspense 组件没有提供 fallback 属性，React 就会悄悄跳过它，继续向上搜索下一个边界：
+
+```jsx
+// React 17
+const App = () => {
+  return (
+    <Suspense fallback={<Loading />}> // <--- 这个边界被使用，显示 Loading 组件
+      <Suspense> // <--- 这个边界被跳过，没有 fallback 属性
+        <Page />
+      </Suspense>
+    </Suspense>
+  );
+};
+
+export default App;
+```
+
+**更新后**
+
+现在，React将使用当前组件的 Suspense 作为边界，即使当前组件的 Suspense 的值为 null 或 undefined：
+
+```jsx
+// React 18
+const App = () => {
+  return (
+    <Suspense fallback={<Loading />}> // <--- 不使用
+      <Suspense> // <--- 这个边界被使用，将 fallback 渲染为 null
+        <Page />
+      </Suspense>
+    </Suspense>
+  );
+};
+
+export default App;
+```
+
+#### 关于 React 组件的返回值
+
+- 在 React 17 中，如果你需要返回一个空组件，React只允许返回null。如果你显式的返回了 undefined，控制台则会在运行时抛出一个错误。
+- 在 React 18 中，不再检查因返回 undefined 而导致崩溃。既能返回 null，也能返回 undefined（但是 React 18 的dts文件还是会检查，只允许返回 null，你可以忽略这个类型错误）。
+
+### 结论
+
+- 并发更新的意义就是交替执行不同的任务，当预留的时间不够用时，React 将线程控制权交还给浏览器，等待下一帧时间到来，然后继续被中断的工作
+- 并发模式是实现并发更新的基本前提
+- 时间切片是实现并发更新的具体手段
 
 
 ### 参考文档

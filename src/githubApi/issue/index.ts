@@ -6,13 +6,13 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "git merge 和 git rebase 区别",
-  key_world: "rebase merge 区别",
+  title: "[React] 18 的新特性有哪些",
+  key_world: "react 新",
   labels: [
-    labels.application,
+    labels.frameWork,
     // company.baidu,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

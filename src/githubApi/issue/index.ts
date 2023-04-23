@@ -6,13 +6,13 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] 开发过程中有哪些性能优化手段？",
-  key_world: "react 优化",
+  title: "[React] 如何监听路由变化？",
+  key_world: "react 路由",
   labels: [
     labels.frameWork,
     company.mi,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

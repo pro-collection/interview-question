@@ -6,13 +6,13 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "ref 是如何拿到函数组件的实例",
-  key_world: "ref 组件",
+  title: "[React] 开发过程中有哪些性能优化手段？",
+  key_world: "react 优化",
   labels: [
-    labels.js,
-    company.mt,
+    labels.frameWork,
+    company.mi,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

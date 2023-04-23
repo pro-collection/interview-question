@@ -6,13 +6,13 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] 18 的新特性有哪些",
-  key_world: "react 新",
+  title: "canvas 性能为何会比 html/css 好？",
+  key_world: "canvas 性能",
   labels: [
-    labels.frameWork,
-    // company.baidu,
+    labels.js,
+    company.baidu,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 
@@ -26,10 +26,10 @@ const main = async () => {
   console.log("yanle - logger: title", remote.title);
 
   // html 写入远端
-  // htmlWriteIssue(remote);
+  htmlWriteIssue(remote);
 
   // md 写入远端
-  writeIssue(remote);
+  // writeIssue(remote);
 
   // 写入本地 temp.md
   // writeToTemp();

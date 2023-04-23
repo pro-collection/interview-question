@@ -6,8 +6,8 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] 生命周期有哪些？",
-  key_world: "react 生命",
+  title: "[React] Hooks 有哪些？",
+  key_world: "hooks 有",
   labels: [
     labels.js,
     company.mt,

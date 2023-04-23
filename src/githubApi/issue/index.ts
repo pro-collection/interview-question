@@ -6,8 +6,8 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] Hooks 有哪些？",
-  key_world: "hooks 有",
+  title: "dom 渲染能使用 GPU 加速吗？",
+  key_world: "dom gpu",
   labels: [
     labels.js,
     company.mt,

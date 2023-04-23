@@ -14,7 +14,7 @@ const request = (q: string, created: string) => {
 
 export const search = async (search: string) => {
   const created = dayjs().subtract(1, "year").format("YYYY-MM-DD");
-  const res = await request(search, '2020-04-23');
+  const res = await request(search, created);
   return get(res, "data.total_count", 0);
 };
 

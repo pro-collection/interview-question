@@ -6,8 +6,8 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "dom 渲染能使用 GPU 加速吗？",
-  key_world: "dom gpu",
+  title: "ref 是如何拿到函数组件的实例",
+  key_world: "ref 组件",
   labels: [
     labels.js,
     company.mt,

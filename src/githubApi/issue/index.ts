@@ -6,8 +6,8 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "CSR、SSR、SSG、NSR、ESR、ISR 都是啥？",
-  key_world: "csr",
+  title: "web components 了解多少？",
+  key_world: "webcomponents",
   labels: [
     labels.application,
     // company.mi,

@@ -6,13 +6,13 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] 如何监听路由变化？",
-  key_world: "react 路由",
+  title: "CSR、SSR、SSG、NSR、ESR、ISR 都是啥？",
+  key_world: "csr",
   labels: [
-    labels.frameWork,
-    company.mi,
+    labels.application,
+    // company.mi,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

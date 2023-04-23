@@ -1,105 +1,154 @@
-**依赖**
+CSR、SSR、SSG、NSR、ESR、ISR 都是啥？
 
-- react-router-dom v6
-- react v18
+根据不同的构建、渲染过程有不同的优劣势和适用情况。
 
-### 实现
+* 现代 UI 库加持下常用的 `CSR`、
+* 具有更好 `SEO` 效果的 `SSR` (`SPR`)、
+* 转换思路主打**构建时生成**的 `SSG`、
+* 大架构视野之上的 `ISR`、`DPR`，
+* 还有更少听到的 `NSR`、`ESR`。
 
-监听的核心原理基于useEffect，和useLocation，通过useEffect监听当前location的变化，这样就实现的最基本的监听结构：
+### CSR(Client Side Rendering)
 
-```jsx
-const location = useLocation();
-useEffect(() => {
-  //记录路径
-}, [location]);
+> 页面托管服务器只需要对页面的**访问请求响应**一个如下的**空页面**
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <!-- metas -->
+    <title></title>
+    <link rel="shortcut icon" href="xxx.png" />
+    <link rel="stylesheet" href="xxx.css" />
+  </head>
+  <body>
+    <div id="root"><!-- page content --></div>
+    <script src="xxx/filterXss.min.js"></script>
+    <script src="xxx/x.chunk.js"></script>
+    <script src="xxx/main.chunk.js"></script>
+  </body>
+</html>
+
 ```
 
-然后，我们可以在useEffect中记录和更新from、to的值，可以根据自己的需要选择from、to的数据类型，这里我使用了React-router提供的Location类型。
+页面中留出一个用于填充渲染内容的视图节点 (`div#root`)，并插入指向项目**编译压缩后**的
 
-更新逻辑为：将to的值赋给from，然后将新的location赋值给to
+* `JS Bundle` 文件的 `script` 节点
+* 指向 `CSS` 文件的 `link.stylesheet` 节点等。
 
-```typescript jsx
-import { Location, useLocation } from "react-router-dom";
+浏览器接收到这样的文档响应之后，会根据文档内的链接加载脚本与样式资源，并完成以下几方面主要工作：
 
-type LocationTrans = {
-  from: Location;
-  to: Location;
-};
+> 1. **执行脚本**
+> 2. 进行**网络访问以获取在线数据**
+> 3. 使用 DOM API **更新页面结构**
+> 4. **绑定交互事件**
+> 5. **注入样式**
 
-const location = useLocation();
-const locationState = useRef<LocationTrans>({
-  from: null,
-  to: null,
-});
+以此完成整个渲染过程。
 
-useEffect(() => {
-  locationState.current.from = locationState.current.to;
-  locationState.current.to = location;
-}, [location]);
+CSR 模式有以下几方面优点：
+
+* UI 库支持
+* **前后端分离**
+* **服务器负担轻**
+
+
+
+
+### SSR (Server Side Rendering)
+
+SSR 的概念，即与 `CSR` 相对地，在服务端完成大部分渲染工作， 服务器在响应站点访问请求的时候，就已经渲染好可供呈现的页面。
+
+像 `React`、`Vue` 这样的 UI 生态巨头，其实都有一个关键的 `Virtual DOM` (or VDOM) 概念,先自己**建模处理视图表现与更新**、再批量调 `DOM API` 完成视图渲染更新。这就带来了一种 `SSR` 方案：
+
+`VDOM` 是**自建模型**，是一种抽象的嵌套数据结构，也就可以在 `Node` 环境（或者说一切服务端环境）下跑起来，**把原来的视图代码拿来在服务端跑**，通过 `VDOM` 维护，再在最后**拼接好字符串作为页面响应**，生成文档作为响应页面，此时的页面内容已经基本生成完毕，把逻辑代码、样式代码附上，则可以实现完整的、可呈现页面的响应。
+
+### SSR优点
+
+* 呈现速度和用户体验佳
+* `SEO` 友好
+
+### SSR缺点
+
+1. 引入成本高
+    * 将视图渲染的工作交给了服务器做，引入了新的概念和技术栈（如 Node）
+2. 响应时间长
+    * SSR 在完成访问响应的时候需要做更多的计算和生成工作
+    * 关键指标 `TTFB` (`Time To First Byte`) 将变得更大
+3. 首屏交互不佳
+    * 虽然 SSR 可以让页面请求响应后更快在浏览器上渲染出来
+    * 但在首帧出现，需要客户端加载激活的逻辑代码（如事件绑定）还没有初始化完毕的时候，其实是不可交互的状态
+
+
+
+### SSR-React 原理
+
+1. VDOM
+2. 同构
+3. 双端对比
+
+几大概念：
+- VDOM
+- 同构
+- 双端对比
+- renderToString()
+- renderToStaticMarkup()
+
+```javascript
+ReactDOMServer.renderToStaticMarkup(element)
+
 ```
 
-最后，利用React的Context进行封装，将其封装成一个组件和一个hook，使用者可以通过这个组件来进行监听，通过hook快速访问数据。我将这些代码放在了同一个.tsx文件中，保证了逻辑的高内聚。
-
-```typescript jsx
-import React, { createContext, useContext, useEffect, useRef } from "react";
-import { Location, useLocation } from "react-router-dom";
+仅仅是为了将组件渲染为html字符串，不会带有`data-react-checksum`属性
 
 
-type LocationTrans = {
-  from: Location;
-  to: Location;
-};
 
-export const LocationContext =
-  createContext<React.MutableRefObject<LocationTrans>>(null);
+### SPR (Serverless Pre-Rendering)
 
-export function WithLocationListener(props: { children: React.ReactNode }) {
-  const location = useLocation();
+无服务预渲染，这是 `Serverless` 话题之下的一项渲染技术。`SPR` 是指在 `SSR` 架构下通过预渲染与缓存能力，将部分页面转化为静态页面，以避免其在服务器接收到请求的时候频繁被渲染的能力，同时一些框架还支持**设置静态资源过期时间**，以确保这部分“静态页面”也能有一定的即时性。
 
-  const locationState = useRef<LocationTrans>({
-    from: null,
-    to: null,
-  });
 
-  useEffect(() => {
-    locationState.current.from = locationState.current.to;
-    locationState.current.to = location;
-  }, [location]);
 
-  return (
-    <LocationContext.Provider value={locationState}>
-      {props.children}
-    </LocationContext.Provider>
-  );
-}
+### SSG (Static Site Generation)
 
-export function useLocationConsumer(): LocationTrans {
-  const ref = useContext(LocationContext);
-  return ref.current;
-}
-```
+* 它与 `CSR` 一样，只需要**页面托管**，不需要真正编写并部署服务端，页面资源在编译完成部署之前就已经确定；
+* 但它又与 `SSR` 一样，属于一种 `Prerender` 预渲染操作，即在用户浏览器得到页面响应之前，页面内容和结构就已经渲染好了。
+* 当然形式和特征来看，它更接近 SSR。
 
-### 使用
+> `SSG` 模式，把原本日益动态化、交互性增强的页面，变成了大部分已经填充好，托管在页面服务 / CDN 上的**静态页面**
 
-这个组件只能在RouterProvider的子组件中使用，因为useLocation只能在这个范围内使用。
 
-```typescript jsx
-//import ....
 
-function Layout() {
-  return (
-    <WithLocationListener>
-      {/* ..... */}
-    </WithLocationListener>
-  );
-}
-```
+### NSR (Native Side Rendering)
 
-在需要用到路由信息的页面：
+`Native` 就是客户端，万物皆可**分布式**，可以理解为这就是一种分布式的 `SSR`，不过这里的渲染工作交给了客户端去做而不是远端服务器。在用户即将访问页面的**上级页面预取页面数据，由客户端缓存 HTML 结构，以达到用户真正访问时快速响应的效果**。
 
-```typescript jsx
-const { from, to } = useLocationConsumer();
-```
+NSR 见于各种移动端 + `Webview` 的 `Hybrid` 场景，是需要页面与客户端研发协作的一种优化手段。
 
-### 参考文档
-- https://juejin.cn/post/7195910055497580600
+
+
+### ESR (Edge Side Rendering)
+
+`Edge` 就是边缘，类比前面的各种 `XSR`，`ESR` 就是将渲染工作交给边缘服务器节点，常见的就是 `CDN` 的边缘节点。这个方案主打的是**边缘节点相比核心服务器与用户的距离优势**，利用了 `CDN` 分级缓存的概念，渲染和内容填充也可以是分级进行并缓存下来的。
+
+`ESR` 之下静态内容与动态内容是分流的，
+
+1. 边缘 CDN 节点可以将静态页面内容先响应给用户
+2. 然后再自己发起动态内容请求，得到核心服务器响应之后再返回给用户
+
+是在大型网络架构下非常极致的一种优化，但这也就依赖更庞大的技术基建体系了。
+
+
+
+### ISR (Incremental Site Rendering)
+
+**增量式网站渲染**，就是对待页面内容小刀切，**有更细的差异化渲染粒度**，能渐进、分层地进行渲染。
+
+常见的选择是：
+
+* 对于重要页面如首屏、访问量较大的直接落地页，进行**预渲染并添加缓存**，保证最佳的访问性能；
+* 对于次要页面，则确保有兜底内容可以即时 `fallback`，再将其实时数据的渲染留到 CSR 层次完成，同时触发异步缓存更新。
+
+对于“异步缓存更新”，则需要提到一个常见的内容缓存策略：`Stale While Revalidate`，CDN 对于数据请求始终首先响应缓存内容，如果这份内容已经过期，则**在响应之后再触发异步更新**——这也是对于次要元素或页面的缓存处理方式。
+

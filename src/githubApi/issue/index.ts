@@ -6,11 +6,11 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "npm lock 文件了解多少？",
+  title: "npx 了解多少？",
   key_world: [
-    "npm lock 原理",
-    "npm lock 实现",
-    "npm lock 作用",
+    "npx 原理",
+    "npx 作用",
+    "npx 执行",
   ],
   labels: [
     labels.engineering,

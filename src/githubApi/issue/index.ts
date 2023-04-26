@@ -7,7 +7,7 @@ import { search } from "@src/githubApi/issue/search";
 
 const remote = {
   title: "package.json 配置了解多少？",
-  key_world: "package.json ",
+  key_world: "package.json 配置",
   labels: [
     labels.engineering,
     // company.mi,

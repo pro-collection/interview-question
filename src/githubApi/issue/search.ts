@@ -1,5 +1,5 @@
 import { apiUrl } from "@utils/apiUrl";
-import { get } from "lodash";
+import { get, sum } from "lodash";
 import dayjs from "dayjs";
 import axios from "axios";
 
@@ -12,9 +12,14 @@ const request = (q: string, created: string) => {
   });
 };
 
-export const search = async (search: string) => {
+export const search = async (search: string[]) => {
   const created = dayjs().subtract(1, "year").format("YYYY-MM-DD");
-  const res = await request(search, created);
-  return get(res, "data.total_count", 0);
+
+  const promiseList = [];
+  for (let i = 0; i < search.length; i++) {
+    promiseList.push(request(search[i], created).then(res => get(res, "data.total_count", 0)));
+  }
+  const res = await Promise.all(promiseList);
+  return sum(res);
 };
 

@@ -6,8 +6,8 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "package.json 配置了解多少？",
-  key_world: "package.json 配置",
+  title: "npm script 了解多少？",
+  key_world: "npm script 运行",
   labels: [
     labels.engineering,
     // company.mi,
@@ -26,10 +26,10 @@ const main = async () => {
   console.log("yanle - logger: title", remote.title);
 
   // html 写入远端
-  // htmlWriteIssue(remote);
+  htmlWriteIssue(remote);
 
   // md 写入远端
-  writeIssue(remote);
+  // writeIssue(remote);
 
   // 写入本地 temp.md
   // writeToTemp();

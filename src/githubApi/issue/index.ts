@@ -6,17 +6,17 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "npx 了解多少？",
+  title: "npm 包管理了解多少？",
   key_world: [
-    "npx 原理",
-    "npx 作用",
-    "npx 执行",
+    "npm 依赖管理",
+    "npm 包管理",
+    "npm 缓存",
   ],
   labels: [
     labels.engineering,
-    company.mi,
+    company.tencent,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.master,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

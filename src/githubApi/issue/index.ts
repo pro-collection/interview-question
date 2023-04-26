@@ -6,13 +6,13 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "web components 了解多少？",
-  key_world: "webcomponents",
+  title: "[webpack] module、chunk 、bundle 的区别",
+  key_world: "bundle 含义",
   labels: [
-    labels.application,
+    labels.engineering,
     // company.mi,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

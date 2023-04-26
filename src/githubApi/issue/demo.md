@@ -1,26 +1,14 @@
-### npm 相关的知识点有哪些？
+首先上图：                       
+![1](https://foruda.gitee.com/images/1682513765931297503/0060bdb5_7819612.png)
 
-- 包的概念：npm 中的所有代码都是通过包的形式组织起来的，包是一组具有相互依赖关系的代码的集合，通常包含了一个 package.json 文件和相关的代码文件。
+- 手写下一个一个的文件，它们无论是 `ESM` 还是 `commonJS` 或是 `AMD`，他们都是 `module`
+- 当我们写的 `module` 源文件传到 `webpack` 进行打包时，`webpack` 会根据文件引用关系生成 `chunk` 文件，`webpack` 会对这个 `chunk` 文件进行一些操作
+- webpack 处理好 chunk 文件后，最后会输出 bundle 文件，这个 bundle 文件包含了经过加载和编译的最终源文件，可以直接在浏览器中运行。
 
-- package.json：是 npm 包的配置文件，包含了包的名称、版本、依赖等信息。
+一般来说一个 chunk 对应一个 bundle，比如上图中的 `utils.js -> chunks 1 -> utils.bundle.js`
 
-- 常用的 npm 命令：npm init、npm install、npm uninstall、npm publish、npm run 等。
+但也有例外，比如说上图中，我就用 `MiniCssExtractPlugin` 从 chunks 0 中抽离出了 `index.bundle.css` 文件
 
-- 版本管理：npm 使用语义化版本控制（Semantic Versioning）规范，即 MAJOR.MINOR.PATCH 格式来管理版本。
-
-- 依赖管理：npm 可以管理项目的依赖关系，支持本地安装和全局安装两种方式。
-
-- npm registry：npm 的官方仓库，存储了数以百万计的 npm 包，开发者可以通过 npm 安装依赖。
-
-- package-lock.json：npm 在安装依赖时会自动生成该文件，用于记录当前项目依赖包的精确版本信息。
-
-- npx：npm 5.2+ 版本中新增的工具，用于快速执行本地安装的 npm 包。
-
-- npm scripts：在 package.json 文件中可以定义一些脚本命令，可以使用 npm run 运行这些命令，比如构建、测试、启动应用等。
-
-- npm 模块开发：使用 npm 可以开发和发布自己的模块，将其分享给其他开发者使用。
-
-- npm 包管理原理：npm 包管理的原理包括包的安装、依赖管理、包的发布、缓存、安全等方面，需要了解其内部实现机制。
-
-
-
+**总结**：                     
+module，chunk 和 bundle 其实就是同一份逻辑代码在不同转换场景下的取了三个名字：                                 
+我们直接写出来的是 module，webpack 处理时是 chunk，最后生成浏览器可以直接运行的 bundle。                  

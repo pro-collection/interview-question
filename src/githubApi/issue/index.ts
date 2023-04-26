@@ -6,8 +6,8 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[webpack] module、chunk 、bundle 的区别",
-  key_world: "bundle 含义",
+  title: "package.json 配置了解多少？",
+  key_world: "package.json ",
   labels: [
     labels.engineering,
     // company.mi,

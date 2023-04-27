@@ -6,11 +6,11 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] React15 架构存在什么样的问题？",
+  title: "[React] React16 是什么样的架构特点？",
   key_world: [
-    "react15 架构",
-    "react 架构",
+    "react16 架构",
     "react Reconciler",
+    "react fiber",
     "react 渲染器",
     "react 协调器",
   ],

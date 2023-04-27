@@ -1,41 +1,63 @@
-**关键词**：react15 架构、react 架构、react Reconciler、react 渲染器、react 协调器
+**关键词**：react16 架构、react Reconciler、react fiber、react 渲染器、react 协调器
 
-React15 架构可以分为两层：
+React16架构可以分为三层：
 
-- Reconciler（协调器）—— 负责找出变化的组件
-- Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入Reconciler
+Reconciler（协调器）—— 负责找出变化的组件
+Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+可以看到，相较于React15，React16中新增了Scheduler（调度器）。
+
+### Scheduler（调度器）
+
+以浏览器是否有剩余时间作为任务中断的标准，那么**需要一种机制，当浏览器有剩余时间时通知我们**。
+
+其实部分浏览器已经实现了这个API，这就是 `requestIdleCallback` (opens new window)。但是由于以下因素，React放弃使用：
+
+- 浏览器兼容性
+- 触发频率不稳定，受很多因素影响。比如当我们的浏览器切换tab后，之前tab注册的 `requestIdleCallback` 触发的频率会变得很低
+
+基于以上原因，React实现了功能更完备的 `requestIdleCallback polyfill`，这就是`Scheduler`。除了在空闲时触发回调的功能外，`Scheduler` 还提供了多种调度优先级供任务设置。
+
+Scheduler (opens new window) 是独立于React的库
 
 ### Reconciler（协调器）
 
-我们知道，在React中可以通过 `this.setState、this.forceUpdate、ReactDOM.render` 等API触发更新。
+在 React15 中 `Reconciler` 是递归处理虚拟DOM的
 
-每当有更新发生时，Reconciler会做如下工作：
+在 React16 中更新工作从递归变成了可以中断的循环过程。每次循环都会调用 `shouldYield` 判断当前是否有剩余时间。
+```js
+/** @noinline */
+function workLoopConcurrent() {
+  // Perform work until Scheduler asks us to yield
+  while (workInProgress !== null && !shouldYield()) {
+    workInProgress = performUnitOfWork(workInProgress);
+  }
+}
+```
 
-- 调用函数组件、或class组件的render方法，将返回的JSX转化为虚拟DOM
-- 将虚拟DOM和上次更新时的虚拟DOM对比
-- 通过对比找出本次更新中变化的虚拟DOM
-- 通知Renderer将变化的虚拟DOM渲染到页面上
+**那么React16是如何解决中断更新时DOM渲染不完全的问题呢？**
+
+在React16中，Reconciler与Renderer不再是交替工作。当Scheduler将任务交给Reconciler后，Reconciler会为变化的虚拟DOM打上代表增/删/更新的标记；
+
+全部标记可以见这里： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactSideEffectTags.js
+
+整个Scheduler与 Reconciler 的工作都在内存中进行。只有当所有组件都完成Reconciler的工作，才会统一交给Renderer。
+
+可以看这里 react16 对 Reconciler 的解释：https://zh-hans.legacy.reactjs.org/docs/codebase-overview.html#fiber-reconciler
+
+Reconciler 内部采用了 `Fiber` 的架构。
 
 ### Renderer（渲染器）
-由于React支持跨平台，所以不同平台有不同的Renderer。我们前端最熟悉的是负责在浏览器环境渲染的Renderer —— `ReactDOM`
 
-除此之外，还有：
-
-- ReactNative 渲染器，渲染App原生组件
-- ReactTest 渲染器，渲染出纯Js对象用于测试
-- ReactArt 渲染器，渲染到Canvas, SVG 或 VML (IE8)
-
-在每次更新发生时，Renderer接到 `Reconciler` 通知，将变化的组件渲染在当前宿主环境。
-
-### React15 架构的缺点
-**react15 是通过递归去更新组件的**
-
-在 Reconciler 中，mount的组件会调用 mountComponent (opens new window)，update 的组件会调用 updateComponent (opens new window)。这两个方法都会递归更新子组件。
-
-**由于递归执行，所以更新一旦开始，中途就无法中断。当层级很深时，递归更新时间超过了16ms，用户交互就会卡顿。**
-
-本质上说是因为 递归 的架构， 是不允许中断的， 因为 react 希望有更好的渲染性能，那么面对大规模 dom diff 更新渲染的时候， 就不能让每一递归时间超过 16 ms。
-递归是做不到这个功能的。 所以只有重写 react15 架构。引入了 react16 fiber 架构。
+Renderer根据Reconciler为虚拟DOM打的标记，同步执行对应的DOM操作。
 
 
 
+### 参考资料 
+- https://react.iamkasong.com/preparation/newConstructure.html#react16%E6%9E%B6%E6%9E%84
+
+
+
+```js
+
+```

@@ -1,142 +1,83 @@
-**关键词**：react16 架构、react Reconciler、react fiber、react 协调器
+**关键词**：react16 架构、react Reconciler、react fiber、react 渲染器、react 协调器
 
-### 代数效应的实践
+### 双缓存Fiber树
 
-React中做的就是践行代数效应（Algebraic Effects）。
+如果当前帧画面计算量比较大，导致清除上一帧画面到绘制当前帧画面之间有较长间隙，就会出现白屏。
 
-简单点儿来说就是： **用于将副作用从函数调用中分离。**
+为了解决这个问题， 就有了图像处理中的**双缓存技术**。               
 
-举例子：                    
-比如我们要获取用户的姓名做展示：
+双缓存是一种技术，用于在图像处理中减少闪烁和图像模糊等视觉问题。在使用双缓存时，图像处理器会将图像绘制到一个“后台缓存”中，而不是直接绘制到屏幕上。一旦绘制完成，新的图像将与当前显示的图像交换，使得新图像无缝地显示在屏幕上，避免了闪烁和模糊的问题。因此，双缓存有助于提高图像处理的质量和可靠性，特别是在高速显示和实时处理应用中。
 
-```js
-const resource = fetchProfileData();
+React使用“双缓存”来完成Fiber树的构建与替换——对应着DOM树的创建与更新。
 
-function ProfileDetails() {
-  // Try to read user info, although it might not have loaded yet
-  const user = resource.user.read();
-  return <h1>{user.name}</h1>;
-}
-```
 
-代码如上， 但是 resource 是通过异步获取的。 这个时候代码就要改为下面这种形式
+在React中最多会同时存在两棵Fiber树。当前屏幕上显示内容对应的Fiber树称为current Fiber树，正在内存中构建的Fiber树称为workInProgress Fiber树。
+
+React Fiber 的双缓存机制是一种优化技术，用于在 UI 更新过程中避免视觉问题，如闪烁、撕裂和卡顿等。React Double Buffer 在 React Fiber 内部实现了两个缓存区域：当前显示的缓存（Current Buffer）和等待显示的缓存（Work Buffer）。
 
 ```js
-const resource = fetchProfileData();
-
-async function ProfileDetails() {
-  // Try to read user info, although it might not have loaded yet
-  const user = await resource.user.read();
-  return <h1>{user.name}</h1>;
-}
+currentFiber.alternate === workInProgressFiber;
+workInProgressFiber.alternate === currentFiber;
 ```
 
-但是 async/await 是具有传染性的。 这个穿践行就是副作用， 我们不希望有这样的副作用， 尽管里面有异步调用， 不希望这样的副作用传递给外部的函数， 只希望外部的函数是一个纯函数。
 
-### 代数效应在React中的应用
+当应用程序状态发生更改，并需要更新 UI 时，React Fiber 首先在 Work Buffer 中执行所有渲染操作，以避免将中间状态呈现在屏幕上。一旦 Work Buffer 中的所有渲染操作完成，React Fiber 将当前缓存与工作缓存进行切换，即将 Work Buffer 设置为当前缓存，以此来更新屏幕上的 UI。
 
-在 react 代码中， 每一个函数式组件， 其实都是一个纯函数， 但是内部里面可能会有各种各样的副作用。 这些副作用就是我们使用的 hooks;
+这样一来，React Fiber 就可以确保在任何时候，所有呈现在屏幕上的内容都是完整和稳定的。
 
-对于类似useState、useReducer、useRef这样的Hook，我们不需要关注FunctionComponent的state在Hook中是如何保存的，React会为我们处理。
+### mount与update 场景
 
-我们只需要假设useState返回的是我们想要的state，并编写业务逻辑就行。
+当组件第一次被挂载时：
 
-可以看官方的 Suspense demo, 可以是通过 Suspense 让内部直接可以同步的方式调用异步代码；                        
-代码链接： https://codesandbox.io/s/frosty-hermann-bztrp?file=/src/index.js:152-160
 ```jsx
-import React, { Suspense } from "react";
-import ReactDOM from "react-dom";
+class MyComponent extends React.Component {
 
-import "./styles.css";
-import { fetchProfileData } from "./fakeApi";
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
 
-const resource = fetchProfileData();
+  handleClick = () => {
+    this.setState((prevState) => ({
+      count: prevState.count + 1,
+    }));
+  }
 
-function ProfilePage() {
-  return (
-    <Suspense
-      fallback={<h1>Loading profile...</h1>}
-    >
-      <ProfileDetails />
-      <Suspense
-        fallback={<h1>Loading posts...</h1>}
-      >
-        <ProfileTimeline />
-      </Suspense>
-    </Suspense>
-  );
+  render() {
+    return (
+      <div onClick={this.handleClick}>
+        Click me: {this.state.count}
+      </div>
+    );
+  }
 }
 
-function ProfileDetails() {
-  // Try to read user info, although it might not have loaded yet
-  const user = resource.user.read();
-  return <h1>{user.name}</h1>;
-}
-
-function ProfileTimeline() {
-  // Try to read posts, although they might not have loaded yet
-  const posts = resource.posts.read();
-  return (
-    <ul>
-      {posts.map(post => (
-        <li key={post.id}>{post.text}</li>
-      ))}
-    </ul>
-  );
-}
-
-const rootElement = document.getElementById(
-  "root"
-);
-ReactDOM.createRoot(rootElement).render(
-  <ProfilePage />
-);
+ReactDOM.render(<MyComponent />, document.getElementById('root'));
 ```
 
-### Generator 架构
+当我们将 `<MyComponent />` 挂载到页面上时，React Fiber 首先会在内存中创建一个空的 Fiber 树，然后根据组件的定义，为组件创建一个初始的“工作单元”（Work In Progress）。
 
-从React15到React16，协调器（Reconciler）重构的一大目的是：将老的同步更新的架构变为异步可中断更新。
+在这个工作单元内部，React Fiber 会为状态和 props 建立初始的 Fiber 对象，并在之后的更新过程中使用这些 Fiber 对象来跟踪组件的状态和变化。这样可以确保任何时候都可以根据状态和 props 的变化来更新 UI，而不会出现任何问题。
 
-异步可中断更新可以理解为：更新在执行过程中可能会被打断（浏览器时间分片用尽或有更高优任务插队），当可以继续执行时恢复之前执行的中间状态。
+接下来，React Fiber 开始在工作单元中执行所有的渲染操作，生成一棵虚拟 DOM 树，并将其添加到 Work Buffer 中。然后，React Fiber 会检查 Work Buffer 是否有更改，如果有更改，就将 Work Buffer 与 Current Buffer 进行对比，以查找差异并更新到 DOM 上。
 
-其实，浏览器原生就支持类似的实现，这就是Generator。
+这个初次渲染的过程不太会涉及到双缓存树，因为当前缓存是空的，所有的操作都是在 Work Buffer 中进行的。但是，一旦初次渲染完成，并且组件状态发生变化时，双缓存树就开始发挥作用了。
 
-但是Generator的一些缺陷使React团队放弃了他：
+当我们通过点击按钮更新组件状态时，React Fiber 将启动一个新的渲染周期，并为更新创建一个新的工作单元。React Fiber 会在新的工作单元中更新状态、生成新的虚拟 DOM 树，并将其添加到 Work Buffer 中。
 
-- 类似async，Generator也是传染性的，使用了Generator则上下文的其他函数也需要作出改变。这样心智负担比较重。
-- Generator执行的中间状态是上下文关联的。
+然后，React Fiber 会将 Work Buffer 与 Current Buffer 进行对比，找出差异并将其更新到 DOM 上。但是，由于双缓存树的存在，React Fiber 不会立即将 Work Buffer 切换到 Current Buffer，以避免将中间状态显示在屏幕上。
 
-例如这样的例子：
-```js
-function* doWork(A, B, C) {
-  var x = doExpensiveWorkA(A);
-  yield;
-  var y = x + doExpensiveWorkB(B);
-  yield;
-  var z = y + doExpensiveWorkC(C);
-  return z;
-}
-```
+### 执行流程
+好的，下面是 React Fiber 在页面初次更新时的工作过程的流程图：
 
-但是当我们考虑“高优先级任务插队”的情况，如果此时已经完成doExpensiveWorkA与doExpensiveWorkB计算出x与y。
-
-此时B组件接收到一个高优更新，由于Generator执行的中间状态是上下文关联的，所以计算y时无法复用之前已经计算出的x，需要重新计算。
-
-如果通过全局变量保存之前执行的中间状态，又会引入新的复杂度。
-
-### fiber 架构
-
-他的中文翻译叫做纤程，与进程（Process）、线程（Thread）、协程（Coroutine）同为程序执行过程。
-
-在很多文章中将纤程理解为协程的一种实现。在JS中，协程的实现便是Generator。
-
-所以，我们可以将纤程(Fiber)、协程(Generator)理解为代数效应思想在JS中的体现。
-
-React Fiber可以理解为：
-
-React内部实现的一套状态更新机制。支持任务不同优先级，可中断与恢复，并且恢复后可以复用之前的中间状态。
-
-其中每个任务更新单元为React Element对应的Fiber节点。
-
+1. 应用程序启动，ReactDOM 调用 `ReactDOM.render()` 方法，并将组件渲染到 DOM 中，React Fiber 创建一个空的 Fiber 树。
+2. React Fiber 为组件创建初始的“工作单元”，并在其中创建状态和 props 的 Fiber 对象。
+3. React Fiber 执行组件的 `render()` 方法，生成虚拟 DOM 树并添加到工作单元中。
+4. React Fiber 将工作单元中的虚拟 DOM 树添加到 Work Buffer 中。
+5. React Fiber 检查 Work Buffer 是否有更改，如果有更改，则将其与 Current Buffer 进行对比，并将差异更新到 DOM 上。
+6. 由于这是初次渲染，Current Buffer 为空，所有更新操作都在 Work Buffer 中完成，然后将 Work Buffer 设置为 Current Buffer。
+7. React Fiber 在内存中保留 Fiber 树的副本，并用于后续的更新操作。此时，组件初次渲染流程结束。
 
 

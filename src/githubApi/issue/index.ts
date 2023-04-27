@@ -6,18 +6,19 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] React Reconciler 为何要采用 fiber 架构？",
+  title: "[React] fiber 架构 的工作原理？",
   key_world: [
     "react16 架构",
     "react Reconciler",
     "react fiber",
+    "react 渲染器",
     "react 协调器",
   ],
   labels: [
     labels.frameWork,
     // company.tencent,
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

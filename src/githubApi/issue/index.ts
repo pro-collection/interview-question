@@ -6,12 +6,11 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] React16 是什么样的架构特点？",
+  title: "[React] React Reconciler 为何要采用 fiber 架构？",
   key_world: [
     "react16 架构",
     "react Reconciler",
     "react fiber",
-    "react 渲染器",
     "react 协调器",
   ],
   labels: [

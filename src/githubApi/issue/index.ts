@@ -6,11 +6,12 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "npm 包管理了解多少？",
+  title: "[React] react 是如何实现页面的快速响应？",
   key_world: [
-    "npm 依赖管理",
-    "npm 包管理",
-    "npm 缓存",
+    "react 快速响应实现",
+    "react 可中断更新",
+    "react IO瓶颈",
+    "react CPU瓶颈",
   ],
   labels: [
     labels.engineering,

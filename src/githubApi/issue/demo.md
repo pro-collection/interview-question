@@ -1,48 +1,41 @@
-**关键词**：react 快速响应实现、react 可中断更新、react IO瓶颈、react CPU瓶颈
+**关键词**：react15 架构、react 架构、react Reconciler、react 渲染器、react 协调器
 
-### react 是如何实现快速响应的？
+React15 架构可以分为两层：
 
-我们日常使用App，浏览网页时，有两类场景会制约快速响应：
+- Reconciler（协调器）—— 负责找出变化的组件
+- Renderer（渲染器）—— 负责将变化的组件渲染到页面上
 
-当遇到大计算量的操作或者设备性能不足使页面掉帧，导致卡顿。
+### Reconciler（协调器）
 
-发送网络请求后，由于需要等待数据返回才能进一步操作导致不能快速响应。
+我们知道，在React中可以通过 `this.setState、this.forceUpdate、ReactDOM.render` 等API触发更新。
 
-这两类场景可以概括为：
+每当有更新发生时，Reconciler会做如下工作：
 
-- CPU的瓶颈
-- IO的瓶颈
+- 调用函数组件、或class组件的render方法，将返回的JSX转化为虚拟DOM
+- 将虚拟DOM和上次更新时的虚拟DOM对比
+- 通过对比找出本次更新中变化的虚拟DOM
+- 通知Renderer将变化的虚拟DOM渲染到页面上
 
-### CPU的瓶颈
+### Renderer（渲染器）
+由于React支持跨平台，所以不同平台有不同的Renderer。我们前端最熟悉的是负责在浏览器环境渲染的Renderer —— `ReactDOM`
 
-**主流浏览器刷新频率为60Hz，即每（1000ms / 60Hz）16.6ms浏览器刷新一次。**
+除此之外，还有：
 
-我们知道，JS可以操作DOM，GUI渲染线程与JS线程是互斥的。所以JS脚本执行和浏览器布局、绘制不能同时执行。
+- ReactNative 渲染器，渲染App原生组件
+- ReactTest 渲染器，渲染出纯Js对象用于测试
+- ReactArt 渲染器，渲染到Canvas, SVG 或 VML (IE8)
 
-在每16.6ms时间内，需要完成如下工作： `JS脚本执行 -----  样式布局 ----- 样式绘制`
+在每次更新发生时，Renderer接到 `Reconciler` 通知，将变化的组件渲染在当前宿主环境。
 
-当JS执行时间过长，超出了16.6ms，这次刷新就没有时间执行样式布局和样式绘制了。
+### React15 架构的缺点
+**react15 是通过递归去更新组件的**
 
-比如我们可以通过一个循环， 渲染列表 3000 个组件， 那么这种渲染时间， 就肯定是远超过 16.6 ms 的， 页面就会感觉到卡顿。
+在 Reconciler 中，mount的组件会调用 mountComponent (opens new window)，update 的组件会调用 updateComponent (opens new window)。这两个方法都会递归更新子组件。
 
-如何解决这个问题呢？
+**由于递归执行，所以更新一旦开始，中途就无法中断。当层级很深时，递归更新时间超过了16ms，用户交互就会卡顿。**
 
-**答案是：在浏览器每一帧的时间中，预留一些时间给JS线程，React利用这部分时间更新组件（可以看到，在源码中，预留的初始时间是5ms）。**                        
-源码位置： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/scheduler/src/forks/SchedulerHostConfig.default.js#L119
+本质上说是因为 递归 的架构， 是不允许中断的， 因为 react 希望有更好的渲染性能，那么面对大规模 dom diff 更新渲染的时候， 就不能让每一递归时间超过 16 ms。
+递归是做不到这个功能的。 所以只有重写 react15 架构。引入了 react16 fiber 架构。
 
-当预留的时间不够用时，React将线程控制权交还给浏览器使其有时间渲染UI，React则等待下一帧时间到来继续被中断的工作。
 
-这种将长任务分拆到每一帧中，像蚂蚁搬家一样一次执行一小段任务的操作，被称为时间切片（time slice）
 
-**所以，解决CPU瓶颈的关键是实现时间切片，而时间切片的关键是：将同步的更新变为可中断的异步更新。**
-
-### IO的瓶颈
-
-网络延迟是前端开发者无法解决的。如何在网络延迟客观存在的情况下，减少用户对网络延迟的感知？
-
-简单点儿来说， 就是在点击页面跳转的是时候提前去加载下一个页面的内容。 或者在当前页面 hold .5s 左右时间， 利用这个时间去加载下一个页面的内容。 
-从而达到下一个页面的快速交互
-
-React实现了 `Suspense` 功能及配套的 hook——`useDeferredValue`。
-
-而在源码内部，为了支持这些特性，**同样需要将同步的更新变为可中断的异步更新。**

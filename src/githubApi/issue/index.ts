@@ -6,16 +6,17 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] react 是如何实现页面的快速响应？",
+  title: "[React] React15 架构存在什么样的问题？",
   key_world: [
-    "react 快速响应实现",
-    "react 可中断更新",
-    "react IO瓶颈",
-    "react CPU瓶颈",
+    "react15 架构",
+    "react 架构",
+    "react Reconciler",
+    "react 渲染器",
+    "react 协调器",
   ],
   labels: [
-    labels.engineering,
-    company.tencent,
+    labels.frameWork,
+    // company.tencent,
   ],
   milestone: MileStone.master,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

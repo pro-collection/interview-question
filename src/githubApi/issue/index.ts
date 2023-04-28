@@ -11,7 +11,6 @@ const remote = {
     "react16 架构",
     "react Reconciler",
     "react fiber",
-    "react 渲染器",
     "react 协调器",
   ],
   labels: [

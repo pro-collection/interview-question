@@ -1,3 +1,5 @@
+**关键词**：react16 架构、react Reconciler、react fiber、react 协调器
+
 **关键词**：react16 架构、react Reconciler、react fiber、react 渲染器、react 协调器
 
 ### 双缓存Fiber树

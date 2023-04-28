@@ -20,6 +20,9 @@ export const search = async (search: string[]) => {
     promiseList.push(request(search[i], created).then(res => get(res, "data.total_count", 0)));
   }
   const res = await Promise.all(promiseList);
+  for (let i = 0; i < res.length; i++) {
+    console.log(`yanle - logger: 关键词： ${search[i]}, 对应搜索热度： ${res[i]}`);
+  }
   return sum(res);
 };
 

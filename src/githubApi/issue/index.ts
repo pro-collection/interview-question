@@ -6,7 +6,7 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] Fiber的含义与数据结构",
+  title: "[React] render 阶段的执行过程",
   key_world: [
     "react16 架构",
     "react Reconciler",

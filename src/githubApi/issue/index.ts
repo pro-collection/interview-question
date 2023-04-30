@@ -6,11 +6,11 @@ import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 
 const remote = {
-  title: "[React] render 阶段的执行过程",
+  title: "[React] commit 阶段的执行过程",
   key_world: [
     "react16 架构",
     "react Reconciler",
-    "react fiber",
+    "react commit 阶段",
     "react 协调器",
   ],
   labels: [

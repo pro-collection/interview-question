@@ -1,457 +1,624 @@
-**关键词**：react16 架构、react Reconciler、react fiber、react 协调器
+**关键词**：react16 架构、react Reconciler、react commit 阶段、react 协调器
 
-render阶段开始于`performSyncWorkOnRoot`或`performConcurrentWorkOnRoot`方法的调用。这取决于本次更新是同步更新还是异步更新。
+commitRoot方法是commit阶段工作的起点。fiberRootNode会作为传参。 `commitRoot(root);`
 
-```js
-// performSyncWorkOnRoot会调用该方法
-function workLoopSync() {
-  while (workInProgress !== null) {
-    performUnitOfWork(workInProgress);
+如何走到 commit 阶段的， 可以参考这个文档：https://github.com/pro-collection/interview-question/issues/324
+
+在rootFiber.firstEffect上保存了一条需要执行副作用的Fiber节点的单向链表effectList，这些Fiber节点的updateQueue中保存了变化的props。
+
+这些副作用对应的DOM操作在commit阶段执行。
+
+除此之外，一些生命周期钩子（比如componentDidXXX）、hook（比如useEffect）需要在commit阶段执行。
+
+commit阶段的主要工作（即Renderer的工作流程）分为三部分：
+
+before mutation阶段（执行DOM操作前）
+
+mutation阶段（执行DOM操作）
+
+layout阶段（执行DOM操作后）
+
+你可以从这里看到commit阶段的完整代码： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactFiberWorkLoop.new.js#L2001
+
+在before mutation阶段之前和layout阶段之后还有一些额外工作，涉及到比如useEffect的触发、优先级相关的重置、ref的绑定/解绑。
+
+### before mutation之前
+
+`commitRootImpl`方法中直到第一句`if (firstEffect !== null)`之前属于`before mutation之前`。
+
+我们大体看下他做的工作，现在你还不需要理解他们：
+
+```ts
+do {
+    // 触发useEffect回调与其他同步任务。由于这些任务可能触发新的渲染，所以这里要一直遍历执行直到没有任务
+    flushPassiveEffects();
+  } while (rootWithPendingPassiveEffects !== null);
+
+  // root指 fiberRootNode
+  // root.finishedWork指当前应用的rootFiber
+  const finishedWork = root.finishedWork;
+
+  // 凡是变量名带lane的都是优先级相关
+  const lanes = root.finishedLanes;
+  if (finishedWork === null) {
+    return null;
+  }
+  root.finishedWork = null;
+  root.finishedLanes = NoLanes;
+
+  // 重置Scheduler绑定的回调函数
+  root.callbackNode = null;
+  root.callbackId = NoLanes;
+
+  let remainingLanes = mergeLanes(finishedWork.lanes, finishedWork.childLanes);
+  // 重置优先级相关变量
+  markRootFinished(root, remainingLanes);
+
+  // 清除已完成的discrete updates，例如：用户鼠标点击触发的更新。
+  if (rootsWithPendingDiscreteUpdates !== null) {
+    if (
+      !hasDiscreteLanes(remainingLanes) &&
+      rootsWithPendingDiscreteUpdates.has(root)
+    ) {
+      rootsWithPendingDiscreteUpdates.delete(root);
+    }
+  }
+
+  // 重置全局变量
+  if (root === workInProgressRoot) {
+    workInProgressRoot = null;
+    workInProgress = null;
+    workInProgressRootRenderLanes = NoLanes;
+  } else {
+  }
+
+  // 将effectList赋值给firstEffect
+  // 由于每个fiber的effectList只包含他的子孙节点
+  // 所以根节点如果有effectTag则不会被包含进来
+  // 所以这里将有effectTag的根节点插入到effectList尾部
+  // 这样才能保证有effect的fiber都在effectList中
+  let firstEffect;
+  if (finishedWork.effectTag > PerformedWork) {
+    if (finishedWork.lastEffect !== null) {
+      finishedWork.lastEffect.nextEffect = finishedWork;
+      firstEffect = finishedWork.firstEffect;
+    } else {
+      firstEffect = finishedWork;
+    }
+  } else {
+    // 根节点没有effectTag
+    firstEffect = finishedWork.firstEffect;
+  }
+```
+
+可以看到，before mutation之前主要做一些变量赋值，状态重置的工作。
+
+这一长串代码我们只需要关注最后赋值的firstEffect，在commit的三个子阶段都会用到他。
+
+### layout之后
+接下来让我们简单看下layout阶段执行完后的代码，现在你还不需要理解他们：
+
+```ts
+const rootDidHavePassiveEffects = rootDoesHavePassiveEffects;
+
+// useEffect相关
+if (rootDoesHavePassiveEffects) {
+  rootDoesHavePassiveEffects = false;
+  rootWithPendingPassiveEffects = root;
+  pendingPassiveEffectsLanes = lanes;
+  pendingPassiveEffectsRenderPriority = renderPriorityLevel;
+} else {}
+
+// 性能优化相关
+if (remainingLanes !== NoLanes) {
+  if (enableSchedulerTracing) {
+    // ...
+  }
+} else {
+  // ...
+}
+
+// 性能优化相关
+if (enableSchedulerTracing) {
+  if (!rootDidHavePassiveEffects) {
+    // ...
   }
 }
 
-// performConcurrentWorkOnRoot会调用该方法
-function workLoopConcurrent() {
-  while (workInProgress !== null && !shouldYield()) {
-    performUnitOfWork(workInProgress);
+// ...检测无限循环的同步任务
+if (remainingLanes === SyncLane) {
+  // ...
+} 
+
+// 在离开commitRoot函数前调用，触发一次新的调度，确保任何附加的任务被调度
+ensureRootIsScheduled(root, now());
+
+// ...处理未捕获错误及老版本遗留的边界问题
+
+
+// 执行同步任务，这样同步任务不需要等到下次事件循环再执行
+// 比如在 componentDidMount 中执行 setState 创建的更新会在这里被同步执行
+// 或useLayoutEffect
+flushSyncCallbackQueue();
+
+return null;
+```
+
+主要包括三点内容：
+
+1. useEffect相关的处理。
+
+2. 性能追踪相关。
+源码里有很多和interaction相关的变量。他们都和追踪React渲染时间、性能相关，在Profiler API 和DevTools 中使用。
+   
+3. 在commit阶段会触发一些生命周期钩子（如 componentDidXXX）和hook（如useLayoutEffect、useEffect）。
+
+
+### before mutation 阶段
+
+Renderer工作的阶段被称为commit阶段。commit阶段可以分为三个子阶段：
+
+before mutation阶段（执行DOM操作前）
+
+mutation阶段（执行DOM操作）
+
+layout阶段（执行DOM操作后）
+
+本节我们看看before mutation阶段（执行DOM操作前）都做了什么。
+
+#### 概览
+before mutation阶段的代码很短，整个过程就是遍历effectList并调用commitBeforeMutationEffects函数处理。
+
+```ts
+// 保存之前的优先级，以同步优先级执行，执行完毕后恢复之前优先级
+const previousLanePriority = getCurrentUpdateLanePriority();
+setCurrentUpdateLanePriority(SyncLanePriority);
+
+// 将当前上下文标记为CommitContext，作为commit阶段的标志
+const prevExecutionContext = executionContext;
+executionContext |= CommitContext;
+
+// 处理focus状态
+focusedInstanceHandle = prepareForCommit(root.containerInfo);
+shouldFireAfterActiveInstanceBlur = false;
+
+// beforeMutation阶段的主函数
+commitBeforeMutationEffects(finishedWork);
+
+focusedInstanceHandle = null;
+```
+
+我们重点关注beforeMutation阶段的主函数commitBeforeMutationEffects做了什么。
+
+#### commitBeforeMutationEffects
+
+```ts
+function commitBeforeMutationEffects() {
+  while (nextEffect !== null) {
+    const current = nextEffect.alternate;
+
+    if (!shouldFireAfterActiveInstanceBlur && focusedInstanceHandle !== null) {
+      // ...focus blur相关
+    }
+
+    const effectTag = nextEffect.effectTag;
+
+    // 调用getSnapshotBeforeUpdate
+    if ((effectTag & Snapshot) !== NoEffect) {
+      commitBeforeMutationEffectOnFiber(current, nextEffect);
+    }
+
+    // 调度useEffect
+    if ((effectTag & Passive) !== NoEffect) {
+      if (!rootDoesHavePassiveEffects) {
+        rootDoesHavePassiveEffects = true;
+        scheduleCallback(NormalSchedulerPriority, () => {
+          flushPassiveEffects();
+          return null;
+        });
+      }
+    }
+    nextEffect = nextEffect.nextEffect;
   }
 }
 ```
 
-可以看到，他们唯一的区别是是否调用shouldYield。如果当前浏览器帧没有剩余时间，shouldYield会中止循环，直到浏览器有空闲时间后再继续遍历。
+整体可以分为三部分：
 
-workInProgress代表当前已创建的workInProgress fiber。
+- 处理DOM节点渲染/删除后的 autoFocus、blur 逻辑。
 
-performUnitOfWork方法会创建下一个Fiber节点并赋值给workInProgress，并将workInProgress与已创建的Fiber节点连接起来构成Fiber树。
+- 调用getSnapshotBeforeUpdate生命周期钩子。
 
-通过遍历的方式实现可中断的递归，所以performUnitOfWork的工作可以分为两部分：“递”和“归”。
+- 调度useEffect。
 
-### 创建节点
+#### 调用 getSnapshotBeforeUpdate
 
-首先从rootFiber开始向下深度优先遍历。为遍历到的每个Fiber节点调用`beginWork`方法 (opens new window)。
+commitBeforeMutationEffectOnFiber是commitBeforeMutationLifeCycles的别名。
 
-该方法会根据传入的Fiber节点创建子Fiber节点，并将这两个Fiber节点连接起来。
+在该方法内会调用getSnapshotBeforeUpdate。
 
-当遍历到叶子节点（即没有子组件的组件）时就会进入“归”阶段。
+从Reactv16开始，componentWillXXX钩子前增加了UNSAFE_前缀。
 
-在“归”阶段会调用`completeWork` (opens new window)处理Fiber节点。
+究其原因，是因为Stack Reconciler重构为Fiber Reconciler后，render阶段的任务可能中断/重新开始，对应的组件在render阶段的生命周期钩子（即componentWillXXX）可能触发多次。
 
-当某个Fiber节点执行完completeWork，如果其存在兄弟Fiber节点（即fiber.sibling !== null），会进入其兄弟Fiber的“递”阶段。
+这种行为和Reactv15不一致，所以标记为UNSAFE_。
 
-如果不存在兄弟Fiber，会进入父级Fiber的“归”阶段。
+更详细的解释参照这里(opens new window)
 
-“递”和“归”阶段会交错执行直到“归”到rootFiber。至此，render阶段的工作就结束了。
+为此，React提供了替代的生命周期钩子getSnapshotBeforeUpdate。
 
-**举例**
+我们可以看见，getSnapshotBeforeUpdate是在commit阶段内的before mutation阶段调用的，由于commit阶段是同步的，所以不会遇到多次调用的问题。
 
+#### 调度useEffect
+在这几行代码内，scheduleCallback方法由Scheduler模块提供，用于以某个优先级异步调度一个回调函数。
+
+```ts
+// 调度useEffect
+if ((effectTag & Passive) !== NoEffect) {
+  if (!rootDoesHavePassiveEffects) {
+    rootDoesHavePassiveEffects = true;
+    scheduleCallback(NormalSchedulerPriority, () => {
+      // 触发useEffect
+      flushPassiveEffects();
+      return null;
+    });
+  }
+}
+```
+
+在此处，被异步调度的回调函数就是触发useEffect的方法flushPassiveEffects。
+
+我们接下来讨论useEffect如何被异步调度，以及为什么要异步（而不是同步）调度。
+
+#### 如何异步调度
+
+在flushPassiveEffects方法内部会从全局变量rootWithPendingPassiveEffects获取effectList。
+
+关于flushPassiveEffects的具体讲解参照useEffect与useLayoutEffect一节
+
+在completeWork一节我们讲到，effectList中保存了需要执行副作用的Fiber节点。其中副作用包括
+
+- 插入DOM节点（Placement）
+- 更新DOM节点（Update）
+- 删除DOM节点（Deletion）
+
+除此外，当一个FunctionComponent含有useEffect或useLayoutEffect，他对应的Fiber节点也会被赋值effectTag。
+
+在flushPassiveEffects方法内部会遍历rootWithPendingPassiveEffects（即effectList）执行effect回调函数。
+
+如果在此时直接执行，rootWithPendingPassiveEffects === null。
+
+那么rootWithPendingPassiveEffects会在何时赋值呢？
+
+在上一节layout之后的代码片段中会根据rootDoesHavePassiveEffects === true?决定是否赋值rootWithPendingPassiveEffects。
+
+```ts
+const rootDidHavePassiveEffects = rootDoesHavePassiveEffects;
+if (rootDoesHavePassiveEffects) {
+  rootDoesHavePassiveEffects = false;
+  rootWithPendingPassiveEffects = root;
+  pendingPassiveEffectsLanes = lanes;
+  pendingPassiveEffectsRenderPriority = renderPriorityLevel;
+}
+```
+
+**所以整个useEffect异步调用分为三步**：
+
+- `before mutation`阶段在`scheduleCallback`中调度`flushPassiveEffects`
+- `layout阶段`之后将`effectList`赋值给`rootWithPendingPassiveEffects`
+- `scheduleCallback`触发`flushPassiveEffects`，`flushPassiveEffects`内部遍历`rootWithPendingPassiveEffects`
+
+#### 为什么需要异步调用
+
+与 componentDidMount、componentDidUpdate 不同的是，在浏览器完成布局与绘制之后，传给 useEffect 的函数会延迟调用。这使得它适用于许多常见的副作用场景，比如设置订阅和事件处理等情况，因此不应在函数中执行阻塞浏览器更新屏幕的操作。
+
+可见，useEffect异步执行的原因主要是防止同步执行时阻塞浏览器渲染。
+
+### mutation阶段
+
+终于到了执行DOM操作的mutation阶段。
+
+#### 概览
+类似before mutation阶段，mutation阶段也是遍历effectList，执行函数。这里执行的是commitMutationEffects。
+
+```ts
+nextEffect = firstEffect;
+do {
+  try {
+      commitMutationEffects(root, renderPriorityLevel);
+    } catch (error) {
+      invariant(nextEffect !== null, 'Should be working on an effect.');
+      captureCommitPhaseError(nextEffect, error);
+      nextEffect = nextEffect.nextEffect;
+    }
+} while (nextEffect !== null);
+```
+
+#### commitMutationEffects
 代码如下：
+```ts
+function commitMutationEffects(root: FiberRoot, renderPriorityLevel) {
+  // 遍历effectList
+  while (nextEffect !== null) {
 
-```js
+    const effectTag = nextEffect.effectTag;
+
+    // 根据 ContentReset effectTag重置文字节点
+    if (effectTag & ContentReset) {
+      commitResetTextContent(nextEffect);
+    }
+
+    // 更新ref
+    if (effectTag & Ref) {
+      const current = nextEffect.alternate;
+      if (current !== null) {
+        commitDetachRef(current);
+      }
+    }
+
+    // 根据 effectTag 分别处理
+    const primaryEffectTag =
+      effectTag & (Placement | Update | Deletion | Hydrating);
+    switch (primaryEffectTag) {
+      // 插入DOM
+      case Placement: {
+        commitPlacement(nextEffect);
+        nextEffect.effectTag &= ~Placement;
+        break;
+      }
+      // 插入DOM 并 更新DOM
+      case PlacementAndUpdate: {
+        // 插入
+        commitPlacement(nextEffect);
+
+        nextEffect.effectTag &= ~Placement;
+
+        // 更新
+        const current = nextEffect.alternate;
+        commitWork(current, nextEffect);
+        break;
+      }
+      // SSR
+      case Hydrating: {
+        nextEffect.effectTag &= ~Hydrating;
+        break;
+      }
+      // SSR
+      case HydratingAndUpdate: {
+        nextEffect.effectTag &= ~Hydrating;
+
+        const current = nextEffect.alternate;
+        commitWork(current, nextEffect);
+        break;
+      }
+      // 更新DOM
+      case Update: {
+        const current = nextEffect.alternate;
+        commitWork(current, nextEffect);
+        break;
+      }
+      // 删除DOM
+      case Deletion: {
+        commitDeletion(root, nextEffect, renderPriorityLevel);
+        break;
+      }
+    }
+
+    nextEffect = nextEffect.nextEffect;
+  }
+}
+```
+
+
+commitMutationEffects会遍历effectList，对每个Fiber节点执行如下三个操作：
+
+- 根据ContentReset effectTag重置文字节点
+- 更新ref
+- 根据effectTag分别处理，其中effectTag包括(Placement | Update | Deletion | Hydrating)
+
+我们关注步骤三中的`Placement | Update | Deletion`。Hydrating作为服务端渲染相关，我们先不关注。
+
+#### Placement effect
+当Fiber节点含有Placement effectTag，意味着该Fiber节点对应的DOM节点需要插入到页面中。
+
+调用的方法为commitPlacement。
+
+该方法所做的工作分为三步：
+
+1. 获取父级DOM节点。其中finishedWork为传入的Fiber节点。
+```ts
+const parentFiber = getHostParentFiber(finishedWork);
+// 父级DOM节点
+const parentStateNode = parentFiber.stateNode;
+```
+
+2. 获取Fiber节点的DOM兄弟节点
+```ts
+获取Fiber节点的DOM兄弟节点
+```
+
+3. 根据DOM兄弟节点是否存在决定调用parentNode.insertBefore或parentNode.appendChild执行DOM插入操作。
+```ts
+// parentStateNode是否是rootFiber
+if (isContainer) {
+  insertOrAppendPlacementNodeIntoContainer(finishedWork, before, parent);
+} else {
+  insertOrAppendPlacementNode(finishedWork, before, parent);
+}
+```
+
+值得注意的是，getHostSibling（获取兄弟DOM节点）的执行很耗时，当在同一个父Fiber节点下依次执行多个插入操作，getHostSibling算法的复杂度为指数级。
+
+这是由于Fiber节点不只包括HostComponent，所以Fiber树和渲染的DOM树节点并不是一一对应的。要从Fiber节点找到DOM节点很可能跨层级遍历。
+
+```tsx
+function Item() {
+  return <li><li>;
+}
+
 function App() {
   return (
     <div>
-      i am
-      <span>KaSong</span>
+      <Item/>
     </div>
   )
 }
 
-ReactDOM.render(<App/>, document.getElementById("root"));
+ReactDOM.render(<App/>, document.getElementById('root'));
 ```
 
-对应的 fiber 树结构如下                 
-![image](https://user-images.githubusercontent.com/22188674/235359287-0f448fa3-657d-40b4-8cff-92327ef5414c.png)
-
-render 阶段会依次执行
-
+对应的Fiber树和DOM树结构为：
 ```
-1. rootFiber beginWork
-2. App Fiber beginWork
-3. div Fiber beginWork
-4. "i am" Fiber beginWork
-5. "i am" Fiber completeWork
-6. span Fiber beginWork
-7. span Fiber completeWork
-8. div Fiber completeWork
-9. App Fiber completeWork
-10. rootFiber completeWork
+// Fiber树
+          child      child      child       child
+rootFiber -----> App -----> div -----> Item -----> li
+
+// DOM树
+#root ---> div ---> li
 ```
 
-### beginWork
+当在div的子节点Item前插入一个新节点p，即App变为：
 
-源码链接： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactFiberBeginWork.new.js#L3075
-
-工作流程图：
-![image](https://user-images.githubusercontent.com/22188674/235361451-6440499a-09dc-4478-81e4-e0585e815f0b.png)
-
-beginWork的工作是传入当前Fiber节点，创建子Fiber节点，我们从传参来看看具体是如何做的。
-
-**传参**
-
-```ts
-function beginWork(
-  current: Fiber | null, // 当前组件对应的Fiber节点在上一次更新时的Fiber节点，即workInProgress.alternate
-  workInProgress: Fiber, // 当前组件对应的Fiber节点
-  renderLanes: Lanes, // 优先级相关，在讲解Scheduler时再讲解
-): Fiber | null {
-  // ...省略函数体
-}
-```
-
-beginWork的工作可以分为两部分:
-
-- `update`时：如果current存在，在满足一定条件时可以复用current节点，这样就能克隆current.child作为workInProgress.child，而不需要新建workInProgress.child。
-- `mount`时：除fiberRootNode以外，current === null。会根据fiber.tag不同，创建不同类型的子Fiber节点
-
-```ts
-function beginWork(
-  current: Fiber | null,
-  workInProgress: Fiber,
-  renderLanes: Lanes
-): Fiber | null {
-
-  // update时：如果current存在可能存在优化路径，可以复用current（即上一次更新的Fiber节点）
-  if (current !== null) {
-    // ...省略
-
-    // 复用current
-    return bailoutOnAlreadyFinishedWork(
-      current,
-      workInProgress,
-      renderLanes,
-    );
-  } else {
-    didReceiveUpdate = false;
-  }
-
-  // mount时：根据tag不同，创建不同的子Fiber节点
-  switch (workInProgress.tag) {
-    case IndeterminateComponent:
-    // ...省略
-    case LazyComponent:
-    // ...省略
-    case FunctionComponent:
-    // ...省略
-    case ClassComponent:
-    // ...省略
-    case HostRoot:
-    // ...省略
-    case HostComponent:
-    // ...省略
-    case HostText:
-    // ...省略
-    // ...省略其他类型
-  }
-}
-```
-
-#### update时
-
-满足如下情况时didReceiveUpdate === false（即可以直接复用前一次更新的子Fiber，不需要新建子Fiber）
-
-```ts
-if (current !== null) {
-  const oldProps = current.memoizedProps;
-  const newProps = workInProgress.pendingProps;
-
-  if (
-    oldProps !== newProps ||
-    hasLegacyContextChanged() ||
-    (__DEV__ ? workInProgress.type !== current.type : false)
-  ) {
-    didReceiveUpdate = true;
-  } else if (!includesSomeLane(renderLanes, updateLanes)) {
-    didReceiveUpdate = false;
-    switch (workInProgress.tag) {
-      // 省略处理
-    }
-    return bailoutOnAlreadyFinishedWork(
-      current,
-      workInProgress,
-      renderLanes,
-    );
-  } else {
-    didReceiveUpdate = false;
-  }
-} else {
-  didReceiveUpdate = false;
-}
-```
-
-1. `oldProps === newProps && workInProgress.type === current.type`，即props与fiber.type不变
-2. `!includesSomeLane(renderLanes, updateLanes)`，即当前Fiber节点优先级不够，会在讲解Scheduler时介绍
-
-#### mount
-
-当不满足优化路径时，我们就进入第二部分，新建子Fiber。
-
-```ts
-// mount时：根据tag不同，创建不同的Fiber节点
-switch (workInProgress.tag) {
-  case IndeterminateComponent:
-  // ...省略
-  case LazyComponent:
-  // ...省略
-  case FunctionComponent:
-  // ...省略
-  case ClassComponent:
-  // ...省略
-  case HostRoot:
-  // ...省略
-  case HostComponent:
-  // ...省略
-  case HostText:
-  // ...省略
-  // ...省略其他类型
-}
-```
-
-我们可以看到，根据fiber.tag不同，进入不同类型Fiber的创建逻辑。
-
-对于我们常见的组件类型，如`（FunctionComponent/ClassComponent/HostComponent）`，最终会进入`reconcileChildren` (opens new window)方法。
-
-#### reconcileChildren
-
-- 对于mount的组件，他会创建新的子Fiber节点
-- 对于update的组件，他会将当前组件与该组件在上次更新时对应的Fiber节点比较（也就是俗称的Diff算法），将比较的结果生成新Fiber节点
-
-```ts
-export function reconcileChildren(
-  current: Fiber | null,
-  workInProgress: Fiber,
-  nextChildren: any,
-  renderLanes: Lanes
-) {
-  if (current === null) {
-    // 对于mount的组件
-    workInProgress.child = mountChildFibers(
-      workInProgress,
-      null,
-      nextChildren,
-      renderLanes,
-    );
-  } else {
-    // 对于update的组件
-    workInProgress.child = reconcileChildFibers(
-      workInProgress,
-      current.child,
-      nextChildren,
-      renderLanes,
-    );
-  }
-}
-```
-
-从代码可以看出，和beginWork一样，他也是通过current === null ?区分mount与update。
-
-不论走哪个逻辑，最终他会生成新的子Fiber节点并赋值给workInProgress.child，作为本次beginWork返回值 (opens new window)
-，并作为下次performUnitOfWork执行时workInProgress的传参
-
-#### effectTag
-
-我们知道，render阶段的工作是在内存中进行，当工作结束后会通知Renderer需要执行的DOM操作。要执行DOM操作的具体类型就保存在fiber.effectTag中。
-
-```ts
-// DOM需要插入到页面中
-export const Placement = /*                */ 0b00000000000010;
-// DOM需要更新
-export const Update = /*                   */ 0b00000000000100;
-// DOM需要插入到页面中并更新
-export const PlacementAndUpdate = /*       */ 0b00000000000110;
-// DOM需要删除
-export const Deletion = /*                 */ 0b00000000001000;
-```
-
-通过二进制表示effectTag，可以方便的使用位操作为fiber.effectTag赋值多个effect。
-
-那么，如果要通知Renderer将Fiber节点对应的DOM节点插入页面中，需要满足两个条件：
-
-1. `fiber.stateNode`存在，即Fiber节点中保存了对应的DOM节点
-
-2. `(fiber.effectTag & Placement) !== 0`，即 `Fiber节点存在Placement effectTag`
-
-我们知道，mount时，fiber.stateNode === null，且在reconcileChildren中调用的mountChildFibers不会为Fiber节点赋值effectTag。那么首屏渲染如何完成呢？
-
-针对第一个问题，`fiber.stateNode`会在`completeWork`中创建，我们会在下一节介绍。
-
-第二个问题的答案十分巧妙：假设`mountChildFibers`也会赋值effectTag，那么可以预见mount时整棵Fiber树所有节点都会有Placement
-effectTag。那么commit阶段在执行DOM操作时每个节点都会执行一次插入操作，这样大量的DOM操作是极低效的。
-
-为了解决这个问题，**在mount时只有rootFiber会赋值Placement effectTag**，在commit阶段只会执行一次插入操作。
-
-### completeWork
-
-流程图：
-![image](https://user-images.githubusercontent.com/22188674/235362048-ce278ddf-b944-4ed6-a6af-e3b1502fb6c7.png)
-
-类似beginWork，completeWork也是针对不同fiber.tag调用不同的处理逻辑。
-
-```ts
-function completeWork(
-  current: Fiber | null,
-  workInProgress: Fiber,
-  renderLanes: Lanes,
-): Fiber | null {
-  const newProps = workInProgress.pendingProps;
-
-  switch (workInProgress.tag) {
-    case IndeterminateComponent:
-    case LazyComponent:
-    case SimpleMemoComponent:
-    case FunctionComponent:
-    case ForwardRef:
-    case Fragment:
-    case Mode:
-    case Profiler:
-    case ContextConsumer:
-    case MemoComponent:
-      return null;
-    case ClassComponent: {
-      // ...省略
-      return null;
-    }
-    case HostRoot: {
-      // ...省略
-      updateHostContainer(workInProgress);
-      return null;
-    }
-    case HostComponent: {
-      // ...省略
-      return null;
-    }
-    // ...省略
-  }
-  // ...省略
-}
-```
-
-我们重点关注页面渲染所必须的 `HostComponent`（即原生DOM组件对应的Fiber节点），其他类型Fiber的处理留在具体功能实现时讲解。
-
-#### 处理 HostComponent
-
-和`beginWork`一样，我们根据 `current === null` ?判断是mount还是`update`。
-
-同时针对 `HostComponent`，判断 `update` 时我们还需要考虑 `workInProgress.stateNode != null` ?（即该Fiber节点是否存在对应的DOM节点）
-
-```ts
-case
-HostComponent: {
-  popHostContext(workInProgress);
-  const rootContainerInstance = getRootHostContainer();
-  const type = workInProgress.type;
-
-  if (current !== null && workInProgress.stateNode != null) {
-    // update的情况
-    // ...省略
-  } else {
-    // mount的情况
-    // ...省略
-  }
-  return null;
-}
-```
-
-#### update 时
-
-当update时，Fiber节点已经存在对应DOM节点，所以不需要生成DOM节点。需要做的主要是处理props，比如：
-
-- `onClick、onChange` 等回调函数的注册
-- 处理 `style prop`
-- 处理 `DANGEROUSLY_SET_INNER_HTML prop`
-- 处理 `children prop`
-
-我们去掉一些当前不需要关注的功能（比如ref）。可以看到最主要的逻辑是调用updateHostComponent方法。
-
-```ts
-if (current !== null && workInProgress.stateNode != null) {
-  // update的情况
-  updateHostComponent(
-    current,
-    workInProgress,
-    type,
-    newProps,
-    rootContainerInstance,
-  );
-}
-```
-
-在updateHostComponent内部，被处理完的props会被赋值给workInProgress.updateQueue，并最终会在commit阶段被渲染在页面上。
-
-`workInProgress.updateQueue = (updatePayload: any);`
-
-其中updatePayload为数组形式，他的偶数索引的值为变化的prop key，奇数索引的值为变化的prop value。
-
-#### mount 时
-
-同样，我们省略了不相关的逻辑。可以看到，mount时的主要逻辑包括三个：
-
-- 为Fiber节点生成对应的DOM节点
-- 将子孙DOM节点插入刚生成的DOM节点中
-- 与update逻辑中的updateHostComponent类似的处理props的过程
-
-```ts
-// mount的情况
-
-// ...省略服务端渲染相关逻辑
-
-const currentHostContext = getHostContext();
-// 为fiber创建对应DOM节点
-const instance = createInstance(
-    type,
-    newProps,
-    rootContainerInstance,
-    currentHostContext,
-    workInProgress,
-  );
-// 将子孙DOM节点插入刚生成的DOM节点中
-appendAllChildren(instance, workInProgress, false, false);
-// DOM节点赋值给fiber.stateNode
-workInProgress.stateNode = instance;
-
-// 与update逻辑中的updateHostComponent类似的处理props的过程
-if (
-  finalizeInitialChildren(
-    instance,
-    type,
-    newProps,
-    rootContainerInstance,
-    currentHostContext,
+```tsx
+function App() {
+  return (
+    <div>
+      <p></p>
+      <Item/>
+    </div>
   )
-) {
-  markUpdate(workInProgress);
 }
 ```
 
-mount时只会在rootFiber存在Placement effectTag。那么commit阶段是如何通过一次插入DOM操作（对应一个Placement effectTag）将整棵DOM树插入页面的呢？
-
-原因就在于 `completeWork中的appendAllChildren` 方法。
-
-由于`completeWork`属于“归”阶段调用的函数，每次调用`appendAllChildren`时都会将已生成的子孙DOM节点插入当前生成的DOM节点下。那么当“归”到rootFiber时，我们已经有一个构建好的离屏DOM树。
-
-#### effectList
-
-至此render阶段的绝大部分工作就完成了。
-
-还有一个问题：作为DOM操作的依据，commit阶段需要找到所有有effectTag的Fiber节点并依次执行effectTag对应操作。难道需要在commit阶段再遍历一次Fiber树寻找effectTag !== null的Fiber节点么？
-
-这显然是很低效的。
-
-为了解决这个问题，在completeWork的上层函数completeUnitOfWork中，每个执行完completeWork且存在effectTag的Fiber节点会被保存在一条被称为effectList的单向链表中。
-
-effectList中第一个Fiber节点保存在fiber.firstEffect，最后一个元素保存在fiber.lastEffect。
-
-类似appendAllChildren，在“归”阶段，所有有effectTag的Fiber节点都会被追加在effectList中，最终形成一条以rootFiber.firstEffect为起点的单向链表。
+对应的Fiber树和DOM树结构为：
 
 ```
-                       nextEffect         nextEffect
-rootFiber.firstEffect -----------> fiber -----------> fiber
+// Fiber树
+          child      child      child
+rootFiber -----> App -----> div -----> p 
+                                       | sibling       child
+                                       | -------> Item -----> li 
+// DOM树
+#root ---> div ---> p
+             |
+               ---> li
 ```
 
-这样，在commit阶段只需要遍历`effectList`就能执行所有`effect`了。
+此时DOM节点 p的兄弟节点为li，而Fiber节点 p对应的兄弟DOM节点为： `fiberP.sibling.child`
 
-### 流程结尾
-至此，render阶段全部工作完成。在performSyncWorkOnRoot函数中fiberRootNode被传递给commitRoot方法，开启commit阶段工作流程。
+即fiber p的兄弟fiber Item的子fiber li
 
-`commitRoot(root);`
+#### Update effect
+
+当Fiber节点含有Update effectTag，意味着该Fiber节点需要更新。调用的方法为commitWork，他会根据Fiber.tag分别处理。
+
+这里我们主要关注FunctionComponent和HostComponent。
+
+#### FunctionComponent mutation
+
+当fiber.tag为FunctionComponent，会调用commitHookEffectListUnmount。该方法会遍历effectList，执行所有useLayoutEffect hook的销毁函数。
+
+所谓“销毁函数”，见如下例子
+```ts
+useLayoutEffect(() => {
+  // ...一些副作用逻辑
+
+  return () => {
+    // ...这就是销毁函数
+  }
+})
+```
+
+你不需要很了解useLayoutEffect，我们会在下一节详细介绍。你只需要知道在mutation阶段会执行useLayoutEffect的销毁函数。
+
+#### HostComponent mutation
+
+当fiber.tag为HostComponent，会调用commitUpdate。
+
+最终会在updateDOMProperties (opens new window)中将render阶段 completeWork (opens new window)中为Fiber节点赋值的updateQueue对应的内容渲染在页面上。
+
+```ts
+for (let i = 0; i < updatePayload.length; i += 2) {
+  const propKey = updatePayload[i];
+  const propValue = updatePayload[i + 1];
+
+  // 处理 style
+  if (propKey === STYLE) {
+    setValueForStyles(domElement, propValue);
+  // 处理 DANGEROUSLY_SET_INNER_HTML
+  } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
+    setInnerHTML(domElement, propValue);
+  // 处理 children
+  } else if (propKey === CHILDREN) {
+    setTextContent(domElement, propValue);
+  } else {
+  // 处理剩余 props
+    setValueForProperty(domElement, propKey, propValue, isCustomComponentTag);
+  }
+}
+```
+
+#### Deletion effect
+
+当Fiber节点含有Deletion effectTag，意味着该Fiber节点对应的DOM节点需要从页面中删除。调用的方法为commitDeletion。
+
+该方法会执行如下操作：
+
+- 递归调用Fiber节点及其子孙Fiber节点中fiber.tag为ClassComponent的componentWillUnmount (opens new window)生命周期钩子，从页面移除Fiber节点对应DOM节点
+- 解绑ref
+- 调度useEffect的销毁函数
+
+### layout阶段
+
+该阶段之所以称为layout，因为该阶段的代码都是在DOM渲染完成（mutation阶段完成）后执行的。
+
+该阶段触发的生命周期钩子和hook可以直接访问到已经改变后的DOM，即该阶段是可以参与DOM layout的阶段。
+
+与前两个阶段类似，layout阶段也是遍历effectList，执行函数。
+
+具体执行的函数是commitLayoutEffects。
+
+
+#### commitLayoutEffects
+
+commitLayoutEffects一共做了两件事：
+
+1. commitLayoutEffectOnFiber（调用生命周期钩子和hook相关操作）
+
+2. commitAttachRef（赋值 ref）
+
+#### commitLayoutEffectOnFiber
+
+commitLayoutEffectOnFiber方法会根据fiber.tag对不同类型的节点分别处理。
+
+- 对于ClassComponent，他会通过current === null?区分是mount还是update，调用componentDidMount (opens new window)或componentDidUpdate
+
+触发状态更新的this.setState如果赋值了第二个参数回调函数，也会在此时调用。
+
+- 对于FunctionComponent及相关类型，他会调用useLayoutEffect hook的回调函数，调度useEffect的销毁与回调函数
+
+相关类型指特殊处理后的FunctionComponent，比如ForwardRef、React.memo包裹的FunctionComponent
+
+mutation阶段会执行useLayoutEffect hook的销毁函数。
+
+结合这里我们可以发现，useLayoutEffect hook从上一次更新的销毁函数调用到本次更新的回调函数调用是同步执行的。
+
+而useEffect则需要先调度，在Layout阶段完成后再异步执行。
+
+这就是useLayoutEffect与useEffect的区别。
+
+- 对于HostRoot，即rootFiber，如果赋值了第三个参数回调函数，也会在此时调用。
+
+#### commitAttachRef
+
+commitLayoutEffects会做的第二件事是commitAttachRef。
+
+代码逻辑很简单：获取DOM实例，更新ref。
+
+#### current Fiber树切换
+
+至此，整个layout阶段就结束了。
+
+
 
 

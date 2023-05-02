@@ -38,6 +38,26 @@
 
 2. 当newChild类型为Array，同级有多个节点
 
+### 单节点 diff
+
+路程图：                    
+![image](https://user-images.githubusercontent.com/22188674/235393691-d5355bfb-da2a-4ffd-9961-04a3927ebd11.png)
+
+React通过先判断key是否相同，如果key相同则判断type是否相同，只有都相同时一个DOM节点才能复用。
+
+### 多节点 diff
+
+主要分为以下几种情况
+
+- 节点更新
+  - 节点属性变化
+  - 节点类型更新
+- 节点新增或减少
+- 节点位置变化
+
+
+
+
 
 
 

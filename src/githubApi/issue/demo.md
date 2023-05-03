@@ -55,6 +55,43 @@ React通过先判断key是否相同，如果key相同则判断type是否相同�
 - 节点新增或减少
 - 节点位置变化
 
+#### diff 思路
+
+React 团队发现，在日常开发中，相较于新增和删除，更新组件发生的频率更高。所以Diff会优先判断当前节点是否属于更新。
+
+本质上是进行了两轮遍历：
+- 第一轮遍历：处理更新的节点。
+- 第二轮遍历：处理剩下的不属于更新的节点。
+
+**为何不用双向指针的方式**？
+
+虽然本次更新的JSX对象 newChildren为数组形式，但是和newChildren中每个组件进行比较的是current fiber，同级的Fiber节点是由sibling指针链接形成的单链表，即不支持双指针遍历。
+
+即 newChildren[0]与fiber比较，newChildren[1]与fiber.sibling比较。
+
+所以无法使用双指针优化。
+
+
+#### 第一次遍历
+
+第一轮遍历步骤如下：
+
+1. `let i = 0`，遍历`newChildren`，将`newChildren[i]`与`oldFiber`比较，判断DOM节点是否可复用。
+
+2. 如果可复用，`i++`，继续比较`newChildren[i]`与`oldFiber.sibling`，可以复用则继续遍历。
+
+3. 如果不可复用，分两种情况：
+
+- key不同导致不可复用，立即跳出整个遍历，第一轮遍历结束。
+
+- key相同type不同导致不可复用，会将`oldFiber`标记为`DELETION`，并继续遍历
+
+4. 如果`newChildren`遍历完（即`i === newChildren.length - 1`）或者`oldFiber`遍历完（即`oldFiber.sibling === null`），跳出遍历，第一轮遍历结束。
+
+
+
+
+
 
 
 

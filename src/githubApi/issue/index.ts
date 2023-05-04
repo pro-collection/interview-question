@@ -7,10 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "常见图片懒加载方式有哪些？",
+  title: "cookie 构成部分有哪些",
   key_world: [
-    "图片懒加载",
-    "Intersection Observer API",
+    "cookie 构成部分",
+    "cookie 作用路径",
+    "cookie 作用域",
   ],
   labels: [
     labels.application,

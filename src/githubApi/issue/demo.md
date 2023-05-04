@@ -1,63 +1,19 @@
-**关键词**：图片懒加载、Intersection Observer API
+**关键词**：cookie 构成部分、cookie 作用路径、cookie 作用域
 
-图片懒加载可以延迟图片的加载，只有当图片即将进入视口范围时才进行加载。这可以大大减轻页面的加载时间，并降低带宽消耗，提高了用户的体验。以下是一些常见的实现方法：
+在 HTTP 协议中，cookie 是一种包含在请求和响应报文头中的数据，用于在客户端存储和读取信息。cookie 是由服务器发送的，客户端可以使用浏览器 API 将 cookie 存储在本地进行后续使用。
 
-1. Intersection Observer API
+一个 cookie 通常由以下几个部分组成：
 
-`Intersection Observer API` 是一种用于异步检查文档中元素与视口叠加程度的API。可以将其用于检测图片是否已经进入视口，并根据需要进行相应的处理。
+1. 名称：cookie 的名称（键），通常是一个字符串。
+2. 值：cookie 的值，通常也是一个字符串。
+3. 失效时间：cookie 失效的时间，过期时间通常存储在一个 `expires` 属性中，以便浏览器自动清除失效的 cookie。
+4. 作用路径：cookie 的作用路径，只有在指定路径下的请求才会携带该 cookie。
+5. 作用域：cookie 的作用域，指定了该 cookie 绑定的域名，可以使用 `domain` 属性来设置。
 
-```js
-let observer = new IntersectionObserver(function (entries) {
-  entries.forEach(function (entry) {
-    if (entry.isIntersecting) {
-      const lazyImage = entry.target;
-      lazyImage.src = lazyImage.dataset.src;
-      observer.unobserve(lazyImage);
-    }
-  });
-});
+例如，以下是一个设置了名称为 "user"、值为 "john"、失效时间为 2022 年 1 月 1 日，并且作用于全站的 cookie：
 
-const lazyImages = [...document.querySelectorAll(".lazy")];
-lazyImages.forEach(function (image) {
-  observer.observe(image);
-});
+```
+Set-Cookie: user=john; expires=Sat, 01 Jan 2022 00:00:00 GMT; path=/; domain=example.com
 ```
 
-2. 自定义监听器
-
-或者，可以通过自定义监听器来实现懒加载。其中，应该避免在滚动事件处理程序中频繁进行图片加载，因为这可能会影响性能。相反，使用自定义监听器只会在滚动停止时进行图片加载。
-
-```js
-function lazyLoad() {
-  const images = document.querySelectorAll(".lazy");
-  const scrollTop = window.pageYOffset;
-  images.forEach((img) => {
-    if (img.offsetTop < window.innerHeight + scrollTop) {
-      img.src = img.dataset.src;
-      img.classList.remove("lazy");
-    }
-  });
-}
-
-let lazyLoadThrottleTimeout;
-document.addEventListener("scroll", function () {
-  if (lazyLoadThrottleTimeout) {
-    clearTimeout(lazyLoadThrottleTimeout);
-  }
-  lazyLoadThrottleTimeout = setTimeout(lazyLoad, 20);
-});
-```
-
-在这个例子中，我们使用了 `setTimeout()` 函数来延迟图片的加载，以避免在滚动事件的频繁触发中对性能的影响。
-
-无论使用哪种方法，都需要为需要懒加载的图片设置占位符，并将未加载的图片路径保存在 `data` 属性中，以便在需要时进行加载。这些占位符可以是简单的 div 或样式类，用于预留图片的空间，避免页面布局的混乱。
-
-```html
-<!-- 占位符示例 -->
-<div class="lazy-placeholder" style="background-color: #ddd;height: 500px;"></div>
-
-<!-- 图片示例 -->
-<img class="lazy" data-src="path/to/image.jpg" alt="预览图" />
-```
-
-总体来说，图片懒加载是一种这很简单，但非常实用的优化技术，能够显著提高网页的性能和用户体验。
+其中，`Set-Cookie` 是响应报文头，用于设置 cookie。在该响应报文中，将 cookie 数据设置为 "user=john"，失效时间为 "2022年1月1日"，作用路径为全站，作用域为 "example.com" 的域名。这个 cookie 就会被存储在客户端，以便在以后的请求中发送给服务器。

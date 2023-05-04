@@ -7,13 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] fiber 是如何实现时间切片的？",
+  title: "script 预加载方式有哪些， 这些加载方式有何区别？",
   key_world: [
-    "react16 架构",
-    "react Reconciler",
-    "fiber 时间切片",
-    "fiber 时间",
-    "react 协调器",
+    "script 预加载",
   ],
   labels: [
     labels.frameWork,
@@ -44,7 +40,7 @@ const main = async () => {
   // htmlWriteIssue(remote);
 
   // md 写入远端
-  writeIssue(omit(remote, 'key_world'));
+  writeIssue(omit(remote, "key_world"));
 
   // 写入本地 temp.md
   // writeToTemp();

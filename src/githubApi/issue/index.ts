@@ -4,13 +4,15 @@ import { company, labels, MileStone } from "@src/githubApi/issue/consts";
 import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
+import { omit } from "lodash";
 
 const remote = {
-  title: "[React] diff 算法",
+  title: "[React] fiber 是如何实现时间切片的？",
   key_world: [
     "react16 架构",
     "react Reconciler",
-    "react commit 阶段",
+    "fiber 时间切片",
+    "fiber 时间",
     "react 协调器",
   ],
   labels: [
@@ -42,7 +44,7 @@ const main = async () => {
   // htmlWriteIssue(remote);
 
   // md 写入远端
-  writeIssue(remote);
+  writeIssue(omit(remote, 'key_world'));
 
   // 写入本地 temp.md
   // writeToTemp();

@@ -1,157 +1,259 @@
-**关键词**：react16 架构、react Reconciler、react commit 阶段、react 协调器
+**关键词**：react16 架构、react Reconciler、fiber 时间切片、fiber 时间、react 协调器
 
-在 react 中：一个`DOM`节点在某一时刻最多会有4个节点和他相关。
+**关键词**：react16 架构、react Reconciler、fiber 时间切片、fiber 时间、react 协调器
 
-一个DOM节点在某一时刻最多会有4个节点和他相关。
+### 基本原理
+
+本质上来说就是将渲染任务拆分成多个小任务，以便提高应用程序的响应性和性能。React Fiber 实现时间切片主要依赖于两个核心功能：**任务分割和任务优先级**。
+
+任务分割是指将一个大的渲染任务切割成多个小任务，每个小任务只负责一小部分 DOM 更新。React Fiber 使用 Fiber 节点之间的父子关系，将一个组件树分割成多个”片段“，每个“片段”内部是一颗 Fiber 子树，多个“片段”之间可以交错执行，实现时间切片。
+
+任务优先级是指 React Fiber 提供了一套基于优先级的算法来决定哪些任务应该先执行，哪些任务可以放到后面执行。React Fiber 将任务分成多个优先级级别，较高优先级的任务在进行渲染时会优先进行，从而确保应用程序的响应性和性能。
+
+React Fiber 实现时间切片的基本原理如下：
+
+1. React Fiber 会将渲染任务划分成多个小任务，每个小任务一般只负责一小部分 DOM 更新。
+2. React Fiber 将这些小任务保存到任务队列中，并按照优先级进行排序和调度。
+3. 当浏览器处于空闲状态时，React Fiber 会从任务队列中取出一个高优先级的任务并执行，直到任务完成或者时间片用完。
+4. 如果任务完成，则将结果提交到 DOM 树上并开始下一个任务。如果时间片用完，则将任务挂起，并将未完成的工作保存到 Fiber 树中，返回控制权给浏览器。
+5. 当浏览器再次处于空闲状态时，React Fiber 会再次从任务队列中取出未完成的任务并继续执行，直到所有任务完成。
+
+通过使用任务分割和任务优先级算法，React Fiber 实现了时间切片功能，保证了应用程序的响应性和性能，提高了用户的使用体验。
+
+### 是如何实现任务分割的？伪代码实现一下
+
+React Fiber 实现任务分割的过程十分复杂，需要涉及到 Fiber 数据结构、调度器、DOM 操作等多个部分。以下是一个简单的示例代码，演示了 React Fiber 任务分割的基本工作原理。
+
+```jsx
+const workInProgressFiber = {};
+
+const performUnitOfWork = () => {
+  // 执行当前 Fiber 对应的组件
+  const isFunctionComponent = workInProgressFiber.type instanceof Function; 
+  if (isFunctionComponent) {
+    updateFunctionComponent(workInProgressFiber);
+  } else {
+    updateHostComponent(workInProgressFiber);
+  }
+
+  // 返回下一个待处理的 Fiber 节点
+  if (workInProgressFiber.child) {
+    return workInProgressFiber.child;
+  }
+
+  let nextFiber = workInProgressFiber;
+  while (nextFiber) {
+    if (nextFiber.sibling) {
+      return nextFiber.sibling;
+    }
+    nextFiber = nextFiber.parent;
+  }
+
+  return null;
+};
+
+const render = (element, container) => {
+  const rootFiber = {
+    dom: container,
+    props: {
+      children: [element],
+    },
+  };
+
+  workInProgressFiber = rootFiber;
+  nextUnitOfWork = rootFiber;
+
+  requestIdleCallback(workLoop);
+};
+
+const workLoop = (deadline) => {
+  while (nextUnitOfWork && deadline.timeRemaining() > 0) {
+    nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
+  }
+
+  if (nextUnitOfWork) {
+    requestIdleCallback(workLoop);
+  }
+};
+
+const updateFunctionComponent = (fiber) => {
+  const children = [fiber.type(fiber.props)];
+  reconcileChildren(fiber, children);
+};
+
+const updateHostComponent = (fiber) => {
+  if (!fiber.dom) {
+    fiber.dom = createDom(fiber);
+  }
+
+  reconcileChildren(fiber, fiber.props.children);
+};
+
+const reconcileChildren = (fiber, children) => {
+  let index = 0;
+  let oldFiber = fiber.alternate ? fiber.alternate.child : null;
+  let prevSibling = null;
+
+  while (index < children.length || oldFiber) {
+    const child = children[index];
+    let newFiber = null;
+    const sameType = oldFiber && child && child.type === oldFiber.type;
+
+    if (sameType) {
+      newFiber = {
+        type: oldFiber.type,
+        props: child.props,
+        dom: oldFiber.dom,
+        parent: fiber,
+        alternate: oldFiber,
+        effectTag: 'UPDATE',
+      };
+    }
+
+    if (child && !sameType) {
+      newFiber = {
+        type: child.type,
+        props: child.props,
+        dom: null,
+        parent: fiber,
+        alternate: null,
+        effectTag: 'PLACEMENT',
+      };
+    }
+
+    if (oldFiber && !sameType) {
+      oldFiber.effectTag = 'DELETION';
+      deletions.push(oldFiber);
+    }
+
+    if (oldFiber) {
+      oldFiber = oldFiber.sibling;
+    }
+
+    if (index === 0) {
+      fiber.child = newFiber;
+    } else if (child) {
+      prevSibling.sibling = newFiber;
+    }
+
+    prevSibling = newFiber;
+
+    index++;
+  }
+};
+```
+
+在这个示例中，我们定义了一个名为 `performUnitOfWork` 的函数，用于执行一个 Fiber 节点上的任务。这个函数会根据 Fiber 节点的类型，执行不同的操作，并返回下一个待处理的 Fiber 节点。
+
+在 `updateFunctionComponent` 和 `updateHostComponent` 函数中，我们分别根据 Fiber 节点的类型执行函数组件和普通组件的更新操作。通过 `reconcileChildren` 函数，我们可以将一个组件的子节点拆分成多个 Fiber 节点，并在 `performUnitOfWork` 函数中进行遍历和处理。
+
+React Fiber 实现任务分割的核心思想是将一个大的渲染任务切割成多个小任务，每个小任务只负责一小部分 DOM 更新。通过在 Fiber 树上进行遍历和操作，我们可以实现任务分割，提高应用程序的响应性和性能。
+
+
+### react fiber 是如何实现任务优先级的？用代码简单示范一下
+
+React Fiber 的任务优先级是通过创建多个优先级队列，并使用一个时间片策略来调度任务的。以下是一个简单的示例代码，用于演示 React Fiber 的优先级队列和任务优先级机制。
+
+```jsx
+const MAX_PRIORITY_LEVEL = 5;
+
+const NoWork = 0;
+const Sync = 1;
+const DefaultPriority = 3;
+const IdlePriority = 4;
+const AnimationPriority = 5;
+
+const initialScheduler = {
+  didTimeout: false,
+  enqueuedTasks: [],
+  scheduledCallback: null,
+  scheduledCallbackTimeout: null,
+  taskQueue: [],
+  currentTime: 0,
+};
+
+let currentScheduler = initialScheduler;
+
+const enableScheduler = () => {
+  // ...初始化 scheduler 的代码...
+};
+
+const requestCallback = (callback, options) => {
+  const currentTime = getCurrentTime();
+  const timeout = options != null && options.timeout != null ? options.timeout : -1;
+  const expirationTime =
+    timeout > 0 ? currentTime + timeout : currentTime + 5 * 1000;
+  const newTask = {
+    callback,
+    priorityLevel: DefaultPriority,
+    startTime: currentTime,
+    expirationTime,
+  };
+
+  currentScheduler.taskQueue.push(newTask);
+  ensureHostCallbackIsScheduled();
+};
+
+const ensureHostCallbackIsScheduled = () => {
+  if (currentScheduler.scheduledCallback === null) {
+    currentScheduler.scheduledCallback = performSchedulerWork;
+    currentScheduler.scheduledCallbackTimeout = setTimeout(() => {
+      performSchedulerWork(currentTime);
+    }, 0);
+  }
+};
+
+const performSchedulerWork = (currentTime) => {
+  performConcurrentWorkOnRoots();
+
+  if (currentScheduler.taskQueue.length > 0) {
+    const firstTask = currentScheduler.taskQueue[0];
+    if (firstTask.startTime <= currentTime) {
+      currentScheduler.taskQueue.shift();
+      firstTask.callback({ didTimeout: false });
+      return;
+    }
+  }
+};
+
+const performConcurrentWorkOnRoots = () => {
+  const priorityLevel = AnimationPriority;
+  const deadline = {
+    timeRemaining() {
+      return Infinity;
+    },
+  };
+  while (currentScheduler.taskQueue.length > 0) {
+    const task = findHighestPriorityTask();
+    if (task.priorityLevel > priorityLevel || task.expirationTime <= currentScheduler.currentTime) {
+      break;
+    }
+    const root = task.callback(deadline);
+
+    if (root !== null) {
+      // ...执行任务更新...
+    }
+  }
+};
+
+const findHighestPriorityTask = () => {
+  let highestPriorityTask = null;
+  let highestPriorityLevel = NoWork;
+
+  for (let i = 0; i < currentScheduler.taskQueue.length; i++) {
+    const task = currentScheduler.taskQueue[i];
+    const priorityLevel = task.priorityLevel;
+    if (priorityLevel > highestPriorityLevel) {
+      highestPriorityLevel = priorityLevel;
+      highestPriorityTask = task;
+    }
+  }
+
+  return highestPriorityTask;
+};
+```
+
+在这个示例中，我们定义了多个优先级常量和优先级队列，以及与之相关的一些变量和函数。我们通过 `requestCallback` 函数，将任务以优先级的方式插入到任务队列中。在 `performConcurrentWorkOnRoots` 函数中，我们按照优先级顺序遍历任务队列，并将任务的回调函数传递给 `callback` 函数执行更新操作。
+
+通过在任务队列和调度器中使用优先级的方式来调度和执行任务，我们可以在保证页面响应性的同时，最大化利用浏览器的空闲时间，提高应用程序整体的性能和用户体验。
 
-1. `JSX对象`。即ClassComponent的render方法的返回结果，或FunctionComponent的调用结果。JSX对象中包含描述DOM节点的信息。
-
-2. `workInProgress Fiber`。如果该DOM节点将在本次更新中渲染到页面中，workInProgress Fiber代表该DOM节点对应的Fiber节点。
-
-3. `current Fiber`。如果该DOM节点已在页面中，current Fiber代表该DOM节点对应的Fiber节点。
-
-4. `DOM节点本身`。
-
-**Diff算法的本质是对比1和2，生成3。**
-
-### 概览
-
-#### Diff的瓶颈以及React如何应对
-
-由于Diff操作本身也会带来性能损耗， 即使在最前沿的算法中，将前后两棵树完全比对的算法的复杂程度为 O(n 3 )，其中n是树中元素的数量。
-
-如果在React中使用了该算法，那么展示1000个元素所需要执行的计算量将在十亿的量级范围
-
-为了降低算法复杂度，**React的diff会预设三个限制**：
-
-1. 只对同级元素进行Diff。如果一个DOM节点在前后两次更新中跨越了层级，那么React不会尝试复用他。
-
-2. 两个不同类型的元素会产生出不同的树。如果元素由div变为p，React会销毁div及其子孙节点，并新建p及其子孙节点。
-
-3. 开发者可以通过 key prop来暗示哪些子元素在不同的渲染下能保持稳定。
-
-#### Diff是如何实现的
-
-我们从Diff的入口函数reconcileChildFibers出发，该函数会根据newChild（即JSX对象）类型调用不同的处理函数。
-
-从同级的节点数量将Diff分为两类：
-
-1. 当newChild类型为object、number、string，代表同级只有一个节点
-
-2. 当newChild类型为Array，同级有多个节点
-
-### 单节点 diff
-
-路程图：                    
-![image](https://user-images.githubusercontent.com/22188674/235393691-d5355bfb-da2a-4ffd-9961-04a3927ebd11.png)
-
-React通过先判断key是否相同，如果key相同则判断type是否相同，只有都相同时一个DOM节点才能复用。
-
-### 多节点 diff
-
-主要分为以下几种情况
-
-- 节点更新
-  - 节点属性变化
-  - 节点类型更新
-- 节点新增或减少
-- 节点位置变化
-
-#### diff 思路
-
-React 团队发现，在日常开发中，相较于新增和删除，更新组件发生的频率更高。所以Diff会优先判断当前节点是否属于更新。
-
-本质上是进行了两轮遍历：
-- 第一轮遍历：处理更新的节点。
-- 第二轮遍历：处理剩下的不属于更新的节点。
-
-**为何不用双向指针的方式**？
-
-虽然本次更新的JSX对象 newChildren为数组形式，但是和newChildren中每个组件进行比较的是current fiber，同级的Fiber节点是由sibling指针链接形成的单链表，即不支持双指针遍历。
-
-即 newChildren[0]与fiber比较，newChildren[1]与fiber.sibling比较。
-
-所以无法使用双指针优化。
-
-
-#### 第一次遍历
-
-第一轮遍历步骤如下：
-
-1. `let i = 0`，遍历`newChildren`，将`newChildren[i]`与`oldFiber`比较，判断DOM节点是否可复用。
-
-2. 如果可复用，`i++`，继续比较`newChildren[i]`与`oldFiber.sibling`，可以复用则继续遍历。
-
-3. 如果不可复用，分两种情况：
-
-- key不同导致不可复用，立即跳出整个遍历，第一轮遍历结束。
-
-- key相同type不同导致不可复用，会将`oldFiber`标记为`DELETION`，并继续遍历
-
-4. 如果`newChildren`遍历完（即`i === newChildren.length - 1`）或者`oldFiber`遍历完（即`oldFiber.sibling === null`），跳出遍历，第一轮遍历结束。
-
-源码如下： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L818
-
-
-#### 第二轮遍历
-
-
-**`newChildren`与`oldFiber`同时遍历完**
-
-那就是最理想的情况：只需在第一轮遍历进行组件更新 
-
-> 源码如下： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L825
-
-**`newChildren`没遍历完，`oldFiber`遍历完**
-
-已有的DOM节点都复用了，这时还有新加入的节点，意味着本次更新有新节点插入，我们只需要遍历剩下的`newChildren`为生成的`workInProgress fiber`依次标记`Placement`。
-
-> 源码如下： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L869
-
-**`newChildren`遍历完，`oldFiber`没遍历完**
-
-意味着本次更新比之前的节点数量少，有节点被删除了。所以需要遍历剩下的`oldFiber`，依次标记`Deletion`。
-
-> https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L863
-
-**`newChildren`与`oldFiber`都没遍历完**
-
-这意味着有节点在这次更新中改变了位置。
-
-这是Diff算法最精髓也是最难懂的部分。我们接下来会重点讲解。
-
-> 源码： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L893
-
-
-#### 处理移动的节点
-
-由于有节点改变了位置，所以不能再用位置索引i对比前后的节点，那么如何才能将同一个节点在两次更新中对应上呢？
-
-我们需要使用key。
-
-为了快速的找到key对应的`oldFiber`，我们将所有还未处理的`oldFiber`存入以key为key，`oldFiber`为`value`的`Map`中。
-
-`const existingChildren = mapRemainingChildren(returnFiber, oldFiber);`           
-
-> 源码： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L890
-
-接下来遍历剩余的`newChildren`，通过`newChildren[i].key`就能在`existingChildren`中找到`key`相同的`oldFiber`。
-
-#### 标记节点是否移动
-
-既然我们的目标是寻找移动的节点，那么我们需要明确：节点是否移动是以什么为参照物？
-
-我们的参照物是：最后一个可复用的节点在`oldFiber`中的位置索引（用变量`lastPlacedIndex`表示）。
-
-由于本次更新中节点是按`newChildren`的顺序排列。在遍历`newChildren`过程中，每个遍历到的可复用节点一定是当前遍历到的所有可复用节点中最靠右的那个，即一定在`lastPlacedIndex`对应的可复用的节点在本次更新中位置的后面。
-
-那么我们只需要比较遍历到的可复用节点在上次更新时是否也在`lastPlacedIndex`对应的`oldFiber`后面，就能知道两次更新中这两个节点的相对位置改变没有。
-
-我们用变量`oldIndex`表示遍历到的可复用节点在`oldFiber`中的位置索引。如果`oldIndex < lastPlacedIndex`，代表本次更新该节点需要向右移动。
-
-`lastPlacedIndex`初始为0，每遍历一个可复用的节点，如果`oldIndex >= lastPlacedIndex`，则`lastPlacedIndex = oldIndex`。
-
-
-### 参考文档
-
-- https://react.iamkasong.com/diff/prepare.html

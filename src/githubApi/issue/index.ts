@@ -7,13 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "扫码登录实现方式",
+  title: "DNS 协议了解多少",
   key_world: [
-    "扫码登录",
+    "DNS协议",
+    "DNS加速",
   ],
   labels: [
     labels.application,
-    // company.tencent,
+    labels.network,
+    company.tencent,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

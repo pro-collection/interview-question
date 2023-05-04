@@ -7,11 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "cookie 构成部分有哪些",
+  title: "扫码登录实现方式",
   key_world: [
-    "cookie 构成部分",
-    "cookie 作用路径",
-    "cookie 作用域",
+    "扫码登录",
   ],
   labels: [
     labels.application,

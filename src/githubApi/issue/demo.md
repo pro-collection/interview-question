@@ -118,16 +118,40 @@ React 团队发现，在日常开发中，相较于新增和删除，更新组�
 
 这是Diff算法最精髓也是最难懂的部分。我们接下来会重点讲解。
 
-> https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L893
+> 源码： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L893
 
 
+#### 处理移动的节点
+
+由于有节点改变了位置，所以不能再用位置索引i对比前后的节点，那么如何才能将同一个节点在两次更新中对应上呢？
+
+我们需要使用key。
+
+为了快速的找到key对应的`oldFiber`，我们将所有还未处理的`oldFiber`存入以key为key，`oldFiber`为`value`的`Map`中。
+
+`const existingChildren = mapRemainingChildren(returnFiber, oldFiber);`           
+
+> 源码： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L890
+
+接下来遍历剩余的`newChildren`，通过`newChildren[i].key`就能在`existingChildren`中找到`key`相同的`oldFiber`。
+
+#### 标记节点是否移动
+
+既然我们的目标是寻找移动的节点，那么我们需要明确：节点是否移动是以什么为参照物？
+
+我们的参照物是：最后一个可复用的节点在`oldFiber`中的位置索引（用变量`lastPlacedIndex`表示）。
+
+由于本次更新中节点是按`newChildren`的顺序排列。在遍历`newChildren`过程中，每个遍历到的可复用节点一定是当前遍历到的所有可复用节点中最靠右的那个，即一定在`lastPlacedIndex`对应的可复用的节点在本次更新中位置的后面。
+
+那么我们只需要比较遍历到的可复用节点在上次更新时是否也在`lastPlacedIndex`对应的`oldFiber`后面，就能知道两次更新中这两个节点的相对位置改变没有。
+
+我们用变量`oldIndex`表示遍历到的可复用节点在`oldFiber`中的位置索引。如果`oldIndex < lastPlacedIndex`，代表本次更新该节点需要向右移动。
+
+`lastPlacedIndex`初始为0，每遍历一个可复用的节点，如果`oldIndex >= lastPlacedIndex`，则`lastPlacedIndex = oldIndex`。
 
 
+### 参考文档
 
-
-
-
-
-
+- https://react.iamkasong.com/diff/prepare.html
 
 

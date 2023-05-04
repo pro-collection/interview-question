@@ -1,3 +1,5 @@
+**关键词**：react16 架构、react Reconciler、react commit 阶段、react 协调器
+
 在 react 中：一个`DOM`节点在某一时刻最多会有4个节点和他相关。
 
 一个DOM节点在某一时刻最多会有4个节点和他相关。
@@ -153,5 +155,3 @@ React 团队发现，在日常开发中，相较于新增和删除，更新组�
 ### 参考文档
 
 - https://react.iamkasong.com/diff/prepare.html
-
-

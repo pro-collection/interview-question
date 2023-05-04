@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "script 预加载方式有哪些， 这些加载方式有何区别？",
+  title: "常见图片懒加载方式有哪些？",
   key_world: [
-    "script 预加载",
+    "图片懒加载",
+    "Intersection Observer API",
   ],
   labels: [
-    labels.frameWork,
+    labels.application,
     // company.tencent,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -1,40 +1,63 @@
-**关键词**：script 预加载
+**关键词**：图片懒加载、Intersection Observer API
 
-在浏览器中，可以通过预加载 JavaScript 脚本来提高性能和用户体验。预加载是指在浏览器解析完当前页面之前，提前加载并解析相关资源（例如 JavaScript 文件、CSS 文件等）。这样可以在用户请求访问其他页面时，减少资源加载的时间和延迟，从而提高页面加载速度和用户体验。
+图片懒加载可以延迟图片的加载，只有当图片即将进入视口范围时才进行加载。这可以大大减轻页面的加载时间，并降低带宽消耗，提高了用户的体验。以下是一些常见的实现方法：
 
-以下是两种预加载 JavaScript 脚本的方法：
+1. Intersection Observer API
 
-1. defer 属性
+`Intersection Observer API` 是一种用于异步检查文档中元素与视口叠加程度的API。可以将其用于检测图片是否已经进入视口，并根据需要进行相应的处理。
 
-`<script>` 标签的 `defer` 属性可以告诉浏览器，让 JavaScript 文件在页面文档解析完成之后再执行。这种方式可以保证页面不会因为脚本加载和执行而被阻塞，同时又能够保证脚本能够按照正确的顺序执行（即按照在 HTML 中出现的顺序，因为 `defer` 属性会按照这个顺序依次加载和执行）。
+```js
+let observer = new IntersectionObserver(function (entries) {
+  entries.forEach(function (entry) {
+    if (entry.isIntersecting) {
+      const lazyImage = entry.target;
+      lazyImage.src = lazyImage.dataset.src;
+      observer.unobserve(lazyImage);
+    }
+  });
+});
 
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>My Page</title>
-    <script src="script1.js" defer></script>
-    <script src="script2.js" defer></script>
-  </head>
-  <body>
-   ...
-  </body>
-</html>
+const lazyImages = [...document.querySelectorAll(".lazy")];
+lazyImages.forEach(function (image) {
+  observer.observe(image);
+});
 ```
 
-2. prefetch 和 preload
+2. 自定义监听器
 
-预加载的另一种方法是使用 `Link` 标签的 `prefetch` 或 `preload` 属性。这种方法可以在不影响当前页面加载的情况下，预先加载需要后续页面需要的 JavaScript 文件和其他资源。
+或者，可以通过自定义监听器来实现懒加载。其中，应该避免在滚动事件处理程序中频繁进行图片加载，因为这可能会影响性能。相反，使用自定义监听器只会在滚动停止时进行图片加载。
 
-其中，`prefetch` 属性指示浏览器预先加载并缓存 JavaScript 文件，但不会立即执行文件。而 `preload` 属性则会在浏览器空闲时立即加载文件，并且可以指定文件的类型、优先级等属性。
+```js
+function lazyLoad() {
+  const images = document.querySelectorAll(".lazy");
+  const scrollTop = window.pageYOffset;
+  images.forEach((img) => {
+    if (img.offsetTop < window.innerHeight + scrollTop) {
+      img.src = img.dataset.src;
+      img.classList.remove("lazy");
+    }
+  });
+}
 
-```html
-<head>
-  <title>My Page</title>
-  <link rel="prefetch" href="script1.js" />
-  <link rel="preload" href="script2.js" as="script" />
-</head>
+let lazyLoadThrottleTimeout;
+document.addEventListener("scroll", function () {
+  if (lazyLoadThrottleTimeout) {
+    clearTimeout(lazyLoadThrottleTimeout);
+  }
+  lazyLoadThrottleTimeout = setTimeout(lazyLoad, 20);
+});
 ```
 
-需要注意的是，使用 `prefetch` 和 `preload` 属性时，应该避免将其用于太多的资源文件，否则可能会引发网络瓶颈和性能问题。可以在需要优化的资源文件上使用这些属性，并通过测试和性能分析来调整其预加载的优先级和时机，以达到最优化的预加载效果。
+在这个例子中，我们使用了 `setTimeout()` 函数来延迟图片的加载，以避免在滚动事件的频繁触发中对性能的影响。
 
+无论使用哪种方法，都需要为需要懒加载的图片设置占位符，并将未加载的图片路径保存在 `data` 属性中，以便在需要时进行加载。这些占位符可以是简单的 div 或样式类，用于预留图片的空间，避免页面布局的混乱。
+
+```html
+<!-- 占位符示例 -->
+<div class="lazy-placeholder" style="background-color: #ddd;height: 500px;"></div>
+
+<!-- 图片示例 -->
+<img class="lazy" data-src="path/to/image.jpg" alt="预览图" />
+```
+
+总体来说，图片懒加载是一种这很简单，但非常实用的优化技术，能够显著提高网页的性能和用户体验。

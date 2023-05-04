@@ -88,6 +88,39 @@ React 团队发现，在日常开发中，相较于新增和删除，更新组�
 
 4. 如果`newChildren`遍历完（即`i === newChildren.length - 1`）或者`oldFiber`遍历完（即`oldFiber.sibling === null`），跳出遍历，第一轮遍历结束。
 
+源码如下： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L818
+
+
+#### 第二轮遍历
+
+
+**`newChildren`与`oldFiber`同时遍历完**
+
+那就是最理想的情况：只需在第一轮遍历进行组件更新 
+
+> 源码如下： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L825
+
+**`newChildren`没遍历完，`oldFiber`遍历完**
+
+已有的DOM节点都复用了，这时还有新加入的节点，意味着本次更新有新节点插入，我们只需要遍历剩下的`newChildren`为生成的`workInProgress fiber`依次标记`Placement`。
+
+> 源码如下： https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L869
+
+**`newChildren`遍历完，`oldFiber`没遍历完**
+
+意味着本次更新比之前的节点数量少，有节点被删除了。所以需要遍历剩下的`oldFiber`，依次标记`Deletion`。
+
+> https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L863
+
+**`newChildren`与`oldFiber`都没遍历完**
+
+这意味着有节点在这次更新中改变了位置。
+
+这是Diff算法最精髓也是最难懂的部分。我们接下来会重点讲解。
+
+> https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L893
+
+
 
 
 

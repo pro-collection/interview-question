@@ -1,4 +1,3 @@
-**关键词**：react16 架构、react Reconciler、fiber 时间切片、fiber 时间、react 协调器
 
 **关键词**：react16 架构、react Reconciler、fiber 时间切片、fiber 时间、react 协调器
 

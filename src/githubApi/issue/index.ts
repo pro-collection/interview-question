@@ -7,17 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "DNS 协议了解多少",
+  title: "TCP/IP 如何保证数据包传输的有序可靠",
   key_world: [
-    "DNS协议",
-    "DNS加速",
+    "TCP/IP 可靠性",
+    "TCP/IP 序列号",
+    "TCP/IP 超时",
   ],
   labels: [
-    labels.application,
+    // labels.application,
     labels.network,
     company.tencent,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

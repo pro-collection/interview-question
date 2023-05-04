@@ -3,8 +3,6 @@
 
 > 04.04 待整理
 
-- https://juejin.cn/post/7204307381689532474
-- https://juejin.cn/post/7204594495996198968
 - https://juejin.cn/post/7016593221815910408
 - https://juejin.cn/post/6844903885488783374
 - https://juejin.cn/post/7061588533214969892

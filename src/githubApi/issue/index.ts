@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "函数式编程了解多少？",
+  title: "JavaScript 对象的底层数据结构是什么",
   key_world: [
-    "函数式编程",
+    "JavaScript 对象数据结构",
   ],
   labels: [
     // labels.application,
-    labels.application,
-    company.baidu,
+    labels.js,
+    // company.jd,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

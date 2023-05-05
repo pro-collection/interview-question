@@ -7,9 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "JavaScript 对象的底层数据结构是什么",
+  title: "JavaScript 中的变量在内存中的具体存储形式是什么",
   key_world: [
-    "JavaScript 对象数据结构",
+    "JavaScript 变量存储形式",
   ],
   labels: [
     // labels.application,

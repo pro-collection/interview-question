@@ -7,16 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 事件绑定原理",
+  title: "函数式编程了解多少？",
   key_world: [
-    "react事件绑定",
-    "react合成事件",
-    "react事件监听",
+    "函数式编程",
   ],
   labels: [
     // labels.application,
-    labels.network,
-    company.alibaba,
+    labels.application,
+    company.baidu,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

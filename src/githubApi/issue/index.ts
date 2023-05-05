@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "JavaScript 中的变量在内存中的具体存储形式是什么",
+  title: "值类型和引用类型 的区别?",
   key_world: [
-    "JavaScript 变量存储形式",
+    "值类型和引用类型区别",
   ],
   labels: [
     // labels.application,
     labels.js,
     // company.jd,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

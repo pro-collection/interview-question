@@ -7,12 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "HTTP 304 状态码表达的请求过程是什么",
+  title: "[React] 事件绑定原理",
   key_world: [
-    "304状态码",
-    "304请求过程",
-    "304过程",
-    "304请求",
+    "react事件绑定",
+    "react合成事件",
+    "react事件监听",
   ],
   labels: [
     // labels.application,

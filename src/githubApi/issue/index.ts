@@ -7,18 +7,19 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "TCP/IP 如何保证数据包传输的有序可靠",
+  title: "HTTP 304 状态码表达的请求过程是什么",
   key_world: [
-    "TCP/IP 可靠性",
-    "TCP/IP 序列号",
-    "TCP/IP 超时",
+    "304状态码",
+    "304请求过程",
+    "304过程",
+    "304请求",
   ],
   labels: [
     // labels.application,
     labels.network,
-    company.tencent,
+    company.alibaba,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

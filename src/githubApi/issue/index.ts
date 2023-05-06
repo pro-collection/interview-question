@@ -7,13 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] createPortal 了解多少？",
+  title: "eval 了解多少？",
   key_world: [
-    "react createPortal",
+    "eval 使用场景",
+    "eval 性能",
+    "eval 优点",
+    "eval 缺点",
   ],
   labels: [
-    labels.frameWork,
-    company.netEase,
+    labels.js,
+    // company.baidu,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

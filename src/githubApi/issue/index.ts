@@ -7,17 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "new Function 了解多少？",
+  title: "Javascript 数组中有那些方法可以改变自身，那些不可以",
   key_world: [
-    "new Function 概念",
-    "js new Function 执行性能",
-    "js new Function 使用场景",
+    // "new Function 概念",
+    // "js new Function 执行性能",
+    // "js new Function 使用场景",
   ],
   labels: [
     labels.js,
     // company.baidu,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

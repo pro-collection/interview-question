@@ -7,17 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "Grid 布局了解多少？",
+  title: "[React] createElement 和 cloneElement 有什么区别",
   key_world: [
-    "Grid 布局",
-    "Grid 属性",
+    "createElement cloneElement",
   ],
   labels: [
-    labels.css,
-    // labels.js,
+    labels.frameWork,
     company.mt,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

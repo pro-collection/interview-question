@@ -7,18 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "eval 了解多少？",
+  title: "new Function 了解多少？",
   key_world: [
-    "eval 使用场景",
-    "eval 性能",
-    "eval 优点",
-    "eval 缺点",
+    "new Function 概念",
+    "js new Function 执行性能",
+    "js new Function 使用场景",
   ],
   labels: [
     labels.js,
     // company.baidu,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

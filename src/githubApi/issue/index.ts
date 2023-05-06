@@ -7,14 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "值类型和引用类型 的区别?",
+  title: "npm script 生命周期有哪些?",
   key_world: [
-    "值类型和引用类型区别",
+    "npm 生命周期",
+    "script 生命周期",
   ],
   labels: [
-    // labels.application,
-    labels.js,
-    // company.jd,
+    labels.engineering,
+    // labels.js,
+    company.mi,
   ],
   milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

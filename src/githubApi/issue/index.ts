@@ -9,7 +9,7 @@ import { omit } from "lodash";
 const remote = {
   title: "[React] memo 和 useMemo 有和区别？",
   key_world: [
-    // "new Function 概念",
+    "memo useMemo",
     // "js new Function 执行性能",
     // "js new Function 使用场景",
   ],

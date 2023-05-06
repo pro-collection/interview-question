@@ -1,49 +1,113 @@
-**关键词**：npm 生命周期、script 生命周期
+**关键词**：Grid 布局、Grid 属性
+
+### 什么是 grid 布局
+
+CSS Grid 布局是 CSS 中的一种新的布局系统，旨在通过 网格（grid）和 行（row）、列（column）的概念来创建灵活的、高效的、响应式网页布局。CSS Grid 布局可以将一个元素的内容划分为多个网格，根据需要，可以在这些网格中定位元素。与传统的基于盒子模型的布局方式不同，CSS Grid 布局以一种更直观、更高效的方式来处理布局问题。
+
+可以通过 CSS Grid 属性来定义网格和元素的位置，包括大小、间距、对齐方式等等。CSS Grid 布局还支持类似 Flexbox 的弹性布局，例如自适应尺寸、重叠和层叠等特性。最重要的是，因为 CSS Grid 布局与内容的结构分离，所以它能够为设计响应式布局提供出色的支持，而不需要在内容标记中添加过多的 CSS 或者 JavaScript。
 
 
-### 安装和卸载
+### grid 布局有哪些 api
 
-| 脚本名称           | 阶段           | 描述                                                                                                                                                   | 执行时机                                                  |
-|-----------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
-| preinstall      | pre           | 在 npm install 执行前运行，用于执行一些安装前的准备工作，例如检查依赖项或设置环境变量。                                                               | 安装前                                                     |
-| install, postinstall  | install | 在模块安装后执行，通常用于构建项目或者为其生成某些必须的文件，例如安装完毕后自动编译 TypeScript、ES6 等。                                               | 安装后                                                     |
-| preuninstall    | pre           | 在 npm uninstall 执行前运行，用于执行一些卸载前的准备工作。                                                                                            | 卸载前                                                     |
-| uninstall       | post          | 在 npm uninstall 执行后运行，用于清理卸载后的一些操作。                                                                                                | 卸载后                                                     |
-| postuninstall   | post          | 在 npm uninstall 执行后运行，用于执行一些卸载后的操作。                                                                                                | 卸载后                                                     |
+CSS Grid 布局提供了一系列的 API 来实现网格布局，以下是常用的几个属性：
 
-### 发布和更新版本
+1. `display: grid;`：设置一个元素为网格容器
+2. `grid-template-columns`：定义网格中每一列的大小和数量
+3. `grid-template-rows`：定义网格中每一行的大小和数量
+4. `grid-template-areas`：为网格中的区域命名，以便将子元素分配到特定的区域
+5. `grid-column-gap` 和 `grid-row-gap`：定义网格中行和列之间的间距
+6. `grid-area`：定义元素应该在网格中的哪个区域，比如指定其所在的行、列和跨越的行列数量
+7. `grid-column-start` 和 `grid-column-end`：定义元素开始和结束的列位置，类似地，`grid-row-start` 和 `grid-row-end` 定义元素开始和结束的行位置
+8. `grid-column` 和 `grid-row`：简写属性，组合了 `grid-column-start` 、`grid-column-end` 、`grid-row-start` 和 `grid-row-end`，用于同时设置元素在网格中的列和行位置。
 
-| 脚本名称           | 阶段           | 描述                                                                                                                                                   | 执行时机                                                  |
-|-----------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
-| prepublish      | pre           | 在 publish（npm发布）执行前，运行 npm pack。                                                                                                           | 发布前                                                     |
-| prepare         | pre           | 在包被发布前或安装前执行，可以用来设置编译或验证文件的操作。                                                                                        | 发布前、安装前                                             |
-| prepublishOnly  | pre           | 在 npm publish 执行前运行，用于确保在 publish 命令执行时不会意外发布不必要的文件。                                                                  | 发布前                                                     |
-| prepack         | pre           | 在 npm pack（打包命令）执行前运行，用于执行一些打包前的准备工作。                                                                                      | 打包前                                                     |
-| postpack        | post          | 在 npm pack 执行后运行，用于清理和重置打包相关的操作。                                                                                                | 打包后                                                     |
-| publish         | post          | 在包被成功发布后执行。                                                                                                                                 | 发布后                                                     |
-| postpublish     | post          | 在包被成功发布后执行，用于执行一些发布后的操作。                                                                                                     | 发布后                                                     |
-| preversion      | pre           | 在项目版本号更新（npm version）之前执行。                                                                                                             | 更新版本号前                                               |
-| version         | post          | 在 npm version 执行后执行，用于执行一些版本更新后的操作。                                                                                              | 更新版本号后                                               |
-| postversion     | post          | 在项目版本号更新（npm version）之后执行。                                                                                                             | 更新版本号后                                               |
+这些属性可以帮助我们在网格容器中定义网格，并指定子元素在网格中的位置和大小。还有其他的属性可以进一步调整子元素的位置和大小，如 `justify-self` 和 `align-self` 用于调整子元素的水平和垂直对齐方式，`grid-auto-columns` 和 `grid-auto-rows` 用于指定未被显式指定的网格单元格的大小等等。
 
-### 测试和运行
 
-| 脚本名称           | 阶段           | 描述                                                                                                                                                   | 执行时机                                                  |
-|-----------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
-| pretest         | pre           | 在 npm test 执行前执行，用于执行某些测试前的准备工作。                                                                                                | 测试前                                                     |
-| test            | test         | 执行 npm run test 命令时执行。通常用于执行单元测试，并返回任何错误状态。                                                                               | 默认测试阶段                                               |
-| posttest        | post          | 在 npm test 执行后执行，用于执行某些测试后的操作。                                                                                                    | 测试后                                                     |
-| prestart        | pre           | 在 npm start 执行前运行，用于执行某些启动进程前的准备工作。                                                                                            | 启动前                                                     |
-| start           | start        | 执行 npm start 命令时执行，通常用于启动 Web 服务器、Node 服务器、实时编译器等。                                                                        | 默认启动阶段                                               |
-| poststart       | post          | 在 npm start 执行后执行，用于执行某些启动进程后的操作。                                                                                                | 启动后                                                     |
-| prerestart      | pre           | 在 npm restart 执行前执行，用于执行一些重新启动进程前的准备工作。                                                                                      | 重新启动前                                                 |
-| restart         | stop/start   | 执行 npm restart 命令时执行，通常用于停止正在运行的 Node 服务器、Web 服务器等，然后以更新的源码重新启动服务。                                      | 默认重新启动阶段，但是该命令会触发停止和启动两个标准阶段 |
-| postrestart     | post          | 在 npm restart 执行后执行，用于执行一些重新启动进程后的操作。                                                                                          | 重新启动后                                                 |
+### 如何使用 grid 布局
 
-### 其他生命周期
+CSS Grid 布局可以通过以下步骤来使用：
 
-| 脚本名称           | 阶段           | 描述                                                                                                                                                   | 执行时机                                                  |
-|-----------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
-| prestop         | pre           | 在 npm stop 执行前运行，用于执行某些停止进程前的准备工作。                                                                                            | 停止前                                                     |
-| stop            | stop         | 执行 npm stop 命令时执行，通常用于停止正在运行的 Web 服务器、Node 服务器、实时编译器等。                                                               | 默认停止阶段                                               |
-| poststop        | post          | 在 npm stop 执行后执行，用于执行某些停止进程后的操作。                                                                                                 | 停止后                                                     |
+1. 在父级元素上声明 `display: grid` 属性，将其转换为网格容器。
+2. 使用 `grid-template-columns` 和 `grid-template-rows` 属性来定义行和列的网格大小和数量，或者使用 `grid-template-areas` 属性来定义网格中的区域。
+3. 使用 `gap` 属性来定义行和列之间的间距。
+4. 将子元素放到网格容器中，并使用 `grid-column` 和 `grid-row` 属性来指定子元素在网格中的位置，也可以通过 `grid-area` 属性来指定子元素在网格中的区域。
+5. 可以使用其他属性来进一步改变子元素的位置和大小，比如 `justify-self` 和 `align-self` 等属性来设置元素的对齐方式和位置。
+
+下面是一个简单的使用 Grid 布局的示例，创建一个 3x3 网格：
+
+```html
+<div class="grid-container">
+  <div class="grid-item item1">1</div>
+  <div class="grid-item item2">2</div>
+  <div class="grid-item item3">3</div>
+  <div class="grid-item item4">4</div>
+  <div class="grid-item item5">5</div>
+  <div class="grid-item item6">6</div>
+  <div class="grid-item item7">7</div>
+  <div class="grid-item item8">8</div>
+  <div class="grid-item item9">9</div>
+</div>
+```
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.grid-item {
+  background-color: #ddd;
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+
+.item1 {
+  grid-column: 1 / span 2;
+  grid-row: 1;
+}
+
+.item2 {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+}
+
+.item3 {
+  grid-column: 1;
+  grid-row: 2 / span 2;
+}
+
+.item4 {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.item5 {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+.item6 {
+  grid-column: 2 / span 2;
+  grid-row: 4;
+}
+
+.item7 {
+  grid-column: 1;
+  grid-row: 5;
+}
+
+.item8 {
+  grid-column: 2;
+  grid-row: 5;
+}
+
+.item9 {
+  grid-column: 3;
+  grid-row: 5;
+}
+```
+
+在这个示例中，我们创建了一个包含 9 个子元素的网格容器。通过设置网格容器的 `grid-template-columns` 和 `grid-template-rows` 属性，我们定义了一个 3x3 的网格，并通过 `gap` 属性设置了行和列的间距。然后，我们使用 `grid-column` 和 `grid-row` 属性来指定每个子元素在网格中的位置，或使用 `grid-area` 属性来指定子元素在网格中的区域。通过这些属性的值，我们可以指定每个子元素跨越多少行和多少列，或者指定一个子元素占据网格中的多个区域。

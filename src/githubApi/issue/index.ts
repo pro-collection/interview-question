@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "npm script 生命周期有哪些?",
+  title: "Grid 布局了解多少？",
   key_world: [
-    "npm 生命周期",
-    "script 生命周期",
+    "Grid 布局",
+    "Grid 属性",
   ],
   labels: [
-    labels.engineering,
+    labels.css,
     // labels.js,
-    company.mi,
+    company.mt,
   ],
   milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

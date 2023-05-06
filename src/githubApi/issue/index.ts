@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] createElement 和 cloneElement 有什么区别",
+  title: "[React] createPortal 了解多少？",
   key_world: [
-    "createElement cloneElement",
+    "react createPortal",
   ],
   labels: [
     labels.frameWork,
-    company.mt,
+    company.netEase,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

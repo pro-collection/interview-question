@@ -7,17 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] memo 和 useMemo 有和区别？",
+  title: "如何做 promise 缓存？上一次调用函数的 promise 没有返回， 那么下一次调用函数依然返回上一个 promise",
   key_world: [
-    "memo useMemo",
+    // "memo useMemo",
     // "js new Function 执行性能",
     // "js new Function 使用场景",
   ],
   labels: [
-    labels.frameWork,
+    labels.js,
     // company.baidu,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

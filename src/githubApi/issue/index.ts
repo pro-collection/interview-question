@@ -7,17 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "Javascript 数组中有那些方法可以改变自身，那些不可以",
+  title: "[React] memo 和 useMemo 有和区别？",
   key_world: [
     // "new Function 概念",
     // "js new Function 执行性能",
     // "js new Function 使用场景",
   ],
   labels: [
-    labels.js,
+    labels.frameWork,
     // company.baidu,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何做 promise 缓存？上一次调用函数的 promise 没有返回， 那么下一次调用函数依然返回上一个 promise",
+  title: "前端水印了解多少？",
   key_world: [
-    // "memo useMemo",
+    "前端 明水印 暗水印",
     // "js new Function 执行性能",
     // "js new Function 使用场景",
   ],
   labels: [
-    labels.js,
-    // company.baidu,
+    labels.application,
+    company.mi,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

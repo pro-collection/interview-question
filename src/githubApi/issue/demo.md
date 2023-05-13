@@ -1,116 +1,64 @@
-### 基础实现
+**关键词**：前端 明水印 暗水印
 
-可以使用闭包实现 promise 缓存的功能。下面是一个示例代码：
+### 明水印和暗水印的区别
 
-```js
-function cachedPromise(promiseFunction) {
-  let lastPromise = null;
-  
-  return function() {
-    if (lastPromise !== null) {
-      return lastPromise;
-    }
-    
-    lastPromise = promiseFunction();
-    return lastPromise;
-  }
-}
+前端水印可以分为明水印和暗水印两种类型。它们的区别如下：
 
-const promiseFunction = () => {
-  // 这里可以是任何一个返回 Promise 的异步函数
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve('Resolved!');
-    }, 2000)
-  })
-}
+1. 明水印：明水印是通过在文本或图像上覆盖另一层图像或文字来实现的。这种水印会明显地出现在页面上，可以用来显示版权信息或其他相关信息。
 
-const cachedPromiseFunction = cachedPromise(promiseFunction);
+2. 暗水印：暗水印是指在文本或图像中隐藏相关信息的一种技术。这种水印不会直接出现在页面上，只有在特殊的程序或工具下才能被检测到。暗水印通常用于保护敏感信息以及追踪网页内容的来源和版本。
 
-cachedPromiseFunction().then(result => {
-  console.log(result); // Resolved!
-});
 
-// 因为上次调用函数的 Promise 还未 resolve，所以这里直接返回上次的 Promise
-cachedPromiseFunction().then(result => {
-  console.log(result); // Resolved!
-});
-```
 
-在上面的代码中，我们先定义了一个 `cachedPromise` 函数，它接收一个返回 Promise 的异步函数 `promiseFunction`，并返回一个新的函数。这个新函数会维护一个 `lastPromise` 变量，用来记录上一次调用 `promiseFunction` 函数返回的 Promise。
+### 添加明水印手段有哪些
 
-当第一次调用 `cachedPromiseFunction` 时，`lastPromise` 变量还没有值，因此会调用 `promiseFunction`，并将返回的 Promise 赋值给 `lastPromise` 变量。同时，返回这个 Promise。
+可以参考这个文档： https://zhuanlan.zhihu.com/p/374734095
 
-当第二次调用 `cachedPromiseFunction` 时，由于 `lastPromise` 变量已经被赋值，表示上一次调用 `promiseFunction` 返回的 Promise 还没有返回，因此直接返回 `lastPromise` 变量，而不再调用 `promiseFunction`。
+总计一下：
 
-当第一个 Promise 返回时，会将 `lastPromise` 重置为空，这样下一次调用 `cachedPromiseFunction` 就会重新执行 `promiseFunction`。
+1. 重复的dom元素覆盖实现： 在页面上覆盖一个position:fixed的div盒子，盒子透明度设置较低，设置pointer-events: none;样式实现点击穿透，在这个盒子内通过js循环生成小的水印div，每个水印div内展示一个要显示的水印内容
 
-通过这种方式，我们就实现了 promise 缓存的功能，即如果上一次调用的 Promise 没有返回，那么下一次调用函数依然会返回上一个 Promise。
+2. canvas输出背景图： 绘制出一个水印区域，将这个水印通过toDataURL方法输出为一个图片，将这个图片设置为盒子的背景图，通过backgroud-repeat：repeat；样式实现填满整个屏幕的效果。
 
-### 如果上一次的函数调用 promise 已经返回，下一次调用就是一个新的 promise
+3. svg实现背景图： 与canvas生成背景图的方法类似，只不过是生成背景图的方法换成了通过svg生成
 
-修改上述的代码，让 `cachedPromise` 函数可以检测上一次的 Promise 是否已经完成，如果已经完成，则返回新的 Promise 对象。
+4. 图片加水印
 
-下面是修改后的代码：
 
-```
-function cachedPromise(promiseFunction) {
-  let lastPromise = null;
-  
-  return function() {
-    if (lastPromise !== null) {
-      if (lastPromise.isFulfilled()) { // 如果上一次 Promise 已经完成
-        lastPromise = null; // 重置上一次 Promise
-      } else {
-        return lastPromise; // 直接返回上一次 Promise
-      }
-    }
-    
-    lastPromise = promiseFunction();
-    return lastPromise;
-  }
-}
+### css 添加水印的方式， 如何防止用户删除对应的 css ， 从而达到去除水印的目的
 
-const promiseFunction = () => {
-  // 这里可以是任何一个返回 Promise 的异步函数
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve('Resolved!');
-    }, 2000)
-  })
-}
+使用 CSS 添加水印的方式本身并不能完全防止用户删除对应的 CSS 样式，从而删除水印。但是，可以采取一些措施来增加删除难度，提高水印的防伪能力。以下是一些常见的方法：
 
-const cachedPromiseFunction = cachedPromise(promiseFunction);
+1. 调用外部CSS文件：将水印样式单独设置在一个CSS文件内，并通过外链的方式在网站中调用，可以避免用户通过编辑页面HTML文件或内嵌样式表的方式删除水印。
 
-cachedPromiseFunction().then(result => {
-  console.log(result); // Resolved!
-});
+2. 设置样式为 !important：在CSS样式中使用 !important 标记可以避免被覆盖。但是，这种方式会影响网页的可读性，需慎重考虑。
 
-// 因为上次调用函数的 Promise 还未 resolve，所以这里直接返回上次的 Promise
-cachedPromiseFunction().then(result => {
-  console.log(result); // Resolved!
-});
+3. 添加自定义类名：通过在CSS样式中加入自定义的class类名，可以防止用户直接删掉该类名，进而删除水印。但是，用户也可以通过重新定义该类名样式来替换水印。
 
-setTimeout(() => {
-  // 上一次 Promise 已经完成，这里会返回新的 Promise 对象
-  cachedPromiseFunction().then(result => {
-    console.log(result); // Resolved!
-  });
-}, 3000);
-```
+4. 将水印样式应用到多个元素上：将水印样式应用到多个元素上，可以使得用户删除水印较为困难。例如，在网站的多个位置都加上"Power by XXX"的水印样式。
 
-在这段代码中，我们在闭包函数中判断上一次的 Promise 是否已经完成，如果已经完成，则将其重置为空，在下一次调用时会再次执行 `promiseFunction`，并返回新的 Promise 对象。
+5. 使用JavaScript动态生成CSS样式：可以监听挂载水印样式的dom 节点， 如果用户改变了该 dom , 重新生成 对应的水印挂载上去即可。 这种方法可通过JS动态生成CSS样式，从而避免用户直接在网页源文件中删除CSS代码。但需要注意的是，这种方案会稍稍加重网页的加载速度，需要合理权衡。
 
-请注意，由于 `lastPromise` 变量被修改了，我们使用了一个名为 `isFulfilled()` 的方法来检测 Promise 是否已经完成。这个方法可以使用任何一个符合 Promises/A+ 规范的 Promise 库（如 bluebird.js）来实现。如果你使用的是原生的 Promise 对象，可以使用 `then()` 方法代替 `isFulfilled()`，如下所示：
+6. 混淆CSS代码：通过多次重复使用同一样式，或者采用CSS压缩等混淆手段，可以使CSS样式表变得复杂难懂，增加水印被删除的难度。
 
-```
-if (typeof lastPromise.then !== 'function') {
-  lastPromise = null; // 重置上一次 Promise
-} else {
-  return lastPromise; // 直接返回上一次 Promise
-}
-```
+7. 采用图片水印的方式：将水印转化为一个透明的PNG图片，然后将其作为网页的背景图片，可以更有效地防止水印被删除。
 
-这样，我们就实现了一个可以检测 Promise 完成状态的 promise 缓存函数。
+8. 使用SVG图形：可以将水印作为SVG图形嵌入到网页中进行展示。由于SVG的矢量性质，这种方式可以保证水印在缩放或旋转后的清晰度，同时也增加了删除难度。
 
+
+### 暗水印是如何把水印信息隐藏起来的
+
+暗水印的基本原理是在原始数据（如文本、图像等）中嵌入信息，从而实现版权保护和溯源追踪等功能。暗水印把信息隐藏在源数据中，使得人眼难以察觉，同时对源数据的影响尽可能小，保持其自身的特征。
+
+一般来说，暗水印算法主要包括以下几个步骤：
+
+1. 水印信息处理：将待嵌入的信息经过处理和加密后，转化为二进制数据。
+
+2. 源数据处理：遍历源数据中的像素或二进制数据，根据特定规则对其进行调整，以此腾出空间插入水印二进制数据。
+
+3. 嵌入水印：将水印二进制数据插入到源数据中的指定位置，以某种方式嵌入到源数据之中。
+
+4. 提取水印：在使用暗水印的过程中，需要从带水印的数据中提取出隐藏的水印信息。提取水印需要使用特定的解密算法和提取密钥。
+
+暗水印的一个关键问题是在嵌入水印的过程中，要保证水印对源数据的伤害尽可能的小，同时嵌入水印后数据的分布、统计性质等不应发生明显变化，以更好地保持数据的质量和可视效果。
 

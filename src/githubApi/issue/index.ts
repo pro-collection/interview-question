@@ -7,17 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "前端水印了解多少？",
+  title: "HTML5 中 meta 标签作用是啥",
   key_world: [
-    "前端 明水印 暗水印",
+    "html5 meta",
     // "js new Function 执行性能",
     // "js new Function 使用场景",
   ],
   labels: [
-    labels.application,
-    company.mi,
+    labels.chrome,
+    company.alibaba,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

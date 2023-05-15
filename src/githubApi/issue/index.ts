@@ -7,15 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "HTML5 中 meta 标签作用是啥",
+  title: "CSS 选择器有哪些、优先级如何？",
   key_world: [
-    "html5 meta",
-    // "js new Function 执行性能",
-    // "js new Function 使用场景",
+    "css 选择器",
+    "css 优先级",
   ],
   labels: [
-    labels.chrome,
-    company.alibaba,
+    labels.css,
+    company.tencent,
   ],
   milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

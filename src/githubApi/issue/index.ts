@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "CSS 选择器有哪些、优先级如何？",
+  title: "CSS 伪类和伪元素有哪些，它们的区别和实际应用",
   key_world: [
-    "css 选择器",
-    "css 优先级",
+    "css 伪类",
+    "css 伪元素",
   ],
   labels: [
     labels.css,
-    company.tencent,
+    company.jd,
   ],
   milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

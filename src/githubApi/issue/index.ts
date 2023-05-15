@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "CSS 伪类和伪元素有哪些，它们的区别和实际应用",
+  title: "如何防止 CSS 阻塞渲染",
   key_world: [
-    "css 伪类",
-    "css 伪元素",
+    "css 阻塞渲染",
+    "css 阻塞",
   ],
   labels: [
     labels.css,
-    company.jd,
+    company.netEase,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

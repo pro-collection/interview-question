@@ -7,16 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "CSS 绘制三角形",
+  title: "如何将JavaScript代码解析成抽象语法树(AST)",
   key_world: [
-    "css 绘制",
-    "css 三角形",
+    "解析为 AST",
+    "抽象语法树",
+    "AST 词法分析",
+    "AST 语法分析",
   ],
   labels: [
-    labels.css,
-    company.mi,
+    labels.engineering,
+    company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

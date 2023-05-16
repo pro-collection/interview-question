@@ -1,50 +1,11 @@
-在CSS中，你可以使用多种方法来实现三角形。以下是几种常用的方法和相应的代码示例：
+JavaScript代码解析成抽象语法树（Abstract Syntax Tree，AST）的过程涉及以下几个主要步骤：
 
-1. 使用边框：
+1. 词法分析（Lexical Analysis）：词法分析器（Lexer）将源代码拆分成词法单元（tokens），比如变量名、关键字、操作符、标点符号等。它根据一组定义好的规则（词法规范）来识别和分类这些词法单元。
 
-```css
-.triangle {
-  width: 0;
-  height: 0;
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
-  border-bottom: 100px solid red;
-}
-```
+2. 语法分析（Syntax Analysis）：语法分析器（Parser）接收词法分析器生成的词法单元，并根据语法规则构建AST。语法分析器使用上下文无关文法（Context-Free Grammar）来定义语言的语法规则，它通过递归下降、LR(1) 等算法来处理这些规则，以确定输入是否符合语法规则并生成相应的AST。
 
-这个方法通过设置元素的边框来创建三角形，其中左右边框设为透明，底边框设置为你想要的颜色。
+3. 构建AST：在语法分析的过程中，语法分析器根据语法规则构建AST。AST是一个树状结构，其中每个节点表示源代码中的一个语法结构，如表达式、语句、函数等。不同节点类型代表不同的语法结构，它们之间通过父子关系和兄弟关系来表示源代码的层次结构和逻辑关联。
 
-2. 使用伪元素：
+4. 后续处理：生成AST后，可以进行进一步的处理和分析。这可能包括语义分析、类型推断、符号解析、代码优化等。这些步骤可以根据具体的需求和工具进行。
 
-```css
-.triangle {
-  position: relative;
-  width: 100px;
-  height: 100px;
-}
-
-.triangle:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-width: 0 100px 100px 0;
-  border-style: solid;
-  border-color: red;
-}
-```
-
-这个方法使用伪元素 `::before` 来创建三角形，通过设置其边框的宽度和样式来实现。
-
-3. 使用旋转：
-
-```css
-.triangle {
-  width: 100px;
-  height: 100px;
-  background-color: red;
-  transform: rotate(45deg);
-}
-```
-
-这个方法创建一个正方形元素，然后通过使用 `transform` 属性的 `rotate` 函数将其旋转45度，从而形成一个三角形。
+总体而言，将JavaScript代码解析成AST的过程是通过词法分析器将源代码拆分成词法单元，然后语法分析器根据语法规则构建AST。AST提供了对代码结构的抽象表示，便于进一步分析、转换和操作代码。

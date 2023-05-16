@@ -7,16 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何将JavaScript代码解析成抽象语法树(AST)",
+  title: "base64 的编码原理是什么",
   key_world: [
-    "解析为 AST",
-    "抽象语法树",
-    "AST 词法分析",
-    "AST 语法分析",
+    "base64 编译",
+    "base64 原理",
   ],
   labels: [
-    labels.engineering,
-    company.alibaba,
+    labels.application,
+    company.tencent,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
@@ -47,7 +45,7 @@ const main = async () => {
 // writeToTemp();
 
 // html 写入远端
-// htmlWriteIssue(remote);
+htmlWriteIssue(remote);
 
 // 直接写入远端
-main();
+// main();

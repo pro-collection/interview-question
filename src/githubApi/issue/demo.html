@@ -1,176 +1,29 @@
-<div class="markdown-body html"><style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#252933}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;line-height:38px;margin-bottom:5px}.markdown-body h2{font-size:22px;line-height:34px;padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:20px;line-height:28px}.markdown-body h4{font-size:18px;line-height:26px}.markdown-body h5{font-size:17px;line-height:24px}.markdown-body h6{font-size:16px;line-height:24px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="juejin">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><h2 class="heading" data-id="heading-0">什么是 npm script</h2>
-  <p>npm 允许在package.json文件里面，使用scripts字段定义脚本命令。</p>
-  <pre><code class="hljs bash copyable hljs language-awk" lang="awk">{
-  <span class="hljs-regexp">//</span> ...
-  <span class="hljs-string">"scripts"</span>: {
-    <span class="hljs-string">"build"</span>: <span class="hljs-string">"node build.js"</span>
-  }
-}<span class="copy-code-btn">复制代码</span></code></pre><p>上面代码是<code>package.json</code>文件的一个片段，里面的scripts字段是一个对象。它的每一个属性，对应一段脚本。比如，build命令对应的脚本是<code>node build.js</code>。</p>
-  <p>命令行下使用<code>npm run</code>命令，就可以执行这段脚本。</p>
-  <pre><code class="hljs bash copyable hljs language-crmsh" lang="crmsh">
-$ npm run build
-<span class="hljs-comment"># 等同于执行</span>
-$ <span class="hljs-keyword">node</span> <span class="hljs-title">build</span>.js<span class="copy-code-btn">复制代码</span></code></pre><p>这些定义在<code>package.json</code>里面的脚本，就称为npm脚本。它的优点很多。</p>
-  <ul>
-    <li>项目的相关脚本，可以集中在一个地方。</li>
-    <li>不同项目的脚本命令，只要功能相同，就可以有同样的对外接口。</li>
-    <li>用户不需要知道怎么测试你的项目，只要运行npm run test即可。</li>
-    <li>可以利用 npm 提供的很多辅助功能。</li>
-  </ul>
-  <p>查看当前项目的所有 npm 脚本命令，可以使用不带任何参数的<code>npm run</code>命令。</p>
-  <pre><code class="hljs bash copyable hljs language-applescript" lang="applescript">$ npm <span class="hljs-built_in">run</span><span class="copy-code-btn">复制代码</span></code></pre><hr>
-  <h2 class="heading" data-id="heading-1">原理</h2>
-  <p>npm run 实际上是 npm run-script 命令的简写</p>
-  <ul>
-    <li>从 package.json 文件中读取 scripts 对象里面的全部配置；</li>
-    <li>以传给 npm run 的第一个参数作为键，如dev，在 scripts 对象里面获取对应的值作为接下来要执行的命令，如果没找到直接报错；</li>
-  </ul>
-  <p>每当执行npm run，就会自动新建一个 Shell，在这个 Shell 里面执行指定的脚本命令。因此，只要是 Shell（一般是 Bash）可以运行的命令，就可以写在 npm 脚本里面。</p>
-  <p>比较特别的是，npm run新建的这个 Shell，会将当前目录的node_modules/.bin子目录加入PATH变量，执行结束后，再将PATH变量恢复原样。</p>
-  <p>这意味着，当前目录的node_modules/.bin子目录里面的所有脚本，都可以直接用脚本名调用，而不必加上路径。比如，当前项目的依赖里面有 Mocha，只要直接写mocha test就可以了。</p>
-  <pre><code class="hljs bash copyable hljs language-json" lang="json"><span class="hljs-attr">"test"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"mocha test"</span><span class="copy-code-btn">复制代码</span></code></pre><h2 class="heading" data-id="heading-2">通配符</h2>
-  <p>由于 npm 脚本就是 Shell 脚本，因为可以使用 Shell 通配符。</p>
-  <pre><code class="hljs bash copyable hljs language-json" lang="json"><span class="hljs-attr">"lint"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"jshint *.js"</span>
-<span class="hljs-attr">"lint"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"jshint **/*.js"</span><span class="copy-code-btn">复制代码</span></code></pre><p>上面代码中，*表示任意文件名，**表示任意一层子目录。</p>
-  <p>如果要将通配符传入原始命令，防止被 Shell 转义，要将星号转义。</p>
-  <pre><code class="hljs bash copyable hljs language-json" lang="json"><span class="hljs-attr">"test"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"tap test/\*.js"</span><span class="copy-code-btn">复制代码</span></code></pre><hr>
-  <h2 class="heading" data-id="heading-3">传参</h2>
-  <p>给 npm script 传递参数
-    给 npm script 传递参数
-    eslint 内置了代码风格自动修复模式，只需给它传入 --fix 参数即可，在 scripts 中声明检查代码命令的同时你可能也需要声明修复代码的命令，面对这种需求，大多数同学可能会忍不住复制粘贴，如下：</p>
-  <pre><code class="hljs bash copyable hljs language-diff" lang="diff"><span class="hljs-meta">@@ -5,6 +5,7 @@</span>
-     "lint:js": "eslint *.js",
-<span class="hljs-addition">+    "lint:js:fix": "eslint *.js --fix",</span><span class="copy-code-btn">复制代码</span></code></pre><p>在 lint:js 命令比较短的时候复制粘贴的方法简单粗暴有效，但是当 lint:js 命令变的很长之后，难免后续会有人改了 lint:js 而忘记修改 lint:js:fix（别问我为啥，我就是踩着坑过来的），更健壮的做法是，在运行 npm script 时给定额外的参数，代码修改如下：</p>
-  <pre><code class="hljs bash copyable hljs language-diff" lang="diff"><span class="hljs-meta">@@ -5,6 +5,7 @@</span>
-     "lint:js": "eslint *.js",
-<span class="hljs-addition">+    "lint:js:fix": "npm run lint:js -- --fix",</span><span class="copy-code-btn">复制代码</span></code></pre><p>要格外注意 --fix 参数前面的 -- 分隔符，意指要给 npm run lint:js 实际指向的命令传递额外的参数。</p>
-  <hr>
-  <h2 class="heading" data-id="heading-4">注释</h2>
-  <pre><code class="hljs bash copyable hljs language-swift" lang="swift"><span class="hljs-string">"test"</span>: <span class="hljs-string">"# 运行所有代码检查和单元测试 <span class="hljs-subst">\n</span>    npm-run-all --parallel lint:* mocha"</span><span class="copy-code-btn">复制代码</span></code></pre><p>或者在单独的文件中可以自由给它添加注释</p>
-  <hr>
-  <h2 class="heading" data-id="heading-5">日志</h2>
-  <pre><code class="hljs bash copyable hljs language-dockerfile" lang="dockerfile">npm <span class="hljs-keyword">run</span><span class="language-bash"> <span class="hljs-built_in">test</span> --loglevel silent</span>
-npm <span class="hljs-keyword">run</span><span class="language-bash"> <span class="hljs-built_in">test</span> --slient</span>
-npm <span class="hljs-keyword">run</span><span class="language-bash"> <span class="hljs-built_in">test</span> -s</span><span class="copy-code-btn">复制代码</span></code></pre><p>这个日志级别，只有命令本身的输出，读起来非常的简洁</p>
-  <pre><code class="hljs bash copyable hljs language-dockerfile" lang="dockerfile">npm <span class="hljs-keyword">run</span><span class="language-bash"> <span class="hljs-built_in">test</span> --loglevel verbose</span>
-npm <span class="hljs-keyword">run</span><span class="language-bash"> <span class="hljs-built_in">test</span> --verbose</span>
-npm <span class="hljs-keyword">run</span><span class="language-bash"> <span class="hljs-built_in">test</span> -d</span><span class="copy-code-btn">复制代码</span></code></pre><p>这个日志级别，详细打印出了每个步骤的参数、返回值</p>
-  <hr>
-  <h2 class="heading" data-id="heading-6">执行顺序</h2>
-  <p>如果 npm 脚本里面需要执行多个任务，那么需要明确它们的执行顺序。</p>
-  <p>如果是并行执行（即同时的平行执行），可以使用&amp;符号。</p>
-  <pre><code class="hljs bash copyable hljs language-routeros" lang="routeros">$ npm <span class="hljs-built_in">run</span> script1.js &amp; npm <span class="hljs-built_in">run</span> script2.js<span class="copy-code-btn">复制代码</span></code></pre><p>如果是继发执行（即只有前一个任务成功，才执行下一个任务），可以使用&amp;&amp;符号。</p>
-  <pre><code class="hljs bash copyable hljs language-routeros" lang="routeros">$ npm <span class="hljs-built_in">run</span> script1.js &amp;&amp; npm <span class="hljs-built_in">run</span> script2.js<span class="copy-code-btn">复制代码</span></code></pre><p>这两个符号是 Bash 的功能。此外，还可以使用 node 的任务管理模块：<code>npm-run-all</code>、<code>script-runner</code></p>
-  <pre><code class="hljs bash copyable hljs language-awk" lang="awk"><span class="hljs-regexp">//</span> 串行
-{
--    <span class="hljs-string">"test"</span>: <span class="hljs-string">"npm run lint:js &amp;&amp; npm run lint:css &amp;&amp; npm run lint:json &amp;&amp; npm run lint:markdown"</span>
-+    <span class="hljs-string">"test"</span>: <span class="hljs-string">"npm-run-all lint:js lint:css lint:json lint:markdown"</span>
-   },
-<span class="hljs-regexp">//</span> 并行 --parallel
-{
--    <span class="hljs-string">"test"</span>: <span class="hljs-string">"npm-run-all lint:*"</span>
-+    <span class="hljs-string">"test"</span>: <span class="hljs-string">"npm-run-all --parallel lint:* mocha"</span>
-}<span class="copy-code-btn">复制代码</span></code></pre><hr>
-  <h2 class="heading" data-id="heading-7">默认值</h2>
-  <p>一般来说，npm 脚本由用户提供。但是，npm 对两个脚本提供了默认值。也就是说，这两个脚本不用定义，就可以直接使用。</p>
-  <pre><code class="hljs bash copyable hljs language-1c" lang="1c">
-<span class="hljs-string">"start"</span>: <span class="hljs-string">"node server.js"</span>，
-<span class="hljs-string">"install"</span>: <span class="hljs-string">"node-gyp rebuild"</span><span class="copy-code-btn">复制代码</span></code></pre><p>上面代码中，npm run start的默认值是node server.js，前提是项目根目录下有server.js这个脚本；npm run install的默认值是node-gyp rebuild，前提是项目根目录下有binding.gyp文件。</p>
-  <hr>
-  <h2 class="heading" data-id="heading-8">钩子</h2>
-  <p>npm 脚本有pre和post两个钩子。举例来说，build脚本命令的钩子就是prebuild和postbuild。</p>
-  <pre><code class="hljs bash copyable hljs language-smalltalk" lang="smalltalk"><span class="hljs-comment">"prebuild"</span>: <span class="hljs-comment">"echo I run before the build script"</span>,
-<span class="hljs-comment">"build"</span>: <span class="hljs-comment">"cross-env NODE_ENV=production webpack"</span>,
-<span class="hljs-comment">"postbuild"</span>: <span class="hljs-comment">"echo I run after the build script"</span><span class="copy-code-btn">复制代码</span></code></pre><p>用户执行npm run build的时候，会自动按照下面的顺序执行。</p>
-  <p>npm run prebuild &amp;&amp; npm run build &amp;&amp; npm run postbuild
-    因此，可以在这两个钩子里面，完成一些准备工作和清理工作。下面是一个例子。</p>
-  <pre><code class="hljs bash copyable hljs language-json" lang="json">
-<span class="hljs-attr">"clean"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"rimraf ./dist &amp;&amp; mkdir dist"</span><span class="hljs-punctuation">,</span>
-<span class="hljs-attr">"prebuild"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"npm run clean"</span><span class="hljs-punctuation">,</span>
-<span class="hljs-attr">"build"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"cross-env NODE_ENV=production webpack"</span><span class="copy-code-btn">复制代码</span></code></pre><p>npm 默认提供下面这些钩子。</p>
-  <pre><code class="hljs bash copyable hljs" lang="bash">prepublish，postpublish
-preinstall，postinstall
-preuninstall，postuninstall
-preversion，postversion
-pretest，posttest
-prestop，poststop
-prestart，poststart
-prerestart，postrestart<span class="copy-code-btn">复制代码</span></code></pre><p>自定义的脚本命令也可以加上pre和post钩子。比如，myscript这个脚本命令，也有premyscript和postmyscript钩子。不过，双重的pre和post无效，比如prepretest和postposttest是无效的。</p>
-  <p>npm 提供一个npm_lifecycle_event变量，返回当前正在运行的脚本名称，比如pretest、test、posttest等等。所以，可以利用这个变量，在同一个脚本文件里面，为不同的npm scripts命令编写代码。请看下面的例子。</p>
-  <pre><code class="hljs bash copyable hljs language-arcade" lang="arcade">const TARGET = process.env.npm_lifecycle_event;
-
-<span class="hljs-keyword">if</span> (TARGET === <span class="hljs-string">'test'</span>) {
-  <span class="hljs-built_in">console</span>.<span class="hljs-built_in">log</span>(<span class="hljs-string">`Running the test task!`</span>);
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>在CSS中，你可以使用多种方法来实现三角形。以下是几种常用的方法和相应的代码示例：</p><ol><li>使用边框：</li></ol><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css"><span class="hljs-selector-class">.triangle</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">border-left</span>: <span class="hljs-number">50px</span> solid transparent;
+  <span class="hljs-attribute">border-right</span>: <span class="hljs-number">50px</span> solid transparent;
+  <span class="hljs-attribute">border-bottom</span>: <span class="hljs-number">100px</span> solid red;
+}
+</code></div></div></pre><p>这个方法通过设置元素的边框来创建三角形，其中左右边框设为透明，底边框设置为你想要的颜色。</p><ol start="2"><li>使用伪元素：</li></ol><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css"><span class="hljs-selector-class">.triangle</span> {
+  <span class="hljs-attribute">position</span>: relative;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">100px</span>;
 }
 
-<span class="hljs-keyword">if</span> (TARGET === <span class="hljs-string">'pretest'</span>) {
-  <span class="hljs-built_in">console</span>.<span class="hljs-built_in">log</span>(<span class="hljs-string">`Running the pretest task!`</span>);
+<span class="hljs-selector-class">.triangle</span><span class="hljs-selector-pseudo">:before</span> {
+  <span class="hljs-attribute">content</span>: <span class="hljs-string">""</span>;
+  <span class="hljs-attribute">position</span>: absolute;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">border-width</span>: <span class="hljs-number">0</span> <span class="hljs-number">100px</span> <span class="hljs-number">100px</span> <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">border-style</span>: solid;
+  <span class="hljs-attribute">border-color</span>: red;
 }
-
-<span class="hljs-keyword">if</span> (TARGET === <span class="hljs-string">'posttest'</span>) {
-  <span class="hljs-built_in">console</span>.<span class="hljs-built_in">log</span>(<span class="hljs-string">`Running the posttest task!`</span>);
-}<span class="copy-code-btn">复制代码</span></code></pre><p>注意，prepublish这个钩子不仅会在npm publish命令之前运行，还会在npm install（不带任何参数）命令之前运行。这种行为很容易让用户感到困惑，所以 npm 4 引入了一个新的钩子prepare，行为等同于prepublish，而从 npm 5 开始，prepublish将只在npm publish命令之前运行。</p>
-  <hr>
-  <h2 class="heading" data-id="heading-9">简写形式</h2>
-  <p>四个常用的 npm 脚本有简写形式。</p>
-  <pre><code class="hljs bash copyable hljs language-routeros" lang="routeros">npm start是npm <span class="hljs-built_in">run</span> start
-npm stop是npm <span class="hljs-built_in">run</span> stop的简写
-npm test是npm <span class="hljs-built_in">run</span> test的简写
-npm restart是npm <span class="hljs-built_in">run</span> stop &amp;&amp; npm <span class="hljs-built_in">run</span> restart &amp;&amp; npm <span class="hljs-built_in">run</span> start的简写<span class="copy-code-btn">复制代码</span></code></pre><p>npm start、npm stop和npm restart都比较好理解，而npm restart是一个复合命令，实际上会执行三个脚本命令：stop、restart、start。具体的执行顺序如下。</p>
-  <pre><code class="hljs bash copyable hljs language-crmsh" lang="crmsh">prerestart
-prestop
-<span class="hljs-literal">stop</span>
-poststop
-restart
-prestart
-<span class="hljs-literal">start</span>
-poststart
-postrestart<span class="copy-code-btn">复制代码</span></code></pre><hr>
-  <h2 class="heading" data-id="heading-10">变量</h2>
-  <p>npm 脚本有一个非常强大的功能，就是可以使用 npm 的内部变量。</p>
-  <p>运行 <code>npm run env</code>能拿到完整的变量列表</p>
-  <p>使用<code>npm run env | grep npm_package | sort</code> 拿到部分排序后的环境变量</p>
-  <p>通过npm_package_前缀，npm 脚本可以拿到package.json里面的字段。比如，下面是一个package.json。</p>
-  <pre><code class="hljs bash copyable hljs language-json" lang="json"><span class="hljs-punctuation">{</span>
-  <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"foo"</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"version"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"1.2.5"</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"config"</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">"port"</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">"8080"</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"scripts"</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">"start"</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">"node server.js"</span> <span class="hljs-punctuation">}</span>
-<span class="hljs-punctuation">}</span><span class="copy-code-btn">复制代码</span></code></pre><p>那么，变量npm_package_name返回foo，变量npm_package_version返回1.2.5。</p>
-  <pre><code class="hljs bash copyable hljs language-arcade" lang="arcade"><span class="hljs-comment">// view.js</span>
-<span class="hljs-built_in">console</span>.<span class="hljs-built_in">log</span>(process.env.npm_package_name); <span class="hljs-comment">// foo</span>
-<span class="hljs-built_in">console</span>.<span class="hljs-built_in">log</span>(process.env.npm_package_version); <span class="hljs-comment">// 1.2.5</span><span class="copy-code-btn">复制代码</span></code></pre><p>上面代码中，我们通过环境变量process.env对象，拿到package.json的字段值。如果是 Bash 脚本，可以用<code>$npm_package_name</code>和<code>$npm_package_version</code>取到这两个值。</p>
-  <p><code>$npm_package_scripts_start</code></p>
-  <hr>
-  <h2 class="heading" data-id="heading-11">结合 npm script 和 git-hooks</h2>
-  <p>Git 在代码版本管理之外，也提供了类似 npm script 里 pre、post 的钩子机制，叫做 Git Hooks，钩子机制能让我们在代码 commit、push 之前（后）做自己想做的事情。</p>
-  <p>前端社区里有多种结合 npm script 和 git-hooks 的方案，比如 <a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fobserving%2Fpre-commit" title="https://github.com/observing/pre-commit" ref="nofollow noopener noreferrer">pre-commit</a>、<a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Ftypicode%2Fhusky" title="https://github.com/typicode/husky" ref="nofollow noopener noreferrer">husky</a>，相比较而言 husky 更好用，它支持更多的 Git Hooks 种类，再结合 <a target="_blank" href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fokonet%2Flint-staged" title="https://github.com/okonet/lint-staged" ref="nofollow noopener noreferrer">lint-staged</a> 使用就更好了。</p>
-  <p><a target="_blank" href="https://juejin.cn/post/6844903479283040269" title="https://juejin.cn/post/6844903479283040269">了解更多</a></p>
-  <hr>
-  <h2 class="heading" data-id="heading-12">常用脚本示例</h2>
-  <pre><code class="hljs bash copyable hljs language-awk" lang="awk"><span class="hljs-regexp">//</span> 删除目录
-<span class="hljs-string">"clean"</span>: <span class="hljs-string">"rimraf dist/*"</span>,
-
-<span class="hljs-regexp">//</span> 本地搭建一个 HTTP 服务
-<span class="hljs-string">"serve"</span>: <span class="hljs-string">"http-server -p 9090 dist/"</span>,
-
-<span class="hljs-regexp">//</span> 打开浏览器
-<span class="hljs-string">"open:dev"</span>: <span class="hljs-string">"opener http://localhost:9090"</span>,
-
-<span class="hljs-regexp">//</span> 实时刷新
- <span class="hljs-string">"livereload"</span>: <span class="hljs-string">"live-reload --port 9091 dist/"</span>,
-
-<span class="hljs-regexp">//</span> 构建 HTML 文件
-<span class="hljs-string">"build:html"</span>: <span class="hljs-string">"jade index.jade &gt; dist/index.html"</span>,
-
-<span class="hljs-regexp">//</span> 只要 CSS 文件有变动，就重新执行构建
-<span class="hljs-string">"watch:css"</span>: <span class="hljs-string">"watch 'npm run build:css' assets/styles/"</span>,
-
-<span class="hljs-regexp">//</span> 只要 HTML 文件有变动，就重新执行构建
-<span class="hljs-string">"watch:html"</span>: <span class="hljs-string">"watch 'npm run build:html' assets/html"</span>,
-
-<span class="hljs-regexp">//</span> 部署到 Amazon S3
-<span class="hljs-string">"deploy:prod"</span>: <span class="hljs-string">"s3-cli sync ./dist/ s3://example-com/prod-site/"</span>,
-
-<span class="hljs-regexp">//</span> 构建 favicon
-<span class="hljs-string">"build:favicon"</span>: <span class="hljs-string">"node scripts/favicon.js"</span>,<span class="copy-code-btn">复制代码</span></code></pre></div>
+</code></div></div></pre><p>这个方法使用伪元素 <code>::before</code> 来创建三角形，通过设置其边框的宽度和样式来实现。</p><ol start="3"><li>使用旋转：</li></ol><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>css</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-css"><span class="hljs-selector-class">.triangle</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">100px</span>;
+  <span class="hljs-attribute">background-color</span>: red;
+  <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">rotate</span>(<span class="hljs-number">45deg</span>);
+}
+</code></div></div></pre><p>这个方法创建一个正方形元素，然后通过使用 <code>transform</code> 属性的 <code>rotate</code> 函数将其旋转45度，从而形成一个三角形。</p><p>这只是一些常用的方法，还有其他更多的方式可以实现三角形，取决于你的具体需求。</p></div>

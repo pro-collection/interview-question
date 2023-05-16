@@ -1,18 +1,52 @@
-**关键词**：css 阻塞渲染、css 阻塞
+**关键词**：css 绘制、css 三角形
 
-当浏览器遇到一个 `<link>` 标签时，它会停止解析 HTML 并发出一个单独的网络请求去加载外部样式表。
-这意味着，如果样式表很大或者网络速度很慢，它将阻止页面的渲染。阻止 CSS 渲染可能会导致页面看起来很糟糕，用户无法立即看到页面内容。                 
+在CSS中，你可以使用多种方法来实现三角形。以下是几种常用的方法和相应的代码示例：
 
-有一些方法可以防止或减轻 CSS 阻塞渲染：
+1. 使用边框：
 
-1. 内联样式：使用内联样式而不是外部样式表，将样式放在页面的顶部，这样 HTML 就能很快地被渲染出来。
+```css
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 100px solid red;
+}
+```
 
-2. 通过媒体查询加载符合指定媒体类型或条件的样式表。这样不会影响未满足条件的设备或屏幕渲染结果。
+这个方法通过设置元素的边框来创建三角形，其中左右边框设为透明，底边框设置为你想要的颜色。
 
-3. 使用 `rel="preload"` 或者 `rel="prefetch"` 预加载样式表，这有助于在页面渲染过程中尽早加载样式表，提高页面加载速度。
+2. 使用伪元素：
 
-4. 通过使用 JavaScript 动态加载样式表，可以实现延迟加载和异步加载。这可以帮助查看者能够看到尽快的内容，然后在不影响查看体验的前提下加载样式表。
+```css
+.triangle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
 
-5. 考虑压缩和优化您的 CSS 文件，以使代码更加紧凑、加载更快。
+.triangle:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-width: 0 100px 100px 0;
+  border-style: solid;
+  border-color: red;
+}
+```
 
-6. 对已经被加载的字体和图片，使用 CSS Sprites 技术合并到一个文件或者减少 HTTP 请求数量。
+这个方法使用伪元素 `::before` 来创建三角形，通过设置其边框的宽度和样式来实现。
+
+3. 使用旋转：
+
+```css
+.triangle {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  transform: rotate(45deg);
+}
+```
+
+这个方法创建一个正方形元素，然后通过使用 `transform` 属性的 `rotate` 函数将其旋转45度，从而形成一个三角形。

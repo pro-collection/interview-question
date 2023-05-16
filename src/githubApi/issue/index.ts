@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何防止 CSS 阻塞渲染",
+  title: "CSS 绘制三角形",
   key_world: [
-    "css 阻塞渲染",
-    "css 阻塞",
+    "css 绘制",
+    "css 三角形",
   ],
   labels: [
     labels.css,
-    company.netEase,
+    company.mi,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
@@ -37,14 +37,15 @@ const main = async () => {
   // 输出 title
   console.log("yanle - logger: title", remote.title);
 
-  // html 写入远端
-  // htmlWriteIssue(remote);
-
   // md 写入远端
   writeIssue(omit(remote, "key_world"));
-
-  // 写入本地 temp.md
-  // writeToTemp();
 };
 
+// 写入本地 temp.md
+// writeToTemp();
+
+// html 写入远端
+// htmlWriteIssue(remote);
+
+// 直接写入远端
 main();

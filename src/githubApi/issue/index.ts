@@ -7,14 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "base64 的编码原理是什么",
+  title: "DNS解析过程",
   key_world: [
-    "base64 编译",
-    "base64 原理",
+    "DNS解析",
   ],
   labels: [
-    labels.application,
-    company.tencent,
+    labels.network,
+    company.baidu,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

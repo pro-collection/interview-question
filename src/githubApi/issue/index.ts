@@ -7,9 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "DNS解析过程",
+  title: "WebSocket 协议的底层原理是什么",
   key_world: [
-    "DNS解析",
+    "WebSocket 协议",
+    "WebSocket 与 http 区别",
+    "全双工通信的协议",
   ],
   labels: [
     labels.network,
@@ -44,7 +46,7 @@ const main = async () => {
 // writeToTemp();
 
 // html 写入远端
-htmlWriteIssue(remote);
+// htmlWriteIssue(remote);
 
 // 直接写入远端
-// main();
+main();

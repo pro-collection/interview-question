@@ -7,17 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "手写 JSON.stringify 和 手写 JSON.parse 实现",
+  title: "模版引擎实现原理",
   key_world: [
-    "手写 JSON.stringify",
-    "手写 JSON.parse",
-    // "柯里化优势",
+    "模版引擎",
   ],
   labels: [
     labels.js,
-    company.netEase,
+    company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

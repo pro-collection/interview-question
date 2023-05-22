@@ -7,17 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "WebSocket 协议的底层原理是什么",
+  title: "函数柯里化了解多少",
   key_world: [
-    "WebSocket 协议",
-    "WebSocket 与 http 区别",
-    "全双工通信的协议",
+    "函数柯里化",
+    "柯里化应用场景",
+    "柯里化优势",
   ],
   labels: [
-    labels.network,
-    company.baidu,
+    labels.js,
+    company.jd,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

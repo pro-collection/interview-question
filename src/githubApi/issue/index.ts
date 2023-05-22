@@ -7,12 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "模版引擎实现原理",
+  title: "如何优化大规模 dom 操作的场景",
   key_world: [
-    "模版引擎",
+    "dom 操作性能",
+    "dom 操作优化",
   ],
   labels: [
-    labels.js,
+    labels.chrome,
     company.alibaba,
   ],
   milestone: MileStone.senior,

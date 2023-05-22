@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "浏览器有读写能力吗？",
+  title: "react native 工作原理是什么？",
   key_world: [
     // "dom 操作性能",
     // "dom 操作优化",
   ],
   labels: [
-    labels.chrome,
+    labels.application,
     // company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

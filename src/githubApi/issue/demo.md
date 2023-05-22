@@ -1,13 +1,17 @@
-在一般情况下，浏览器本身不具备直接的读写能力。浏览器是用于显示网页内容的客户端应用程序，其主要功能是发送HTTP请求，接收和渲染服务器返回的HTML、CSS和JavaScript等资源。然而，浏览器提供了一些特定的API，允许开发人员在浏览器中进行读写操作。
+React Native是一种基于JavaScript的开发框架，用于构建移动应用程序。它允许开发人员使用React的组件化开发模式来构建原生移动应用，同时跨平台共享代码。
 
-下面是一些允许浏览器进行读写操作的API：
+工作原理如下：
 
-1. Web Storage API：通过localStorage和sessionStorage提供了在浏览器中存储数据的能力。开发人员可以使用这些API将数据以键值对的形式存储在浏览器本地，读取和修改数据。
+1. JavaScript线程：React Native的应用程序逻辑是通过JavaScript代码来编写的。React Native应用在运行时会创建一个专用的JavaScript线程，负责处理JavaScript代码的解析和执行。
 
-2. IndexedDB API：IndexedDB是浏览器提供的一种高性能的非关系型数据库API。开发人员可以使用IndexedDB API在浏览器中创建和管理数据库，进行复杂的数据存储、查询和索引操作。
+2. 原生桥（Native Bridge）：React Native应用通过原生桥（Native Bridge）连接JavaScript线程和原生平台，使得JavaScript代码能够与原生代码进行通信和交互。原生桥是一个双向通信通道，它将JavaScript的调用转发给原生平台，并将原生平台的事件和回调传递回JavaScript。
 
-3. File API：File API允许浏览器读取和处理本地文件。开发人员可以使用File API选择本地文件并读取其内容，也可以通过FileWriter将数据写入本地文件。
+3. Virtual DOM：React Native使用Virtual DOM（虚拟DOM）机制来描述和管理UI的状态和变化。在React Native中，组件的UI层由React组件树构建而成，每个组件都有一个相应的虚拟DOM表示。
 
-4. Web Sockets：WebSocket是一种在浏览器和服务器之间实现全双工通信的协议。通过WebSocket API，浏览器可以与服务器建立持久的双向连接，并进行实时的数据读写操作。
+4. 原生渲染：React Native将虚拟DOM的变化映射到相应的原生UI组件上。通过与原生平台的交互，React Native会根据虚拟DOM的变化更新相应的原生UI组件，实现界面的渲染和更新。
 
-需要注意的是，浏览器的读写能力受到一些限制，如同源策略、跨域限制等。为了保障安全性和用户隐私，浏览器会限制对本地文件系统的直接读写访问。读写操作通常是通过浏览器提供的特定API进行，并且需要经过用户的授权和同意。
+5. 原生组件：React Native提供了一系列的原生组件，这些组件直接映射到原生平台上的真实UI控件，例如文本、图像、按钮等。开发人员可以使用这些原生组件来构建用户界面。
+
+6. 原生模块：React Native还提供了原生模块的概念，允许开发人员编写原生平台相关的功能和逻辑。通过原生模块，开发人员可以访问设备功能、原生API和第三方库等。
+
+总体来说，React Native通过JavaScript线程和原生桥实现了JavaScript代码和原生平台之间的通信。它利用虚拟DOM机制来管理UI的状态和变化，并通过与原生平台的交互实现UI的渲染和更新。开发人员可以使用React Native提供的原生组件和原生模块来构建跨平台的移动应用程序。

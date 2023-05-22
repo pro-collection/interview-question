@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "函数柯里化了解多少",
+  title: "手写 JSON.stringify 和 手写 JSON.parse 实现",
   key_world: [
-    "函数柯里化",
-    "柯里化应用场景",
-    "柯里化优势",
+    "手写 JSON.stringify",
+    "手写 JSON.parse",
+    // "柯里化优势",
   ],
   labels: [
     labels.js,
-    company.jd,
+    company.netEase,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

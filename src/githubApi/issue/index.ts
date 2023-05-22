@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何优化大规模 dom 操作的场景",
+  title: "浏览器有读写能力吗？",
   key_world: [
-    "dom 操作性能",
-    "dom 操作优化",
+    // "dom 操作性能",
+    // "dom 操作优化",
   ],
   labels: [
     labels.chrome,
-    company.alibaba,
+    // company.alibaba,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 
@@ -45,7 +45,7 @@ const main = async () => {
 // writeToTemp();
 
 // html 写入远端
-// htmlWriteIssue(remote);
+htmlWriteIssue(remote);
 
 // 直接写入远端
-main();
+// main();

@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "什么是领域模型",
+  title: "一直在 window 上面挂东西是否有什么风险",
   key_world: [
-    "前端领域模型",
+    // "前端领域模型",
     // "dom 操作优化",
   ],
   labels: [
     labels.application,
-    // company.alibaba,
+    company.tencent,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

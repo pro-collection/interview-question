@@ -1,30 +1,9 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>当使用<code>createContext</code>和<code>useContext</code>时，以下是一个简单的代码示例：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>jsx</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-jsx"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { createContext, useContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p><code>hasOwnProperty</code>和<code>instanceof</code>是两个不同的操作符，用于在JavaScript中进行不同类型的检查。</p><ol><li><p><code>hasOwnProperty</code>：<code>hasOwnProperty</code>是<code>Object</code>原型对象上的方法，用于检查一个对象是否具有指定的属性（即对象自身拥有的属性），并返回一个布尔值表示结果。它是针对对象属性的检查。</p></li><li><p><code>instanceof</code>：<code>instanceof</code>是JavaScript的一个操作符，用于检查一个对象是否是某个构造函数的实例。它用于检查对象的类型。</p></li></ol><p>以下是两者之间的区别：</p><ul><li><p><code>hasOwnProperty</code>是用于检查对象是否具有特定的属性，它关注的是对象自身的属性，不涉及对象的类型。它只检查对象自身的属性，不会检查原型链上的属性。</p></li><li><p><code>instanceof</code>是用于检查对象是否是某个构造函数的实例，它关注的是对象的类型。它会检查对象的原型链上是否存在指定构造函数的原型对象。</p></li></ul><p>使用示例：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-javascript"><span class="hljs-keyword">const</span> obj = {
+  <span class="hljs-attr">prop</span>: <span class="hljs-string">'value'</span>
+};
 
-<span class="hljs-comment">// 创建上下文对象</span>
-<span class="hljs-keyword">const</span> <span class="hljs-title class_">MyContext</span> = <span class="hljs-title function_">createContext</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-title function_">hasOwnProperty</span>(<span class="hljs-string">'prop'</span>)); <span class="hljs-comment">// true</span>
 
-<span class="hljs-comment">// 父组件</span>
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">ParentComponent</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> value = <span class="hljs-string">'Hello, World!'</span>;
-
-  <span class="hljs-keyword">return</span> (
-    <span class="hljs-comment">// 提供上下文的值</span>
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MyContext.Provider</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{value}</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">ChildComponent</span> /&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">MyContext.Provider</span>&gt;</span></span>
-  );
-}
-
-<span class="hljs-comment">// 子组件</span>
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">ChildComponent</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-comment">// 使用 useContext 获取上下文的值</span>
-  <span class="hljs-keyword">const</span> value = <span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">MyContext</span>);
-
-  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{value}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
-}
-
-<span class="hljs-comment">// 使用上述组件</span>
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ParentComponent</span> /&gt;</span></span>;
-}
-</code></div></div></pre><p>在上述示例中，我们首先使用<code>createContext</code>创建一个上下文对象<code>MyContext</code>。然后，在<code>ParentComponent</code>组件中，我们通过<code>MyContext.Provider</code>组件提供了上下文的值，值为<code>'Hello, World!'</code>。在<code>ChildComponent</code>组件中，我们使用<code>useContext</code>钩子获取了上下文的值，并将其显示在页面上。</p><p>最终，我们在<code>App</code>组件中使用<code>ParentComponent</code>组件作为根组件。当渲染应用程序时，<code>ChildComponent</code>将获取到上下文的值并显示在页面上。</p><p>通过这种方式，<code>ParentComponent</code>提供了上下文的值，<code>ChildComponent</code>通过<code>useContext</code>钩子获取并使用该值，实现了组件之间的数据共享。</p></div>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Object</span>); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Array</span>); <span class="hljs-comment">// false</span>
+</code></div></div></pre><p>在上述示例中，<code>obj</code>对象拥有<code>prop</code>属性，因此<code>obj.hasOwnProperty('prop')</code>返回<code>true</code>。同时，<code>obj</code>对象是<code>Object</code>构造函数的实例，因此<code>obj instanceof Object</code>返回<code>true</code>，但不是<code>Array</code>构造函数的实例，因此<code>obj instanceof Array</code>返回<code>false</code>。</p><p>总结而言，<code>hasOwnProperty</code>用于检查对象是否拥有特定的属性，而<code>instanceof</code>用于检查对象的类型。</p></div>

@@ -7,15 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] createContext 和 useContext 有什么区别， 是做什么用的",
+  title: "Object.prototype.hasOwnProperty() 作用是啥",
   key_world: [
-    "createContext useContext",
-    "useContext 使用",
-    "createContext 使用",
+    "Object.prototype.hasOwnProperty",
   ],
   labels: [
-    labels.frameWork,
-    company.baidu,
+    labels.js,
+    company.mi,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

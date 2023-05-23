@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "Babel Polyfill 了解多少",
+  title: "Antd（Ant Design）的 Tooltip 组件是如何实现的？",
   key_world: [
-    "Babel Polyfill 原理",
-    "Babel Polyfill 作用",
-    "Babel Polyfill 使用",
-    "Babel Polyfill 按需加载",
+    // "Babel Polyfill 原理",
+    // "Babel Polyfill 作用",
+    // "Babel Polyfill 使用",
+    // "Babel Polyfill 按需加载",
   ],
   labels: [
-    labels.engineering,
-    company.mt,
+    labels.frameWork,
+    company.alibaba,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

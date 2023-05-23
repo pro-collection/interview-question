@@ -1,112 +1,30 @@
-**关键词**：Babel Polyfill 原理、Babel Polyfill 作用、Babel Polyfill 使用、Babel Polyfill 按需加载
+Antd（Ant Design）的 Tooltip 组件是通过 CSS 和 JavaScript 结合实现的。
 
-### Babel Polyfill 作用是啥
+在 CSS 方面，Tooltip 组件使用了绝对定位和一些样式规则来定义 Tooltip 的外观。它通常包括一个触发元素和一个浮动在触发元素旁边的提示框。通过设置样式属性，如 position: absolute、top、left、display 等，可以控制提示框的位置、显示和隐藏等。
 
-Babel Polyfill 的作用是在旧版本浏览器中提供对新的JavaScript特性和API的支持。当使用Babel进行代码转换时，它只会转换语法，而不会转换新的API和全局对象（如Promise、Map、Set等）。
+在 JavaScript 方面，Tooltip 组件通过事件监听和操作 DOM 元素来实现交互行为。当鼠标悬停在触发元素上时，会触发相应的事件处理函数。在事件处理函数中，通常会修改提示框元素的样式或类名，以实现显示或隐藏提示框的效果。同时，还可以根据鼠标位置调整提示框的位置，使其相对于触发元素居中或显示在特定的位置。
 
-旧版本的浏览器可能不支持这些新的API和全局对象，因此在运行使用这些特性的代码时会抛出错误。为了解决这个问题，可以使用Babel Polyfill来填充缺失的功能，以确保代码在旧版本浏览器中正常运行。
-
-Babel Polyfill通过修改全局对象和原型链，添加缺失的方法和属性，使得代码能够在不支持这些功能的浏览器中运行。它会检测当前环境的特性支持情况，并根据需要自动加载所需的Polyfill代码。
-
-使用Babel Polyfill可以让开发人员在编写代码时不必过多考虑浏览器的兼容性，而专注于使用最新的JavaScript特性和API。它提供了一种简单方便的方式来填充浏览器的功能差异，确保代码在各种浏览器环境中具有一致的行为。
+另外，Tooltip 组件还支持一些额外的配置选项，如延迟显示、自定义内容等。这些选项可以通过传递属性或配置项给 Tooltip 组件来进行设置。
 
 
-### 如何使用
+**Tooltip 组件的动态偏移样式计算**
 
-要使用 Babel Polyfill，需要按照以下步骤进行设置：
+1. 监听触发元素的事件：Tooltip 组件通常在触发元素上监听鼠标悬停或点击等事件。
 
-1. 安装依赖：首先，确保你的项目已经安装了 Babel 相关的依赖包。这包括 `@babel/core`、`@babel/preset-env` 和 `@babel/polyfill`。你可以使用 npm 或者 yarn 进行安装：
+2. 获取触发元素的位置信息：在事件处理函数中，通过 DOM 操作获取触发元素的位置信息，包括宽度、高度、左偏移和上偏移等。
 
-```shell
-npm install --save-dev @babel/core @babel/preset-env @babel/polyfill
-```
+3. 计算偏移样式：根据触发元素的位置信息，结合组件配置项或属性中的偏移参数，计算出提示框相对于触发元素的偏移样式。
 
-2. 配置 Babel：在项目根目录下创建一个 `.babelrc` 文件，并添加以下配置：
+4. 设置提示框的样式：通过修改提示框元素的样式属性，如 top、left、transform 等，将计算得到的偏移样式应用于提示框，使其出现在预期的位置。
 
-```json
-{
- "presets": ["@babel/preset-env"]
-}
-```
+具体实现上述步骤的方式可以有多种，取决于具体的实现框架或库。一种常见的方式是使用 JavaScript 来监听事件、获取位置信息和设置样式，配合 CSS 来定义样式规则。
 
-这样的配置将告诉 Babel 使用 `@babel/preset-env` 预设来进行转换。
+在实际开发中，可以使用一些常见的技术手段来计算动态偏移样式，例如：
 
-3. 导入 Polyfill：在你的入口文件（通常是项目的主 JavaScript 文件）中导入 Babel Polyfill。你可以使用 import 语句或者 require 来导入 Polyfill：
-
-使用 import（适用于 ES6 模块）：
-
-```javascript
-import '@babel/polyfill';
-```
-
-使用 require（适用于 CommonJS 模块）：
-
-```javascript
-require('@babel/polyfill');
-```
-
-导入 Polyfill 的位置很重要，通常应该在你的应用程序代码之前导入，以确保 Polyfill 在应用程序代码之前被加载和执行。
-
-4. 配置目标浏览器：为了让 Babel Polyfill 根据目标浏览器进行特性填充，你可以在 `.babelrc` 文件中的 `@babel/preset-env` 配置中指定目标浏览器的选项。例如，你可以在配置中添加 `targets` 属性：
-
-```json
-{
- "presets": [
-   [
-     "@babel/preset-env",
-     {
-       "targets": {
-         "browsers": ["last 2 versions", "ie >= 11"]
-       }
-     }
-   ]
- ]
-}
-```
-
-这样，Polyfill 将根据所选的目标浏览器填充相应的功能。
-
-完成以上步骤后，Babel Polyfill 将根据配置在目标浏览器中填充所需的功能，以确保你的代码在旧版本浏览器中正常运行。请注意，Polyfill 会增加你的应用程序的大小，因此请考虑仅填充所需的功能，以减小文件大小并优化性能。
+- 使用 CSS 的 position: absolute 将提示框定位在触发元素的相对位置上。
+- 使用 JavaScript 的 getBoundingClientRect() 方法获取触发元素的位置信息，包括宽度、高度、左偏移和上偏移等。
+- 结合触发元素的位置信息和组件配置项中的偏移参数，通过计算得到最终的偏移值。
+- 将计算得到的偏移值应用于提示框的样式属性，如 top、left、transform 等，使其相对于触发元素进行动态偏移。
 
 
-### 按需加载 Polyfill
-
-Babel Polyfill 默认会填充所有缺失的功能，但如果你只需要按需加载特定功能，可以使用 core-js 库的按需加载特性。下面是按需加载 Babel Polyfill 的步骤：
-
-1. 安装依赖：确保你的项目已经安装了必要的依赖。除了之前提到的 Babel 相关依赖外，你还需要安装 `core-js`。
-
-```shell
-npm install --save-dev @babel/core @babel/preset-env core-js
-```
-
-2. 配置 Babel：在 `.babelrc` 文件中，添加以下配置：
-
-```json
-{
- "presets": [
-   [
-     "@babel/preset-env",
-     {
-       "useBuiltIns": "usage",
-       "corejs": 3
-     }
-   ]
- ]
-}
-```
-
-`useBuiltIns` 选项设置为 `"usage"` 表示按需加载特性，而 `"corejs": 3` 指定了使用的 `core-js` 版本。
-
-3. 导入 Polyfill：在需要使用特定功能的文件中，按需导入所需的 Polyfill。例如，如果你需要填充 `Promise` 和 `Array.prototype.includes`，你可以按如下方式导入：
-
-```javascript
-import 'core-js/features/promise';
-import 'core-js/features/array/includes';
-```
-
-这样只会加载和填充所需的功能，而不会加载整个 Polyfill 库。你可以根据具体的功能需求进行按需导入。
-
-请注意，使用按需加载的方式可以减小应用程序的文件大小，并且只填充需要的功能，但需要确保在使用相关功能之前已经导入了相应的 Polyfill。
-
-
-
+需要注意的是，具体的实现方式可能因框架、库或组件的不同而有所差异，但核心思想是通过监听事件、获取位置信息和计算样式来实现动态偏移效果。

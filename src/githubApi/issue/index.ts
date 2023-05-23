@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "Object.prototype.hasOwnProperty() 作用是啥",
+  title: "幽灵依赖 是什么",
   key_world: [
-    "Object.prototype.hasOwnProperty",
+    // "幽灵依赖",
   ],
   labels: [
-    labels.js,
-    company.mi,
+    labels.engineering,
+    company.mt,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

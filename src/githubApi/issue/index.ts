@@ -7,14 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "一直在 window 上面挂东西是否有什么风险",
+  title: "[React] createContext 和 useContext 有什么区别， 是做什么用的",
   key_world: [
-    // "前端领域模型",
-    // "dom 操作优化",
+    "createContext useContext",
+    "useContext 使用",
+    "createContext 使用",
   ],
   labels: [
-    labels.application,
-    company.tencent,
+    labels.frameWork,
+    company.baidu,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

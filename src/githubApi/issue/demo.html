@@ -1,1 +1,30 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>在前端开发中，将内容或应用程序运行在浏览器的全局<code>window</code>对象上可能会带来一些潜在的风险。以下是一些需要注意的风险：</p><ol><li><p>命名冲突：<code>window</code>对象是浏览器的全局对象，它包含许多内置属性和方法。如果您在全局命名空间中定义的变量或函数与现有的全局对象属性或方法发生冲突，可能会导致意外行为或错误。</p></li><li><p>安全漏洞：在全局<code>window</code>对象上挂载的代码可以访问和修改全局的数据和功能。这可能导致安全漏洞，特别是当这些操作被恶意利用时。攻击者可能通过篡改全局对象来窃取用户敏感信息或执行恶意代码。</p></li><li><p>代码维护性：过多地依赖全局<code>window</code>对象可能导致代码的维护困难。全局状态的过度共享可能导致代码变得难以理解和调试，尤其在大型应用程序中。</p></li></ol><p>为了减轻这些风险，建议采用以下最佳实践：</p><ol><li><p>使用模块化开发：将代码模块化，避免对全局<code>window</code>对象的直接依赖。使用模块加载器（如ES Modules、CommonJS、AMD）来管理模块之间的依赖关系，以减少全局命名冲突和代码冗余。</p></li><li><p>使用严格模式：在JavaScript代码中使用严格模式（<code>"use strict"</code>），以启用更严格的语法检查和错误处理。严格模式可以帮助捕获潜在的错误和不安全的行为。</p></li><li><p>显式访问全局对象：如果确实需要访问全局<code>window</code>对象的属性或方法，请使用显式访问方式，如<code>window.localStorage</code>、<code>window.setTimeout()</code>等。避免直接引用全局属性，以减少冲突和误用的风险。</p></li><li><p>谨慎处理第三方代码：在使用第三方库或框架时，注意审查其对全局<code>window</code>对象的使用方式。确保库或框架的操作不会产生潜在的安全风险或全局命名冲突。</p></li></ol><p>总而言之，合理地使用全局<code>window</code>对象可以带来方便和灵活性，但需要谨慎处理，避免潜在的安全风险和代码维护性问题。</p></div>
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p>当使用<code>createContext</code>和<code>useContext</code>时，以下是一个简单的代码示例：</p><pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>jsx</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-jsx"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { createContext, useContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+
+<span class="hljs-comment">// 创建上下文对象</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">MyContext</span> = <span class="hljs-title function_">createContext</span>();
+
+<span class="hljs-comment">// 父组件</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ParentComponent</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> value = <span class="hljs-string">'Hello, World!'</span>;
+
+  <span class="hljs-keyword">return</span> (
+    <span class="hljs-comment">// 提供上下文的值</span>
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MyContext.Provider</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{value}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">ChildComponent</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">MyContext.Provider</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 子组件</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ChildComponent</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 使用 useContext 获取上下文的值</span>
+  <span class="hljs-keyword">const</span> value = <span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">MyContext</span>);
+
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{value}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 使用上述组件</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ParentComponent</span> /&gt;</span></span>;
+}
+</code></div></div></pre><p>在上述示例中，我们首先使用<code>createContext</code>创建一个上下文对象<code>MyContext</code>。然后，在<code>ParentComponent</code>组件中，我们通过<code>MyContext.Provider</code>组件提供了上下文的值，值为<code>'Hello, World!'</code>。在<code>ChildComponent</code>组件中，我们使用<code>useContext</code>钩子获取了上下文的值，并将其显示在页面上。</p><p>最终，我们在<code>App</code>组件中使用<code>ParentComponent</code>组件作为根组件。当渲染应用程序时，<code>ChildComponent</code>将获取到上下文的值并显示在页面上。</p><p>通过这种方式，<code>ParentComponent</code>提供了上下文的值，<code>ChildComponent</code>通过<code>useContext</code>钩子获取并使用该值，实现了组件之间的数据共享。</p></div>

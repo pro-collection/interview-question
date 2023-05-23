@@ -7,7 +7,7 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "Antd（Ant Design）的 Tooltip 组件是如何实现的？",
+  title: "深度 SEO 优化的方式有哪些， 从技术层面来说",
   key_world: [
     // "Babel Polyfill 原理",
     // "Babel Polyfill 作用",
@@ -15,8 +15,8 @@ const remote = {
     // "Babel Polyfill 按需加载",
   ],
   labels: [
-    labels.frameWork,
-    company.alibaba,
+    labels.application,
+    company.baidu,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
@@ -47,7 +47,7 @@ const main = async () => {
 // writeToTemp();
 
 // html 写入远端
-// htmlWriteIssue(remote);
+htmlWriteIssue(remote);
 
 // 直接写入远端
-main();
+// main();

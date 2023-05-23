@@ -7,16 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "深度 SEO 优化的方式有哪些， 从技术层面来说",
+  title: "SSR 了解多少",
   key_world: [
-    // "Babel Polyfill 原理",
-    // "Babel Polyfill 作用",
-    // "Babel Polyfill 使用",
-    // "Babel Polyfill 按需加载",
+    "SSR 原理",
+    "SSR 实现",
   ],
   labels: [
-    labels.application,
-    company.baidu,
+    labels.engineering,
+    company.jd,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
@@ -47,7 +45,7 @@ const main = async () => {
 // writeToTemp();
 
 // html 写入远端
-htmlWriteIssue(remote);
+// htmlWriteIssue(remote);
 
 // 直接写入远端
-// main();
+main();

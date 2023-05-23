@@ -7,9 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "react native 工作原理是什么？",
+  title: "什么是领域模型",
   key_world: [
-    // "dom 操作性能",
+    "前端领域模型",
     // "dom 操作优化",
   ],
   labels: [
@@ -45,7 +45,7 @@ const main = async () => {
 // writeToTemp();
 
 // html 写入远端
-htmlWriteIssue(remote);
+// htmlWriteIssue(remote);
 
 // 直接写入远端
-// main();
+main();

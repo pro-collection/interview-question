@@ -1,11 +1,36 @@
-pnpm 是一个基于 npm 的包管理工具，它采用了一种称为"快速硬链接（Fast Hard Links）"的机制来解决幽灵依赖问题。
+Babel Polyfill 默认会填充所有缺失的功能，但如果你只需要按需加载特定功能，可以使用 core-js 库的按需加载特性。下面是按需加载 Babel Polyfill 的步骤：
 
-传统的 npm 或 yarn 安装依赖时，每个项目都会在`node_modules`目录下创建依赖包的副本。这导致了大量的重复文件，尤其是对于多个项目都使用同一依赖包时。
+1. 安装依赖：确保你的项目已经安装了必要的依赖。除了之前提到的 Babel 相关依赖外，你还需要安装 `core-js`。
 
-而 pnpm 通过使用快速硬链接机制，在全局的存储位置（默认为`~/.pnpm-store`）只保存一份依赖包，而不是为每个项目都复制一份。这样就避免了幽灵依赖问题，减少了存储空间的占用。
+```shell
+npm install --save-dev @babel/core @babel/preset-env core-js
+```
 
-当使用 pnpm 安装依赖时，它会在项目的`node_modules`目录下创建一个`.modules.yaml`文件，记录项目所需的依赖包和版本信息。实际的依赖包文件通过硬链接指向全局存储位置中的依赖包。这意味着不同项目之间可以共享相同的依赖包，但每个项目都拥有自己的依赖版本。
+2. 配置 Babel：在 `.babelrc` 文件中，添加以下配置：
 
-通过这种方式，pnpm 解决了幽灵依赖的问题，同时减少了存储空间的使用。它还具有一些其他的优点，如更快的安装速度、更少的网络传输和更好的缓存利用率。
+```json
+{
+ "presets": [
+   [
+     "@babel/preset-env",
+     {
+       "useBuiltIns": "usage",
+       "corejs": 3
+     }
+   ]
+ ]
+}
+```
 
-需要注意的是，pnpm 仍然会将项目中的所有依赖安装在`node_modules`目录下，但它使用硬链接的方式避免了重复文件的复制，从而解决了幽灵依赖问题。
+`useBuiltIns` 选项设置为 `"usage"` 表示按需加载特性，而 `"corejs": 3` 指定了使用的 `core-js` 版本。
+
+3. 导入 Polyfill：在需要使用特定功能的文件中，按需导入所需的 Polyfill。例如，如果你需要填充 `Promise` 和 `Array.prototype.includes`，你可以按如下方式导入：
+
+```javascript
+import 'core-js/features/promise';
+import 'core-js/features/array/includes';
+```
+
+这样只会加载和填充所需的功能，而不会加载整个 Polyfill 库。你可以根据具体的功能需求进行按需导入。
+
+请注意，使用按需加载的方式可以减小应用程序的文件大小，并且只填充需要的功能，但需要确保在使用相关功能之前已经导入了相应的 Polyfill。

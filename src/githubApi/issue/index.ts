@@ -7,9 +7,12 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "幽灵依赖 是什么",
+  title: "Babel Polyfill 了解多少",
   key_world: [
-    // "幽灵依赖",
+    "Babel Polyfill 原理",
+    "Babel Polyfill 作用",
+    "Babel Polyfill 使用",
+    "Babel Polyfill 按需加载",
   ],
   labels: [
     labels.engineering,

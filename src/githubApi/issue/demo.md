@@ -1,38 +1,112 @@
-### 幽灵依赖 是什么
+**关键词**：Babel Polyfill 原理、Babel Polyfill 作用、Babel Polyfill 使用、Babel Polyfill 按需加载
 
-"幽灵依赖"（Ghost Dependency）是指在项目的`node_modules`目录中存在但未被实际使用的依赖包。
+### Babel Polyfill 作用是啥
 
-在使用 npm 或者其他包管理工具安装依赖包时，有时会出现安装了一些不需要的或者不正确的依赖包的情况。这些依赖包在项目中没有被显式地引用或使用，但仍然存在于`node_modules`目录中，占用了项目的存储空间。
+Babel Polyfill 的作用是在旧版本浏览器中提供对新的JavaScript特性和API的支持。当使用Babel进行代码转换时，它只会转换语法，而不会转换新的API和全局对象（如Promise、Map、Set等）。
 
-幽灵依赖可能会产生以下问题：
+旧版本的浏览器可能不支持这些新的API和全局对象，因此在运行使用这些特性的代码时会抛出错误。为了解决这个问题，可以使用Babel Polyfill来填充缺失的功能，以确保代码在旧版本浏览器中正常运行。
 
-1. 占用存储空间：未使用的依赖包会增加项目的体积，占用存储空间。对于大型项目或频繁部署的项目来说，这可能会造成不必要的存储资源浪费。
+Babel Polyfill通过修改全局对象和原型链，添加缺失的方法和属性，使得代码能够在不支持这些功能的浏览器中运行。它会检测当前环境的特性支持情况，并根据需要自动加载所需的Polyfill代码。
 
-2. 增加构建时间：未使用的依赖包可能会增加构建过程中的解析和处理时间，导致构建过程变慢。这会影响开发人员的开发效率和项目的部署速度。
-
-3. 潜在的安全风险：未使用的依赖包可能包含漏洞或安全风险，但由于没有使用，可能没有及时更新或修复这些问题，增加了项目的安全隐患。
-
-为了解决幽灵依赖的问题，可以采取以下措施：
-
-1. 定期检查依赖：定期检查项目的依赖，识别和删除未使用的依赖包。可以使用工具如`npm-check-unused`、`depcheck`等来帮助检测和清理未使用的依赖。
-
-2. 精简依赖：审查项目的依赖关系，仅安装和保留必要的依赖包。避免过度依赖，只安装项目所需的模块，减少项目体积和构建时间。
-
-3. 更新依赖包：确保项目中使用的依赖包都是最新版本，并及时更新已知的安全漏洞和问题。这可以通过定期检查依赖包的更新和使用工具如`npm audit`来实现。
-
-通过处理幽灵依赖，可以提高项目的整洁性、性能和安全性，并减少不必要的开销和风险。
+使用Babel Polyfill可以让开发人员在编写代码时不必过多考虑浏览器的兼容性，而专注于使用最新的JavaScript特性和API。它提供了一种简单方便的方式来填充浏览器的功能差异，确保代码在各种浏览器环境中具有一致的行为。
 
 
-### pnpm 是如何解决幽灵依赖问题的
+### 如何使用
 
-pnpm 是一个基于 npm 的包管理工具，它采用了一种称为"快速硬链接（Fast Hard Links）"的机制来解决幽灵依赖问题。
+要使用 Babel Polyfill，需要按照以下步骤进行设置：
 
-传统的 npm 或 yarn 安装依赖时，每个项目都会在`node_modules`目录下创建依赖包的副本。这导致了大量的重复文件，尤其是对于多个项目都使用同一依赖包时。
+1. 安装依赖：首先，确保你的项目已经安装了 Babel 相关的依赖包。这包括 `@babel/core`、`@babel/preset-env` 和 `@babel/polyfill`。你可以使用 npm 或者 yarn 进行安装：
 
-而 pnpm 通过使用快速硬链接机制，在全局的存储位置（默认为`~/.pnpm-store`）只保存一份依赖包，而不是为每个项目都复制一份。这样就避免了幽灵依赖问题，减少了存储空间的占用。
+```shell
+npm install --save-dev @babel/core @babel/preset-env @babel/polyfill
+```
 
-当使用 pnpm 安装依赖时，它会在项目的`node_modules`目录下创建一个`.modules.yaml`文件，记录项目所需的依赖包和版本信息。实际的依赖包文件通过硬链接指向全局存储位置中的依赖包。这意味着不同项目之间可以共享相同的依赖包，但每个项目都拥有自己的依赖版本。
+2. 配置 Babel：在项目根目录下创建一个 `.babelrc` 文件，并添加以下配置：
 
-通过这种方式，pnpm 解决了幽灵依赖的问题，同时减少了存储空间的使用。它还具有一些其他的优点，如更快的安装速度、更少的网络传输和更好的缓存利用率。
+```json
+{
+ "presets": ["@babel/preset-env"]
+}
+```
 
-需要注意的是，pnpm 仍然会将项目中的所有依赖安装在`node_modules`目录下，但它使用硬链接的方式避免了重复文件的复制，从而解决了幽灵依赖问题。
+这样的配置将告诉 Babel 使用 `@babel/preset-env` 预设来进行转换。
+
+3. 导入 Polyfill：在你的入口文件（通常是项目的主 JavaScript 文件）中导入 Babel Polyfill。你可以使用 import 语句或者 require 来导入 Polyfill：
+
+使用 import（适用于 ES6 模块）：
+
+```javascript
+import '@babel/polyfill';
+```
+
+使用 require（适用于 CommonJS 模块）：
+
+```javascript
+require('@babel/polyfill');
+```
+
+导入 Polyfill 的位置很重要，通常应该在你的应用程序代码之前导入，以确保 Polyfill 在应用程序代码之前被加载和执行。
+
+4. 配置目标浏览器：为了让 Babel Polyfill 根据目标浏览器进行特性填充，你可以在 `.babelrc` 文件中的 `@babel/preset-env` 配置中指定目标浏览器的选项。例如，你可以在配置中添加 `targets` 属性：
+
+```json
+{
+ "presets": [
+   [
+     "@babel/preset-env",
+     {
+       "targets": {
+         "browsers": ["last 2 versions", "ie >= 11"]
+       }
+     }
+   ]
+ ]
+}
+```
+
+这样，Polyfill 将根据所选的目标浏览器填充相应的功能。
+
+完成以上步骤后，Babel Polyfill 将根据配置在目标浏览器中填充所需的功能，以确保你的代码在旧版本浏览器中正常运行。请注意，Polyfill 会增加你的应用程序的大小，因此请考虑仅填充所需的功能，以减小文件大小并优化性能。
+
+
+### 按需加载 Polyfill
+
+Babel Polyfill 默认会填充所有缺失的功能，但如果你只需要按需加载特定功能，可以使用 core-js 库的按需加载特性。下面是按需加载 Babel Polyfill 的步骤：
+
+1. 安装依赖：确保你的项目已经安装了必要的依赖。除了之前提到的 Babel 相关依赖外，你还需要安装 `core-js`。
+
+```shell
+npm install --save-dev @babel/core @babel/preset-env core-js
+```
+
+2. 配置 Babel：在 `.babelrc` 文件中，添加以下配置：
+
+```json
+{
+ "presets": [
+   [
+     "@babel/preset-env",
+     {
+       "useBuiltIns": "usage",
+       "corejs": 3
+     }
+   ]
+ ]
+}
+```
+
+`useBuiltIns` 选项设置为 `"usage"` 表示按需加载特性，而 `"corejs": 3` 指定了使用的 `core-js` 版本。
+
+3. 导入 Polyfill：在需要使用特定功能的文件中，按需导入所需的 Polyfill。例如，如果你需要填充 `Promise` 和 `Array.prototype.includes`，你可以按如下方式导入：
+
+```javascript
+import 'core-js/features/promise';
+import 'core-js/features/array/includes';
+```
+
+这样只会加载和填充所需的功能，而不会加载整个 Polyfill 库。你可以根据具体的功能需求进行按需导入。
+
+请注意，使用按需加载的方式可以减小应用程序的文件大小，并且只填充需要的功能，但需要确保在使用相关功能之前已经导入了相应的 Polyfill。
+
+
+

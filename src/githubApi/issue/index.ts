@@ -7,12 +7,12 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[vue] render 函数了解吗？",
+  title: "node 子进程了解多少",
   key_world: [
-    "vue render 函数",
+    "node 子进程",
   ],
   labels: [
-    labels.frameWork,
+    labels.node,
     // company.baidu,
   ],
   milestone: MileStone.senior,

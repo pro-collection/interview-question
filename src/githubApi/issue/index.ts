@@ -7,9 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[vue] vue 是如何识别和解析指令",
+  title: "[vue] render 函数了解吗？",
   key_world: [
-    "vue 指令",
+    "vue render 函数",
   ],
   labels: [
     labels.frameWork,

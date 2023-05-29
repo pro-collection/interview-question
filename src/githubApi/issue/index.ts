@@ -7,15 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何编写一个 babel 插件",
+  title: "常见 web 安全解析",
   key_world: [
-    "babel插件",
-    "babel插件api",
-    "babel插件代码示例",
+    "XSS攻击",
+    "CSRF攻击",
+    "点击劫持共计",
+    "URL跳转漏洞",
+    "SQL注入攻击",
+    "OS命令注入攻击",
   ],
   labels: [
-    labels.engineering,
-    company.netEase,
+    labels.application,
+    company.mi,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

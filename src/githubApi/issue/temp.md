@@ -1,11 +1,40 @@
-前端实现服务器端渲染（SSR）的方案有以下几种：
+以下是一个简单的 Babel 插件示例，用于去除代码中的 `console.log` 语句：
 
-1. 基于 Node.js 的框架：使用 Node.js 的框架（如Express、Koa、Nest.js等）来构建服务器端应用程序，并在服务器端进行页面渲染。通过在服务器上运行 JavaScript 代码，将渲染好的页面直接返回给客户端。
+```javascript
+// babel-plugin-remove-console.js
 
-2. 框架提供的 SSR 功能：一些前端框架（如Next.js、Nuxt.js、Angular Universal等）提供了内置的服务器端渲染功能，可以更方便地实现 SSR。这些框架会负责处理路由、数据预取和页面渲染等工作，并将渲染好的页面返回给客户端。
+module.exports = function ({ types: t }) {
+  return {
+    visitor: {
+      // 处理函数调用表达式
+      CallExpression(path) {
+        const { callee } = path.node;
 
-3. 预渲染：使用预渲染技术将静态页面提前生成，并部署到服务器上。在用户请求页面时，直接返回预渲染好的 HTML 页面，然后再由客户端接管页面的交互。这种方式适用于内容不经常变动或不需要动态数据的页面。
+        // 如果函数调用的名称是 console.log
+        if (
+          t.isMemberExpression(callee) &&
+          t.isIdentifier(callee.object, { name: 'console' }) &&
+          t.isIdentifier(callee.property, { name: 'log' })
+        ) {
+          // 移除该函数调用
+          path.remove();
+        }
+      }
+    }
+  };
+};
+```
 
-4. 后端代理：通过将前端应用程序的请求代理到服务器端，然后在服务器端进行页面渲染，并将渲染好的页面返回给客户端。这种方式适用于在现有的后端服务中添加 SSR 功能，而无需重写整个应用程序。
+该插件会遍历代码中的函数调用表达式，如果发现是 `console.log`，则会移除该函数调用。
 
-需要根据具体的项目需求、技术栈和框架选择合适的 SSR 实现方案。每种方案都有其优点和限制，综合考虑性能、开发体验、部署成本和维护复杂度等因素来做出决策。
+要使用该插件，可以在项目中安装并配置它。例如，创建一个 `.babelrc` 文件，并将该插件添加到 Babel 的插件列表中：
+
+```json
+{
+  "plugins": ["./path/to/babel-plugin-remove-console.js"]
+}
+```
+
+然后运行 Babel 命令或构建工具，它将应用该插件，并从代码中去除所有的 `console.log` 语句。
+
+请注意，这只是一个简单的示例插件，仅适用于演示目的。在实际开发中，你可能需要更复杂的逻辑来处理不同的情况和要求。

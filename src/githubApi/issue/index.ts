@@ -7,14 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "SSR 了解多少",
+  title: "如何编写一个 babel 插件",
   key_world: [
-    "SSR 原理",
-    "SSR 实现",
+    "babel插件",
+    "babel插件api",
+    "babel插件代码示例",
   ],
   labels: [
     labels.engineering,
-    company.jd,
+    company.netEase,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

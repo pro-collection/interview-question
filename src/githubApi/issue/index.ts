@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "vue 是怎么解析template的? template会变成什么?",
+  title: "[vue] vue 是如何识别和解析指令",
   key_world: [
-    "[vue] template 解析",
+    "vue 指令",
   ],
   labels: [
     labels.frameWork,
     // company.baidu,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

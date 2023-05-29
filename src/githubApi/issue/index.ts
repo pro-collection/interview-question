@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何定制前端项目代码规范",
+  title: "vue 是怎么解析template的? template会变成什么?",
   key_world: [
-    "定制前端代码规范",
+    "[vue] template 解析",
   ],
   labels: [
-    labels.engineering,
-    company.baidu,
+    labels.frameWork,
+    // company.baidu,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

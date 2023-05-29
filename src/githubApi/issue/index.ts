@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "node 子进程了解多少",
+  title: "source map 了解多少",
   key_world: [
-    "node 子进程",
+    "source map 原理",
   ],
   labels: [
-    labels.node,
-    // company.baidu,
+    labels.engineering,
+    company.baidu,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

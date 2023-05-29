@@ -7,18 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "常见 web 安全解析",
+  title: "如何定制前端项目代码规范",
   key_world: [
-    "XSS攻击",
-    "CSRF攻击",
-    "点击劫持共计",
-    "URL跳转漏洞",
-    "SQL注入攻击",
-    "OS命令注入攻击",
+    "定制前端代码规范",
   ],
   labels: [
-    labels.application,
-    company.mi,
+    labels.engineering,
+    company.baidu,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

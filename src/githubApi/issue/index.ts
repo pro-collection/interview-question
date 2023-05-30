@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "小程序为什么会有两个线程",
+  title: "[React] react-router 页面跳转时，是如何传递下一个页面参数的？",
   key_world: [
     // "JS 作用域链链",
     // "JS 作用域链链应用",
   ],
   labels: [
-    labels.application,
-    company.shopee,
+    labels.frameWork,
+    company.tencent,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

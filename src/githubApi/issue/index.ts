@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "哪些原因会导致js里this指向混乱?",
+  title: "JS 作用域链链接多少?",
   key_world: [
-    "js 指向",
+    "JS 作用域链链",
+    "JS 作用域链链应用",
   ],
   labels: [
     labels.js,
-    company.mi,
+    company.mt,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

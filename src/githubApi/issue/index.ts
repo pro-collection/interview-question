@@ -7,14 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "Generator 是如何做到中断和恢复的",
+  title: "哪些原因会导致js里this指向混乱?",
   key_world: [
-    "Generator 中断",
-    "Generator 回复",
+    "js 指向",
   ],
   labels: [
     labels.js,
-    company.baidu,
+    company.mi,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

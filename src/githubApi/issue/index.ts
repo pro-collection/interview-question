@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] react-router 页面跳转时，是如何传递下一个页面参数的？",
+  title: "实现一个JS 函数， 解析 url 参数， 返回一个对象",
   key_world: [
     // "JS 作用域链链",
     // "JS 作用域链链应用",
   ],
   labels: [
-    labels.frameWork,
-    company.tencent,
+    labels.js,
+    company.shopee,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

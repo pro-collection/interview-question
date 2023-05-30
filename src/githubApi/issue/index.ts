@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "webpack5 Module Federation 了解多少",
+  title: "小程序为什么会有两个线程",
   key_world: [
     // "JS 作用域链链",
     // "JS 作用域链链应用",
   ],
   labels: [
-    labels.engineering,
-    company.jd,
+    labels.application,
+    company.shopee,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -18,7 +18,6 @@ export const labels = {
 };
 
 export const company = {
-  bytedance: "字节跳动",
   alibaba: "阿里巴巴",
   tencent: "腾讯",
   baidu: "百度",
@@ -26,4 +25,5 @@ export const company = {
   mt: "美团",
   jd: "京东",
   netEase: "网易",
+  shopee: 'Shopee',
 };

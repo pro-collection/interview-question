@@ -7,17 +7,19 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "使用 Promise 实现一个异步流量控制的函数",
+  title: "不使用任何中间件， koa 如何解析 post 请求参数",
   key_world: [
-    "异步流量控制的函数",
+    "koa 请求",
+    "koa 解析",
+    "koa body-parser",
   ],
   labels: [
-    labels.js,
-    company.tencent,
+    labels.node,
+    company.alibaba,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
-};
+};。
 
 const main = async () => {
   console.log(`yanle - logger: 使用关键词: `, remote.key_world.join("、"));

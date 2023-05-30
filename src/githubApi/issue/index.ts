@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "source map 了解多少",
+  title: "使用 Promise 实现一个异步流量控制的函数",
   key_world: [
-    "source map 原理",
+    "异步流量控制的函数",
   ],
   labels: [
-    labels.engineering,
-    company.baidu,
+    labels.js,
+    company.tencent,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

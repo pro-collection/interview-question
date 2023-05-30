@@ -7,19 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "不使用任何中间件， koa 如何解析 post 请求参数",
+  title: "Generator 是如何做到中断和恢复的",
   key_world: [
-    "koa 请求",
-    "koa 解析",
-    "koa body-parser",
+    "Generator 中断",
+    "Generator 回复",
   ],
   labels: [
-    labels.node,
-    company.alibaba,
+    labels.js,
+    company.baidu,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
-};。
+};
 
 const main = async () => {
   console.log(`yanle - logger: 使用关键词: `, remote.key_world.join("、"));

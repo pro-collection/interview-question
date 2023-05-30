@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "JS 作用域链链接多少?",
+  title: "webpack5 Module Federation 了解多少",
   key_world: [
-    "JS 作用域链链",
-    "JS 作用域链链应用",
+    // "JS 作用域链链",
+    // "JS 作用域链链应用",
   ],
   labels: [
-    labels.js,
-    company.mt,
+    labels.engineering,
+    company.jd,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

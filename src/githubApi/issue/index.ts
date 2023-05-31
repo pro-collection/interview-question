@@ -7,19 +7,19 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[vue] vue3 性能提升主要是体现在哪些方面",
+  title: "[vue] vue3 相比较于 vue2 在编译阶段有哪些改进",
   key_world: [
-    "vue3 性能提升",
-    "vue3 编译优化",
-    "vue3 初始化优化",
-    "vue3 Tree-shaking支持",
-    "vue3 虚拟DOM优化",
+    // "vue3 性能提升",
+    // "vue3 编译优化",
+    // "vue3 初始化优化",
+    // "vue3 Tree-shaking支持",
+    // "vue3 虚拟DOM优化",
   ],
   labels: [
     labels.frameWork,
-    company.shopee,
+    // company.shopee,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

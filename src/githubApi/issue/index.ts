@@ -7,17 +7,19 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[webpack] 提高 webpack 的构建速度的办法有哪些",
+  title: "[vue] vue3 性能提升主要是体现在哪些方面",
   key_world: [
-    "webpack 构建",
-    "webpack 构建优化",
-    "webpack 构建速度",
+    "vue3 性能提升",
+    "vue3 编译优化",
+    "vue3 初始化优化",
+    "vue3 Tree-shaking支持",
+    "vue3 虚拟DOM优化",
   ],
   labels: [
     labels.frameWork,
-    company.netEase,
+    company.shopee,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -7,16 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "实现一个JS 函数， 解析 url 参数， 返回一个对象",
+  title: "[webpack] 提高 webpack 的构建速度的办法有哪些",
   key_world: [
-    // "JS 作用域链链",
-    // "JS 作用域链链应用",
+    "webpack 构建",
+    "webpack 构建优化",
+    "webpack 构建速度",
   ],
   labels: [
-    labels.js,
-    company.shopee,
+    labels.frameWork,
+    company.netEase,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

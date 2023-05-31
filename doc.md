@@ -34,8 +34,6 @@
 
 > 04.04 待整理
 
-- https://juejin.cn/post/7142690757722243102
-- https://juejin.cn/post/7194400984490049573
 - https://juejin.cn/post/7202639428132274234
 - https://www.toutiao.com/article/7199435823970828857
 - [2022年我的面试万字总结（Node、webpack、性能优化）](https://juejin.cn/post/7161292246526984228)

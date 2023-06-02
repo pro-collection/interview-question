@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "ajax 是否支持取消请求 ",
+  title: "使用 ajax 封装一个上传文件的函数",
   key_world: [
-    // "ajax 取消请求",
-    // "XMLHTTPRequest 特点",
-    // "XMLHTTPRequest 属性",
-    // "封装发送 GET 请求",
+    "ajax 上传文件",
+    "ajax 上传文件函数",
+    "ajax 上传文件封装",
   ],
   labels: [
     labels.network,
-    company.mi,
+    company.mt,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -1,59 +1,81 @@
-在原生的 XMLHttpRequest 对象中，没有提供直接取消请求的方法。一旦发送了请求，就无法中途取消。但是，可以通过一些手段模拟实现请求的取消效果。
+**关键词**：ajax 上传文件、ajax 上传文件函数、ajax 上传文件封装
 
-一种常见的方式是通过设置一个标志位来控制请求的发送和响应处理。在发送请求前，设置一个标志位，当需要取消请求时，将标志位设为 true。在请求的响应处理函数中，根据标志位的状态来判断是否继续处理响应结果。
-
-下面是一个示例代码，展示了如何使用标志位实现取消请求的效果：
+下面是一个使用 AJAX 封装的上传文件函数的示例代码：
 
 ```javascript
-let isRequestCanceled = false;
-
-function sendGetRequest(url, callback) {
+function uploadFile(file, url, progressCallback, successCallback, errorCallback) {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
+  const formData = new FormData();
+
+  // 将文件添加到 FormData 对象
+  formData.append('file', file);
+
+  xhr.open('POST', url, true);
+
+  // 监听上传进度
+  xhr.upload.addEventListener('progress', function(event) {
+    if (event.lengthComputable) {
+      const progress = Math.round((event.loaded / event.total) * 100);
+      // 调用进度回调函数
+      progressCallback(progress);
+    }
+  });
 
   xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE && !isRequestCanceled) {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
-        // 请求成功
+        // 上传成功
+        // 解析响应数据
         const response = JSON.parse(xhr.responseText);
-        callback(null, response);
+        // 调用成功回调函数
+        successCallback(response);
       } else {
-        // 请求失败
-        const error = new Error(`Request failed with status ${xhr.status}`);
-        callback(error, null);
+        // 上传失败
+        // 创建错误对象
+        const error = new Error(`File upload failed with status ${xhr.status}`);
+        // 调用错误回调函数
+        errorCallback(error);
       }
     }
   };
 
-  xhr.send();
-
-  // 取消请求
-  function cancelRequest() {
-    if (xhr.readyState !== XMLHttpRequest.DONE) {
-      xhr.abort();
-      isRequestCanceled = true;
-      callback(new Error('Request canceled'), null);
-    }
-  }
-
-  // 返回取消请求的函数
-  return cancelRequest;
+  // 发送请求
+  xhr.send(formData);
 }
 
 // 使用示例
-const apiUrl = 'https://api.example.com/data';
-const cancelRequest = sendGetRequest(apiUrl, (error, response) => {
-  if (error) {
-    console.error('Error:', error);
-  } else {
-    console.log('Response:', response);
-  }
-});
+const fileInput = document.getElementById('file-input');
+const uploadButton = document.getElementById('upload-button');
+const progressElement = document.getElementById('progress');
+const statusElement = document.getElementById('status');
 
-// 取消请求
-cancelRequest();
+uploadButton.addEventListener('click', function() {
+  const file = fileInput.files[0];
+  const url = 'https://api.example.com/upload';
+  
+  uploadFile(
+    file,
+    url,
+    function(progress) {
+      // 更新进度
+      progressElement.textContent = `Upload Progress: ${progress}%`;
+    },
+    function(response) {
+      // 上传成功
+      statusElement.textContent = 'Upload Successful';
+      console.log('Response:', response);
+    },
+    function(error) {
+      // 上传失败
+      statusElement.textContent = 'Upload Failed';
+      console.error('Error:', error);
+    }
+  );
+});
 ```
 
-在上述示例代码中，添加了一个 `cancelRequest` 函数用于取消请求。该函数会在请求发送后立即返回，并中止请求的发送。同时，将标志位 `isRequestCanceled` 设为 true，并通过回调函数返回一个错误对象，表示请求被取消。
+在上述示例代码中，定义了一个 `uploadFile` 函数用于上传文件。该函数接收文件对象、上传 URL、进度回调函数、成功回调函数和错误回调函数作为参数。
 
-需要注意的是，虽然通过标志位模拟了请求的取消，但实际上请求已经发送到服务器并得到了响应。只是在客户端这边忽略了响应结果。在真实的网络请求中，服务器仍然会继续处理请求并返回响应，但客户端会忽略该响应。
+函数内部通过创建 `XMLHttpRequest` 对象，将文件添加到 `FormData` 对象，并使用 `POST` 方法发送请求到指定的 URL。同时，通过监听 `upload` 事件来获取上传进度，并调用进度回调函数进行更新。在请求的状态改变时，根据响应状态码判断上传成功与否，并调用相应的回调函数。
+
+使用示例中，通过监听按钮点击事件，获取选择的文件对象，并调用 `uploadFile` 函数进行文件上传。在回调函数中更新进度和状态信息，并处理成功和失败的情况。

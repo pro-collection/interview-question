@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "使用 ajax 封装一个上传文件的函数",
+  title: "fetch 与 ajax 的区别是什么",
   key_world: [
-    "ajax 上传文件",
-    "ajax 上传文件函数",
-    "ajax 上传文件封装",
+    // "ajax 上传文件",
+    // "ajax 上传文件函数",
+    // "ajax 上传文件封装",
   ],
   labels: [
     labels.network,
-    company.mt,
+    // company.mt,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -7,7 +7,7 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "有哪些基础算法",
+  title: "有哪些场景的 http header",
   key_world: [
     // "vue3 性能提升",
     // "vue3 编译优化",
@@ -16,8 +16,8 @@ const remote = {
     // "vue3 虚拟DOM优化",
   ],
   labels: [
-    labels.js,
-    // company.shopee,
+    labels.network,
+    company.alibaba,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

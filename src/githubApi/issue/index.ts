@@ -7,18 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "介绍一下 XMLHTTPRequest 对象",
+  title: "ajax 是否支持取消请求 ",
   key_world: [
-    "XMLHTTPRequest 对象",
-    "XMLHTTPRequest 特点",
-    "XMLHTTPRequest 属性",
-    "封装发送 GET 请求",
+    // "ajax 取消请求",
+    // "XMLHTTPRequest 特点",
+    // "XMLHTTPRequest 属性",
+    // "封装发送 GET 请求",
   ],
   labels: [
     labels.network,
-    company.baidu,
+    company.mi,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

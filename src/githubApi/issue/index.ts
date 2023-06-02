@@ -7,17 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "有哪些场景的 http header",
+  title: "304 是什么场景的状态码， 好处和坏处分别是什么",
   key_world: [
-    // "vue3 性能提升",
-    // "vue3 编译优化",
-    // "vue3 初始化优化",
-    // "vue3 Tree-shaking支持",
-    // "vue3 虚拟DOM优化",
+    "304 状态码",
+    "缓存响应",
   ],
   labels: [
     labels.network,
-    company.alibaba,
+    company.tencent,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

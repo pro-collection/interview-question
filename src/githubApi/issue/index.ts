@@ -7,16 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "304 是什么场景的状态码， 好处和坏处分别是什么",
+  title: "介绍一下 XMLHTTPRequest 对象",
   key_world: [
-    "304 状态码",
-    "缓存响应",
+    "XMLHTTPRequest 对象",
+    "XMLHTTPRequest 特点",
+    "XMLHTTPRequest 属性",
+    "封装发送 GET 请求",
   ],
   labels: [
     labels.network,
-    company.tencent,
+    company.baidu,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

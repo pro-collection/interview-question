@@ -7,11 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "TLS/SSL的工作原理",
+  title: "数字证书了解多少",
   key_world: [
-    "SSL的工作原理",
-    "TLS的工作原理",
-    "密钥交换阶段",
+    "数字证书 公钥",
+    "数字签名 概念",
+    "数字签名详解",
   ],
   labels: [
     labels.network,

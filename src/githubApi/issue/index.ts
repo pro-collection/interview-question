@@ -7,16 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "进程和线程的区别是什么？",
+  title: "在浏览器内多个标签页之间实现通信有哪些方式",
   key_world: [
-    // "token过期刷新",
-    // "token刷新",
+    "跨页面通信",
+    "Broadcast Channel API 通信",
+    "SharedWorker",
   ],
   labels: [
     labels.network,
-    company.shopee,
+    company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

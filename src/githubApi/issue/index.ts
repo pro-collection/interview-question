@@ -7,17 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "在浏览器内多个标签页之间实现通信有哪些方式",
+  title: "什么是文档的预解析",
   key_world: [
-    "跨页面通信",
-    "Broadcast Channel API 通信",
-    "SharedWorker",
+    "文档预解析",
   ],
   labels: [
     labels.network,
-    company.alibaba,
+    company.tencent,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

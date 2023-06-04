@@ -7,17 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "fetch 与 ajax 的区别是什么",
+  title: "OSI的七层模型是什么",
   key_world: [
-    // "ajax 上传文件",
-    // "ajax 上传文件函数",
-    // "ajax 上传文件封装",
+    // "OSI的七层模型",
   ],
   labels: [
     labels.network,
     // company.mt,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

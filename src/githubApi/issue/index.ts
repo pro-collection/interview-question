@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "TCP粘包了解多少",
+  title: "token过期后，页面如何实现无感刷新",
   key_world: [
-    "粘包",
-    "粘包解决办法",
+    "token过期刷新",
+    "token刷新",
   ],
   labels: [
     labels.network,
-    company.jd,
+    company.netEase,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

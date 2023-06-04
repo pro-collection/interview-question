@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "什么是同源策略",
+  title: "什么是正向代理，反向代理",
   key_world: [
-    "同源策略限制了什么资源",
+    "正向代理反向代理概念",
   ],
   labels: [
     labels.network,
-    company.baidu,
+    company.mi,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

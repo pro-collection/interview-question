@@ -7,15 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "数字证书了解多少",
+  title: "TCP粘包了解多少",
   key_world: [
-    "数字证书 公钥",
-    "数字签名 概念",
-    "数字签名详解",
+    "粘包",
+    "粘包解决办法",
   ],
   labels: [
     labels.network,
-    // company.mt,
+    company.jd,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

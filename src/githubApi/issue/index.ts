@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "什么是文档的预解析",
+  title: "什么是同源策略",
   key_world: [
-    "文档预解析",
+    "同源策略限制了什么资源",
   ],
   labels: [
     labels.network,
-    company.tencent,
+    company.baidu,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

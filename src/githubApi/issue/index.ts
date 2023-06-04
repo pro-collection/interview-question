@@ -26,6 +26,7 @@ const main = async () => {
 
   if (remote.key_world.length) {
     const count = await search(remote.key_world);
+
     remote.title = count && remote.key_world ? `${remote.title}【热度: ${count?.toLocaleString() || count}】` : remote.title;
 
     // 关键词

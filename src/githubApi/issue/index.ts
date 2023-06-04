@@ -7,9 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "OSI的七层模型是什么",
+  title: "TLS/SSL的工作原理",
   key_world: [
-    // "OSI的七层模型",
+    "SSL的工作原理",
+    "TLS的工作原理",
+    "密钥交换阶段",
   ],
   labels: [
     labels.network,

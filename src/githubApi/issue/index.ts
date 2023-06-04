@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "token过期后，页面如何实现无感刷新",
+  title: "进程和线程的区别是什么？",
   key_world: [
-    "token过期刷新",
-    "token刷新",
+    // "token过期刷新",
+    // "token刷新",
   ],
   labels: [
     labels.network,
-    company.netEase,
+    company.shopee,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

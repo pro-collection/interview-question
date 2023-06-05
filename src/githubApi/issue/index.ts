@@ -9,13 +9,14 @@ import { omit } from "lodash";
 const remote = {
   title: "什么是正向代理，反向代理",
   key_world: [
-    "正向代理反向代理概念",
+    "css display 属性",
+    "css display 作用",
   ],
   labels: [
-    labels.network,
-    company.mi,
+    labels.css,
+    // company.mi,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "css 隐藏元素的方法有哪些",
+  title: "css 中 伪元素和伪类的区别和作用",
   key_world: [
-    "隐藏元素",
+    "伪元素和伪类",
   ],
   labels: [
     labels.css,
     // company.mi,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

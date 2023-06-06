@@ -7,11 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "postcss 是什么，作用是啥？",
+  title: "css 栅格布局是什么，如何实现",
   key_world: [
-    "postcss 作用",
-    "css 预处理",
-    "css 模块化",
+    "栅格布局",
+    "grid 布局",
   ],
   labels: [
     labels.css,

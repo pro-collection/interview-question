@@ -7,10 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "详细介绍一下 CSS Grid 布局",
+  title: "html 元素节点上， 有多个 class 名称，这几个class 名称对应的样式渲染优先级是如何的？",
   key_world: [
-    "栅格布局",
-    "grid 布局",
+    "class 名称样式优先级",
   ],
   labels: [
     labels.css,

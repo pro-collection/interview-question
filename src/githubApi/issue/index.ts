@@ -7,7 +7,7 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "css 栅格布局是什么，如何实现",
+  title: "详细介绍一下 CSS Grid 布局",
   key_world: [
     "栅格布局",
     "grid 布局",

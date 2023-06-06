@@ -7,9 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "html 元素节点上， 有多个 class 名称，这几个class 名称对应的样式渲染优先级是如何的？",
+  title: "如何避免全局样式污染？",
   key_world: [
-    "class 名称样式优先级",
+    "避免样式污染",
+    "css 模块化",
   ],
   labels: [
     labels.css,

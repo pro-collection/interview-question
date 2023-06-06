@@ -7,9 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "css 中 伪元素和伪类的区别和作用",
+  title: "CSS3 中有哪些新特性",
   key_world: [
-    "伪元素和伪类",
+    // "伪元素和伪类",
   ],
   labels: [
     labels.css,

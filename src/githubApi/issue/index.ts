@@ -7,9 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "CSS3 中有哪些新特性",
+  title: "postcss 是什么，作用是啥？",
   key_world: [
-    // "伪元素和伪类",
+    "postcss 作用",
+    "css 预处理",
+    "css 模块化",
   ],
   labels: [
     labels.css,

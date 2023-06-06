@@ -7,10 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "什么是正向代理，反向代理",
+  title: "css 隐藏元素的方法有哪些",
   key_world: [
-    "css display 属性",
-    "css display 作用",
+    "隐藏元素",
   ],
   labels: [
     labels.css,

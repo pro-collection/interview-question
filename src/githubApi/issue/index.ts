@@ -7,16 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: `web 应用中如何对静态资源加载失败的场景做降级处理`,
+  title: `html 中前缀为 data- 开头的元素属性是什么？`,
   key_world: [
-    "静态资源降级",
-    "静态资源加载失败",
   ],
   labels: [
     labels.application,
-    // company.mi,
+    company.shopee,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

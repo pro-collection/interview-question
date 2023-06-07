@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "HTML5 drag(拖拽) API 了解多少",
+  title: `<!DOCTYPE html> 标签有何作用?`,
   key_world: [
-    "drag 拖拽 api",
-    "拖拽 api",
+    // "drag 拖拽 api",
+    // "拖拽 api",
   ],
   labels: [
     labels.chrome,
     // company.mi,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

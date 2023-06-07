@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: `<!DOCTYPE html> 标签有何作用?`,
+  title: `web 应用中如何对静态资源加载失败的场景做降级处理`,
   key_world: [
-    // "drag 拖拽 api",
-    // "拖拽 api",
+    "静态资源降级",
+    "静态资源加载失败",
   ],
   labels: [
-    labels.chrome,
+    labels.application,
     // company.mi,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

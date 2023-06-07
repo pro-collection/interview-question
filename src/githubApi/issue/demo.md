@@ -1,32 +1,82 @@
-**关键词**：iframe优点、iframe缺点、iframe应用
+**关键词**：drag 拖拽 api、拖拽 api
 
-`<iframe>` 标签是 HTML 中的内嵌框架元素，它具有一些优点和缺点，如下所示：
+### api
 
-优点：
-1. 分隔内容：`<iframe>` 允许将不同的 HTML 文档嵌入到当前文档中，实现内容的分隔和独立。每个 `<iframe>` 都有自己的文档上下文，可以在不同的 `<iframe>` 中加载和操作不同的内容。
-2. 并行加载：每个 `<iframe>` 是独立的，可以并行加载，这样可以提高页面加载速度和性能。
-3. 代码隔离：`<iframe>` 中的内容与主页面的内容相互隔离，可以避免一些 CSS 样式或 JavaScript 代码的冲突，提高代码的可维护性和可靠性。
-4. 安全性：由于 `<iframe>` 是独立的文档上下文，可以用于实现一些安全隔离的措施，例如加载来自不可信源的内容，可以将其放置在 `<iframe>` 中，以保护主页面的安全性。
+HTML5 Drag API 提供了一组用于实现拖放操作的接口和事件。以下是 HTML5 Drag API 中常用的一些接口和事件：
 
-缺点：
-1. SEO 不友好：搜索引擎对 `<iframe>` 中的内容索引能力较弱，可能影响页面的搜索引擎优化。
-2. 高度难以控制：`<iframe>` 的高度默认会根据内容的高度自动调整，如果内容高度动态变化，可能导致页面布局出现问题。
-3. 页面性能：每个 `<iframe>` 都会增加页面的请求量和渲染成本，特别是当页面中存在大量的 `<iframe>` 时，会影响页面的性能。
-4. 安全性风险：如果在 `<iframe>` 中加载来自不受信任的源的内容，可能存在安全风险，例如跨域脚本攻击（XSS）。
+1. `draggable` 属性：将元素设置为可拖动。可以通过设置元素的 `draggable` 属性为 `true` 或 `false` 来控制元素是否可以被拖动。
 
+2. `ondragstart` 事件：拖动操作开始时触发的事件，通常在此事件中设置被拖动的数据类型和数据内容。
 
-**应用场景**
+3. `ondrag` 事件：拖动过程中持续触发的事件，可以在此事件中进行一些自定义的操作，如实时更新拖动元素的位置。
 
-`<iframe>` 元素在以下场景中常被使用：
+4. `ondragend` 事件：拖动操作结束时触发的事件，通常在此事件中执行一些清理操作，如移除拖动时设置的样式。
 
-1. 嵌入其他网页：通过 `<iframe>` 可以将其他网页嵌入到当前页面中。这在一些需要展示其他网页内容的情况下非常有用，例如嵌入地图、视频、社交媒体小部件等。
+5. `ondragenter` 事件：拖动元素进入目标元素时触发的事件，可以在此事件中进行一些针对目标元素的操作，如改变目标元素的样式。
 
-2. 广告展示：广告平台通常会提供 `<iframe>` 代码片段，用于在页面上嵌入广告内容。这样可以实现广告与页面的分离，保持页面结构简洁，并且提供安全隔离，防止广告脚本对页面产生负面影响。
+6. `ondragleave` 事件：拖动元素离开目标元素时触发的事件，可以在此事件中进行一些清除或还原目标元素的操作。
 
-3. 安全隔离：通过将不受信任的内容放置在 `<iframe>` 中，可以实现安全隔离，防止不受信任的内容对主页面进行攻击。这在加载来自第三方或不可信任源的内容时非常有用。
+7. `ondragover` 事件：在目标元素上拖动时持续触发的事件，可以在此事件中阻止默认的拖放行为或执行一些自定义操作。
 
-4. 无刷新文件上传：在需要实现文件上传的场景中，可以使用 `<iframe>` 创建一个隐藏的表单，并通过该表单实现文件上传操作。由于 `<iframe>` 的独立上下文，可以实现无刷新上传，同时避免页面刷新带来的不良用户体验。
+8. `ondrop` 事件：在目标元素上释放拖动元素时触发的事件，通常在此事件中处理拖放操作，如获取拖放数据并执行相应的操作。
 
-5. 跨域通信：通过使用 `<iframe>` 和窗口通信 API（如 `postMessage`），可以实现跨域的安全通信。这在需要在不同域之间进行数据交互或嵌入第三方内容时非常有用。
+以上是 HTML5 Drag API 中常用的接口和事件。通过使用这些接口和事件，可以实现灵活的拖拽功能并与其他元素进行交互。需要注意的是，拖放操作的实现还涉及到一些其他的 DOM 操作和事件处理。
 
-请注意，尽管 `<iframe>` 在上述场景中有用，但也要注意潜在的性能问题、安全风险以及对 SEO 的影响。因此，在使用 `<iframe>` 时需要谨慎权衡利弊，并根据具体需求选择适当的解决方案。
+### 应用举例
+
+下面是一个使用 HTML5 Drag API 的简单示例，展示了如何实现拖拽功能：
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .draggable {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        cursor: move;
+      }
+
+      .droppable {
+        width: 200px;
+        height: 200px;
+        background-color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="draggable" draggable="true">Drag Me</div>
+    <div class="droppable">Drop Here</div>
+
+    <script>
+      const draggableElement = document.querySelector('.draggable');
+      const droppableElement = document.querySelector('.droppable');
+
+      draggableElement.addEventListener('dragstart', (event) => {
+        // 设置拖动数据
+        event.dataTransfer.setData('text/plain', 'Draggable Element');
+      });
+
+      droppableElement.addEventListener('dragover', (event) => {
+        // 阻止默认的拖放行为
+        event.preventDefault();
+      });
+
+      droppableElement.addEventListener('drop', (event) => {
+        // 获取拖放数据
+        const data = event.dataTransfer.getData('text/plain');
+
+        // 在目标元素上执行操作
+        droppableElement.textContent = data;
+      });
+    </script>
+  </body>
+</html>
+```
+
+在上面的示例中，`.draggable` 类的元素被设置为可拖动（`draggable="true"`），当开始拖动时，触发了 `dragstart` 事件，并设置了拖动数据。
+
+`.droppable` 类的元素作为目标元素，它监听了 `dragover` 事件以阻止默认的拖放行为，并在 `drop` 事件中获取拖放数据并执行相应的操作。
+
+通过以上代码，你可以在浏览器中看到一个红色的可拖动元素和一个蓝色的目标元素。你可以尝试将可拖动元素拖放到目标元素上，拖放完成后，目标元素的内容将会被设置为拖放的数据。

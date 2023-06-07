@@ -7,11 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "iframe 标签有那些优点和缺点？",
+  title: "HTML5 drag(拖拽) API 了解多少",
   key_world: [
-    "iframe优点",
-    "iframe缺点",
-    "iframe应用",
+    "drag 拖拽 api",
+    "拖拽 api",
   ],
   labels: [
     labels.chrome,

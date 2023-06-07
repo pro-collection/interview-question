@@ -7,15 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "src和href的区别是什么？",
+  title: "iframe 标签有那些优点和缺点？",
   key_world: [
-    "src和href的区别",
+    "iframe优点",
+    "iframe缺点",
+    "iframe应用",
   ],
   labels: [
     labels.chrome,
     // company.mi,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

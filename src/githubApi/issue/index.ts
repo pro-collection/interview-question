@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何避免全局样式污染？",
+  title: "src和href的区别是什么？",
   key_world: [
-    "避免样式污染",
-    "css 模块化",
+    "src和href的区别",
   ],
   labels: [
-    labels.css,
+    labels.chrome,
     // company.mi,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

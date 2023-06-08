@@ -7,9 +7,8 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "typeof null 的结果是什么，为什么？",
+  title: "js 函数有默认值的时候， 如果传递的参数是 undefined 那么会被默认值赋值吗？",
   key_world: [
-    // "js判断数组方法",
   ],
   labels: [
     labels.js,

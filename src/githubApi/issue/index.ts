@@ -14,7 +14,7 @@ const remote = {
   ],
   labels: [
     labels.js,
-    company.mt,
+    company.baidu,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

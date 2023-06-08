@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "判断数组的方式有哪些",
+  title: "typeof null 的结果是什么，为什么？",
   key_world: [
-    "js判断数组方法",
+    // "js判断数组方法",
   ],
   labels: [
     labels.js,
-    company.netEase,
+    // company.netEase,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -1,33 +1,32 @@
-**关键词**：Object.is()、js 相等比较
+**关键词**：伪数组、类数组
 
-`Object.is()` 方法和比较操作符 "==="、"==" 用于比较两个值的相等性，但它们在比较方式和行为上有一些区别。
+伪数组（Array-like）和类数组（Array-like Object）都是描述一种类似数组的对象结构，它们在外观和行为上类似于数组，但实际上不是真正的数组。
 
-1. `Object.is()` 方法是严格相等比较，而 "===" 操作符也是严格相等比较，但 "==" 操作符是相等比较。
-    - 严格相等比较（`===`）要求比较的两个值在类型和值上完全相同才会返回 `true`。
-    - 相等比较（`==`）会进行类型转换，将两个值转换为相同类型后再进行比较。
+伪数组（Array-like）：
+- 伪数组是指具有类似数组的结构，但不具备数组的方法和属性的对象。
+- 伪数组对象通常拥有一个 length 属性，用于表示其元素的个数。
+- 伪数组对象可以通过索引访问元素，类似于数组的下标访问。
+- 伪数组对象不具备数组的方法，如 push、pop、slice 等。
 
-2. `Object.is()` 方法对于一些特殊的值比较更准确：
-    - 对于 NaN 和 NaN 的比较，`Object.is(NaN, NaN)` 返回 `true`，而 `NaN === NaN` 返回 `false`。
-    - 对于 +0 和 -0 的比较，`Object.is(+0, -0)` 返回 `false`，而 `+0 === -0` 返回 `true`。
+类数组（Array-like Object）：
+- 类数组是指具有类似数组的结构，但不是由 Array 构造函数创建的对象。
+- 类数组对象通常拥有一个 length 属性，用于表示其元素的个数。
+- 类数组对象可以通过索引访问元素，类似于数组的下标访问。
+- 类数组对象不具备数组的方法，如 push、pop、slice 等。
 
-下面是一些示例：
-
+示例：
 ```javascript
-console.log(Object.is(1, 1));  // true
-console.log(Object.is('foo', 'foo'));  // true
-console.log(Object.is(true, true));  // true
+// 伪数组
+const arrayLike = { 0: 'apple', 1: 'banana', length: 2 };
+console.log(arrayLike[0]);  // 'apple'
+console.log(arrayLike.length);  // 2
+console.log(arrayLike.push);  // undefined
 
-console.log(Object.is(null, null));  // true
-console.log(Object.is(undefined, undefined));  // true
-
-console.log(Object.is(NaN, NaN));  // true
-console.log(NaN === NaN);  // false
-
-console.log(Object.is(+0, -0));  // false
-console.log(+0 === -0);  // true
-
-console.log(Object.is({}, {}));  // false
-console.log({} === {});  // false
+// 类数组
+const arrayLikeObject = document.querySelectorAll('div');
+console.log(arrayLikeObject[0]);  // DOM元素
+console.log(arrayLikeObject.length);  // 元素数量
+console.log(arrayLikeObject.push);  // undefined
 ```
 
-`Object.is()` 方法更精确地比较两个值的相等性，尤其是在处理一些特殊的值时，而 "===" 操作符和 "==" 操作符则具有不同的类型转换行为和比较规则。
+需要注意的是，伪数组和类数组虽然具有类似数组的结构，但它们没有继承自 Array 的方法和属性，因此无法直接使用数组的方法。如果需要使用数组的方法，可以将伪数组或类数组对象转换为真正的数组，例如通过 `Array.from()`、`Array.prototype.slice.call()` 或展开运算符 `...` 等方法进行转换。

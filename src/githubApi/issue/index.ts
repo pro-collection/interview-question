@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "Object.is() 与比较操作符 “===”、“==” 有什么区别",
+  title: "什么是伪数组、什么是类数组",
   key_world: [
-    'Object.is()',
-    'js 相等比较',
+    '伪数组',
+    '类数组',
   ],
   labels: [
     labels.js,
-    company.jd,
+    company.mt,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

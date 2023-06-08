@@ -1,26 +1,41 @@
-**关键词**：类数组对象转换为真正的数组
+**关键词**：arguments 参数、arguments 参数遍历
 
-有几种常见的方法可以将类数组对象转换为真正的数组：
+在 JavaScript 中，函数的 `arguments` 参数被设计为类数组对象，而不是真正的数组。这是因为 `arguments` 对象包含了函数调用时传入的所有参数，包括未命名的参数。它提供了一种方便的方式来访问和操作这些参数。
 
-1. Array.from()：使用 Array.from() 方法可以将可迭代对象或类数组对象转换为数组。
+要遍历类数组对象，可以使用以下方法：
+
+1. 使用 for 循环和索引：通过使用普通的 for 循环和索引来遍历类数组对象。
 ```javascript
-const arrayLike = { 0: 'apple', 1: 'banana', length: 2 };
-const array = Array.from(arrayLike);
-console.log(array);  // ['apple', 'banana']
+function sum() {
+  for (let i = 0; i < arguments.length; i++) {
+    console.log(arguments[i]);
+  }
+}
+
+sum(1, 2, 3);  // 输出：1 2 3
 ```
 
-2. Array.prototype.slice.call()：通过调用 Array.prototype.slice() 方法，并将类数组对象作为参数传入，可以将其转换为数组。
+2. 使用 for...of 循环：从 ES6 开始，可以使用 for...of 循环来遍历可迭代对象，包括类数组对象。
 ```javascript
-const arrayLike = { 0: 'apple', 1: 'banana', length: 2 };
-const array = Array.prototype.slice.call(arrayLike);
-console.log(array);  // ['apple', 'banana']
+function sum() {
+  for (let arg of arguments) {
+    console.log(arg);
+  }
+}
+
+sum(1, 2, 3);  // 输出：1 2 3
 ```
 
-3. Spread Operator（展开运算符）：使用展开运算符 `...` 可以将可迭代对象或类数组对象展开为数组。
+3. 将类数组对象转换为真正的数组后遍历：可以使用上述提到的类数组转换方法将类数组对象转换为真正的数组，然后使用数组的遍历方法进行遍历，如 `forEach()`、`map()` 等。
 ```javascript
-const arrayLike = { 0: 'apple', 1: 'banana', length: 2 };
-const array = [...arrayLike];
-console.log(array);  // ['apple', 'banana']
+function sum() {
+  const args = Array.from(arguments);
+  args.forEach(arg => {
+    console.log(arg);
+  });
+}
+
+sum(1, 2, 3);  // 输出：1 2 3
 ```
 
-这些方法都可以将类数组对象转换为真正的数组，使其具备数组的方法和属性。需要注意的是，类数组对象必须具有 length 属性和通过索引访问元素的能力才能成功转换为数组。
+这些方法都可以用于遍历类数组对象，根据需求选择适合的方式进行操作。

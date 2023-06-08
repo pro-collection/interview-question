@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "类数组转换成数组的方法有哪些",
+  title: "为什么函数的 arguments 参数是类数组而不是数组？如何遍历类数组?",
   key_world: [
-    '类数组对象转换为真正的数组',
+    'arguments 参数',
+    'arguments 参数遍历',
   ],
   labels: [
     labels.js,
-    company.baidu,
+    company.tencent,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -67,6 +67,7 @@ export const getDataIssue = (preDate: string) => octokit.request(apiUrl.getIssue
   per_page: 100,
   page: 1,
   since: dayjs(preDate).format("YYYY-MM-DDTHH:mm:ssZ"),
+  creator: "yanlele",
 });
 
 /**

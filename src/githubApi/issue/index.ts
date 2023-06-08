@@ -7,14 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "为什么函数的 arguments 参数是类数组而不是数组？如何遍历类数组?",
+  title: "escape、encodeURI、encodeURIComponent 区别",
   key_world: [
-    'arguments 参数',
-    'arguments 参数遍历',
+    'js URL 编码解码',
   ],
   labels: [
     labels.js,
-    company.tencent,
+    company.alibaba,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

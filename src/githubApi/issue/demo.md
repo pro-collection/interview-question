@@ -1,41 +1,23 @@
-**关键词**：arguments 参数、arguments 参数遍历
+**关键词**：js URL 编码解码
 
-在 JavaScript 中，函数的 `arguments` 参数被设计为类数组对象，而不是真正的数组。这是因为 `arguments` 对象包含了函数调用时传入的所有参数，包括未命名的参数。它提供了一种方便的方式来访问和操作这些参数。
+在 JavaScript 中，`escape()`、`encodeURI()` 和 `encodeURIComponent()` 都是用于编码 URL 或字符串的函数，但它们有一些区别：
 
-要遍历类数组对象，可以使用以下方法：
-
-1. 使用 for 循环和索引：通过使用普通的 for 循环和索引来遍历类数组对象。
+1. `escape()` 函数用于编码字符串中的特殊字符，使其能够安全地传输。它对字符进行编码，包括非 ASCII 字符和特殊字符。但需要注意的是，`escape()` 不会编码 URL 中的保留字符（例如 `:/?#[]@!$&'()*+,;=`），它只会编码其他字符。
 ```javascript
-function sum() {
-  for (let i = 0; i < arguments.length; i++) {
-    console.log(arguments[i]);
-  }
-}
-
-sum(1, 2, 3);  // 输出：1 2 3
+// 输出：%48%65%6c%6c%6f%20%57%6f%72%6c%64%21
+console.log(escape("Hello World!"));  
 ```
 
-2. 使用 for...of 循环：从 ES6 开始，可以使用 for...of 循环来遍历可迭代对象，包括类数组对象。
+2. `encodeURI()` 函数用于对整个 URL 进行编码，用于将 URL 中的特殊字符转换为可传输的形式。它不会编码 URL 中的保留字符和一些特殊字符（例如 `:/?#[]@!$&'()*+,;=`）。它主要用于编码整个 URL，而不是编码 URL 的参数值。
 ```javascript
-function sum() {
-  for (let arg of arguments) {
-    console.log(arg);
-  }
-}
-
-sum(1, 2, 3);  // 输出：1 2 3
+// 输出：http://example.com/page.php?id=123
+console.log(encodeURI("http://example.com/page.php?id=123"));  
 ```
 
-3. 将类数组对象转换为真正的数组后遍历：可以使用上述提到的类数组转换方法将类数组对象转换为真正的数组，然后使用数组的遍历方法进行遍历，如 `forEach()`、`map()` 等。
+3. `encodeURIComponent()` 函数用于编码 URL 的参数值，它会对所有特殊字符进行编码，包括 URL 中的保留字符和其他特殊字符。它用于编码 URL 参数中的特殊字符，以确保它们在 URL 中的传输和解析过程中不会被误解。
 ```javascript
-function sum() {
-  const args = Array.from(arguments);
-  args.forEach(arg => {
-    console.log(arg);
-  });
-}
-
-sum(1, 2, 3);  // 输出：1 2 3
+// 输出：Hello%20World%21
+console.log(encodeURIComponent("Hello World!"));  
 ```
 
-这些方法都可以用于遍历类数组对象，根据需求选择适合的方式进行操作。
+需要注意的是，`escape()` 函数已被废弃，不推荐使用。在大多数情况下，建议使用 `encodeURI()` 或 `encodeURIComponent()` 函数进行 URL 编码。选择使用哪个函数取决于具体的需求，是否需要编码整个 URL 或只是其中的一部分（如参数值）。

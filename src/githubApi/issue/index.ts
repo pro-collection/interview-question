@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "use strict是什么? 它有什么用？",
+  title: "解释性语言和编译型语言的区别",
   key_world: [
-    'JS 编译指示',
-    'JS 严格模式',
+    '解释性语言和编译型语言',
   ],
   labels: [
     labels.js,
-    company.pdd,
+    company.quic,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

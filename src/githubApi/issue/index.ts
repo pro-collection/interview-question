@@ -7,14 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "ajax、axios、fetch的区别",
+  title: "深度遍历广度遍历的区别？",
   key_world: [
-    'ajax、axios、fetch',
-    '前端网络请求库',
+    "深度遍历广度遍历",
   ],
   labels: [
-    labels.network,
-    company.shopee,
+    labels.js,
+    company.quic,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

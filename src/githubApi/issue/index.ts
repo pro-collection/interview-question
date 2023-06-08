@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "escape、encodeURI、encodeURIComponent 区别",
+  title: "use strict是什么? 它有什么用？",
   key_world: [
-    'js URL 编码解码',
+    'JS 编译指示',
+    'JS 严格模式',
   ],
   labels: [
     labels.js,
-    company.alibaba,
+    company.pdd,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

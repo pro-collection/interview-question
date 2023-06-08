@@ -23,7 +23,9 @@ export const company = {
   baidu: "百度",
   mi: "小米",
   mt: "美团",
+  pdd: "PDD",
   jd: "京东",
   netEase: "网易",
-  shopee: 'Shopee',
+  shopee: "Shopee",
+  quic: "快手",
 };

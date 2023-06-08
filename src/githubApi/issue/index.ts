@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "解释性语言和编译型语言的区别",
+  title: "ajax、axios、fetch的区别",
   key_world: [
-    '解释性语言和编译型语言',
+    'ajax、axios、fetch',
+    '前端网络请求库',
   ],
   labels: [
-    labels.js,
-    company.quic,
+    labels.network,
+    company.shopee,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

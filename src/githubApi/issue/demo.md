@@ -1,32 +1,33 @@
-是的，如果函数在调用时某个参数被传递为 `undefined`，那么它会被默认值赋值。
+**关键词**：Object.is()、js 相等比较
 
-当为函数的参数设置默认值时，只有当参数的值为 `undefined` 时才会生效。如果传递的参数为 `null`、空字符串 `''` 或者未提供参数，则默认值不会被应用。
+`Object.is()` 方法和比较操作符 "==="、"==" 用于比较两个值的相等性，但它们在比较方式和行为上有一些区别。
 
-以下是一个示例：
+1. `Object.is()` 方法是严格相等比较，而 "===" 操作符也是严格相等比较，但 "==" 操作符是相等比较。
+    - 严格相等比较（`===`）要求比较的两个值在类型和值上完全相同才会返回 `true`。
+    - 相等比较（`==`）会进行类型转换，将两个值转换为相同类型后再进行比较。
 
-```javascript
-function greet(name = 'Guest') {
-  console.log(`Hello, ${name}!`);
-}
+2. `Object.is()` 方法对于一些特殊的值比较更准确：
+    - 对于 NaN 和 NaN 的比较，`Object.is(NaN, NaN)` 返回 `true`，而 `NaN === NaN` 返回 `false`。
+    - 对于 +0 和 -0 的比较，`Object.is(+0, -0)` 返回 `false`，而 `+0 === -0` 返回 `true`。
 
-greet('John');     // 输出: Hello, John!
-greet(undefined);  // 输出: Hello, Guest!
-greet();           // 输出: Hello, Guest!
-```
-
-在上面的例子中，当参数 `name` 被传递为 `undefined` 或者未提供时，它会被默认值 `'Guest'` 赋值，从而在函数内部输出 `'Hello, Guest!'`。
-
-
-如果传递的参数为 `null`，默认值不会被应用。当函数的参数被显式传递为 `null` 时，它将被视为有效的值，不会触发默认值的赋值。
-
-以下是一个示例：
+下面是一些示例：
 
 ```javascript
-function greet(name = 'Guest') {
-  console.log(`Hello, ${name}!`);
-}
+console.log(Object.is(1, 1));  // true
+console.log(Object.is('foo', 'foo'));  // true
+console.log(Object.is(true, true));  // true
 
-greet(null);  // 输出: Hello, null!
+console.log(Object.is(null, null));  // true
+console.log(Object.is(undefined, undefined));  // true
+
+console.log(Object.is(NaN, NaN));  // true
+console.log(NaN === NaN);  // false
+
+console.log(Object.is(+0, -0));  // false
+console.log(+0 === -0);  // true
+
+console.log(Object.is({}, {}));  // false
+console.log({} === {});  // false
 ```
 
-在上面的例子中，参数 `name` 被显式传递为 `null`，因此默认值 `'Guest'` 不会被应用，而是使用了传递的 `null` 值。所以输出结果为 `'Hello, null!'`。
+`Object.is()` 方法更精确地比较两个值的相等性，尤其是在处理一些特殊的值时，而 "===" 操作符和 "==" 操作符则具有不同的类型转换行为和比较规则。

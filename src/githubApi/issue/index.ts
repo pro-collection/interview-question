@@ -7,12 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "js 函数有默认值的时候， 如果传递的参数是 undefined 那么会被默认值赋值吗？",
+  title: "Object.is() 与比较操作符 “===”、“==” 有什么区别",
   key_world: [
+    'Object.is()',
+    'js 相等比较',
   ],
   labels: [
     labels.js,
-    // company.netEase,
+    company.jd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

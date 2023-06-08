@@ -7,10 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "什么是伪数组、什么是类数组",
+  title: "类数组转换成数组的方法有哪些",
   key_world: [
-    '伪数组',
-    '类数组',
+    '类数组对象转换为真正的数组',
   ],
   labels: [
     labels.js,

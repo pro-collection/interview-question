@@ -7,9 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "JS 创建对象的方式有哪些？",
+  title: "hasOwnProperty 与 instanceof 区别",
   key_world: [
-    "JS 创建对象",
+    "hasOwnProperty、instanceof",
+    "hasOwnProperty作用",
+    "instanceof作用",
   ],
   labels: [
     labels.js,

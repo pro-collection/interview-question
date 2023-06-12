@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "移动端如何实现上拉加载，下拉刷新？",
+  title: "JS 中的数组和函数在内存中是如何存储的？",
   key_world: [
-    "上拉加载、下拉刷新",
+    "数组和函数在内存中存储方式",
   ],
   labels: [
-    labels.application,
-    company.jd,
+    labels.js,
+    company.pdd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

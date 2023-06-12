@@ -7,9 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "普通函数动态参数 和 箭头函数的动态参数有什么区别？",
+  title: "函数声明与函数表达式的区别",
   key_world: [
-    "JS函数动态参数",
+    "函数声明、函数表达式",
   ],
   labels: [
     labels.js,

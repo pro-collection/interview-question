@@ -7,14 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "JS 执行上下文的生命周期阶段有哪些",
+  title: "普通函数动态参数 和 箭头函数的动态参数有什么区别？",
   key_world: [
-    "JS 执行阶段",
-    "JS执行上下文生命周期",
+    "JS函数动态参数",
   ],
   labels: [
     labels.js,
-    company.baidu,
+    // company.baidu,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "手写实现一个缓存函数 memoize",
+  title: "JS 执行上下文的生命周期阶段有哪些",
   key_world: [
-    "缓存函数实现",
-    "memoize函数"
+    "JS 执行阶段",
+    "JS执行上下文生命周期",
   ],
   labels: [
     labels.js,
-    company.mi,
+    company.baidu,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

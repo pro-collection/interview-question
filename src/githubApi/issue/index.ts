@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "执行上下文栈是什么",
+  title: "移动端如何实现上拉加载，下拉刷新？",
   key_world: [
-    "执行上下文栈",
+    "上拉加载、下拉刷新",
   ],
   labels: [
-    labels.js,
-    company.netEase,
+    labels.application,
+    company.jd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

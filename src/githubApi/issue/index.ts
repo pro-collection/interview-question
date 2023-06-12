@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "函数声明与函数表达式的区别",
+  title: "JS 创建对象的方式有哪些？",
   key_world: [
-    "函数声明、函数表达式",
+    "JS 创建对象",
   ],
   labels: [
     labels.js,
     // company.baidu,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

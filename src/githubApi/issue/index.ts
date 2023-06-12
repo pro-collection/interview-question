@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "深度遍历广度遍历的区别？",
+  title: "执行上下文栈是什么",
   key_world: [
-    "深度遍历广度遍历",
+    "执行上下文栈",
   ],
   labels: [
     labels.js,
-    company.quic,
+    company.netEase,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

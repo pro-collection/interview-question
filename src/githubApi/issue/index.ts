@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "JS 中的数组和函数在内存中是如何存储的？",
+  title: "手写实现一个缓存函数 memoize",
   key_world: [
-    "数组和函数在内存中存储方式",
+    "缓存函数实现",
+    "memoize函数"
   ],
   labels: [
     labels.js,
-    company.pdd,
+    company.mi,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

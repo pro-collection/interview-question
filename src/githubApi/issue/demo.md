@@ -1,11 +1,43 @@
-**关键词**：数组和函数在内存中存储方式
+**关键词**：缓存函数实现、memoize函数
 
-在JavaScript中，数组和函数在内存中的存储方式有一些不同。
+用于创建一个带有缓存功能的函数。下面是一个简化版本的手写实现，展示了如何自己实现 `memoize` 函数：
 
-1. 数组（Array）的存储：
-    - 数组是一种线性数据结构，它可以存储多个值，并且这些值可以是不同类型的。在内存中，数组的存储通常是连续的。当创建一个数组时，JavaScript引擎会为其分配一段连续的内存空间来存储数组的元素。数组的每个元素都会被存储在这段内存空间中的相应位置。数组的长度可以动态改变，当向数组添加或删除元素时，JavaScript引擎会重新分配内存空间并移动元素的位置。
+```javascript
+function memoize(func) {
+  const cache = {};
 
-2. 函数（Function）的存储：
-    - 函数在JavaScript中被视为一种特殊的对象。函数的定义实际上是创建一个函数对象，并将其存储在内存中。函数对象本身包含了函数的代码以及其他相关信息，例如函数的名称、参数和闭包等。函数对象的代码部分通常是一段可执行的JavaScript代码，它被存储在内存中的某个位置。当调用函数时，JavaScript引擎会查找该函数对象的存储位置，并执行其中的代码。
+  return function (...args) {
+    const key = JSON.stringify(args);
 
-需要注意的是，数组和函数的存储方式是由JavaScript引擎决定的，不同的引擎可能会有一些微小的差异。此外，JavaScript引擎还会使用一些优化技术，如垃圾回收和内存管理，来优化内存的使用和回收。
+    if (cache[key]) {
+      return cache[key];
+    }
+
+    const result = func.apply(this, args);
+    cache[key] = result;
+
+    return result;
+  };
+}
+
+// 示例用法
+const expensiveFunction = memoize(function (n) {
+  console.log('Computing...');
+  return n * 2;
+});
+
+console.log(expensiveFunction(5)); // 第一次调用，输出：Computing... 10
+console.log(expensiveFunction(5)); // 第二次调用，直接从缓存中获取结果，输出：10
+console.log(expensiveFunction(10)); // 新的参数，再次计算并缓存结果，输出：Computing... 20
+console.log(expensiveFunction(10)); // 再次调用，直接从缓存中获取结果，输出：20
+```
+
+上述代码中的 `memoize` 函数接受一个函数 `func` 作为参数，并返回一个新的函数。返回的函数具有缓存的能力，即根据参数的不同缓存计算结果。
+
+在返回的函数内部，首先将传入的参数 `args` 转换成一个唯一的字符串 `key`，以便作为缓存对象 `cache` 然后检查 `cache` 对象中是否存在对应的缓存结果，如果存在直接返回缓存结果，否则执行原始函数 `func` 并将结果缓存起来。
+
+通过这种方式，对于相同的参数，后续的调用将直接从缓存中获取结果，而不会再次执行函数。这样可以避免重复计算，提高函数的性能。
+
+在示例中，我们创建了一个名为 `expensiveFunction` 的函数，并使用 `memoize` 进行包装。第一次调用时，函数会执行计算，并输出 `"Computing..."`，结果为 10。第二次调用时，函数直接从缓存中获取结果，无需再次计算。最后两次调用分别使用了不同的参数，会触发新的计算并缓存结果。
+
+需要注意的是，这个手写的 `memoize` 函数是一个简化版本，仅适用于参数为基本类型的情况。对于参数为复杂类型（如对象、数组等）的情况，需要使用更复杂的缓存键值生成方法，以确保正确的缓存行为。此外，实际的 Lodash 库中的 `memoize` 函数还提供了其他选项和功能，例如自定义缓存键生成函数、缓存过期时间等。

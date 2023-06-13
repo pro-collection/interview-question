@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "requestAnimationFrame 了解多少",
+  title: "JS里的类就是构造函数的语法糖，这个说法是否正确",
   key_world: [
-    // "JS异步编程",
-    // "JS异步编程实现方式",
+    "JS构造函数",
+    "JS类的语法糖",
   ],
   labels: [
     labels.js,
-    // company.baidu,
+    company.tencent,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

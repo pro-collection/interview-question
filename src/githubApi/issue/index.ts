@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "异步编程的实现方式?",
+  title: "requestAnimationFrame 了解多少",
   key_world: [
-    "JS异步编程",
-    "JS异步编程实现方式",
+    // "JS异步编程",
+    // "JS异步编程实现方式",
   ],
   labels: [
     labels.js,
     // company.baidu,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

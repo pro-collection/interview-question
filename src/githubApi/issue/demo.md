@@ -1,80 +1,22 @@
-**关键词**：JS异步编程、JS异步编程实现方式
+`requestAnimationFrame` 是一种优化动画性能的方法，它会在浏览器重绘之前执行指定的回调函数。相比于传统的 `setInterval` 或 `setTimeout` 方法，`requestAnimationFrame` 会在浏览器的下一次重绘之前执行回调函数，能够更好地与浏览器的渲染机制结合，减少页面的卡顿和闪烁。
 
-异步编程的实现方式有以下几种：
+`requestAnimationFrame` 的使用方法如下：
 
-1. 回调函数
+```javascript
+let animationId;
 
-回调函数是最基本的异步编程方式。在执行异步操作时，将回调函数作为参数传递给异步函数，异步函数在操作完成后将结果传递给回调函数，回调函数再进行下一步操作。例如：
-
-```
-function getData(callback) {
-  setTimeout(function () {
-    callback('Data received');
-  }, 1000);
+function animate() {
+  animationId = requestAnimationFrame(animate);
+  // 在这里执行动画代码
 }
 
-getData(function(data) {
-  console.log(data); // 'Data received'
-});
+animate(); // 启动动画
 ```
 
-2. Promise
+在上面的代码中，`requestAnimationFrame` 方法返回一个唯一的标识符，可以用来取消动画，如下所示：
 
-Promise 是一种更高级的异步编程方式。通过 Promise 对象可以管理异步操作的状态、结果与错误。Promise 支持链式调用，使得异步操作的多个步骤可以更加清晰地表达。例如：
-
-```
-function getData() {
-  return new Promise(function(resolve, reject) {
-    setTimeout(function() {
-      resolve('Data received');
-    }, 1000);
-  });
-}
-
-getData().then(function(data) {
-  console.log(data); // 'Data received'
-});
+```javascript
+cancelAnimationFrame(animationId); // 取消动画
 ```
 
-3. Async/await
-
-Async/await 是基于 Promise 的一种语法糖，使异步操作的代码更加简单、易读。通过在函数前面加上 async 关键字，可以将函数变成 async 函数，使用 await 关键字可以等待 Promise 对象的结果。例如：
-
-```
-function getData() {
-  return new Promise(function(resolve, reject) {
-    setTimeout(function() {
-      resolve('Data received');
-    }, 1000);
-  });
-}
-
-async function outputData() {
-  const data = await getData();
-  console.log(data); // 'Data received'
-}
-
-outputData();
-```
-
-4. Generator
-
-Generator 是一种能够暂停和恢复执行的函数，可以用来实现异步编程。通过在函数中使用 yield 关键字可以暂停函数的执行，并在需要时恢复执行。例如：
-
-```
-function* getData() {
-  yield new Promise(function(resolve, reject) {
-    setTimeout(function() {
-      resolve('Data received');
-    }, 1000);
-  });
-}
-
-const gen = getData();
-
-gen.next().value.then(function(data) {
-  console.log(data); // 'Data received'
-});
-```
-
-总的来说，异步编程的实现方式有很多，不同的方式适用于不同的情况。在实际编码中，需要根据具体情况选择合适的方式来实现异步操作。
+需要注意的是，`requestAnimationFrame` 并不一定每秒都会执行 60 次，它会根据浏览器的刷新频率来自动调整执行次数，保证动画的流畅性。同时，由于 `requestAnimationFrame` 是在浏览器的主线程中执行，如果动画计算量过大，会占用过多的 CPU 资源，导致页面的卡顿和性能问题。因此，需要合理使用 `requestAnimationFrame`，避免在单个动画中进行复杂的计算。

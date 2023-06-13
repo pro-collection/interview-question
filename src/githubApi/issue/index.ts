@@ -7,9 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "原型链的终点是什么？",
+  title: "异步编程的实现方式?",
   key_world: [
-    "原型链的终点",
+    "JS异步编程",
+    "JS异步编程实现方式",
   ],
   labels: [
     labels.js,

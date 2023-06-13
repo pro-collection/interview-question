@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何判断dom元素是否在可视区域",
+  title: "手写实现 Object.create",
   key_world: [
-    "元素是否在可视区域",
+    "Object.create实现",
+    "Object.create手写",
   ],
   labels: [
-    labels.application,
-    company.baidu,
+    labels.js,
+    company.mi,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

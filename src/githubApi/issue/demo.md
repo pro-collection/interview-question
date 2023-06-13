@@ -1,38 +1,26 @@
-**关键词**：hasOwnProperty、instanceof、hasOwnProperty作用、instanceof作用
+**关键词**：原型链的终点
 
-hasOwnProperty 和 instanceof 是两个不同的操作符，用于不同的目的。
+在JavaScript中，原型链的终点是 `null`。当访问一个对象的属性或方法时，如果当前对象没有该属性或方法，JavaScript引擎会沿着原型链向上查找，直到找到该属性或方法或者到达原型链的终点 `null`。
 
-1. hasOwnProperty
+每个对象都有一个原型（`prototype`）属性，指向它的原型对象。原型对象也是一个对象，也有自己的原型，形成了原型链。原型链是由一系列对象的连接构成的，每个对象都有一个指向其原型的引用，通过这个引用可以沿着原型链向上查找属性和方法。
 
-hasOwnProperty 是一个对象的原型方法，用来检测一个对象自身是否具有指定名称的属性（不会检查原型链上的属性）。其语法如下：
+原型链的终点是 `null`，即最顶层的原型对象没有原型，它的 `[[Prototype]]` 指向 `null`。当查找属性或方法时，如果一直沿着原型链找到最顶层的原型对象仍然没有找到，则返回 `undefined`。
 
-```
-object.hasOwnProperty(property)
-```
+示例：
+```javascript
+const obj = {};
+console.log(obj.toString()); // obj 没有定义 toString 方法，通过原型链找到 Object.prototype 上的 toString 方法
 
-其中，object 是要检测的对象，property 是要检测的属性名。如果对象自身具有指定名称的属性，则返回 true，否则返回 false。
+const arr = [];
+console.log(arr.join()); // arr 没有定义 join 方法，通过原型链找到 Array.prototype 上的 join 方法
 
-2. instanceof
+const str = 'Hello';
+console.log(str.toUpperCase()); // str 没有定义 toUpperCase 方法，通过原型链找到 String.prototype 上的 toUpperCase 方法
 
-instanceof 是一个运算符，用来检测一个对象是否是某个类的实例。其语法如下：
+const num = 42;
+console.log(num.toFixed(2)); // num 没有定义 toFixed 方法，通过原型链找到 Number.prototype 上的 toFixed 方法
 
-```
-object instanceof constructor
-```
-
-其中，object 是要检测的对象，constructor 是要检测的类（构造函数）。如果对象是指定类的实例，则返回 true，否则返回 false。
-
-举个例子来说，假设有以下代码：
-
-```
-function Person(name) {
-  this.name = name;
-}
-
-var john = new Person("John");
-
-console.log(john.hasOwnProperty("name")); // true
-console.log(john instanceof Person); // true
+console.log(Object.prototype.__proto__); // 最顶层的原型对象 Object.prototype 的原型是 null
 ```
 
-上述代码中，我们创建了一个 Person 类，并使用构造函数创建了一个实例 john。然后我们分别使用 hasOwnProperty 和 instanceof 操作符检测 john 对象是否具有 name 属性和是否是 Person 类的实例，得到的结果分别为 true 和 true。
+因此，原型链的终点是 `null`，表示在原型链的最顶层无法再继续向上查找。

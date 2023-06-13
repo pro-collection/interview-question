@@ -7,11 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "hasOwnProperty 与 instanceof 区别",
+  title: "原型链的终点是什么？",
   key_world: [
-    "hasOwnProperty、instanceof",
-    "hasOwnProperty作用",
-    "instanceof作用",
+    "原型链的终点",
   ],
   labels: [
     labels.js,

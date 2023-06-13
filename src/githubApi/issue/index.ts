@@ -7,14 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "手写实现 Object.create",
+  title: "手写实现 instanceof",
   key_world: [
-    "Object.create实现",
-    "Object.create手写",
+    "instanceof原理",
+    "instanceof实现",
+    "instanceof手写",
   ],
   labels: [
     labels.js,
-    company.mi,
+    company.pdd,
   ],
   milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -7,14 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "JS里的类就是构造函数的语法糖，这个说法是否正确",
+  title: "如何判断dom元素是否在可视区域",
   key_world: [
-    "JS构造函数",
-    "JS类的语法糖",
+    "元素是否在可视区域",
   ],
   labels: [
-    labels.js,
-    company.tencent,
+    labels.application,
+    company.baidu,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

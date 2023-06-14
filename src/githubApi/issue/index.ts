@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "斐波拉契数列是什么，用 JS 实现，用尾调优化斐波拉契数列",
+  title: "[vue] vue2.x 响应式原理是什么",
   key_world: [
-    "斐波拉契数列",
-    "尾调优化",
+    "vue响应式",
+    "Observe、Compile、Watcher",
   ],
   labels: [
-    labels.js,
-    company.netEase,
+    labels.frameWork,
+    company.shopee,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

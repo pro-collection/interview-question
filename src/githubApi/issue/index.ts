@@ -7,17 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "手写实现 instanceof",
+  title: "实现数组的flat方法，支持深度层级参数",
   key_world: [
-    "instanceof原理",
-    "instanceof实现",
-    "instanceof手写",
+    // "instanceof原理",
+    // "instanceof实现",
+    // "instanceof手写",
   ],
   labels: [
     labels.js,
-    company.pdd,
+    company.jd,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

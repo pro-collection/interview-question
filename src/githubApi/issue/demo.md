@@ -1,17 +1,34 @@
-可以通过传入一个深度参数来限制 flat 方法的递归深度。实现如下：
+**关键词**：斐波拉契数列、尾调优化
+
+斐波那契数列是指：0、1、1、2、3、5、8、13、21、34、……，在数学上，斐波那契数列以如下被以递归的方法定义：
+
+F(0) = 0, F(1) = 1
+F(n) = F(n-1) + F(n-2) (n > 1)
+
+用 JS 实现斐波那契数列可以如下：
 
 ```
-function flat(arr, depth = 1) {
-  let res = [];
-  for (let i = 0; i < arr.length; i++) {
-    if (Array.isArray(arr[i]) && depth > 0) {
-      res = res.concat(flat(arr[i], depth - 1));
-    } else {
-      res.push(arr[i]);
-    }
+function fibonacci(n) {
+  if (n <= 1) {
+    return n;
   }
-  return res;
+  return fibonacci(n - 1) + fibonacci(n - 2);
 }
 ```
 
-这里在原有的 flat 方法基础上增加了一个 depth 参数，每递归一层，深度就减一，当深度为 0 时就不再递归。
+这个函数用递归的方式实现了斐波那契数列的求解。但是递归会导致函数栈的不断扩张，当 n 很大的时候会导致栈溢出。所以为了避免这种情况，可以使用尾调用优化。
+
+尾调用优化是指：一个函数的最后一个操作是一个函数调用，并且这个调用的返回值就是这个函数的返回值。这种情况下，函数的调用栈可以被重用，从而避免了栈溢出的问题。
+
+用尾调用优化实现斐波那契数列可以如下：
+
+```
+function fibonacci(n, curr = 0, next = 1) {
+  if (n === 0) {
+    return curr;
+  }
+  return fibonacci(n - 1, next, curr + next);
+}
+```
+
+这个函数用了 ES6 的默认参数来实现了尾调用优化。由于函数的最后一个操作是对 fibonacci 函数的递归调用，并且这个调用的返回值就是函数的返回值，所以这个递归调用被尾调用优化了。

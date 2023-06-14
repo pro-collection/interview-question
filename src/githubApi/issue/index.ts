@@ -7,15 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "实现数组的flat方法，支持深度层级参数",
+  title: "斐波拉契数列是什么，用 JS 实现，用尾调优化斐波拉契数列",
   key_world: [
-    // "instanceof原理",
-    // "instanceof实现",
-    // "instanceof手写",
+    "斐波拉契数列",
+    "尾调优化",
   ],
   labels: [
     labels.js,
-    company.jd,
+    company.netEase,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

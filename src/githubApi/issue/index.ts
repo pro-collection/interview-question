@@ -7,16 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[vue] vue2.x 响应式原理是什么",
+  title: "[react] 数组用useState做状态管理的时候，使用push，pop，splice等直接更改数组对象，会引起页面渲染吗？",
   key_world: [
-    "vue响应式",
-    "Observe、Compile、Watcher",
+    "useState状态管理",
+    "push 直接更改数组对象",
+    "pop 直接更改数组对象",
+    "splice 直接更改数组对象",
   ],
   labels: [
     labels.frameWork,
-    company.shopee,
+    company.quic,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

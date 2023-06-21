@@ -7,18 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[react] 数组用useState做状态管理的时候，使用push，pop，splice等直接更改数组对象，会引起页面渲染吗？",
+  title: "[react] 如何合理使用 useContext",
   key_world: [
-    "useState状态管理",
-    "push 直接更改数组对象",
-    "pop 直接更改数组对象",
-    "splice 直接更改数组对象",
+    "合理使用 context 的层级",
+    "避免滥用 context",
+    "避免context引起重复渲染",
+    "优化context重复渲染",
   ],
   labels: [
     labels.frameWork,
-    company.quic,
+    company.tencent,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

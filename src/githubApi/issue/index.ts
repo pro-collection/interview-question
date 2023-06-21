@@ -7,18 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[react] 如何合理使用 useContext",
+  title: "[react] constructor 和 getInitialState 的区别?",
   key_world: [
-    "合理使用 context 的层级",
-    "避免滥用 context",
-    "避免context引起重复渲染",
-    "优化context重复渲染",
+    "react constructor 作用",
+    "react getInitialState 作用",
+    "初始化 state",
   ],
   labels: [
     labels.frameWork,
-    company.tencent,
+    company.baidu,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

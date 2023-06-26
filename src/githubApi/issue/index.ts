@@ -7,17 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何理解研发流程和研发效率， 如何保障研发效率",
+  title: "如何理解研发流程和研发效率，如何保障研发效率",
   key_world: [
     // "react constructor 作用",
     // "react getInitialState 作用",
     // "初始化 state",
   ],
   labels: [
-    labels.frameWork,
-    company.baidu,
+    labels.engineering,
+    company.mi,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.master,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

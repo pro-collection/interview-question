@@ -7,18 +7,19 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何通过设置失效时间清除本地存储的数据？",
+  title: "如果不使用脚手架， 如果用 webpack 构建一个自己的 react 应用",
   key_world: [
-    "定时清除本地存储",
+    "构建 react 应用",
+
     // "react constructor 作用",
     // "react getInitialState 作用",
     // "初始化 state",
   ],
   labels: [
     labels.application,
-    company.shopee,
+    company.quic,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

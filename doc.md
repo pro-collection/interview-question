@@ -3,8 +3,6 @@
 
 > 05.10
 
-- [「1.5w字总结」Web前端开发必知必会详尽知识手册](https://juejin.cn/post/7216174863447146552)
-- [使用 TypeScript 定义业务字典](https://juejin.cn/post/7187963986875252795)
 - https://juejin.cn/post/7194760495956492344
 - https://juejin.cn/post/7155354834877546532
 - https://juejin.cn/post/7119102104337121316

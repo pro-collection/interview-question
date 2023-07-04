@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "前端如何用 canvas 来做电影院选票功能",
+  title: "如何通过设置失效时间清除本地存储的数据？",
   key_world: [
+    "定时清除本地存储",
     // "react constructor 作用",
     // "react getInitialState 作用",
     // "初始化 state",
   ],
   labels: [
     labels.application,
-    company.netEase,
+    company.shopee,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

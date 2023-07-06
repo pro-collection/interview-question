@@ -7,17 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如果不使用脚手架， 如果用 webpack 构建一个自己的 react 应用",
+  title: "webpack 如何配置按需加载的模块",
   key_world: [
-    "构建 react 应用",
-
-    // "react constructor 作用",
-    // "react getInitialState 作用",
-    // "初始化 state",
+    "webpack 配置按需加载",
+    "webpack 按需加载",
+    "react lazy 加载"
   ],
   labels: [
     labels.application,
-    company.quic,
+    company.shopee,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

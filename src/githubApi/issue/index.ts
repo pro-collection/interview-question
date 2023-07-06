@@ -7,17 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "webpack 如何配置按需加载的模块",
+  title: "用 nodejs 实现一个命令行工具， 统计输入目录下面指定代码的行数",
   key_world: [
-    "webpack 配置按需加载",
-    "webpack 按需加载",
-    "react lazy 加载"
+    "统计指定目录下代码行数",
   ],
   labels: [
     labels.application,
-    company.shopee,
+    company.netEase,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

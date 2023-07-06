@@ -7,13 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "用 nodejs 实现一个命令行工具， 统计输入目录下面指定代码的行数",
+  title: "package.json 里面 sideEffects 属性的作用是啥",
   key_world: [
-    "统计指定目录下代码行数",
+    "sideEffects作用",
+    "package.json sideEffects 属性",
+    "webpack Tree Shaking 优化",
+    "Tree Shaking 优化"
   ],
   labels: [
     labels.application,
-    company.netEase,
+    company.jd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "package.json 里面 sideEffects 属性的作用是啥",
+  title: "[React] 合成事件和原生事件触发的先后顺序如何？",
   key_world: [
-    "sideEffects作用",
-    "package.json sideEffects 属性",
-    "webpack Tree Shaking 优化",
-    "Tree Shaking 优化"
+    // "sideEffects作用",
+    // "package.json sideEffects 属性",
+    // "webpack Tree Shaking 优化",
+    // "Tree Shaking 优化"
   ],
   labels: [
-    labels.application,
-    company.jd,
+    labels.frameWork,
+    // company.jd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

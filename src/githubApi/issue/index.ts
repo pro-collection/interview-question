@@ -7,18 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 函数组件和 class 组件有什么区别？",
+  title: "[React] ref 有哪些使用场景，请举例",
   key_world: [
-    "React函数组件对比类组件",
-    "React函数组件对比类组件性能",
-    "React函数组件对比类组件状态管理",
-    "React函数组件与类组件"
+    "ref 使用场景",
+    "ref 获取dom",
+    "ref 获取子组件属性和方法",
   ],
   labels: [
     labels.frameWork,
-    company.pdd,
+    company.mt,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

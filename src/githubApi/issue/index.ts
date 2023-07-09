@@ -7,20 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 合成事件和原生事件触发的先后顺序如何？",
+  title: "[React] 函数组件和 class 组件有什么区别？",
   key_world: [
-    "React合成事件、原生事件",
-    "事件执行先后顺序"
-    // "sideEffects作用",
-    // "package.json sideEffects 属性",
-    // "webpack Tree Shaking 优化",
-    // "Tree Shaking 优化"
+    "React函数组件对比类组件",
+    "React函数组件对比类组件性能",
+    "React函数组件对比类组件状态管理",
+    "React函数组件与类组件"
   ],
   labels: [
     labels.frameWork,
-    // company.jd,
+    company.pdd,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

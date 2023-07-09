@@ -9,6 +9,8 @@ import { omit } from "lodash";
 const remote = {
   title: "[React] 合成事件和原生事件触发的先后顺序如何？",
   key_world: [
+    "React合成事件、原生事件",
+    "事件执行先后顺序"
     // "sideEffects作用",
     // "package.json sideEffects 属性",
     // "webpack Tree Shaking 优化",

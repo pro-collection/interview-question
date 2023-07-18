@@ -7,15 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "下面代码的执行结果是多少（意义不大）",
+  title: "模拟new操作",
   key_world: [
-    // "ref 使用场景",
-    // "ref 获取dom",
-    // "ref 获取子组件属性和方法",
+    "模拟 new",
   ],
   labels: [
     labels.js,
-    // company.mt,
+    company.dd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

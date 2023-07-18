@@ -28,4 +28,5 @@ export const company = {
   netEase: "网易",
   shopee: "Shopee",
   quic: "快手",
+  dd: "滴滴",
 };

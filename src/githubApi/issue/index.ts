@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] ref 有哪些使用场景，请举例",
+  title: "下面代码的执行结果是多少（意义不大）",
   key_world: [
-    "ref 使用场景",
-    "ref 获取dom",
-    "ref 获取子组件属性和方法",
+    // "ref 使用场景",
+    // "ref 获取dom",
+    // "ref 获取子组件属性和方法",
   ],
   labels: [
-    labels.frameWork,
-    company.mt,
+    labels.js,
+    // company.mt,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

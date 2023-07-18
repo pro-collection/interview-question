@@ -1,86 +1,41 @@
-**关键词**：ref 使用场景、ref 获取dom、ref 获取子组件属性和方法
+**执行结果是多少， 为什么？**
 
-React的ref用于获取组件或DOM元素的引用。它有以下几个常见的使用场景：
-
-1. 访问子组件的方法或属性：通过ref可以获取子组件的实例，并调用其方法或访问其属性。
-
-```jsx
-import React, { useRef } from 'react';
-
-function ChildComponent() {
-  const childRef = useRef(null);
-
-  const handleClick = () => {
-    childRef.current.doSomething();
-  }
-
-  return (
-    <div>
-      <button onClick={handleClick}>Click</button>
-      <Child ref={childRef} />
-    </div>
-  );
+```js
+var foo = function () {
+console.log("foo1")
 }
+foo()
 
-const Child = React.forwardRef((props, ref) => {
-  const doSomething = () => {
-    console.log('Doing something...');
-  }
+var foo = function () {
+console.log("foo2")
+}
+foo()
 
-  // 将ref引用绑定到组件的实例
-  React.useImperativeHandle(ref, () => ({
-    doSomething
-  }));
 
-  return <div>Child Component</div>;
-});
+function foo() {
+console.log("foo1")
+}
+foo()
+
+function foo() {
+console.log("foo2")
+}
+foo()
 ```
 
-2. 获取DOM元素：通过ref可以获取组件渲染后的DOM元素，并进行操作。
-
-```jsx
-import React, { useRef } from 'react';
-
-function MyComponent() {
-  const inputRef = useRef(null);
-
-  const handleClick = () => {
-    inputRef.current.focus();
-  }
-
-  return (
-    <div>
-      <input ref={inputRef} type="text" />
-      <button onClick={handleClick}>Focus Input</button>
-    </div>
-  );
-}
+**执行结果是：**
+```
+foo1
+foo2
+foo2
+foo2
 ```
 
-3. 动态引用：通过ref可以在函数组件中动态地引用不同的组件或DOM元素。
+**原因:**
+首先，变量`foo`被赋值为一个函数表达式`function () { console.log("foo1") }`，然后立即调用`foo()`，输出结果为`foo1`。
 
-```jsx
-import React, { useRef } from 'react';
+接下来，变量`foo`再次被赋值为另一个函数表达式`function () { console.log("foo2") }`，然后再次调用`foo()`，输出结果为`foo2`。
 
-function MyComponent() {
-  const ref = useRef(null);
-  const condition = true;
+然后，函数声明`function foo() { console.log("foo1") }`被解析并提升到作用域的顶部，但由于变量`foo`已经被重新赋值为函数表达式，因此这个函数声明不会对变量`foo`产生影响。
 
-  const handleClick = () => {
-    ref.current.doSomething();
-  }
-
-  return (
-    <div>
-      {condition ? (
-        <ChildComponent ref={ref} />
-      ) : (
-        <OtherComponent ref={ref} />
-      )}
-      <button onClick={handleClick}>Click</button>
-    </div>
-  );
-}
-```
-
-这些例子展示了一些使用React的ref的常见场景，但实际上，ref的用途非常灵活，可以根据具体需求进行扩展和应用。
+最后，另一个函数声明`function foo() { console.log("foo2") }`也被解析并提升到作用域的顶部。然后再次调用`foo()`，由于变量`foo`指向最后一个函数声明，输出结果为`foo2`。这也说明了后面的函数声明覆盖了前面的函数声明。

@@ -1,33 +1,99 @@
-**关键词**：灰度上线
+**关键词**：自定义滚动条、自定义顶部滚动条
 
-这个是一个非常复杂的话题， 没法直接给出答案， 进提供一些实现的思路：
+要实现页面顶部的自定义滚动进度条样式，可以按照以下步骤进行：
 
-**什么是灰度**
+1. 在HTML中添加滚动进度条的容器元素，通常可以使用一个<div>元素作为容器，放在页面顶部的合适位置。
 
-灰度系统可以把流量划分成多份，一份走新版本代码，一份走老版本代码。
+```html
+<div id="scroll-progress"></div>
+```
 
-而且灰度系统支持设置流量的比例，比如可以把走新版本代码的流程设置为 5%，没啥问题再放到 10%，50%，最后放到 100% 全量。
+2. 在CSS中定义滚动进度条的样式。可以使用背景颜色、高度、透明度等属性来自定义样式。
 
-这样可以把出现问题的影响降到最低。
+```css
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background-color: #f00; /* 自定义进度条颜色 */
+  opacity: 0.7; /* 自定义进度条透明度 */
+  z-index: 9999; /* 确保进度条显示在最顶层 */
+}
+```
 
-而且灰度系统不止这一个用途，比如产品不确定某些改动是不是要的，就要做 AB 实验，也就是要把流量分成两份，一份走 A 版本代码，一份走 B 版本代码。
+3. 使用JavaScript来监听页面滚动事件，并更新滚动进度条的宽度。
+
+```javascript
+ var scrollProgress = document.getElementById('scroll-progress');
+var requestId;
+
+function updateScrollProgress() {
+  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+  var progress = (scrollTop / (scrollHeight - window.innerHeight)) * 100;
+  scrollProgress.style.width = progress + '%';
+  requestId = null;
+}
+
+function scrollHandler() {
+  if (!requestId) {
+    requestId = requestAnimationFrame(updateScrollProgress);
+  }
+}
+
+window.addEventListener('scroll', scrollHandler);
+```
+
+以上就是一个简单的实现页面顶部自定义滚动进度条样式的方法。根据自己的需求，可以调整CSS样式和JavaScript的逻辑来实现不同的效果。
 
 
-**实现思路**
+完整代码：
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>自定义滚动进度条样式</title>
+  <style>
+      #scroll-progress {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 5px;
+          background-color: #f00; /* 自定义进度条颜色 */
+          opacity: 0.7; /* 自定义进度条透明度 */
+          z-index: 9999; /* 确保进度条显示在最顶层 */
+      }
+  </style>
+</head>
+<body>
+<div id="scroll-progress"></div>
 
-1. 后端支持：灰度上线需要后端的支持，通过后端的灰度发布控制，可以将不同版本的前端应用分配给不同用户。
+<!-- 假设有很长的内容 -->
+<div style="height: 2000px;"></div>
 
-2. 搭建网关层： 支持一部分用户分发到 A 版本， 一部分用户分发到 B 版本 （通常使用 nginx 搭建）。
-   
-3. 版本管控机制： 使用版本控制系统（如Git、package.version、hash version 等）来管理不同版本的前端应用代码。在灰度上线时，可以根据需要切换到特定的版本。
+<script>
+  var scrollProgress = document.getElementById('scroll-progress');
+  var requestId;
 
-4. 动态路由：通过动态路由配置，将用户请求导向不同版本的前端应用。例如，可以使用Nginx或其他反向代理服务器来实现动态路由。
+  function updateScrollProgress() {
+    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+    var progress = (scrollTop / (scrollHeight - window.innerHeight)) * 100;
+    scrollProgress.style.width = progress + '%';
+    requestId = null;
+  }
 
-5. 流量染色：使用Cookie或Session来控制用户的灰度版本访问。可以通过设置不同的Cookie值或Session标记，将用户分配到不同的灰度版本。
+  function scrollHandler() {
+    if (!requestId) {
+      requestId = requestAnimationFrame(updateScrollProgress);
+    }
+  }
 
-6. 更复杂的漏量配置： 例如要根据部门、权限、角色等方式来开放灰度；可以使用让用户访问应用的时候， 查询其权限和角色， 根据权限和角色来分发不同的页面路由。
-
-
-**参考文档**
-
-- [基于 Nginx 实现一个灰度上线系统](https://juejin.cn/post/7250914419579944997)
+  window.addEventListener('scroll', scrollHandler);
+</script>
+</body>
+</html>
+```

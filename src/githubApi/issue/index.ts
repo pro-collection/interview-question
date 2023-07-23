@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何搭建一套灰度系统？",
+  title: "如何实现页面顶部， 自定义滚动进度条样式",
   key_world: [
-    '灰度上线'
+    "自定义滚动条",
+    "自定义顶部滚动条",
   ],
   labels: [
-    labels.engineering,
-    company.tencent,
+    labels.css,
+    company.quic,
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -7,13 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "模拟new操作",
+  title: "async/await 函数到底要不要加 try catch ?",
   key_world: [
-    "模拟 new",
+    "async/await函数",
+    "async/await函数 是否需要 try/catch",
+    "async/await函数 与 try/catch 关系",
+    "try/catch 使用场景",
   ],
   labels: [
     labels.js,
-    company.dd,
+    // company.dd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

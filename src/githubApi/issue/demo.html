@@ -1,1 +1,496 @@
-<div class="markdown prose w-full break-words dark:prose-invert dark"><p>当按照上述步骤定制前端代码规范时，可以按照以下详细步骤执行：</p><ol><li><p>选择代码规范工具：</p><ul><li>研究可用的代码规范工具，如 ESLint、Prettier 等。</li><li>比较各工具的功能、灵活性和社区支持，并选择最适合你团队和项目的工具。</li></ul></li><li><p>定义规范：</p><ul><li>针对项目的需求和团队的编码风格，制定代码规范的具体规则和约定。</li><li>参考行业内的代码规范，如 Airbnb JavaScript Style Guide、Google JavaScript Style Guide 等，以获取最佳实践和通用规则的参考。</li><li>考虑以下方面进行规范定义：<ul><li>缩进和空格：确定使用的缩进大小、空格还是制表符等。</li><li>命名约定：定义变量、函数、类、文件等的命名约定。</li><li>代码风格：确定代码的风格规则，如花括号的位置、换行符的使用等。</li><li>语法约定：定义应该使用的语言特性和语法约定，如使用严格模式、避免使用特定的语言功能等。</li></ul></li></ul></li><li><p>配置规范工具：</p><ul><li>创建代码规范工具的配置文件，如 <code>.eslintrc.js</code> 或 <code>.prettierrc</code>。</li><li>在配置文件中指定所选规范工具的规则和选项，根据定义的规范进行配置。</li><li>根据需要，可以启用或禁用不同的规则，并进行其他自定义配置。</li></ul></li><li><p>集成到开发环境：</p><ul><li>集成代码规范工具到开发环境，以实现自动检测和修复代码规范问题。</li><li>针对使用的编辑器或集成开发环境（IDE），安装相应的插件或扩展来支持代码规范检查和格式化。</li><li>配置构建工具（如 webpack）或版本控制系统（如 Git）的钩子，以在代码提交前运行代码规范检查。</li></ul></li><li><p>告知团队：</p><ul><li>与团队成员分享定制的代码规范，并解释规范的目的和重要性。</li><li>提供规范的文档或指南，以便团队成员参考和遵循。</li><li>组织一个会议或培训，介绍代码规范并解答团队成员的疑问。</li></ul></li><li><p>定期审查和更新：</p><ul><li>定期审查代码规范的有效性，并根据实际需求进行更新和调整。</li><li>接收团队成员的反馈和建议，以改进和优化代码规范。</li><li>在项目演进和技术发展的过程中，适时地更新代码规范以适应变化的需求。</li></ul></li></ol><p>以上步骤是一个通用的指南，你可以根据自己的团队和项目的特定要求进行调整和执行。此外，团队中的讨论和协商也是非常重要的，确保所有成员都参与到代码规范的制定和执行中。</p></div>
+<div itemprop="articleBody" class="article-content markdown-viewer" data-v-4ff8bdf2="">
+  <div class="markdown-body cache">
+    <style>.markdown-body {
+        word-break: break-word;
+        line-height: 1.75;
+        font-weight: 400;
+        font-size: 16px;
+        overflow-x: hidden;
+        color: #252933
+    }
+
+    .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+        line-height: 1.5;
+        margin-top: 35px;
+        margin-bottom: 10px;
+        padding-bottom: 5px
+    }
+
+    .markdown-body h1 {
+        font-size: 24px;
+        line-height: 38px;
+        margin-bottom: 5px
+    }
+
+    .markdown-body h2 {
+        font-size: 22px;
+        line-height: 34px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #ececec
+    }
+
+    .markdown-body h3 {
+        font-size: 20px;
+        line-height: 28px
+    }
+
+    .markdown-body h4 {
+        font-size: 18px;
+        line-height: 26px
+    }
+
+    .markdown-body h5 {
+        font-size: 17px;
+        line-height: 24px
+    }
+
+    .markdown-body h6 {
+        font-size: 16px;
+        line-height: 24px
+    }
+
+    .markdown-body p {
+        line-height: inherit;
+        margin-top: 22px;
+        margin-bottom: 22px
+    }
+
+    .markdown-body img {
+        max-width: 100%
+    }
+
+    .markdown-body hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin-top: 32px;
+        margin-bottom: 32px
+    }
+
+    .markdown-body code {
+        word-break: break-word;
+        border-radius: 2px;
+        overflow-x: auto;
+        background-color: #fff5f5;
+        color: #ff502c;
+        font-size: .87em;
+        padding: .065em .4em
+    }
+
+    .markdown-body code, .markdown-body pre {
+        font-family: Menlo, Monaco, Consolas, Courier New, monospace
+    }
+
+    .markdown-body pre {
+        overflow: auto;
+        position: relative;
+        line-height: 1.75
+    }
+
+    .markdown-body pre > code {
+        font-size: 12px;
+        padding: 15px 12px;
+        margin: 0;
+        word-break: normal;
+        display: block;
+        overflow-x: auto;
+        color: #333;
+        background: #f8f8f8
+    }
+
+    .markdown-body a {
+        text-decoration: none;
+        color: #0269c8;
+        border-bottom: 1px solid #d1e9ff
+    }
+
+    .markdown-body a:active, .markdown-body a:hover {
+        color: #275b8c
+    }
+
+    .markdown-body table {
+        display: inline-block !important;
+        font-size: 12px;
+        width: auto;
+        max-width: 100%;
+        overflow: auto;
+        border: 1px solid #f6f6f6
+    }
+
+    .markdown-body thead {
+        background: #f6f6f6;
+        color: #000;
+        text-align: left
+    }
+
+    .markdown-body tr:nth-child(2n) {
+        background-color: #fcfcfc
+    }
+
+    .markdown-body td, .markdown-body th {
+        padding: 12px 7px;
+        line-height: 24px
+    }
+
+    .markdown-body td {
+        min-width: 120px
+    }
+
+    .markdown-body blockquote {
+        color: #666;
+        padding: 1px 23px;
+        margin: 22px 0;
+        border-left: 4px solid #cbcbcb;
+        background-color: #f8f8f8
+    }
+
+    .markdown-body blockquote:after {
+        display: block;
+        content: ""
+    }
+
+    .markdown-body blockquote > p {
+        margin: 10px 0
+    }
+
+    .markdown-body ol, .markdown-body ul {
+        padding-left: 28px
+    }
+
+    .markdown-body ol li, .markdown-body ul li {
+        margin-bottom: 0;
+        list-style: inherit
+    }
+
+    .markdown-body ol li .task-list-item, .markdown-body ul li .task-list-item {
+        list-style: none
+    }
+
+    .markdown-body ol li .task-list-item ol, .markdown-body ol li .task-list-item ul, .markdown-body ul li .task-list-item ol, .markdown-body ul li .task-list-item ul {
+        margin-top: 0
+    }
+
+    .markdown-body ol ol, .markdown-body ol ul, .markdown-body ul ol, .markdown-body ul ul {
+        margin-top: 3px
+    }
+
+    .markdown-body ol li {
+        padding-left: 6px
+    }
+
+    .markdown-body .contains-task-list {
+        padding-left: 0
+    }
+
+    .markdown-body .task-list-item {
+        list-style: none
+    }
+
+    @media (max-width: 720px) {
+        .markdown-body h1 {
+            font-size: 24px
+        }
+
+        .markdown-body h2 {
+            font-size: 20px
+        }
+
+        .markdown-body h3 {
+            font-size: 18px
+        }
+    }</style>
+    <style data-highlight="" data-highlight-key="juejin">.markdown-body pre, .markdown-body pre > code.hljs {
+        color: #333;
+        background: #f8f8f8
+    }
+
+    .hljs-comment, .hljs-quote {
+        color: #998;
+        font-style: italic
+    }
+
+    .hljs-keyword, .hljs-selector-tag, .hljs-subst {
+        color: #333;
+        font-weight: 700
+    }
+
+    .hljs-literal, .hljs-number, .hljs-tag .hljs-attr, .hljs-template-variable, .hljs-variable {
+        color: teal
+    }
+
+    .hljs-doctag, .hljs-string {
+        color: #d14
+    }
+
+    .hljs-section, .hljs-selector-id, .hljs-title {
+        color: #900;
+        font-weight: 700
+    }
+
+    .hljs-subst {
+        font-weight: 400
+    }
+
+    .hljs-class .hljs-title, .hljs-type {
+        color: #458;
+        font-weight: 700
+    }
+
+    .hljs-attribute, .hljs-name, .hljs-tag {
+        color: navy;
+        font-weight: 400
+    }
+
+    .hljs-link, .hljs-regexp {
+        color: #009926
+    }
+
+    .hljs-bullet, .hljs-symbol {
+        color: #990073
+    }
+
+    .hljs-built_in, .hljs-builtin-name {
+        color: #0086b3
+    }
+
+    .hljs-meta {
+        color: #999;
+        font-weight: 700
+    }
+
+    .hljs-deletion {
+        background: #fdd
+    }
+
+    .hljs-addition {
+        background: #dfd
+    }
+
+    .hljs-emphasis {
+        font-style: italic
+    }
+
+    .hljs-strong {
+        font-weight: 700
+    }</style>
+    <p><em><strong>本文正在参加<a href="https://juejin.cn/post/7207698564641996856/"
+                            title="https://juejin.cn/post/7207698564641996856/" target="_blank">「金石计划」</a></strong></em>
+    </p>
+    <h2 data-id="heading-0">前言</h2>
+    <p>写异步函数的时候，promise 和 async 两种方案都非常常见，甚至同一个项目里，不同的开发人员都使用不同的习惯, 不过关于两者的比较不是本文关注的重点，只总结为一句话：“async 是异步编程的终极解决方案”。</p>
+    <p>当使用 async 函数的时候，很多文章都说建议用 <code>try catch</code> 来捕获异常, 可是实际上我看了很多项目的代码，遵循的并不是严谨，很多都没有用，甚至 catch 函数都没写，这是为什么呢？
+    </p>
+    <p>我们先看下使用 try catch 情况下的代码示例：</p>
+    <h2 data-id="heading-1">示例1 ：使用 try catch</h2>
+    <pre><div class="code-block-extension-header" style="background-color: rgb(248, 248, 248);"><div
+      class="code-block-extension-headerLeft"><div class="code-block-extension-foldBtn"><svg
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path
+      d="M16.924 9.617A1 1 0 0 0 16 9H8a1 1 0 0 0-.707 1.707l4 4a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 .217-1.09z"
+      data-name="Down"></path></svg></div></div><div class="code-block-extension-headerRight"><span
+      class="code-block-extension-lang">js</span><div
+      class="code-block-extension-copyCodeBtn">复制代码</div></div></div><code
+      class="hljs language-js code-block-extension-codeShowNum" lang="js"><span class="code-block-extension-codeLine"
+                                                                                data-line-num="1"><span
+      class="hljs-keyword">function</span> <span class="hljs-title function_">getUserInfo</span> () {</span>
+<span class="code-block-extension-codeLine" data-line-num="2">    <span class="hljs-keyword">return</span> <span
+  class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span
+  class="hljs-params">resolve, reject</span>) =&gt;</span> {</span>
+<span class="code-block-extension-codeLine" data-line-num="3">        <span
+  class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {</span>
+<span class="code-block-extension-codeLine" data-line-num="4">                <span
+  class="hljs-title function_">reject</span>(<span class="hljs-string">'请求异常'</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="5">        }, <span class="hljs-number">1000</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="6">    })</span>
+<span class="code-block-extension-codeLine" data-line-num="7">}</span>
+<span class="code-block-extension-codeLine" data-line-num="8"></span>
+<span class="code-block-extension-codeLine" data-line-num="9"><span class="hljs-keyword">async</span> <span
+  class="hljs-keyword">function</span> <span class="hljs-title function_">logined</span> () {</span>
+<span class="code-block-extension-codeLine" data-line-num="10">    <span class="hljs-keyword">try</span> {</span>
+<span class="code-block-extension-codeLine" data-line-num="11">        <span class="hljs-keyword">let</span> userInfo = <span
+  class="hljs-keyword">await</span> <span class="hljs-title function_">getUserInfo</span>()</span>
+<span class="code-block-extension-codeLine" data-line-num="12">        <span class="hljs-comment">// 执行中断</span></span>
+<span class="code-block-extension-codeLine" data-line-num="13">        <span class="hljs-keyword">let</span> pageInfo = <span
+  class="hljs-keyword">await</span> <span class="hljs-title function_">getPageInfo</span>(userInfo?.<span
+  class="hljs-property">userId</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="14">    } <span class="hljs-keyword">catch</span>(e) {</span>
+<span class="code-block-extension-codeLine" data-line-num="15">        <span
+  class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(e)</span>
+<span class="code-block-extension-codeLine" data-line-num="16">    }</span>
+<span class="code-block-extension-codeLine" data-line-num="17">}</span>
+<span class="code-block-extension-codeLine" data-line-num="18"></span>
+<span class="code-block-extension-codeLine" data-line-num="19"><span
+  class="hljs-title function_">logined</span>()</span>
+</code></pre>
+    <p>执行后会在 catch 里捕获 <code>请求异常</code>，然后 getUserInfo 函数中断执行，这是符合逻辑的，对于有依赖关系的接口，中断执行可以避免程序崩溃，这里唯一的问题是 try catch
+      貌似占据了太多行数，如果每个接口都写的话看起来略显冗余。</p>
+    <h2 data-id="heading-2">示例2： 直接 catch</h2>
+    <p>鉴于正常情况下，<code>await</code> 命令后面是一个 Promise 对象, 所以上面代码可以很自然的想到优化方案：</p>
+    <pre><div class="code-block-extension-header" style="background-color: rgb(248, 248, 248);"><div
+      class="code-block-extension-headerLeft"><div class="code-block-extension-foldBtn"><svg
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path
+      d="M16.924 9.617A1 1 0 0 0 16 9H8a1 1 0 0 0-.707 1.707l4 4a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 .217-1.09z"
+      data-name="Down"></path></svg></div></div><div class="code-block-extension-headerRight"><span
+      class="code-block-extension-lang">js</span><div
+      class="code-block-extension-copyCodeBtn">复制代码</div></div></div><code
+      class="hljs language-js code-block-extension-codeShowNum" lang="js"><span class="code-block-extension-codeLine"
+                                                                                data-line-num="1"><span
+      class="hljs-keyword">function</span> <span class="hljs-title function_">getUserInfo</span> () {</span>
+<span class="code-block-extension-codeLine" data-line-num="2">    <span class="hljs-keyword">return</span> <span
+  class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span
+  class="hljs-params">resolve, reject</span>) =&gt;</span> {</span>
+<span class="code-block-extension-codeLine" data-line-num="3">        <span
+  class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {</span>
+<span class="code-block-extension-codeLine" data-line-num="4">                <span
+  class="hljs-title function_">reject</span>(<span class="hljs-string">'请求异常'</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="5">        }, <span class="hljs-number">1000</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="6">    })</span>
+<span class="code-block-extension-codeLine" data-line-num="7">}</span>
+<span class="code-block-extension-codeLine" data-line-num="8"></span>
+<span class="code-block-extension-codeLine" data-line-num="9"><span class="hljs-keyword">async</span> <span
+  class="hljs-keyword">function</span> <span class="hljs-title function_">logined</span> () {</span>
+<span class="code-block-extension-codeLine" data-line-num="10">    <span
+  class="hljs-keyword">let</span> userInfo = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUserInfo</span>().<span
+  class="hljs-keyword">catch</span>(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> <span
+  class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(e))</span>
+<span class="code-block-extension-codeLine" data-line-num="11">    <span class="hljs-comment">// 执行没有中断，userInfo 为 undefined</span></span>
+<span class="code-block-extension-codeLine" data-line-num="12">    <span
+  class="hljs-keyword">if</span> (!userInfo) <span class="hljs-keyword">return</span> <span class="hljs-comment">// 需要做非空校验</span></span>
+<span class="code-block-extension-codeLine" data-line-num="13">    <span
+  class="hljs-keyword">let</span> pageInfo = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getPageInfo</span>(userInfo?.<span
+  class="hljs-property">userId</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="14">}</span>
+<span class="code-block-extension-codeLine" data-line-num="15"></span>
+<span class="code-block-extension-codeLine" data-line-num="16"><span
+  class="hljs-title function_">logined</span>()</span>
+</code></pre>
+    <p>执行后 catch 可以正常捕获异常，但是程序没有中断，返回值 <code>userInfo</code> 为 <code>undefined</code>, 所以如果这样写的话，就需要对返回值进行非空校验, <code>if
+      (!userInfo) return</code> 我觉得这样有点反逻辑，异常时就应该中断执行才对；</p>
+    <h2 data-id="heading-3">示例3：在 catch 里 reject</h2>
+    <p>可以继续优化，在 catch 里面加一行 <code>return Promise.reject(e)</code>, 可以使 await 中断执行；</p>
+    <p>完整代码：</p>
+    <pre><div class="code-block-extension-header" style="background-color: rgb(248, 248, 248);"><div
+      class="code-block-extension-headerLeft"><div class="code-block-extension-foldBtn"><svg
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path
+      d="M16.924 9.617A1 1 0 0 0 16 9H8a1 1 0 0 0-.707 1.707l4 4a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 .217-1.09z"
+      data-name="Down"></path></svg></div></div><div class="code-block-extension-headerRight"><span
+      class="code-block-extension-lang">js</span><div
+      class="code-block-extension-copyCodeBtn">复制代码</div></div></div><code
+      class="hljs language-js code-block-extension-codeShowNum" lang="js"><span class="code-block-extension-codeLine"
+                                                                                data-line-num="1"><span
+      class="hljs-keyword">function</span> <span class="hljs-title function_">getUserInfo</span> () {</span>
+<span class="code-block-extension-codeLine" data-line-num="2">    <span class="hljs-keyword">return</span> <span
+  class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span
+  class="hljs-params">resolve, reject</span>) =&gt;</span> {</span>
+<span class="code-block-extension-codeLine" data-line-num="3">        <span
+  class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {</span>
+<span class="code-block-extension-codeLine" data-line-num="4">            <span
+  class="hljs-title function_">reject</span>(<span class="hljs-string">'请求异常'</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="5">        }, <span class="hljs-number">1000</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="6">    })</span>
+<span class="code-block-extension-codeLine" data-line-num="7">}</span>
+<span class="code-block-extension-codeLine" data-line-num="8"></span>
+<span class="code-block-extension-codeLine" data-line-num="9"><span class="hljs-keyword">async</span> <span
+  class="hljs-keyword">function</span> <span class="hljs-title function_">logined</span> () {</span>
+<span class="code-block-extension-codeLine" data-line-num="10">    <span
+  class="hljs-keyword">let</span> userInfo = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUserInfo</span>().<span
+  class="hljs-keyword">catch</span>(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> {</span>
+<span class="code-block-extension-codeLine" data-line-num="11">        <span
+  class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(e)</span>
+<span class="code-block-extension-codeLine" data-line-num="12">        <span class="hljs-keyword">return</span> <span
+  class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(e) <span
+  class="hljs-comment">// 会导致控制台出现 uncaught (in promise) 报错信息</span></span>
+<span class="code-block-extension-codeLine" data-line-num="13">    })</span>
+<span class="code-block-extension-codeLine" data-line-num="14">    <span class="hljs-comment">// 执行中断</span></span>
+<span class="code-block-extension-codeLine" data-line-num="15">    <span
+  class="hljs-keyword">let</span> pageInfo = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getPageInfo</span>(userInfo?.<span
+  class="hljs-property">userId</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="16">}</span>
+<span class="code-block-extension-codeLine" data-line-num="17"></span>
+<span class="code-block-extension-codeLine" data-line-num="18"><span
+  class="hljs-title function_">logined</span>()</span>
+</code></pre>
+    <p>一般我们在项目里都是用 axios 或者 fetch 之类发送请求，会对其进行一个封装，也可以在里面进行 catch 操作，对错误信息先一步处理，至于是否需要 reject，就看你是否想要在 await
+      命令异常时候中断了；不使用 reject 则不会中断，但是需要每个接口拿到 response 后先 非空校验， 使用 reject 则会在异常处中断，并且会在控制台暴露 <code>uncaught (in
+        promise)</code> 报错信息。</p>
+    <p><img
+      src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e79d351eef5c45c9984273dcc48c36a0~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?"
+      alt="截屏2023-03-22 16.55.14.png" loading="lazy" class="medium-zoom-image"></p>
+    <h2 data-id="heading-4">建议</h2>
+    <p>不需要在 await 处异常时中断，可以这样写，需要做非空校验，控制台不会有报错信息</p>
+    <pre><div class="code-block-extension-header" style="background-color: rgb(248, 248, 248);"><div
+      class="code-block-extension-headerLeft"><div class="code-block-extension-foldBtn"><svg
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path
+      d="M16.924 9.617A1 1 0 0 0 16 9H8a1 1 0 0 0-.707 1.707l4 4a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 .217-1.09z"
+      data-name="Down"></path></svg></div></div><div class="code-block-extension-headerRight"><span
+      class="code-block-extension-lang">js</span><div
+      class="code-block-extension-copyCodeBtn">复制代码</div></div></div><code
+      class="hljs language-js code-block-extension-codeShowNum" lang="js"><span class="code-block-extension-codeLine"
+                                                                                data-line-num="1"><span
+      class="hljs-keyword">let</span> userInfo = <span class="hljs-keyword">await</span> <span
+      class="hljs-title function_">getUserInfo</span>().<span class="hljs-keyword">catch</span>(<span
+      class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span
+      class="hljs-title function_">warn</span>(e))</span>
+<span class="code-block-extension-codeLine" data-line-num="2"><span class="hljs-keyword">if</span> (!userInfo) <span
+  class="hljs-keyword">return</span></span>
+</code></pre>
+    <p>需要在 await 处异常时中断，并且在意控制台报错，可以这样写</p>
+    <pre><div class="code-block-extension-header" style="background-color: rgb(248, 248, 248);"><div
+      class="code-block-extension-headerLeft"><div class="code-block-extension-foldBtn"><svg
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path
+      d="M16.924 9.617A1 1 0 0 0 16 9H8a1 1 0 0 0-.707 1.707l4 4a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 .217-1.09z"
+      data-name="Down"></path></svg></div></div><div class="code-block-extension-headerRight"><span
+      class="code-block-extension-lang">js</span><div
+      class="code-block-extension-copyCodeBtn">复制代码</div></div></div><code
+      class="hljs language-js code-block-extension-codeShowNum" lang="js"><span class="code-block-extension-codeLine"
+                                                                                data-line-num="1"><span
+      class="hljs-keyword">try</span> {</span>
+<span class="code-block-extension-codeLine" data-line-num="2">    <span class="hljs-keyword">let</span> userInfo = <span
+  class="hljs-keyword">await</span> <span class="hljs-title function_">getUserInfo</span>()</span>
+<span class="code-block-extension-codeLine" data-line-num="3">    <span class="hljs-comment">// 执行中断</span></span>
+<span class="code-block-extension-codeLine" data-line-num="4">    <span class="hljs-keyword">let</span> pageInfo = <span
+  class="hljs-keyword">await</span> <span class="hljs-title function_">getPageInfo</span>(userInfo?.<span
+  class="hljs-property">userId</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="5">} <span class="hljs-keyword">catch</span>(e) {</span>
+<span class="code-block-extension-codeLine" data-line-num="6">    <span
+  class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(e)</span>
+<span class="code-block-extension-codeLine" data-line-num="7">}</span>
+<span class="code-block-extension-codeLine" data-line-num="8"></span>
+</code></pre>
+    <p>需要在 await 处异常时中断，但是不在意控制台报错，则可以这样写</p>
+    <pre><div class="code-block-extension-header" style="background-color: rgb(248, 248, 248);"><div
+      class="code-block-extension-headerLeft"><div class="code-block-extension-foldBtn"><svg
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path
+      d="M16.924 9.617A1 1 0 0 0 16 9H8a1 1 0 0 0-.707 1.707l4 4a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 .217-1.09z"
+      data-name="Down"></path></svg></div></div><div class="code-block-extension-headerRight"><span
+      class="code-block-extension-lang">js</span><div
+      class="code-block-extension-copyCodeBtn">复制代码</div></div></div><code
+      class="hljs language-js code-block-extension-codeShowNum" lang="js"><span class="code-block-extension-codeLine"
+                                                                                data-line-num="1"></span>
+<span class="code-block-extension-codeLine" data-line-num="2"><span class="hljs-keyword">let</span> userInfo = <span
+  class="hljs-keyword">await</span> <span class="hljs-title function_">getUserInfo</span>().<span class="hljs-keyword">catch</span>(<span
+  class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> {</span>
+<span class="code-block-extension-codeLine" data-line-num="3">    <span
+  class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(e)</span>
+<span class="code-block-extension-codeLine" data-line-num="4">    <span class="hljs-keyword">return</span> <span
+  class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(e) <span
+  class="hljs-comment">// 会导致控制台出现 uncaught (in promise) 报错信息</span></span>
+<span class="code-block-extension-codeLine" data-line-num="5">})</span>
+<span class="code-block-extension-codeLine" data-line-num="6"><span class="hljs-comment">// 执行中断</span></span>
+<span class="code-block-extension-codeLine" data-line-num="7"><span class="hljs-keyword">let</span> pageInfo = <span
+  class="hljs-keyword">await</span> <span class="hljs-title function_">getPageInfo</span>(userInfo?.<span
+  class="hljs-property">userId</span>)</span>
+<span class="code-block-extension-codeLine" data-line-num="8"></span>
+</code></pre>
+    <h2 data-id="heading-5">总结</h2>
+    <p>几种写法，初看可能觉得第三种 catch 这种写法是最好的，但是细想下，从用户体验上来看，我觉得 try catch 是最好的，逻辑直观、符合同步编程思维，控制台不会暴露 <code>uncaught (in
+      promise)</code> 报错信息；</p>
+    <p>而链式调用的 catch (里面再 reject)，是传统 promise 的回调写法，既然已经用 async await 这种同步编程写法了，再用 catch 链式写法，感觉没必要。</p>
+    <hr>
+    <p>文章更新平台：掘金首发<a href="https://juejin.cn/user/1151943916391965/posts"
+                     title="https://juejin.cn/user/1151943916391965/posts" target="_blank">【Ethan_Zhou】</a>，源码Github&nbsp;<a
+      href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fmingjiezhou%2Fnotes"
+      title="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fmingjiezhou%2Fnotes"
+      target="_blank">第二大脑</a>，知乎<a
+      href="https://link.juejin.cn/?target=https%3A%2F%2Fwww.zhihu.com%2Fpeople%2Fstone-56-94%2Fposts"
+      title="https://link.juejin.cn/?target=https%3A%2F%2Fwww.zhihu.com%2Fpeople%2Fstone-56-94%2Fposts" target="_blank">【Ethan
+      Zhou】</a>、公号【编码美学】酌情同步，若需转载，可加 v 1032151090 获取授权，也欢迎来交流。</p></div>
+</div>

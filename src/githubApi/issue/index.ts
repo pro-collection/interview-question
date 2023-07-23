@@ -7,18 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "async/await 函数到底要不要加 try catch ?",
+  title: "如何搭建一套灰度系统？",
   key_world: [
-    "async/await函数",
-    "async/await函数 是否需要 try/catch",
-    "async/await函数 与 try/catch 关系",
-    "try/catch 使用场景",
+    '灰度上线'
   ],
   labels: [
-    labels.js,
-    // company.dd,
+    labels.engineering,
+    company.tencent,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.master,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

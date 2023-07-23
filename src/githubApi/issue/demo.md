@@ -1,127 +1,33 @@
-**关键词**：async/await函数、async/await函数 是否需要 try/catch、async/await函数 与 try/catch 关系、try/catch 使用场景
+**关键词**：灰度上线
 
-当使用 async 函数的时候，很多文章都说建议用 `try catch` 来捕获异常, 可是实际上很多项目的代码，遵循的并不是严谨，很多都没有用，甚至 catch 函数都没写，这是为什么呢？
+这个是一个非常复杂的话题， 没法直接给出答案， 进提供一些实现的思路：
+
+**什么是灰度**
+
+灰度系统可以把流量划分成多份，一份走新版本代码，一份走老版本代码。
+
+而且灰度系统支持设置流量的比例，比如可以把走新版本代码的流程设置为 5%，没啥问题再放到 10%，50%，最后放到 100% 全量。
+
+这样可以把出现问题的影响降到最低。
+
+而且灰度系统不止这一个用途，比如产品不确定某些改动是不是要的，就要做 AB 实验，也就是要把流量分成两份，一份走 A 版本代码，一份走 B 版本代码。
 
 
-### 示例1 ：使用 try catch
+**实现思路**
 
-```javascript
-function getUserInfo () {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-                reject('请求异常')
-        }, 1000)
-    })
-}
+1. 后端支持：灰度上线需要后端的支持，通过后端的灰度发布控制，可以将不同版本的前端应用分配给不同用户。
 
-async function logined () {
-    try {
-        let userInfo = await getUserInfo()
-        // 执行中断
-        let pageInfo = await getPageInfo(userInfo?.userId)
-    } catch(e) {
-        console.warn(e)
-    }
-}
+2. 搭建网关层： 支持一部分用户分发到 A 版本， 一部分用户分发到 B 版本 （通常使用 nginx 搭建）。
+   
+3. 版本管控机制： 使用版本控制系统（如Git、package.version、hash version 等）来管理不同版本的前端应用代码。在灰度上线时，可以根据需要切换到特定的版本。
 
-logined()
-```
+4. 动态路由：通过动态路由配置，将用户请求导向不同版本的前端应用。例如，可以使用Nginx或其他反向代理服务器来实现动态路由。
 
-执行后会在 catch 里捕获 `请求异常`，然后 getUserInfo 函数中断执行，这是符合逻辑的，对于有依赖关系的接口，中断执行可以避免程序崩溃，这里唯一的问题是 try catch 貌似占据了太多行数，如果每个接口都写的话看起来略显冗余。
+5. 流量染色：使用Cookie或Session来控制用户的灰度版本访问。可以通过设置不同的Cookie值或Session标记，将用户分配到不同的灰度版本。
 
-### 示例2： 直接 catch
+6. 更复杂的漏量配置： 例如要根据部门、权限、角色等方式来开放灰度；可以使用让用户访问应用的时候， 查询其权限和角色， 根据权限和角色来分发不同的页面路由。
 
-鉴于正常情况下，`await` 命令后面是一个 Promise 对象, 所以上面代码可以很自然的想到优化方案：
 
-```javascript
-function getUserInfo () {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-                reject('请求异常')
-        }, 1000)
-    })
-}
+**参考文档**
 
-async function logined () {
-    let userInfo = await getUserInfo().catch(e => console.warn(e))
-    // 执行没有中断，userInfo 为 undefined
-    if (!userInfo) return // 需要做非空校验
-    let pageInfo = await getPageInfo(userInfo?.userId)
-}
-
-logined()
-```
-
-执行后 catch 可以正常捕获异常，但是程序没有中断，返回值 `userInfo` 为 `undefined`, 所以如果这样写的话，就需要对返回值进行非空校验, `if (!userInfo) return` 我觉得这样有点反逻辑，异常时就应该中断执行才对；
-
-### 示例3：在 catch 里 reject
-
-可以继续优化，在 catch 里面加一行 `return Promise.reject(e)`, 可以使 await 中断执行；
-
-完整代码：
-
-```javascript
-function getUserInfo () {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            reject('请求异常')
-        }, 1000)
-    })
-}
-
-async function logined () {
-    let userInfo = await getUserInfo().catch(e => {
-        console.warn(e)
-        return Promise.reject(e) // 会导致控制台出现 uncaught (in promise) 报错信息
-    })
-    // 执行中断
-    let pageInfo = await getPageInfo(userInfo?.userId)
-}
-
-logined()
-```
-
-一般我们在项目里都是用 axios 或者 fetch 之类发送请求，会对其进行一个封装，也可以在里面进行 catch 操作，对错误信息先一步处理，
-至于是否需要 reject，就看你是否想要在 await 命令异常时候中断了；
-不使用 reject 则不会中断，但是需要每个接口拿到 response 后先 非空校验， 使用 reject 则会在异常处中断，并且会在控制台暴露 `uncaught (in promise)` 报错信息。
-
-### 建议
-
-不需要在 await 处异常时中断，可以这样写，需要做非空校验，控制台不会有报错信息
-
-```javascript
-let userInfo = await getUserInfo().catch(e => console.warn(e))
-if (!userInfo) return
-```
-
-需要在 await 处异常时中断，并且在意控制台报错，可以这样写
-
-```javascript
-try {
-    let userInfo = await getUserInfo()
-    // 执行中断
-    let pageInfo = await getPageInfo(userInfo?.userId)
-} catch(e) {
-    console.warn(e)
-}
-
-```
-
-需要在 await 处异常时中断，但是不在意控制台报错，则可以这样写
-
-```javascript
-
-let userInfo = await getUserInfo().catch(e => {
-    console.warn(e)
-    return Promise.reject(e) // 会导致控制台出现 uncaught (in promise) 报错信息
-})
-// 执行中断
-let pageInfo = await getPageInfo(userInfo?.userId)
-
-```
-
-### 总结
-
-几种写法，初看可能觉得第三种 catch 这种写法是最好的，但是细想下，从用户体验上来看，我觉得 try catch 是最好的，逻辑直观、符合同步编程思维，控制台不会暴露 `uncaught (in promise)` 报错信息；
-
-而链式调用的 catch (里面再 reject)，是传统 promise 的回调写法，既然已经用 async await 这种同步编程写法了，再用 catch 链式写法，感觉没必要。
+- [基于 Nginx 实现一个灰度上线系统](https://juejin.cn/post/7250914419579944997)

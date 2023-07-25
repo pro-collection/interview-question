@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "script 标签上有那些属性，分别作用是啥？",
+  title: "如何冻结一个 JS 对象",
   key_world: [
-    "script 标签属性",
-    "script 标签属性作用",
-    "常用 script 标签属性",
+    "Object.freeze",
+    "Object.freeze作用",
+    "深度冻结对象",
   ],
   labels: [
-    labels.application,
+    labels.js,
     company.shopee,
   ],
   milestone: MileStone.inProgress,

@@ -7,14 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "proxy 有那些实际使用场景",
+  title: "script 标签上有那些属性，分别作用是啥？",
   key_world: [
-    "proxy 应用场景",
-    "proxy 作用是什么",
+    "script 标签属性",
+    "script 标签属性作用",
+    "常用 script 标签属性",
   ],
   labels: [
-    labels.js,
-    company.dd,
+    labels.application,
+    company.shopee,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -1,109 +1,32 @@
-**关键词**：proxy 应用场景、proxy 作用是什么
+**关键词**：script 标签属性、script 标签属性作用、常用 script 标签属性
 
-JavaScript的Proxy对象提供了一种拦截并定制JavaScript对象底层操作的机制。它允许你在对象上定义自定义行为，例如访问、赋值、函数调用等操作。Proxy对象包裹着目标对象，并拦截对目标对象的访问，使你能够自定义处理这些操作。
+在HTML中，`<script>`标签用于引入或嵌入JavaScript代码。`<script>`标签可以使用以下属性来调整脚本的行为：
 
-Proxy可以用于实现很多功能，包括：
+**常用属性**
 
-1. 属性验证和拦截：可以拦截对象属性的读取、写入和删除操作，并进行验证和处理。例如，你可以拦截对属性的访问，验证属性的值是否符合特定规则。
+1. `src`：指定要引入的外部JavaScript文件的URL。例如：`<script src="script.js"></script>`。通过这个属性，浏览器会下载并执行指定的外部脚本文件。
 
-2. 对象扩展和变形：可以拦截对象属性的读取和写入操作，并根据需求进行变形或扩展。例如，你可以在访问对象属性时，动态生成属性的值。
+2. `async`：可选属性，用于指示浏览器异步加载脚本。这意味着脚本会在下载的同时继续解析HTML文档，不会阻塞其他资源的加载。例如：`<script src="script.js" async></script>`。
 
-3. 函数调用的拦截：可以拦截函数的调用和构造，以便进行自定义处理。例如，你可以在函数调用之前或之后执行额外的逻辑。
+3. `defer`：可选属性，用于指示浏览器延迟执行脚本，直到文档解析完成。这样可以确保脚本在文档完全呈现之前不会执行。例如：`<script src="script.js" defer></script>`。
 
-4. 数组操作的拦截：可以拦截数组的操作，如push、pop、shift等，允许你对数组的操作进行自定义处理。例如，你可以在数组操作之后触发其他逻辑。
+4. `type`：指定脚本语言的MIME类型。通常是`text/javascript`或者`module`（用于ES6模块）。如果未指定该属性，浏览器默认将其视为JavaScript类型。例如：`<script type="text/javascript">...</script>`。
 
-通过使用Proxy对象，你可以拦截和修改对象的底层操作，实现更加灵活和定制化的行为。然而需要注意的是，Proxy对象的使用可能会导致性能上的一些影响，所以在使用时要谨慎考虑。
+5. `charset`：指定外部脚本文件的字符编码。例如：`<script src="script.js" charset="UTF-8"></script>`。
+
+6. `integrity`：用于指定外部脚本文件的Subresource Integrity（SRI）。SRI可以确保浏览器在加载脚本时验证其完整性，防止通过恶意更改文件来执行潜在的攻击。例如：`<script src="script.js" integrity="sha256-qznLcsROx4GACP2dm0UCKCzCG+HiZ1guq6ZZDob/Tng="></script>`。
+
+**不常用属性**
+
+7. `crossorigin`：正常的 script 元素将最小的信息传递给 window.onerror，用于那些没有通过标准 CORS 检查的脚本。要允许对静态媒体使用独立域名的网站进行错误记录，请使用此属性。参见 CORS 设置属性。
+
+8. `fetchpriority`：提供一个指示，说明在获取外部脚本时要使用的相对优先级。
+
+9. `nomodule`： 这个布尔属性被设置来标明这个脚本不应该在支持 ES 模块的浏览器中执行。实际上，这可用于在不支持模块化 JavaScript 的旧浏览器中提供回退脚本。
+
+10. `nonce`: 在 `script-src Content-Security-Policy (en-US)` 中允许脚本的一个一次性加密随机数（nonce）。服务器每次传输策略时都必须生成一个唯一的 nonce 值。提供一个无法猜测的 nonce 是至关重要。
+    
+11. `referrerpolicy`: 表示在获取脚本或脚本获取资源时，要发送哪个 referrer。
 
 
-**`Proxy`的实际使用场景有很多，以下是一些常见的示例**：
-
-1. 数据验证和过滤：你可以使用`Proxy`来拦截对对象属性的访问和修改，从而进行数据验证和过滤。例如，你可以使用`Proxy`来确保一个对象的属性只能是特定的类型或范围。
-
-```javascript
-const person = {
-  name: 'Alice',
-  age: 25
-};
-
-const personProxy = new Proxy(person, {
-  set(target, key, value) {
-    if (key === 'age' && (typeof value !== 'number' || value < 0)) {
-      throw new Error('Invalid age');
-    }
-
-    target[key] = value;
-    return true;
-  }
-});
-
-personProxy.age = -10; // 抛出错误：Invalid age
-```
-
-2. 计算属性：你可以使用`Proxy`来动态计算属性的值，而无需实际存储它们。这对于需要根据其他属性的值来计算衍生属性的情况非常有用。
-
-```javascript
-const person = {
-  firstName: 'Alice',
-  lastName: 'Smith'
-};
-
-const personProxy = new Proxy(person, {
-  get(target, key) {
-    if (key === 'fullName') {
-      return `${target.firstName} ${target.lastName}`;
-    }
-
-    return target[key];
-  }
-});
-
-console.log(personProxy.fullName); // Alice Smith
-```
-
-3. 资源管理和延迟加载：你可以使用`Proxy`来延迟加载资源，直到它们被真正需要。这在处理大型数据集或昂贵的资源时非常有用，可以节省内存和提高性能。
-
-```javascript
-const expensiveResource = {
-  // 一些昂贵的操作
-};
-
-const expensiveResourceProxy = new Proxy(expensiveResource, {
-  get(target, key) {
-    // 在需要的时候才加载资源
-    if (!target.loaded) {
-      target.load();
-      target.loaded = true;
-    }
-
-    return target[key];
-  }
-});
-
-console.log(expensiveResourceProxy.someProperty); // 加载资源并返回属性值
-```
-
-4. 日志记录和调试：你可以使用`Proxy`来记录对象属性的访问和修改，以便进行调试和日志记录。
-
-```javascript
-const person = {
-  name: 'Alice',
-  age: 25
-};
-
-const personProxy = new Proxy(person, {
-  get(target, key) {
-    console.log(`Getting property '${key}'`);
-    return target[key];
-  },
-  set(target, key, value) {
-    console.log(`Setting property '${key}' to '${value}'`);
-    target[key] = value;
-    return true;
-  }
-});
-
-personProxy.age; // 记录：Getting property 'age'
-personProxy.age = 30; // 记录：Setting property 'age' to '30'
-```
-
-这些只是`Proxy`的一些实际使用场景示例，`Proxy`的强大之处在于它提供了对对象的底层操作的拦截和自定义能力，可以根据具体需求进行灵活的应用。
+可以参考文档：https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/script

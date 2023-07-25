@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何实现页面顶部， 自定义滚动进度条样式",
+  title: "proxy 有那些实际使用场景",
   key_world: [
-    "自定义滚动条",
-    "自定义顶部滚动条",
+    "proxy 应用场景",
+    "proxy 作用是什么",
   ],
   labels: [
-    labels.css,
-    company.quic,
+    labels.js,
+    company.dd,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

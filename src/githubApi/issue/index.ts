@@ -7,16 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "onpopstate可以监听到一个pushstate的事件吗",
+  title: "一般项目里面对请求 request 都会做哪些统一封装？",
   key_world: [
-    "popstate",
+    "request封装",
+    "request封装功能",
+    "request封装作用",
     // "React 路由监听",
   ],
   labels: [
-    labels.chrome,
-    company.baidu,
+    labels.network,
+    company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

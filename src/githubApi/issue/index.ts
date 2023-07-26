@@ -7,14 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "为什么 SPA 应用都会提供一个 hash 路由，好处是什么？",
+  title: " HTML5 的 History API 进行导航时，页面真的进行了一个切换吗？",
   key_world: [
-    "hash路由优势",
-    "hash路由和history路由区别",
+    "History 导航",
+    "History 导航页面切换",
+    "History 页面切换",
   ],
   labels: [
-    labels.application,
-    company.quic,
+    labels.chrome,
+    company.dd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

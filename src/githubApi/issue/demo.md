@@ -1,18 +1,79 @@
-**关键词**：request封装、request封装功能、request封装作用
+**关键词**：defer函数、请求结果缓存在JS内存
 
-1. 统一处理错误：可以在请求封装中统一处理错误，例如网络错误、超时等，并进行统一的错误提示或处理逻辑。
-2. 统一处理认证和授权：可以在请求中添加认证信息，例如在请求头中添加 token，或者在每个请求中验证用户权限。
-3. 统一处理请求配置：可以在请求封装中设置一些全局的请求配置，例如请求超时时间、请求头部信息等。
-4. 统一处理请求拦截和响应拦截：可以在请求发送前和响应返回后进行一些统一的处理，例如请求拦截器可以添加 loading 状态，响应拦截器可以对返回数据进行预处理等。
-5. 统一处理请求取消：可以实现一个请求取消的机制，可以取消重复的请求或者在组件卸载时取消未完成的请求，避免造成资源浪费或者潜在的问题。
-6. 统一处理请求缓存：可以实现请求结果的缓存机制，可以在多次请求相同数据时，直接从缓存中获取，避免重复发送请求。
-7. 统一处理请求重试：在网络不稳定或请求失败时，可以设置请求重试的机制，可以通过封装请求函数来自动进行重试，提高请求的成功率。
-8. 统一处理请求日志：可以在请求封装中添加请求日志记录，方便追踪和排查问题。
-9. 统一处理请求埋点：可以在请求发送前后加入一些埋点逻辑，例如统计请求的次数、请求时长等，方便进行性能分析和优化。
-10. 统一处理请求参数加密：可以将敏感数据进行加密，并在请求封装中进行解密操作，提高数据安全性。
-11. 统一处理请求数据格式化：可以对请求的数据进行格式化，例如将请求参数转换为指定的数据格式（如 JSON、XML），或者进行数据的序列化和反序列化操作。
-12. 统一处理请求的并发限制：可以设置请求并发数的限制，避免同时发送过多的请求导致服务器压力过大。
-13. 统一处理请求的响应缓存：可以对请求的响应结果进行缓存，减少对服务器的请求压力，提高性能。
-14. 统一处理请求的重定向：可以对请求的重定向进行统一处理，例如自动跳转到指定的页面或进行指定的操作。
-15. 统一处理请求的跨域问题：可以在请求封装中对跨域请求进行处理，例如设置 CORS 头信息、使用代理等方式来解决跨域问题。
+最优解： **使用deferred思想来实现请求的等待队列，可以借助Promise和async/await语法**。
 
+下面是使用`deferred`思想来实现的代码示例：
+
+```javascript
+class Deferred {
+  constructor() {
+    this.promise = new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
+  }
+}
+
+// 创建一个全局的锁标识
+let lock = false;
+
+// 创建一个缓存对象
+const cache = {};
+
+// 创建一个等待队列数组
+const waitingRequests = [];
+
+// 封装请求函数
+async function request(url, params) {
+  const cacheKey = `${url}-${JSON.stringify(params)}`;
+
+  // 判断锁的状态
+  if (lock) {
+    const deferred = new Deferred();
+    // 如果锁已经被占用，将请求添加到等待队列中
+    waitingRequests.push({
+      deferred,
+      cacheKey
+    });
+    await deferred.promise;
+    return cache[cacheKey];
+  }
+
+  // 设置锁的状态为true，表示当前请求正在执行
+  lock = true;
+
+  try {
+    // 发起实际的请求
+    const response = await fetch(url, params);
+    const data = await response.json();
+    // 将结果存入缓存对象
+    cache[cacheKey] = data;
+    return data;
+  } finally {
+    // 释放锁，将锁的状态设置为false
+    lock = false;
+
+    // 处理等待队列中的请求
+    if (waitingRequests.length > 0) {
+      const request = waitingRequests.shift();
+      request.deferred.resolve(cache[request.cacheKey]);
+    }
+  }
+}
+
+// 调用请求函数
+request('https://api.example.com/data', { method: 'GET' })
+  .then(data => {
+    // 处理请求结果
+    console.log(data);
+  });
+
+// 同时发起另一个请求
+request('https://api.example.com/data', { method: 'GET' })
+  .then(data => {
+    // 直接从缓存中获取结果，而不发起实际的请求
+    console.log(data);
+  });
+```
+
+在上述代码中，`Deferred`类用于创建一个延迟对象，其中`promise`属性是一个`Promise`对象，`resolve`和`reject`方法分别用于解决和拒绝该延迟对象的`promise`。通过`await`关键字等待延迟对象的`promise`完成，当锁被占用时，将请求添加到等待队列中，并使用`await`等待对应的延迟对象的`promise`完成后再返回结果。当请求完成后，解锁并处理等待队列中的请求。

@@ -7,11 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "一般项目里面对请求 request 都会做哪些统一封装？",
+  title: "如何封装一个请求，让其多次调用的时候，实际只发起一个请求的时候，返回同一份结果",
   key_world: [
-    "request封装",
-    "request封装功能",
-    "request封装作用",
+    "defer函数",
+    "请求结果缓存在JS内存",
     // "React 路由监听",
   ],
   labels: [

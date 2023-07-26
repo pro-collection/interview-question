@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "typeof null 的输出结果是什么，为什么？",
+  title: "[Vue] Vue2.0 和 Vue3.0 有什么区别",
   key_world: [
-    "typeof null 输出结果",
+    // "typeof null 输出结果",
   ],
   labels: [
-    labels.js,
-    company.shopee,
+    labels.frameWork,
+    // company.netEase,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

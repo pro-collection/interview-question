@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Vue] Vue2.0 和 Vue3.0 有什么区别",
+  title: "[Vue] 你做过哪些性能优化",
   key_world: [
-    // "typeof null 输出结果",
+    "vue 项目优化",
+    "vue 开发优化",
   ],
   labels: [
     labels.frameWork,
-    // company.netEase,
+    company.shopee,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

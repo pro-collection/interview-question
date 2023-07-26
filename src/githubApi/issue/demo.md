@@ -1,34 +1,64 @@
-**关键词**：原生路由监听
+**关键词**：React 路由、React 路由监听
 
-在原生 JavaScript 中，可以使用 window 对象上的 popstate 事件来监听路由的变化。popstate 事件在浏览器的历史记录发生变化时触发，包括当用户点击浏览器的前进或后退按钮、调用 history.pushState() 或 history.replaceState() 方法等。
+在 React 中，你可以使用 React Router 库来进行路由变化的监听。React Router 是 React 的一个常用路由库，它提供了一组组件和 API 来帮助你在应用中管理路由。
 
-下面是一个简单的示例代码，演示如何使用 popstate 事件监听路由的变化：
+下面是一个示例代码，演示如何使用 React Router 监听路由的变化：
 
-```javascript
-// 监听 popstate 事件
-window.addEventListener('popstate', function(event) {
-  // 在这里可以执行路由变化后的处理逻辑
-  console.log('路由发生了变化');
-});
+然后，在你的 React 组件中，使用 BrowserRouter 或 HashRouter 组件包裹你的应用：
 
-// 修改 URL 并添加一条历史记录
-history.pushState(null, null, '/new-route');
+```jsx
+import React from 'react';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
 
-// 或者使用 history.replaceState() 方法替换当前历史记录
-// history.replaceState(null, null, '/new-route');
+function App() {
+  return (
+    // 使用 BrowserRouter 或 HashRouter 包裹你的应用
+    <BrowserRouter>
+      {/* 在这里编写你的应用内容 */}
+    </BrowserRouter>
+  );
+}
+
+export default App;
 ```
 
-在上面的代码中，当 popstate 事件触发时，回调函数会被执行。你可以在回调函数中添加适当的处理逻辑，例如更新页面内容、重新渲染视图等。
+当使用函数组件时，可以使用 `useEffect` 钩子函数来监听路由变化。下面是修改后的示例代码：
 
-需要注意的是，popstate 事件不会在页面加载时触发，因此如果你需要在页面加载时执行一些初始化的路由处理逻辑，可以将该逻辑封装为一个函数，并在加载时调用一次，然后再通过 popstate 事件监听路由的变化。
+```jsx
+import React, { useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 
-另外，还可以使用 history.state 属性来获取当前历史记录的状态对象，该对象可以在调用 history.pushState() 或 history.replaceState() 方法时传入。这样可以在 popstate 事件回调函数中访问和使用该状态对象。
+function MyComponent(props) {
+  useEffect(() => {
+    const handleRouteChange = (location, action) => {
+      // 路由发生变化时执行的处理逻辑
+      console.log('路由发生了变化', location, action);
+    };
 
-```javascript
-window.addEventListener('popstate', function(event) {
-  var state = history.state;
-  // 在这里可以访问和使用历史记录的状态对象
-});
+    // 在组件挂载后，添加路由变化的监听器
+    const unlisten = props.history.listen(handleRouteChange);
+
+    // 在组件卸载前，移除监听器
+    return () => {
+      unlisten();
+    };
+  }, [props.history]);
+
+  return (
+    <div>
+      {/* 在这里编写组件的内容 */}
+    </div>
+  );
+}
+
+// 使用 withRouter 高阶组件将路由信息传递给组件
+export default withRouter(MyComponent);
 ```
 
-通过监听 popstate 事件，可以在原生 JavaScript 中轻松地监听和响应路由的变化，从而实现相应的页面切换和处理逻辑。
+在上面的代码中，我们使用了 `useEffect` 钩子函数来添加路由变化的监听器。在 `useEffect` 的回调函数中，我们定义了 `handleRouteChange` 方法来处理路由变化的逻辑。然后，通过 `props.history.listen` 方法来添加监听器，并将返回的取消监听函数赋值给 `unlisten` 变量。
+
+同时，我们还在 `useEffect` 返回的清理函数中调用了 `unlisten` 函数，以确保在组件卸载时移除监听器。
+
+需要注意的是，由于 `useEffect` 的依赖数组中包含了 `props.history`，所以每当 `props.history` 发生变化时（即路由发生变化时），`useEffect` 的回调函数会被调用，从而更新路由变化的监听器。
+
+总结起来，通过使用 `useEffect` 钩子函数和 `props.history.listen` 方法，可以在函数组件中监听和响应路由的变化。

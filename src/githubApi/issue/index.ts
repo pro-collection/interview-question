@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "原生 js 如何进行监听路由的变化",
+  title: "[React] 如何进行路由变化监听",
   key_world: [
-    "原生路由监听",
+    "React 路由",
+    "React 路由监听",
   ],
   labels: [
-    labels.chrome,
-    company.netEase,
+    labels.application,
+    company.baidu,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

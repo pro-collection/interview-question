@@ -7,17 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何优化 DOM 树解析过程",
+  title: "实现管道函数",
   key_world: [
-    "DOM 树解析过程",
-    "DOM 树解析",
-    "优化 DOM 树解析",
+    "JS 管道函数",
+    "JS 管道函数实现",
   ],
   labels: [
-    labels.chrome,
-    // company.shopee,
+    labels.js,
+    company.shopee,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

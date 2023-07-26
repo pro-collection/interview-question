@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "实现管道函数",
+  title: "为什么 SPA 应用都会提供一个 hash 路由，好处是什么？",
   key_world: [
-    "JS 管道函数",
-    "JS 管道函数实现",
+    "hash路由优势",
+    "hash路由和history路由区别",
   ],
   labels: [
-    labels.js,
-    company.shopee,
+    labels.application,
+    company.quic,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

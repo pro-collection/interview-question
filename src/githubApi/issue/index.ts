@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 如何进行路由变化监听",
+  title: "onpopstate可以监听到一个pushstate的事件吗",
   key_world: [
-    "React 路由",
-    "React 路由监听",
+    "popstate",
+    // "React 路由监听",
   ],
   labels: [
-    labels.application,
+    labels.chrome,
     company.baidu,
   ],
   milestone: MileStone.inProgress,

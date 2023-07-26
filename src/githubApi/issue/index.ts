@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Vue] 你做过哪些性能优化",
+  title: "DOM 树解析过程",
   key_world: [
-    "vue 项目优化",
-    "vue 开发优化",
+    "DOM 树解析过程",
+    "DOM 树解",
   ],
   labels: [
-    labels.frameWork,
-    company.shopee,
+    labels.chrome,
+    // company.shopee,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

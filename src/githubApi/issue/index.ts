@@ -7,17 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何冻结一个 JS 对象",
+  title: "typeof null 的输出结果是什么，为什么？",
   key_world: [
-    "Object.freeze",
-    "Object.freeze作用",
-    "深度冻结对象",
+    "typeof null 输出结果",
   ],
   labels: [
     labels.js,
     company.shopee,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

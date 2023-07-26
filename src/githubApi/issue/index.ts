@@ -7,15 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: " HTML5 的 History API 进行导航时，页面真的进行了一个切换吗？",
+  title: "原生 js 如何进行监听路由的变化",
   key_world: [
-    "History 导航",
-    "History 导航页面切换",
-    "History 页面切换",
+    "原生路由监听",
   ],
   labels: [
     labels.chrome,
-    company.dd,
+    company.netEase,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

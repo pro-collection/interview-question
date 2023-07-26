@@ -1,14 +1,34 @@
-**关键词**：History 导航、History 导航页面切换、History 页面切换
+**关键词**：原生路由监听
 
-当使用 HTML5 的 History API 进行导航时，页面实际上没有进行完全的刷新。相反，只是通过 JavaScript 动态地更改 URL，并通过这个新的 URL 加载相应的内容。
+在原生 JavaScript 中，可以使用 window 对象上的 popstate 事件来监听路由的变化。popstate 事件在浏览器的历史记录发生变化时触发，包括当用户点击浏览器的前进或后退按钮、调用 history.pushState() 或 history.replaceState() 方法等。
 
-这种方式被称为前端路由，因为页面的切换是在前端处理的，而不是通过向服务器请求新的页面。在导航期间，浏览器会保留当前页面的状态和数据，以便在返回时恢复。
+下面是一个简单的示例代码，演示如何使用 popstate 事件监听路由的变化：
 
-这种页面切换的方式有以下几个特点：
-1. 前端渲染：页面的内容是通过 JavaScript 动态渲染的，可以实现无刷新的页面切换效果。
-2. 只加载部分内容：仅加载页面中需要更新的部分，而不是整个页面的内容。
-3. 保留页面状态：页面切换后，不会丢失当前页面的状态和数据，可以在返回时恢复。
+```javascript
+// 监听 popstate 事件
+window.addEventListener('popstate', function(event) {
+  // 在这里可以执行路由变化后的处理逻辑
+  console.log('路由发生了变化');
+});
 
-虽然页面实际上没有进行完全的切换和刷新，但对于用户而言，他们会感知到页面的切换效果，因为 URL 和页面内容发生了变化。这种方式能够提供更流畅的用户体验，并提高了应用的性能。
+// 修改 URL 并添加一条历史记录
+history.pushState(null, null, '/new-route');
 
-需要注意的是，使用 History API 进行导航时，需要确保服务器配置正确，以便在直接访问 URL 或刷新页面时能够正确地返回相应的内容。这通常需要在服务器端设置一个后备规则，以便将所有请求都指向应用的入口文件，例如 index.html，从而实现前端路由的正常工作。
+// 或者使用 history.replaceState() 方法替换当前历史记录
+// history.replaceState(null, null, '/new-route');
+```
+
+在上面的代码中，当 popstate 事件触发时，回调函数会被执行。你可以在回调函数中添加适当的处理逻辑，例如更新页面内容、重新渲染视图等。
+
+需要注意的是，popstate 事件不会在页面加载时触发，因此如果你需要在页面加载时执行一些初始化的路由处理逻辑，可以将该逻辑封装为一个函数，并在加载时调用一次，然后再通过 popstate 事件监听路由的变化。
+
+另外，还可以使用 history.state 属性来获取当前历史记录的状态对象，该对象可以在调用 history.pushState() 或 history.replaceState() 方法时传入。这样可以在 popstate 事件回调函数中访问和使用该状态对象。
+
+```javascript
+window.addEventListener('popstate', function(event) {
+  var state = history.state;
+  // 在这里可以访问和使用历史记录的状态对象
+});
+```
+
+通过监听 popstate 事件，可以在原生 JavaScript 中轻松地监听和响应路由的变化，从而实现相应的页面切换和处理逻辑。

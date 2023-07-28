@@ -7,17 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何封装一个请求，让其多次调用的时候，实际只发起一个请求的时候，返回同一份结果",
+  title: "TCP/IP五层协议是什么？",
   key_world: [
-    "defer函数",
+    "TCP/IP协议",
     "请求结果缓存在JS内存",
-    // "React 路由监听",
   ],
   labels: [
     labels.network,
-    company.alibaba,
+    company.mt,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

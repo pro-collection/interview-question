@@ -1,79 +1,15 @@
-**关键词**：defer函数、请求结果缓存在JS内存
+**关键词**：TCP/IP协议、请求结果缓存在JS内存
 
-最优解： **使用deferred思想来实现请求的等待队列，可以借助Promise和async/await语法**。
+当提到五层协议时，通常是指TCP/IP模型的五层协议，即物理层、数据链路层、网络层、传输层和应用层。下面是对每一层的详细解释以及一些应用场景的例子：
 
-下面是使用`deferred`思想来实现的代码示例：
+1. 物理层（Physical Layer）：物理层是网络通信的最底层，它负责传输比特流，将数据从一个节点通过物理介质传输到另一个节点。它包括了电缆、光纤、无线信号等物理媒介以及相关的传输设备和接口。应用场景包括有线以太网、Wi-Fi、蓝牙、光纤通信等。
 
-```javascript
-class Deferred {
-  constructor() {
-    this.promise = new Promise((resolve, reject) => {
-      this.resolve = resolve;
-      this.reject = reject;
-    });
-  }
-}
+2. 数据链路层（Data Link Layer）：数据链路层负责将比特流划分为数据帧，并提供可靠的数据传输。它通过物理地址（MAC地址）识别网络设备，进行数据传输的控制和错误检测。应用场景包括以太网、局域网（LAN）、无线局域网（WLAN）、以及网桥、交换机等设备。
 
-// 创建一个全局的锁标识
-let lock = false;
+3. 网络层（Network Layer）：网络层负责将数据包从源主机传输到目标主机，并提供寻址、路由选择和分组转发等功能。它使用IP（Internet Protocol）协议来实现这些功能，同时支持多种路由算法和IP寻址方案。常见的应用场景包括互联网、路由器、IP地址分配等。
 
-// 创建一个缓存对象
-const cache = {};
+4. 传输层（Transport Layer）：传输层负责在网络中的两个主机之间提供端到端的可靠或不可靠的数据传输。主要有TCP（Transmission Control Protocol）和UDP（User Datagram Protocol）两个协议。TCP提供可靠的数据传输，适用于需要保证数据完整性和顺序的应用场景，如网页浏览、文件传输等。UDP则提供不可靠但更快速的数据传输，适用于实时性要求较高的应用场景，如音视频传输、在线游戏等。
 
-// 创建一个等待队列数组
-const waitingRequests = [];
+5. 应用层（Application Layer）：应用层负责特定应用程序之间的通信服务。它定义了数据的格式和表示方式，包括HTTP（网页浏览）、FTP（文件传输）、SMTP（电子邮件）、DNS（域名系统）等协议。应用层协议提供了用户与网络之间的接口，使得应用程序能够通过网络进行通信。
 
-// 封装请求函数
-async function request(url, params) {
-  const cacheKey = `${url}-${JSON.stringify(params)}`;
-
-  // 判断锁的状态
-  if (lock) {
-    const deferred = new Deferred();
-    // 如果锁已经被占用，将请求添加到等待队列中
-    waitingRequests.push({
-      deferred,
-      cacheKey
-    });
-    await deferred.promise;
-    return cache[cacheKey];
-  }
-
-  // 设置锁的状态为true，表示当前请求正在执行
-  lock = true;
-
-  try {
-    // 发起实际的请求
-    const response = await fetch(url, params);
-    const data = await response.json();
-    // 将结果存入缓存对象
-    cache[cacheKey] = data;
-    return data;
-  } finally {
-    // 释放锁，将锁的状态设置为false
-    lock = false;
-
-    // 处理等待队列中的请求
-    if (waitingRequests.length > 0) {
-      const request = waitingRequests.shift();
-      request.deferred.resolve(cache[request.cacheKey]);
-    }
-  }
-}
-
-// 调用请求函数
-request('https://api.example.com/data', { method: 'GET' })
-  .then(data => {
-    // 处理请求结果
-    console.log(data);
-  });
-
-// 同时发起另一个请求
-request('https://api.example.com/data', { method: 'GET' })
-  .then(data => {
-    // 直接从缓存中获取结果，而不发起实际的请求
-    console.log(data);
-  });
-```
-
-在上述代码中，`Deferred`类用于创建一个延迟对象，其中`promise`属性是一个`Promise`对象，`resolve`和`reject`方法分别用于解决和拒绝该延迟对象的`promise`。通过`await`关键字等待延迟对象的`promise`完成，当锁被占用时，将请求添加到等待队列中，并使用`await`等待对应的延迟对象的`promise`完成后再返回结果。当请求完成后，解锁并处理等待队列中的请求。
+这些是TCP/IP五层协议的详细解释和一些常见的应用场景示例。通过分层的设计，这些协议能够协同工作，实现可靠、高效的网络通信。

@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "TCP/IP五层协议是什么？",
+  title: "浏览器本身是不支持模块化的, webpack 是如何通过文件打包，让浏览器可以读取到前端各个模块的代码的？",
   key_world: [
-    "TCP/IP协议",
-    "请求结果缓存在JS内存",
+    "webpack模块化",
+    "浏览器模块化支持",
   ],
   labels: [
-    labels.network,
+    labels.engineering,
     company.mt,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

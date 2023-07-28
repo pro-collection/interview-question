@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "浏览器本身是不支持模块化的, webpack 是如何通过文件打包，让浏览器可以读取到前端各个模块的代码的？",
+  title: "如何判断一个单向链表是否是循环链表?",
   key_world: [
-    "webpack模块化",
-    "浏览器模块化支持",
+    "循环链表",
   ],
   labels: [
-    labels.engineering,
+    labels.js,
     company.mt,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

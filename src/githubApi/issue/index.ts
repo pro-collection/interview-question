@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何判断一个单向链表是否是循环链表?",
+  title: "[React] hooks 和 memorizedState 是什么关系?",
   key_world: [
-    "循环链表",
+    "memorizedState",
+    "添加和管理状态",
   ],
   labels: [
     labels.js,
-    company.mt,
+    company.pdd,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.master,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] hooks 和 memorizedState 是什么关系?",
+  title: "[React] 如何给 children 添加额外的属性",
   key_world: [
-    "memorizedState",
-    "添加和管理状态",
+    "cloneElement",
+    "children 添加额外属性",
   ],
   labels: [
-    labels.js,
+    labels.frameWork,
     company.pdd,
   ],
   milestone: MileStone.master,

@@ -1,19 +1,14 @@
 ## 问题收集
 
-> 07.28
-
-- [滴滴前端一面常考手写面试题整理](https://juejin.cn/post/7205401322110812216)
 
  
 > 07.26
 
-- https://q.shanyue.tech/interview
+合计：https://q.shanyue.tech/interview
 
 
 > 05.10
 
-- https://juejin.cn/post/7194760495956492344
-- https://juejin.cn/post/7155354834877546532
 - https://juejin.cn/post/7119102104337121316
 
 

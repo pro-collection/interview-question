@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 如何给 children 添加额外的属性",
+  title: "never 是什么类型，详细讲一下",
   key_world: [
-    "cloneElement",
-    "children 添加额外属性",
+    "never类型",
+    "never类型应用",
   ],
   labels: [
-    labels.frameWork,
-    company.pdd,
+    labels.ts,
+    // company.pdd,
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

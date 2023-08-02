@@ -4,17 +4,10 @@
  
 > 07.26
 
-合计：https://q.shanyue.tech/interview
-
-
-> 05.10
-
-- https://juejin.cn/post/7119102104337121316
+合集：https://q.shanyue.tech/interview
 
 
 > 05.09
-
-
 
 - [重学 TS](https://juejin.cn/post/7211358106629750841)
 

@@ -1,25 +1,32 @@
-**关键词**：infer 关键字、infer 关键字作用
+**关键词**：is 谓词语法、is 语法作用
 
-在 TypeScript 中，`infer` 是一个用于条件类型中的关键字。它的作用是从待推断的类型中提取特定的类型，并将其赋值给一个类型变量。这个类型变量可以在条件类型的 `true` 分支中使用。
+在 TypeScript 中，`is` 是一种类型谓词（type predicate）语法。它用于在运行时对一个值的类型进行检查，并返回一个布尔值。
 
-通过使用 `infer` 关键字，我们可以实现一些高级的类型操作，比如从函数类型中提取参数类型、从数组类型中提取元素类型等。
+`is` 通常与条件类型和类型保护（type guards）一起使用。条件类型可以基于类型谓词 `is` 的结果来进行类型细化，从而在编译时获取更准确的类型推断。
 
-以下是一个示例，展示了如何使用 `infer` 关键字提取函数参数的类型：
+以下是一个示例，展示了如何使用 `is` 进行类型谓词检查：
 
 ```typescript
-type ParamType<T> = T extends (param: infer P) => any ? P : never;
-
-function foo(arg: number): void {
-  // ...
+function isString(value: unknown): value is string {
+  return typeof value === 'string';
 }
 
-type FooParam = ParamType<typeof foo>; // FooParam 的类型是 number
+function processValue(value: unknown): void {
+  if (isString(value)) {
+    console.log(value.toUpperCase());
+  } else {
+    console.log('Value is not a string.');
+  }
+}
+
+processValue('hello'); // 输出: HELLO
+processValue(42); // 输出: Value is not a string.
 ```
 
-在上述示例中，我们定义了一个条件类型 `ParamType<T>`，它接受一个泛型参数 `T`。在 `extends` 条件语句中，我们检查泛型参数 `T` 是否可以赋值给一个函数类型，并使用 `infer`
-关键字提取函数参数的类型并赋值给类型变量 `P`。如果不是函数类型，则返回 `never` 类型。
+在上述示例中，我们定义了一个 `isString` 函数，它接受一个 `unknown` 类型的值，并使用 `typeof` 运算符检查该值是否为字符串类型。函数返回一个布尔值，指示值是否为字符串类型。
 
-然后，我们定义了一个函数 `foo`，它接受一个 `number` 类型的参数。通过使用 `typeof foo`，我们获取函数 `foo` 的类型，并使用 `ParamType<typeof foo>`
-提取函数参数的类型，赋值给类型变量 `FooParam`。在本例中，`FooParam` 的类型为 `number`。
+然后，我们定义了一个 `processValue` 函数，它接受一个 `unknown` 类型的值，并通过调用 `isString` 函数进行类型谓词检查。如果值是字符串类型，就将其转换为大写并打印出来；否则，打印出值不是字符串类型的消息。
 
-因此，`infer` 是 TypeScript 中用于条件类型中的关键字，用于类型推断和提取特定类型的操作。
+最后，我们调用 `processValue` 函数两次，一次传入字符串 `'hello'`，一次传入数值 `42`。第一次调用输出 `HELLO`，表示字符串类型的值通过了类型谓词检查；第二次调用输出 `Value is not a string.`，表示数值类型的值未通过类型谓词检查。
+
+因此，`is` 是 TypeScript 中用于类型谓词检查的关键字，用于在运行时对一个值的类型进行判断，并返回一个布尔值。

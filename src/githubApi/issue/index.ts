@@ -7,10 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "infer 关键字是什么",
+  title: "is 作用是什么",
   key_world: [
-    "infer 关键字",
-    "infer 关键字作用",
+    "is 谓词语法",
+    "is 语法作用",
   ],
   labels: [
     labels.ts,

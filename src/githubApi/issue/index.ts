@@ -7,10 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "联合类型是什么？",
+  title: "extends 条件类型定义",
   key_world: [
-    "联合类型",
-    "联合类型应用",
+    "extends 类型继承",
+    "extends 条件类型定义",
   ],
   labels: [
     labels.ts,

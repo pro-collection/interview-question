@@ -1,20 +1,27 @@
-**关键词**：联合类型、联合类型应用
+**关键词**：extends 类型继承、extends 条件类型定义
 
-在 TypeScript 中，联合类型是指将多个类型组合到一起形成的新类型。联合类型使用 `|` 符号来表示，表示允许变量具有其中任意一个类型的值。
+在 TypeScript 中，`extends` 关键字不仅仅用于类之间的继承关系，还可以用于条件类型的定义。
 
-例如，可以声明一个变量为 `string | number` 类型，表示该变量可以是字符串类型或者数值类型。这样可以增加变量的灵活性，可以在不确定变量具体类型的情况下使用它。
+条件类型是一种在类型系统中根据条件进行推断的方式。通过使用 `extends` 关键字，可以根据给定的条件选择不同的类型。
 
-以下是一个使用联合类型的示例：
+以下是一个使用 `extends` 条件语句定义条件类型的示例：
 
 ```typescript
-function displayData(data: string | number) {
-  console.log(data);
-}
+type TypeName<T> =
+  T extends string ? "string" :
+    T extends number ? "number" :
+      T extends boolean ? "boolean" :
+        "unknown";
 
-displayData("Hello"); // 输出: Hello
-displayData(123); // 输出: 123
+let type1: TypeName<string>;  // 类型为 "string"
+let type2: TypeName<number>;  // 类型为 "number"
+let type3: TypeName<boolean>; // 类型为 "boolean"
+let type4: TypeName<object>;  // 类型为 "unknown"
 ```
 
-在上面的例子中，`displayData` 函数可以接受一个参数，该参数可以是字符串类型或者数值类型。函数内部使用 `console.log` 打印参数的值。
+在上面的例子中，我们定义了一个条件类型 `TypeName`，它根据给定的泛型类型 `T` 来选择不同的类型。如果 `T` 是 `string` 类型，那么返回值类型为 `"string"`；如果 `T` 是 `number`
+类型，那么返回值类型为 `"number"`；如果 `T` 是 `boolean` 类型，那么返回值类型为 `"boolean"`；否则返回值类型为 `"unknown"`。
 
-需要注意的是，在使用联合类型的情况下，只能访问所有类型共有的属性和方法，无法访问特定类型独有的属性和方法。如果需要针对不同类型执行不同的操作，可以使用类型断言或类型保护等技术来处理。
+通过上述定义，我们可以根据不同的类型获取它们的类型名称。例如，`type1` 的类型为 `"string"`，`type2` 的类型为 `"number"`，依此类推。
+
+注意，条件类型的定义中可以使用嵌套的 `extends` 关键字，以支持更复杂的条件判断。

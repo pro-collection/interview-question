@@ -24,6 +24,7 @@ export const writeToTemp = async (path = "./temp.md") => {
     value => value.replace(/jsxCopy code/gi, ""),
     value => value.replace(/```js\njs/gi, "```js\n"),
     value => value.replace(/```javascript\njs/gi, "```javascript\n"),
+    value => value.replace(/```typescript\ntypescript/gi, "```typescript\n"),
     value => value.replace(/\\. /gi, ". "),
     value => value.replace(/\\- /gi, "- "),
     value => value.replace(/复制代码/gi, ""),

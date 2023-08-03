@@ -7,10 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "unknown 是什么类型，详细讲一下",
+  title: "联合类型是什么？",
   key_world: [
-    "unknown类型",
-    "unknown类型应用",
+    "联合类型",
+    "联合类型应用",
   ],
   labels: [
     labels.ts,

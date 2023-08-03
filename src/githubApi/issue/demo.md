@@ -1,50 +1,20 @@
-**关键词**：unknown类型、unknown类型应用
+**关键词**：联合类型、联合类型应用
 
-**关键词**：unknown类型、unknown类型应用
+在 TypeScript 中，联合类型是指将多个类型组合到一起形成的新类型。联合类型使用 `|` 符号来表示，表示允许变量具有其中任意一个类型的值。
 
-**关键词**：unknown类型、unknown类型应用
+例如，可以声明一个变量为 `string | number` 类型，表示该变量可以是字符串类型或者数值类型。这样可以增加变量的灵活性，可以在不确定变量具体类型的情况下使用它。
 
-`unknown`指的是**不可预先定义的类型**，在很多场景下，它可以替代any的功能同时保留静态检查的能力。
-
-```typescript
-typescriptconst num: number = 10;
-(num as unknown as string).split('');          // 注意，这里和any一样完全可以通过静态检查
-```
-
-这个时候unknown的作用就跟any高度类似了，你可以把它转化成任何类型，不同的地方是，在静态编译的时候，unknown不能调用任何方法，而any可以。
+以下是一个使用联合类型的示例：
 
 ```typescript
-typescriptconst foo: unknown = 'string';
-foo.substr(1);           // Error: 静态检查不通过报错
-const bar: any = 10;
-bar.substr(1); 
-```
-
-unknown的一个使用场景是，避免使用any作为函数的参数类型而导致的静态类型检查bug：
-
-```typescript
-typescriptfunction test(input: unknown): number {
-  if (Array.isArray(input)) {
-    return input.length;    // Pass: 这个代码块中，类型守卫已经将input识别为array类型
-  }
-  return input.length;      // Error: 这里的input还是unknown类型，静态检查报错。如果入参是any，则会放弃检查直接成功，带来报错风险
+function displayData(data: string | number) {
+  console.log(data);
 }
+
+displayData("Hello"); // 输出: Hello
+displayData(123); // 输出: 123
 ```
 
-我们在一些无法确定函数参数（返回值）类型中 unknown 使用的场景非常多
+在上面的例子中，`displayData` 函数可以接受一个参数，该参数可以是字符串类型或者数值类型。函数内部使用 `console.log` 打印参数的值。
 
-```typescript
-typescript// 在不确定函数参数的类型时
-// 将函数的参数声明为unknown类型而非any
-// TS同样会对于unknown进行类型检测，而any就不会
-function resultValueBySome(val:unknown) { 
-  if (typeof val === 'string') {  
-    // 此时 val 是string类型   
-    // do someThing 
-  } else if (typeof val === 'number') { 
-    // 此时 val 是number类型   
-    // do someThing  
-  } 
-  // ...
-}
-```
+需要注意的是，在使用联合类型的情况下，只能访问所有类型共有的属性和方法，无法访问特定类型独有的属性和方法。如果需要针对不同类型执行不同的操作，可以使用类型断言或类型保护等技术来处理。

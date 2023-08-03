@@ -23,7 +23,7 @@ TS是一门语言，它拥有一套完整的基础语法，包括逻辑语句，
 于是我请教同事后见到的示例版本长这样：类似一个mergeClass的功能
 
 ```typescript
-typescriptexport type TypeJoin<A extends any[]> = A extends [infer R, ...infer L] ? R & TypeJoin<L> : A;
+export type TypeJoin<A extends any[]> = A extends [infer R, ...infer L] ? R & TypeJoin<L> : A;
 export type Class<A extends any[] = any[], I = any> = new (...args: A)=>I;
 export type ClassInstance<T> =T extends Class<any[], infer R> ? R : never;
 export type MixinType<O extends Class, T> = ClassInstance<O> & T;
@@ -108,7 +108,7 @@ a.sayHello();
 **never在联合类型中会被过滤掉：**
 
 ```typescript
-typescripttype Exclude<T, U> = T extends U ? never : T;
+type Exclude<T, U> = T extends U ? never : T;
 
 // 相当于: type A = 'a'
 type A = Exclude<'x' | 'a', 'x' | 'y' | 'z'>
@@ -121,7 +121,7 @@ T & never // 结果为never
 取一个映射类型中所有value为指定类型的key。例如，已知某个React组件的props类型，我需要“知道”（编程意义上）哪些参数是function类型。
 
 ```typescript
-typescriptinterface SomeProps {
+interface SomeProps {
     a: string
     b: number
     c: (e: MouseEvent) => void
@@ -141,7 +141,7 @@ type FunctionPropNames =  GetKeyByValueType<SomeProps, Function>;    // 'c' | 'd
 运算过程如下：
 
 ```typescript
-typescript// 开始
+// 开始
 {
     a: string
     b: number
@@ -166,7 +166,7 @@ never | never | 'c' | 'd'
 举个具体点的例子，当你有一个 union type:
 
 ```typescript
-typescriptinterface Foo {   type: 'foo' } 
+interface Foo {   type: 'foo' } 
 interface Bar {   type: 'bar' } 
 type All = Foo | Bar
 ```
@@ -174,7 +174,7 @@ type All = Foo | Bar
 在 switch 当中判断 type，TS 是可以收窄类型的 (discriminated union)：
 
 ```typescript
-typescriptfunction handleValue(val: All) {
+function handleValue(val: All) {
   switch (val.type) {
     case 'foo':
       // 这里 val 被收窄为 Foo
@@ -201,14 +201,14 @@ typescriptfunction handleValue(val: All) {
 unknown指的是**不可预先定义的类型**，在很多场景下，它可以替代any的功能同时保留静态检查的能力。
 
 ```typescript
-typescriptconst num: number = 10;
+const num: number = 10;
 (num as unknown as string).split('');          // 注意，这里和any一样完全可以通过静态检查
 ```
 
 这个时候unknown的作用就跟any高度类似了，你可以把它转化成任何类型，不同的地方是，在静态编译的时候，unknown不能调用任何方法，而any可以。
 
 ```typescript
-typescriptconst foo: unknown = 'string';
+const foo: unknown = 'string';
 foo.substr(1);           // Error: 静态检查不通过报错
 const bar: any = 10;
 bar.substr(1); 
@@ -217,7 +217,7 @@ bar.substr(1);
 unknown的一个使用场景是，避免使用any作为函数的参数类型而导致的静态类型检查bug：
 
 ```typescript
-typescriptfunction test(input: unknown): number {
+function test(input: unknown): number {
   if (Array.isArray(input)) {
     return input.length;    // Pass: 这个代码块中，类型守卫已经将input识别为array类型
   }
@@ -228,7 +228,7 @@ typescriptfunction test(input: unknown): number {
 我们在一些无法确定函数参数（返回值）类型中 unknown 使用的场景非常多
 
 ```typescript
-typescript// 在不确定函数参数的类型时
+// 在不确定函数参数的类型时
 // 将函数的参数声明为unknown类型而非any
 // TS同样会对于unknown进行类型检测，而any就不会
 function resultValueBySome(val:unknown) { 
@@ -246,7 +246,7 @@ function resultValueBySome(val:unknown) {
 ### 联合类型
 
 ```typescript
-typescripttype A<T> = T extends { a: infer U, b: infer U } ? U : any; 
+type A<T> = T extends { a: infer U, b: infer U } ? U : any; 
 type Foo = A<{ a: number, b: string }> // type Foo = string | number
 ```
 
@@ -255,7 +255,7 @@ type Foo = A<{ a: number, b: string }> // type Foo = string | number
 ### 函数类型
 
 ```typescript
-typescripttype FnType = (x: number, y: number) => number
+type FnType = (x: number, y: number) => number
 
 function fn(): number {
   return 1
@@ -282,7 +282,7 @@ const obj = {
 **重载签名的类型不会合并：**
 
 ```typescript
-typescript// 重载签名（函数类型定义）
+// 重载签名（函数类型定义）
 function toString(x: string): string;
 function toString(x: number): string;
 
@@ -307,7 +307,7 @@ toString(input) // error
 链式的函数可以在返回函数中再添加范型
 
 ```typescript
-typescripttype Join<T extends string[], U extends string, Acc extends string = ''> = 
+type Join<T extends string[], U extends string, Acc extends string = ''> = 
 T extends [infer First extends string, ...infer Rest extends string[]]
 ? Rest extends []
   ? `${Acc}${First}`
@@ -329,7 +329,7 @@ join('#')('a', 'b', 'c') // = 'a#b#c'
 举例： Overwrite<T, U>从U中的同名属性的类型覆盖T中的同名属性类型。(后者中的同名属性覆盖前者)
 
 ```typescript
-typescript/**
+/**
  * Overwrite实现
  * 获取前者独有的key和类型，再取两者共有的key和该key在后者中的类型，最后合并。
  */
@@ -372,7 +372,7 @@ type Eg = Overwrite<{key1: number, other: boolean}, {key1: string}>
 ### 数组
 
 ```typescript
-typescripttype LoopArr<T extends any[]> = T extends [infer P, ...infer R]
+type LoopArr<T extends any[]> = T extends [infer P, ...infer R]
 // can do something with P
 ? [P, ...LoopArr<R>]
 : [];
@@ -385,7 +385,7 @@ typescripttype LoopArr<T extends any[]> = T extends [infer P, ...infer R]
 ### 字符串
 
 ```typescript
-typescripttype LoopStr<T extends string> = T extends `${infer P}${infer R}`
+type LoopStr<T extends string> = T extends `${infer P}${infer R}`
 // can do something with P
 ? `${P}${LoopStr<R>}`
 : '';
@@ -400,7 +400,7 @@ typescripttype LoopStr<T extends string> = T extends `${infer P}${infer R}`
 初学者一定对class这种类型感到困惑，因为他们有时候代表类的实例类型，有时候代表构造器方法类型
 
 ```typescript
-typescript/**
+/**
  * 定义一个类
  */
 class People {
@@ -454,7 +454,7 @@ const p4: typeof People = People;
 如果你打算通过构造函数以外的其他方式去初始化类中的字段 (例如，也许外部库一定会帮你填充类的一部分)，则可以使用 确定赋值断言运算符 `!`，它只能被用在你确定安全的地方
 
 ```typescript
-typescriptclass OKGreeter {
+class OKGreeter {
   // Not initialized, but no error
   name!: string;
 }Try
@@ -465,7 +465,7 @@ typescriptclass OKGreeter {
 当 `target >= ES2022` 或者 配置文件里的 `useDefineForClassFields`是 `true`时, 类字段在父类构造函数完成后初始化，覆盖父类设置的任何值。当您只想为继承的字段重新声明更准确的类型时，这可能是一个问题。要处理这些情况，你可以写 声明 向TypeScript指示此字段声明不应有运行时效果。
 
 ```typescript
-typescriptinterface Animal {
+interface Animal {
   dateOfBirth: any;
 }
 
@@ -495,7 +495,7 @@ class DogHouse extends AnimalHouse {
 TypeScript提供了特殊的语法，用于将构造函数参数转换为具有相同名称和值的类属性。这些叫做 `parameter properties` ，是通过在构造函数参数之前加上可见性修饰符之一来创建的： `public`, `private`, `protected`, `readonly`，这种做法代码上比较简洁：
 
 ```typescript
-typescriptclass Params {
+class Params {
   constructor(
     public readonly x: number,
     protected y: number,
@@ -519,7 +519,7 @@ console.log(a.z);Property 'z' is private and only accessible within class 'Param
 is 关键字用在函数的返回值上，用来表示对于函数返回值的类型保护。
 
 ```typescript
-typescriptfunction isString (value) {
+function isString (value) {
   return Object.prototype.toString.call(value) === '[object String]'
 }
 
@@ -550,7 +550,7 @@ function fn (x: string | number) {
 但总有些类型是不能依靠typeof的能力的，譬如朋友提出的这个：
 
 ```typescript
-typescriptinterface TA {
+interface TA {
   a: number
 }
 
@@ -567,7 +567,7 @@ function cookTest(val: TA | TB) {
 这时候is就可以用起来了：
 
 ```typescript
-typescriptinterface TA {
+interface TA {
   a: number
 }
 
@@ -593,7 +593,7 @@ function cookTest(val: TA | TB) {
 TS中引入了两个修饰符来**精确控制**添加或者移除映射属性的 "?" 修饰符和 readonly 修饰符
 
 ```typescript
-typescripttype T0<T> = { -readonly [P in keyof T]-?: T[P] }; 
+type T0<T> = { -readonly [P in keyof T]-?: T[P] }; 
 type T1<T> = { +readonly [P in keyof T]+?: T[P] };
 ```
 
@@ -609,14 +609,14 @@ type T1<T> = { +readonly [P in keyof T]+?: T[P] };
 当子类型与父类型组成联合类型时，实际效果等于父类型。例如：
 
 ```typescript
-typescripttype A = number | 1; // number 
+type A = number | 1; // number 
 type B = never | string; // string （never 前面说了是所有类型的子类型）
 ```
 
 利用`never | others = others`的特性可以实现object的过滤，譬如：
 
 ```typescript
-typescripttype ExtractFun<T> = {
+type ExtractFun<T> = {
   [key in keyof T]: T[key] extends Function ? key: never;
 }[keyof T];
 
@@ -644,7 +644,7 @@ test0 = {
 in可以解决：`An index signature parameter type cannot be a literal type or generic type` ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f641b3b82b424091af68ada30ec505c2~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
 
 ```typescript
-typescripttype name = 'firstName' | 'lastName';
+type name = 'firstName' | 'lastName';
 type TName = {
   [key in name]: string;
 };
@@ -658,7 +658,7 @@ interface 和 type 两个关键字因为其功能比较接近，常常引起新�
 * 自身只能表示object/class/function的类型 ::: 建议**库的开发者所提供的公共api应该尽量用interface/class**，方便使用者自行扩展。举个例子，monaco缺失了一些需要的API，所以需要手动polyfill一下。
 
 ```typescript
-typescript/**
+/**
  * Cloud Studio使用的monaco版本较老0.14.3，和官方文档相比缺失部分功能
  * 另外vscode有一些特有的功能，必须适配
  * 故在这里手动实现作为补充
@@ -683,7 +683,7 @@ monaco.Position.prototype.delta = function (this: monaco.Position, deltaLineNumb
 * 支持更复杂的类型操作 ::: 基本上所有用interface表达的类型都有其等价的type表达。但在实践的过程中，也发现了一种类型只能用interface表达，无法用type表达，那就是往函数上挂载属性。
 
 ```typescript
-typescriptinterface FuncWithAttachment {
+interface FuncWithAttachment {
     (param: string): boolean;
     someProperty: number;
 }
@@ -707,14 +707,14 @@ from [《TypeScript中高级应用与最佳实践》](https://juejin.cn/post/684
 具体有两种方式，declare和三斜线指令。
 
 ```typescript
-typescriptdeclare const IS_MOBILE = true;    // 编译后此行消失 
+declare const IS_MOBILE = true;    // 编译后此行消失 
 const wording = IS_MOBILE ? '移动端' : 'PC端'; 
 ```
 
 用三斜线指令可以一次性引入整个类型声明文件。
 
 ```typescript
-typescript/// <reference path="../typings/monaco.d.ts" /> 
+/// <reference path="../typings/monaco.d.ts" /> 
 const range = new monaco.Range(2, 3, 6, 7);
 ```
 
@@ -737,7 +737,7 @@ const range = new monaco.Range(2, 3, 6, 7);
 > 具有父子关系的多个类型，在通过某种构造关系构造成的新的类型，如果还具有父子关系则是协变的，而关系逆转了（子变父，父变子）就是逆变的
 
 ```typescript
-typescriptinterface Animal {
+interface Animal {
   name: string;
 }
 
@@ -791,7 +791,7 @@ A ≼ B 意味着 A 是 B 的子类型。
 函数的参数类型赋值就被称为逆变，参数少（父）的可以赋给参数多（子）的那一个。看起来和类型兼容性（多的可以赋给少的）相反。为什么？？？不理解这种反安全性的设计
 
 ```typescript
-typescriptlet fn1!: (a: string, b: number) => void;
+let fn1!: (a: string, b: number) => void;
 let fn2!: (a: string, b: number, c: boolean) => void;
 fn2 = fn1; // 正确，被允许
 fn1 = fn2 // error
@@ -799,7 +799,7 @@ fn1 = fn2 // error
 ```
 
 ```typescript
-typescripttype IParent = () => void;
+type IParent = () => void;
 type IChild = (val: string) => void;
 
 let parentTest: IParent = () => {};
@@ -822,7 +822,7 @@ let childTest2: IChild = () => { }; // ok
 **函数类型赋值兼容时函数的返回值就是典型的协变场景**
 
 ```typescript
-typescriptlet fn1!: (a: string, b: number) => string;
+let fn1!: (a: string, b: number) => string;
 let fn2!: (a: string, b: number) => string | number | boolean;
 fn2 = fn1; // correct 
 fn1 = fn2 // error: 不可以将 string|number|boolean 赋给 string 类型
@@ -835,7 +835,7 @@ fn1 = fn2 // error: 不可以将 string|number|boolean 赋给 string 类型
 * infer推导的名称相同并且都处于**逆变**的位置，则推导的结果将会是**交叉类型**。
 
 ```typescript
-typescripttype Bar<T> = T extends {
+type Bar<T> = T extends {
   a: (x: infer U) => void;
   b: (x: infer U) => void;
 } ? U : never;
@@ -850,7 +850,7 @@ type T2 = Bar<{ a: (x: string) => void; b: (x: number) => void }>;
 * infer推导的名称相同并且都处于**协变**的位置，则推导的结果将会是**联合类型**。
 
 ```typescript
-typescripttype Foo<T> = T extends {
+type Foo<T> = T extends {
   a: infer U;
   b: infer U;
 } ? U : never;
@@ -865,7 +865,7 @@ type T2 = Foo<{ a: string; b: number }>;
 ### 🤭一个不能理解的例子
 
 ```typescript
-typescript// lib.dom.d.ts中EventListener的接口定义
+// lib.dom.d.ts中EventListener的接口定义
 interface EventListener {
   (evt: Event): void;
 }
@@ -908,7 +908,7 @@ window.addEventListener('mouseover', (e: MouseEvent) => {});
 ### 数组是对象的一种
 
 ```typescript
-typescript// Ts 示例：希望 [1, () => number, string] 能够被处理成 [1, number, string]
+// Ts 示例：希望 [1, () => number, string] 能够被处理成 [1, number, string]
 // 对象遍历的方式
 type GetType1<T extends any[]> = {
   [K in keyof T]: T[K] extends () => infer R ? R : T[K]
@@ -926,7 +926,7 @@ type GetType1Test = GetType1<[1, () => number, string]>;
 在某些情况下，JavaScript类初始化的顺序可能令人惊讶。让我们考虑一下这段代码:
 
 ```typescript
-typescriptclass Base {
+class Base {
   name = "base";
   constructor() {
     console.log("My name is " + this.name);
@@ -957,7 +957,7 @@ keyof 索引查询
 对应任何类型T, keyof T的结果为该类型上所有公有属性key的联合：
 
 ```typescript
-typescriptinterface Eg1 {
+interface Eg1 {
   name: string,
   readonly age: number,
 }
@@ -977,7 +977,7 @@ type T2 = keyof Eg2
 索引访问：
 
 ```typescript
-typescriptinterface Eg1 {
+interface Eg1 {
   name: string,
   readonly age: number,
 }
@@ -999,7 +999,7 @@ type V3 = Eg1[keyof Eg1]
 ### 💥条件类型的分布式特性
 
 ```typescript
-typescript/**
+/**
  * @example
  * type A1 = 1
  */
@@ -1030,7 +1030,7 @@ type A3 = P<'x' | 'y'>
 如果不想被分解（分发），做法也很简单，可以通过简单的元组类型包裹以下：
 
 ```typescript
-typescripttype P<T> = [T] extends ['x'] ? 1 : 2;
+type P<T> = [T] extends ['x'] ? 1 : 2;
 /**
  * type A4 = 2;
  */
@@ -1040,7 +1040,7 @@ type A4 = P<'x' | 'y'>
 ### 赋值
 
 ```typescript
-typescriptinterface testA {
+interface testA {
   findElementById: IInterfaces['findElementById'];
   extractMention: IInterfaces['extractMention'];
 }
@@ -1059,7 +1059,7 @@ let testa: testA;
 enum在TS中出现的比较早，它引入了JavaScript没有的数据结构（编译成一个双向map），入侵了运行时，与TypeScript宗旨不符。用 string literal union（'small' | 'big' | 'large'）可以做到相同的事，且在debug时可读性更好。如果很在意条件比较的性能，应该用二进制flag加位运算。
 
 ```typescript
-typescript// TypeScript
+// TypeScript
 enum Size {
     small = 3,
     big,
@@ -1083,7 +1083,7 @@ const a = Size.large; // 5
 子类型中必须包含源类型所有的属性和方法:
 
 ```typescript
-typescriptfunction getPointX(point: { x: number }) {
+function getPointX(point: { x: number }) {
   return point.x
 }
 
@@ -1098,7 +1098,7 @@ getPointX(point) // OK
 **注意**: 如果直接传入一个对象字面量是会报错的：
 
 ```typescript
-typescriptfunction getPointX(point: { x: number }) {
+function getPointX(point: { x: number }) {
   return point.x
 }
 
@@ -1118,7 +1118,7 @@ getPointX({ x: 1, y: '2' }) // error
 数组可以直接用类似js的`[infer start, ...infer M, infer end]`来获得一个数组的第一个和最后一个值。 字符串也是`${infer L}${infer M}${infer R}`，但注意这里L是第一个字符，M是第二个字符，R是剩下的字符，如果字符只有2个，则R是''，如果字符只有一位，则无法这么拆解成3个变量，`T extends`<math><semantics><mrow><mi>i</mi><mi>n</mi><mi>f</mi><mi>e</mi><mi>r</mi><mi>L</mi></mrow><annotation>{infer L}</annotation></semantics></math>inferL{infer M}${infer R}\`\`条件会走到false的语句里去，这一点比较奇怪。
 
 ```typescript
-typescript// 15 实现一个通用Last<T>，它接受一个数组T并返回其最后一个元素的类型。
+// 15 实现一个通用Last<T>，它接受一个数组T并返回其最后一个元素的类型。
 type Last<T extends any[]> = T extends [...infer B, infer P] ? P : never;
 
 type arr1 = ['a', 'b', 'c']
@@ -1145,7 +1145,7 @@ Replace的用法可见字符串拆解时，变量位置明确时可以是多个�
 类似结构的联合类型可以直接通过extends条件语句遍历到
 
 ```typescript
-typescriptinterface Cat {
+interface Cat {
   type: 'cat'
   breeds: 'Abyssinian' | 'Shorthair' | 'Curl' | 'Bengal'
 }
@@ -1164,7 +1164,7 @@ type MyDog = LookUp<Cat | Dog, 'dog'> // expected to be `Dog`
 这个特性可以做些变态的事了，譬如把联合类型组成笛卡尔积的数组，直接看：[github.com/type-challe…](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Ftype-challenges%2Ftype-challenges%2Fissues%2F614 "https://github.com/type-challenges/type-challenges/issues/614")
 
 ```typescript
-typescripttype Permutation<T, K=T> =
+type Permutation<T, K=T> =
     [T] extends [never]
       ? []
       : K extends K
@@ -1180,7 +1180,7 @@ type perm = Permutation<'A' | 'B' | 'C'>;
 通过`extends keyof T`进行遍历
 
 ```typescript
-typescripttype ObjectEntries<T extends Record<string, any>, K = keyof T> = K extends keyof T ? [K, T[K]]: [];
+type ObjectEntries<T extends Record<string, any>, K = keyof T> = K extends keyof T ? [K, T[K]]: [];
 
 interface Model {
   name: string;
@@ -1195,7 +1195,7 @@ type modelEntries = ObjectEntries<Model> // ['name', string] | ['age', number] |
 元组的遍历，借助元组解构逐个处理逻辑，再把剩下的元组迭代调用当前的类型分析器
 
 ```typescript
-typescripttype PromiseParseAll<T extends any[]> = T extends [infer P, ...infer O]
+type PromiseParseAll<T extends any[]> = T extends [infer P, ...infer O]
   ? P extends Promise<infer R> ? [R, ...PromiseParseAll<O>] : [P, ...PromiseParseAll<O>]
   : []
 type PromiseAll<T extends any[]> = Promise<PromiseParseAll<T>>
@@ -1208,7 +1208,7 @@ type PRes = PromiseAll<[Promise<number>, 42, Promise<string>]>;
 字符串类似
 
 ```typescript
-typescripttype TrimLeft<T extends string> = T extends `${infer L}${infer R}`
+type TrimLeft<T extends string> = T extends `${infer L}${infer R}`
 ? L extends " "|"\n"|"\t" ? TrimLeft<R> : T
 : never
 type trimed = TrimLeft<'  Hello World '> // 应推导出 'Hello World '
@@ -1219,7 +1219,7 @@ type trimed = TrimLeft<'  Hello World '> // 应推导出 'Hello World '
 使用场景：字符串的逐个解析有递归特性，我们可以转成字符串后做一些这方面的处理，处理完后还需要转回去
 
 ```typescript
-typescripttype ToNumber<T> = T extends `${infer N extends number}`
+type ToNumber<T> = T extends `${infer N extends number}`
   ? N
   : T
 ```
@@ -1227,7 +1227,7 @@ typescripttype ToNumber<T> = T extends `${infer N extends number}`
 ### 映射类型 key值的交集与并集
 
 ```typescript
-typescripttype foo = {
+type foo = {
   name: string;
   age: string;
 }
@@ -1246,7 +1246,7 @@ type TestBoth = keyof (foo | coo);  // 'age'
 利用函数入参的逆变特性，把输入类型构建成函数参数
 
 ```typescript
-typescripttype UnionToIntersection<U> = 
+type UnionToIntersection<U> = 
   (U extends any 
    ? (arg: U) => any 
    : never
@@ -1262,7 +1262,7 @@ type TestUnion2Intersection = UnionToIntersection<{a: 1} | {b: 2} | {c: 3}>
 `(()=>a) & (()=>b) & (()=>c)`获得这些函数返回值会是c
 
 ```typescript
-typescript//需要了解性质：多个函数交集的返回值类型只取最后一个！(This is Important!)
+//需要了解性质：多个函数交集的返回值类型只取最后一个！(This is Important!)
 //例如：
 // type Intersepted = (() => 'a') & (() => 'b') & (() => 'c')
 // type Last = Intersepted extends () => infer R ? R : never // 'c'
@@ -1297,7 +1297,7 @@ Equal<UnionToTuple<'a' | 'a' | 'a'>, UnionToTuple<'a'>>         // will always b
 但是枚举类型下，extends无法很好的区分是否可选，是否只读的区别。
 
 ```typescript
-typescripttype a = {a: string} extends {readonly a: string} ? true : false; // true
+type a = {a: string} extends {readonly a: string} ? true : false; // true
 type b = {readonly a: string} extends {a: string} ? true : false; // true
 type c = {a: string} extends {a?: string} ? true : false; // true
 type d = {a?: string} extends {a: string} ? true : false; // false
@@ -1306,7 +1306,7 @@ type d = {a?: string} extends {a: string} ? true : false; // false
 所以严格的相等要借助函数的协变，具体的逻辑我也没get到。。。
 
 ```typescript
-typescriptexport type Equal<X, Y> =
+export type Equal<X, Y> =
   (<T>() => T extends X ? 1 : 2) extends
   (<T>() => T extends Y ? 1 : 2) ? true : false
 ```
@@ -1316,7 +1316,7 @@ typescriptexport type Equal<X, Y> =
 先来看一个反直觉的现象：
 
 ```typescript
-typescript// 1.
+// 1.
 type JudgeNever = never extends never ? true : false; // true
 
 // 2.
@@ -1338,7 +1338,7 @@ type testIsNever = IsNever<never>  // true
 ### ❓❓❓T extends never的作用
 
 ```typescript
-typescript// 解析：https://github.com/type-challenges/type-challenges/issues/22792、
+// 解析：https://github.com/type-challenges/type-challenges/issues/22792、
 // https://github.com/type-challenges/type-challenges/issues/1140
 type IsUnion<T, Copy = T> =
   [T] extends [never]
@@ -1362,7 +1362,7 @@ type TestNCI = TestNC<string | number> // false
 为什么TestNI和TestNCI如此不同， `T extends never`的作用究竟是什么？ ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/652be1cfbc7346c1afb391e15b21bc32~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp) 让我们来看看：
 
 ```typescript
-typescripttype Hmm<T> = keyof T extends never ? true : false
+type Hmm<T> = keyof T extends never ? true : false
 // 如前人所说是true
 // 1.
 type testMapVal = Hmm<{ a: string } | { b: string }> // true
@@ -1380,7 +1380,7 @@ type testUnionMapKey = TestUnkown<keyof ({ a: string } | { b: string })> // neve
 再回头看看这一段
 
 ```typescript
-typescripttype IsUnion<T, Copy = T> =
+type IsUnion<T, Copy = T> =
   [T] extends [never]
     ? false
     : T extends never
@@ -1400,7 +1400,7 @@ typescripttype IsUnion<T, Copy = T> =
 回到这题不纠结never，肯能换种写法更好理解
 
 ```typescript
-typescriptIsUnion<T, B = T> = [T] extends [never] 
+IsUnion<T, B = T> = [T] extends [never] 
   ? false 
   : (T extends T 
      ? [B] extends [T] 
@@ -1419,7 +1419,7 @@ typescriptIsUnion<T, B = T> = [T] extends [never]
 > Implement RemoveIndexSignature , exclude the index signature from object types.
 
 ```typescript
-typescripttype TypeLiteralOnly<T> =
+type TypeLiteralOnly<T> =
   string extends T
   ? never
   : number extends T
@@ -1449,7 +1449,7 @@ type ARemove = RemoveIndexSignature<FooRemove>  // expected { foo(): void }
 联合类型在遍历时能产生枚举的效果：
 
 ```typescript
-typescript// [] | [1] | [3] | [1, 2, 3] | [2, 3] | [1, 2] | [2] | [1, 3]
+// [] | [1] | [3] | [1, 2, 3] | [2, 3] | [1, 2] | [2] | [1, 3]
 type Subsequence<T extends any[]> = T extends [infer Left, ...infer Rest] 
 ? [Left, ...Subsequence<Rest>] | Subsequence<Rest> 
 : T
@@ -1494,7 +1494,7 @@ type TestSubsequence = Subsequence<[1, 2, 3]> //[] | [1] | [3] | [1, 2, 3] | [2,
 这个排列组合确实逻辑比较绕。 可以再看个例子，自个脑补过程巩固下：
 
 ```typescript
-typescripttype Combination<T extends string[], U = T[number], K = U> = K extends string
+type Combination<T extends string[], U = T[number], K = U> = K extends string
     ? K | `${K} ${Combination<[], Exclude<U, K>>}`
     : ''
     
@@ -1509,7 +1509,7 @@ type Keys = Combination<['foo', 'bar', 'baz']>
 实现类型 PercentageParser。根据规则`/^(\+|\-)?(\d*)?(\%)?$/` 匹配类型 T。 匹配的结果由三部分组成，分别是：\[正负号, 数字, 单位\]，如果没有匹配，则默认是空字符串。
 
 ```typescript
-typescripttype PString1 = ''
+type PString1 = ''
 type PString2 = '+85%'
 type PString3 = '-85%'
 type PString4 = '85%'
@@ -1523,7 +1523,7 @@ type R5 = PercentageParser<PString5> // expected ["", "85", ""]
 ```
 
 ```typescript
-typescripttype Symbol = "+" | "-";
+type Symbol = "+" | "-";
 type PercentageParser<A extends string> =
   A extends `${infer F extends Symbol}${infer R}%`
     ? [F, R, "%"]
@@ -1535,7 +1535,7 @@ type PercentageParser<A extends string> =
 ```
 
 ```typescript
-typescripttype ParseSign<T extends string> =
+type ParseSign<T extends string> =
   T extends `${infer Head}${string}`
     ? Head extends '+' | '-'
       ? Head
@@ -1565,7 +1565,7 @@ type PercentageParser<T extends string> = [
 ts类型是无法进行数学加减运算的，有运算或者计数的诉求，都可以构建一个元组，用元组的length来计数
 
 ```typescript
-typescripttype FlattenDepth<
+type FlattenDepth<
   T extends unknown[],
   Depth extends number = 1,
   Count extends 1[] = []
@@ -1593,7 +1593,7 @@ type b = FlattenDepth<[1, 2, [3, 4], [[[5]]]]> // [1, 2, 3, 4, [[5]]]. Depth def
 用上面计数相同的思想，我们甚至可以用类型计算斐波拉契数列： ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/961c871541494e638b91f4b2b6adec70~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
 
 ```typescript
-typescripttype Fibonacci<
+type Fibonacci<
   T extends number,
   CurrentIndex extends any[] = [''],
   Prev extends any[] = [],
@@ -1619,7 +1619,7 @@ type ResultFibonacci2 = Fibonacci<8> // 21
 * [github.com/LeetCode-Op…](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2FLeetCode-OpenSource%2Fhire%2Fblob%2Fmaster%2Ftypescript_zh.md "https://github.com/LeetCode-OpenSource/hire/blob/master/typescript_zh.md")
 
 ```typescript
-typescripttype Origin = {
+type Origin = {
   count: number;
   message: string;
   asyncMethod<T, U>(input: Promise<T>): Promise<Action<U>>
@@ -1675,7 +1675,7 @@ type test4<T, U> = ConnectedFn<Origin>;
 例如：
 
 ```typescript
-typescripttype Zero = MinusOne<1> // 0
+type Zero = MinusOne<1> // 0
 type FiftyFour = MinusOne<55> // 54
 ```
 
@@ -1688,7 +1688,7 @@ type FiftyFour = MinusOne<55> // 54
 技巧是把原数字中**每位数都变成了一个数组**长度和数字相同的数组，避免整体一起算导致的递归有1000次限制问题，大大减少递归次数。
 
 ```typescript
-typescript// Utility Type
+// Utility Type
 type ToNumber<T> = T extends `0${infer N extends number}`
   ? N
   : T extends `${infer N extends number}`
@@ -1742,7 +1742,7 @@ type Result = ToNumber<Step3> // 3449
 这种方式没有用递归，性能比较好。
 
 ```typescript
-typescripttype ParseInt<T extends string> = T extends `${infer Digit extends number}` ? Digit : never
+type ParseInt<T extends string> = T extends `${infer Digit extends number}` ? Digit : never
 type ReverseString<S extends string> = S extends `${infer First}${infer Rest}` ? `${ReverseString<Rest>}${First}` : ''
 type RemoveLeadingZeros<S extends string> = S extends '0' ? S : S extends `${'0'}${infer R}` ? RemoveLeadingZeros<R> : S
 type InternalMinusOne<
@@ -1769,7 +1769,7 @@ type test = MinusOne<9007199254740992>
 > 给定一个整数数组 nums 和一个目标整数 target, 如果 nums 数组中存在两个元素的和等于 target 返回 true, 否则返回 false
 
 ```typescript
-typescript/** Helpers */
+/** Helpers */
 type Equal<X, Y> =
   (<T>() => T extends X ? 1 : 2) extends
   (<T>() => T extends Y ? 1 : 2) ? true : false
@@ -1831,7 +1831,7 @@ For example, for N = 20, the output should be: 1, 2, Fizz, 4, Buzz, Fizz, 7, 8, 
 > In the challenge below, we will want to generate this as an array of string literals. For large values of N, you will need to ensure that any types generated do so efficiently (e.g. by correctly using the tail-call optimisation for recursion).
 
 ```typescript
-typescripttype FizzBuzzOne<
+type FizzBuzzOne<
     C extends number, 
     C3 extends number, 
     C5 extends number, 
@@ -1861,7 +1861,7 @@ type FizzBuzz<
 ### 比较大小
 
 ```typescript
-typescripttype ToTuple<T extends number, R extends readonly unknown[] = []> = R['length'] extends T
+type ToTuple<T extends number, R extends readonly unknown[] = []> = R['length'] extends T
   ? R
   : ToTuple<T, [...R, unknown]>
 
@@ -1886,14 +1886,14 @@ type Maximum<T extends number[]> = T extends [infer F]
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/72c547e740e0482b9128b2c702f48ac8~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
 
 ```typescript
-typescripttype AllCombinations_ABC = AllCombinations<'ABC'>;
+type AllCombinations_ABC = AllCombinations<'ABC'>;
 // should be '' | 'A' | 'B' | 'C' | 'AB' | 'AC' | 'BA' | 'BC' | 'CA' | 'CB' | 'ABC' | 'ACB' | 'BAC' | 'BCA' | 'CAB' | 'CBA'
 ```
 
 首先运用了把字符串拆成单个字符的联合类型，作为基础单元 利用in遍历联合类型，取出一个和其他的组合获得结果
 
 ```typescript
-typescripttype Exclude<T, U> = T extends U ? never : T;
+type Exclude<T, U> = T extends U ? never : T;
 
 type IsNever<T> = [T] extends [never] ? true : false;
 
@@ -1924,7 +1924,7 @@ type AllCombinations<
 ### 💥幂运算 - 二进制转十进制
 
 ```typescript
-typescripttype BinaryToDecimal<S extends string, Acc extends unknown[] = []> = S extends `${infer First}${infer Rest}`
+type BinaryToDecimal<S extends string, Acc extends unknown[] = []> = S extends `${infer First}${infer Rest}`
 ? First extends '1'
   ? BinaryToDecimal<Rest, [...Acc, ...Acc, '']>
   : BinaryToDecimal<Rest, [...Acc, ...Acc]>

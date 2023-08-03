@@ -7,10 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "extends 条件类型定义",
+  title: "infer 关键字是什么",
   key_world: [
-    "extends 类型继承",
-    "extends 条件类型定义",
+    "infer 关键字",
+    "infer 关键字作用",
   ],
   labels: [
     labels.ts,

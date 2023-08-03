@@ -1,27 +1,25 @@
-**关键词**：extends 类型继承、extends 条件类型定义
+**关键词**：infer 关键字、infer 关键字作用
 
-在 TypeScript 中，`extends` 关键字不仅仅用于类之间的继承关系，还可以用于条件类型的定义。
+在 TypeScript 中，`infer` 是一个用于条件类型中的关键字。它的作用是从待推断的类型中提取特定的类型，并将其赋值给一个类型变量。这个类型变量可以在条件类型的 `true` 分支中使用。
 
-条件类型是一种在类型系统中根据条件进行推断的方式。通过使用 `extends` 关键字，可以根据给定的条件选择不同的类型。
+通过使用 `infer` 关键字，我们可以实现一些高级的类型操作，比如从函数类型中提取参数类型、从数组类型中提取元素类型等。
 
-以下是一个使用 `extends` 条件语句定义条件类型的示例：
+以下是一个示例，展示了如何使用 `infer` 关键字提取函数参数的类型：
 
 ```typescript
-type TypeName<T> =
-  T extends string ? "string" :
-    T extends number ? "number" :
-      T extends boolean ? "boolean" :
-        "unknown";
+type ParamType<T> = T extends (param: infer P) => any ? P : never;
 
-let type1: TypeName<string>;  // 类型为 "string"
-let type2: TypeName<number>;  // 类型为 "number"
-let type3: TypeName<boolean>; // 类型为 "boolean"
-let type4: TypeName<object>;  // 类型为 "unknown"
+function foo(arg: number): void {
+  // ...
+}
+
+type FooParam = ParamType<typeof foo>; // FooParam 的类型是 number
 ```
 
-在上面的例子中，我们定义了一个条件类型 `TypeName`，它根据给定的泛型类型 `T` 来选择不同的类型。如果 `T` 是 `string` 类型，那么返回值类型为 `"string"`；如果 `T` 是 `number`
-类型，那么返回值类型为 `"number"`；如果 `T` 是 `boolean` 类型，那么返回值类型为 `"boolean"`；否则返回值类型为 `"unknown"`。
+在上述示例中，我们定义了一个条件类型 `ParamType<T>`，它接受一个泛型参数 `T`。在 `extends` 条件语句中，我们检查泛型参数 `T` 是否可以赋值给一个函数类型，并使用 `infer`
+关键字提取函数参数的类型并赋值给类型变量 `P`。如果不是函数类型，则返回 `never` 类型。
 
-通过上述定义，我们可以根据不同的类型获取它们的类型名称。例如，`type1` 的类型为 `"string"`，`type2` 的类型为 `"number"`，依此类推。
+然后，我们定义了一个函数 `foo`，它接受一个 `number` 类型的参数。通过使用 `typeof foo`，我们获取函数 `foo` 的类型，并使用 `ParamType<typeof foo>`
+提取函数参数的类型，赋值给类型变量 `FooParam`。在本例中，`FooParam` 的类型为 `number`。
 
-注意，条件类型的定义中可以使用嵌套的 `extends` 关键字，以支持更复杂的条件判断。
+因此，`infer` 是 TypeScript 中用于条件类型中的关键字，用于类型推断和提取特定类型的操作。

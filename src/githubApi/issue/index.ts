@@ -7,10 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "is 作用是什么",
+  title: "in 运算符作用是什么",
   key_world: [
-    "is 谓词语法",
-    "is 语法作用",
+    "in 运算符",
+    "in 运算符作用",
+    "in 运算符应用",
   ],
   labels: [
     labels.ts,

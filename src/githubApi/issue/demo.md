@@ -1,57 +1,13 @@
-**关键词**：in 运算符、in 运算符作用、in 运算符应用
+**关键词**：link 标签属性
 
-在 TypeScript 中，`in` 是一个运算符，用于检查对象是否具有指定的属性或者类实例是否实现了指定的接口。
+link标签有以下几个常用的属性：
 
-对于对象类型，`in` 运算符可以用来检查对象是否具有某个属性。语法为 `property in object`，其中 `property` 是一个字符串，`object` 是一个对象。
+1. href：指定所链接文档的URL地址，可以是一个外部CSS文件的URL或者其他文档的URL。
+2. rel：用于定义当前文档与所链接文档之间的关系。常用的取值有stylesheet（指定所链接文档是一个外部CSS文件）、icon（指定所链接文档是一个图标文件）、preconnect（预连接到指定的URL，加快页面加载速度）等等。
+3. type：指定所链接文档的MIME类型。常用的取值有text/css（链接一个外部CSS文件）、image/x-icon（链接一个图标文件）等等。
+4. media：指定链接的文档在哪些媒体设备上生效。常用的取值有print（应用于打印样式）和screen（应用于屏幕样式）。
+5. crossorigin：用于指定跨域资源的处理方式。常用的取值有anonymous（允许跨域请求，但不发送凭据）和use-credentials（允许跨域请求，并发送凭据）。
+6. integrity：用于指定链接的文档的完整性校验值，以确保外部资源不被篡改。通常结合subresource integrity（SRI）一起使用。
+7. as：用于指定所链接资源的预期用途，以优化资源的加载方式。常用的取值有image（图片资源）、font（字体资源）、script（脚本资源）等等。
 
-示例：
-
-```typescript
-interface Person {
-  name: string;
-  age: number;
-}
-
-function printPersonInfo(person: Person) {
-  if ('name' in person) {
-    console.log('Name:', person.name);
-  }
-  if ('age' in person) {
-    console.log('Age:', person.age);
-  }
-}
-
-let person = { name: 'Alice', age: 25 };
-printPersonInfo(person); // 输出: Name: Alice, Age: 25
-```
-
-在上述示例中，我们定义了一个接口 `Person`，具有 `name` 和 `age` 两个属性。然后定义了一个函数 `printPersonInfo`，它接收一个参数 `person`，类型为 `Person`。在函数内部，我们使用 `in` 运算符检查 `person` 对象是否具有 `name` 和 `age` 属性，如果有则打印对应的值。
-
-对于类类型，`in` 运算符可以用来检查类的实例是否实现了指定的接口。语法为 `interfaceName in object`，其中 `interfaceName` 是一个接口名字，`object` 是一个对象或类的实例。
-
-示例：
-
-```typescript
-interface Printable {
-  print(): void;
-}
-
-class MyClass implements Printable {
-  print() {
-    console.log('Printing...');
-  }
-}
-
-function printObjectInfo(obj: any) {
-  if ('print' in obj) {
-    obj.print();
-  }
-}
-
-let myObj = new MyClass();
-printObjectInfo(myObj); // 输出: Printing...
-```
-
-在上述示例中，我们定义了一个接口 `Printable`，具有一个方法 `print`。然后定义了一个类 `MyClass`，它实现了 `Printable` 接口，并且实现了 `print` 方法。接着定义了一个函数 `printObjectInfo`，它接收一个参数 `obj`，类型为 `any`。在函数内部，我们使用 `in` 运算符检查 `obj` 对象是否实现了 `Printable` 接口，如果是则调用 `print` 方法。
-
-总的来说，`in` 关键字在 TypeScript 中用于检查对象是否具有指定的属性或类实例是否实现了指定的接口。它可以帮助我们在运行时根据对象的属性或接口的实现情况来进行相应的处理。
+link标签的作用是在HTML文档中引入外部资源，例如外部CSS文件、图标文件等。通过link标签，可以将外部资源与HTML文档关联起来，使得浏览器能够正确加载和渲染页面所需的样式和其他资源。

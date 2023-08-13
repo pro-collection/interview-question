@@ -7,17 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "in 运算符作用是什么",
+  title: "link 标签有 那些属性，作用都是啥？",
   key_world: [
-    "in 运算符",
-    "in 运算符作用",
-    "in 运算符应用",
+    "link 标签属性",
   ],
   labels: [
-    labels.ts,
+    labels.chrome,
     // company.pdd,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -7,18 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Vue] 组件之间的通信方式有哪些？",
+  title: "[性能] 衡量页面性能的指标有哪些？",
   key_world: [
-    "vue组件通信",
-    "vue通信",
-    "Vuex组件通信",
-    "$refs组件通信",
+    "web性能指标",
   ],
   labels: [
-    labels.frameWork,
-    company.pdd,
+    labels.engineering,
+    company.mt,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

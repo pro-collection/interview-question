@@ -1,447 +1,236 @@
-**关键词**：vue组件通信、vue通信、Vuex组件通信、$refs组件通信
+**关键词**：web性能指标
 
-### 在Vue中 组件之间的通信总结
+### 性能的核心问题
 
-在Vue中，组件之间的通信可以通过以下几种方式实现：
+- 什么样的性能指标最能度量人的感觉？
+- 怎样才能从我们的真实用户中获取这些指标？
+- 如何用我们所获取的指标来确定一个页面表现得是否「快」？
+- 当我们得知用户所感知的真实性能表现后，我们应该如何做才能避免重蹈覆辙，并在未来提高性能表现？
 
-1. Props/Attributes：父组件通过向子组件传递属性（props），子组件通过props接收父组件传递的数据。这是一种单向数据流的方式。
+### 以用户为中心的性能指标
 
-2. Events/Custom Events：子组件可以通过触发自定义事件（$emit），向父组件发送消息。父组件可以监听子组件的自定义事件，在事件回调中处理接收到的消息。
+**开始了吗？**
+页面开始加载了吗？得到了服务端的回应吗？
 
-3. $refs：父组件可以通过在子组件上使用ref属性，获取子组件的实例，并直接调用子组件的方法或访问子组件的属性。
+**有用吗？**
+有足够用户期望看到的内容被渲染出来了吗？
 
-4. Event Bus：通过创建一个全局事件总线实例，可以在任何组件中触发和监听事件。组件之间可以通过事件总线进行通信。
+**能用吗？**
+用户能够与我们的页面交互了吗？还是依然在加载？
 
-5. Vuex：Vuex是Vue官方提供的状态管理库，用于在组件之间共享状态。组件可以通过Vuex的store来进行状态的读取和修改。
+**好用吗？**
+交互是否流畅、自然、没有延迟与其他的干扰？
 
-6. Provide/Inject：父组件通过provide选项提供数据，子组件通过inject选项注入数据。这样可以在跨层级的组件中进行数据传递。
+#### 首次绘制（First Paint）和首次内容绘制（First Contentful Paint）
+
+首次绘制（FP）和首次内容绘制（FCP）。在浏览器导航并渲染出像素点后，这些指标点立即被标记。 这些点对于用户而言十分重要，因为它回答了我们的第一个问题问题：**开始了吗**？
+
+FP与FCP的主要区别在于，FP标记浏览器所渲染的任何与导航前内容不同的点，而FCP所标记的是来自于DOM中的内容，可能是文本、图片、SVG，甚至是canvas元素。
 
 
-#### Props/Attributes
+#### 首次有效绘制（First Meaningful Pain）和主要元素时间点（Hero Element Timing）
 
-在Vue中，可以通过props和attributes来实现组件之间的通信。
+首次有效绘制（FMP）回答了我们的问题：**有用吗**？对于现存的所有网页而言，我们不能去清晰地界定哪些元素的加载是「有用」的（因此目前尚无规范），
+但是对于开发者他们自己而言，他们很容易知道页面的哪些部分对于用户而言是最为有用的。
 
-1. 使用props：
-   父组件可以通过props向子组件传递数据。子组件通过在props选项中声明属性来接收父组件传递的数据。
+![image](https://github.com/pro-collection/interview-question/assets/22188674/613b9446-c386-47c9-84fd-ce53e9e2f2b2)
 
-例如，父组件传递一个名为message的属性给子组件：
-```html
-<template>
-  <div>
-    <child-component :message="parentMessage"></child-component>
-  </div>
-</template>
+这些页面中「最重要的部分」通常被称为**主要元素**。举一些例子，在YouTube的播放页面，播放器就是主要元素。在Twitter中可能是通知的图标，或者是第一条推文。在 天气应用中，主要元素应是指定位置的预测信息。在一个新闻站点中，它可能是摘要，或者是第一张插图。
 
-<script>
-import ChildComponent from './ChildComponent.vue';
+网页中总有一部分内容的重要性大于其余的部分。如果这部分的内容能够很快地被加载出来，用户甚至都不会在意其余部分的加载情况。
 
-export default {
-  components: {
-    ChildComponent
-  },
-  data() {
-    return {
-      parentMessage: 'Hello from parent'
-    };
-  }
-};
-</script>
-```
 
-子组件接收并使用父组件传递的属性：
-```html
-<template>
-  <div>
-    {{ message }}
-  </div>
-</template>
+#### 可交互时间（TTI）
 
-<script>
-export default {
-  props: {
-    message: {
-      type: String,
-      required: true
-    }
-  }
-};
-</script>
-```
+可交互时间（TTI）标记了你的页面已经呈现了画面，并且能够响应用户输入的时间点。页面不能响应用户输入有以下常见的原因：
 
-2. 使用attributes：
-   父组件可以通过attributes向子组件传递数据。子组件通过$attrs属性来访问父组件传递的所有属性。
+- 将被JavaScript所操作的元素还未被加载出来；
+- 一些慢会话阻塞了浏览器的主线程（如我们在上一部分所描述的）
 
-例如，父组件传递一个名为message的属性给子组件：
-```html
-<template>
-  <div>
-    <child-component message="Hello from parent"></child-component>
-  </div>
-</template>
+TTI所记录实际上是页面的JavaScript完成了初始化，主线程处于空闲的时间点。
 
-<script>
-import ChildComponent from './ChildComponent.vue';
 
-export default {
-  components: {
-    ChildComponent
-  }
-};
-</script>
-```
+#### long tasks
 
-子组件访问父组件传递的属性：
-```html
-<template>
-  <div>
-    {{ $attrs.message }}
-  </div>
-</template>
+浏览器像是单线程的。 某些情况下，一些任务将可能会花费很长的时间来执行，如果这种情况发生了，主线程阻塞，剩下的任务只能在队列中等待。
 
-<script>
-export default {
-  inheritAttrs: false
-};
-</script>
-```
+用户所感知到的可能是输入的延迟，或者是哐当一下全部出现。这些是当今网页糟糕体验的主要来源。
 
-这些是使用props和attributes在Vue中实现组件之间通信的示例。通过props可以实现父子组件之间的单向数据流，而通过attributes可以实现更灵活的通信方式。
+Long Tasks API认为任何超过50毫秒的任务都可能存在潜在的问题，并将这些任务揭露给开发者。既然能够满足50毫秒内完成任务，也就能够符合RAIL在100毫秒内相应用户输入的要求。
 
-#### Events/Custom Events
 
-在Vue中，可以使用Events/Custom Events（事件/自定义事件）来实现组件之间的通信。以下是一个示例：
+#### 指标所反映的用户体验
 
-1. 在父组件中触发事件：
-```html
-<template>
-  <div>
-    <button @click="sendMessage">发送消息给子组件</button>
-    <child-component @message-received="handleMessage"></child-component>
-  </div>
-</template>
+下表概述了我们的性能指标如何对应到我们的问题之上：
 
-<script>
-import ChildComponent from './ChildComponent.vue';
+**开始了吗**？
+- 首次绘制、首次内容绘制 First Paint (FP) / First Contentful Paint (FCP)
 
-export default {
-  components: {
-    ChildComponent
-  },
-  methods: {
-    sendMessage() {
-      this.$emit('message-received', 'Hello from parent');
-    },
-    handleMessage(message) {
-      console.log(message);
-    }
-  }
-};
-</script>
-```
+**有用吗**？
+- 首次有效绘制、主要元素时间点 First Meaningful Paint (FMP) / Hero Element Timing
 
-2. 在子组件中监听事件：
-```html
-<template>
-  <div>
-    <p>{{ message }}</p>
-  </div>
-</template>
+**能用吗**？
+- 可交互时间点 Time to Interactive (TTI)
 
-<script>
-export default {
-  data() {
-    return {
-      message: ''
-    };
-  },
-  mounted() {
-    this.$on('message-received', this.handleMessage);
-  },
-  methods: {
-    handleMessage(message) {
-      this.message = message;
-    }
-  }
-};
-</script>
-```
+**好用吗**？
+- 慢会话 Long Tasks (从技术上来讲应该是：没有慢会话)
 
-在这个示例中，父组件中有一个按钮，当点击按钮时会触发`sendMessage`方法，该方法通过`$emit`触发名为`message-received`的自定义事件，并传递了一个消息作为参数。
 
-子组件中通过`$on`方法监听`message-received`事件，并在事件触发时调用`handleMessage`方法，该方法用于接收并处理接收到的消息。
+### 获取指标
 
-通过这种方式，父组件可以通过自定义事件向子组件传递数据，子组件则可以通过监听相应的自定义事件来接收并处理父组件传递的数据。
+主要依赖浏览器提供的 api 
+- [PerformanceObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/PerformanceObserver)
+- [PerformanceEntry](https://developer.mozilla.org/zh-CN/docs/Web/API/PerformanceEntry)
+- [DOMHighResTimeStamp](https://developer.mozilla.org/zh-CN/docs/Web/API/DOMHighResTimeStamp)
 
-这是使用Events/Custom Events在Vue中实现组件之间通信的示例。通过自定义事件，可以实现父子组件之间的双向通信。
 
-#### $refs
+#### PerformanceObserver 使用示范
 
-在Vue中，可以使用`$refs`来访问子组件的实例，从而进行组件之间的通信。以下是一个示例：
+要使用 PerformanceObserver，首先需要创建一个 PerformanceObserver 实例，并指定一个回调函数作为参数。回调函数将在性能事件触发时被调用。然后，通过 PerformanceObserver 的 observe() 方法去监听所关注的性能事件类型。
 
-1. 在父组件中访问子组件的实例：
-```html
-<template>
-  <div>
-    <child-component ref="child"></child-component>
-    <button @click="sendMessage">发送消息给子组件</button>
-  </div>
-</template>
+以下是一个使用 PerformanceObserver 的示例代码：
 
-<script>
-import ChildComponent from './ChildComponent.vue';
-
-export default {
-  components: {
-    ChildComponent
-  },
-  methods: {
-    sendMessage() {
-      this.$refs.child.handleMessage('Hello from parent');
-    }
-  }
-};
-</script>
-```
-
-2. 子组件中的方法处理接收到的消息：
-```html
-<template>
-  <div>
-    <p>{{ message }}</p>
-  </div>
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      message: ''
-    };
-  },
-  methods: {
-    handleMessage(message) {
-      this.message = message;
-    }
-  }
-};
-</script>
-```
-
-在这个示例中，父组件通过在子组件上使用`ref`属性来获取子组件的实例。在父组件的`sendMessage`方法中，通过`this.$refs.child`访问子组件的实例，并调用子组件的`handleMessage`方法，将消息作为参数传递给子组件。
-
-子组件的`handleMessage`方法接收到父组件传递的消息，并更新`message`的值。这样，父组件就可以通过`$refs`来访问子组件的实例，并调用子组件中的方法，从而实现组件之间的通信。
-
-需要注意的是，`$refs`只能用于访问子组件的实例，在父组件中直接修改子组件的数据是不推荐的。更好的做法是在子组件中提供相应的方法，父组件通过`$refs`调用这些方法来进行通信。
-
-#### Event Bus
-
-在Vue中，可以使用Event Bus（事件总线）来实现组件之间的通信。Event Bus是一个空的Vue实例，可以用于作为中央事件总线，用于组件之间的通信。以下是一个示例：
-
-1. 创建一个Event Bus实例：
 ```javascript
-// EventBus.js
-import Vue from 'vue';
-export const EventBus = new Vue();
+// 创建回调函数
+function performanceCallback(list, observer) {
+  list.getEntries().forEach(entry => {
+    console.log(entry.name + "：" + entry.startTime);
+  });
+}
+
+// 创建 PerformanceObserver 实例
+const observer = new PerformanceObserver(performanceCallback);
+
+// 监听性能事件类型
+observer.observe({ entryTypes: ["measure", "paint"] });
 ```
 
-2. 在需要通信的组件中，使用Event Bus来发送和接收事件：
-```html
-<template>
-  <div>
-    <button @click="sendMessage">发送消息给另一个组件</button>
-  </div>
-</template>
+在上面的代码中，定义了一个名为 `performanceCallback` 的回调函数，它接收两个参数：`list` 和 `observer`。`list` 参数是一个 PerformanceEntryList 对象，包含了所有触发的性能事件，可以通过 `getEntries()` 方法获取详细信息。`observer` 参数表示 PerformanceObserver 实例本身。
 
-<script>
-import { EventBus } from './EventBus.js';
+然后，通过 `new PerformanceObserver(performanceCallback)` 创建了一个 PerformanceObserver 实例，并将 `performanceCallback` 作为回调函数传递进去。
 
-export default {
-  methods: {
-    sendMessage() {
-      EventBus.$emit('messageReceived', 'Hello from Component A');
-    }
-  }
-};
-</script>
-```
+最后，通过 `observer.observe({ entryTypes: ["measure", "paint"] })` 方法，指定了要监听的性能事件类型，这里监听了 "measure" 和 "paint" 两种类型的事件。
 
-```html
-<template>
-  <div>
-    <p>{{ message }}</p>
-  </div>
-</template>
+当指定的性能事件类型发生时，回调函数将被调用，并传递触发事件的 PerformanceEntry 对象作为参数。开发者可以在回调函数中进一步处理和分析这些对象，以获取性能数据并进行优化。
 
-<script>
-import { EventBus } from './EventBus.js';
+需要注意的是，观察者模式是异步的，因此回调函数可能不会立即执行。另外，一旦创建了 PerformanceObserver 实例，需要调用其 `disconnect()` 方法来停止监听性能事件，避免内存泄漏。
 
-export default {
-  data() {
-    return {
-      message: ''
-    };
-  },
-  mounted() {
-    EventBus.$on('messageReceived', (message) => {
-      this.message = message;
-    });
-  }
-};
-</script>
-```
+以上是 PerformanceObserver 的基本用法，开发者可以根据实际需求和业务场景来灵活运用。
 
-在这个示例中，我们首先创建了一个Event Bus实例`EventBus`，并将其导出。然后在发送消息的组件中，通过`EventBus.$emit`方法发送一个名为`messageReceived`的事件，并传递消息作为参数。
 
-在接收消息的组件中，通过在`mounted`钩子中使用`EventBus.$on`方法来监听`messageReceived`事件，并定义一个回调函数来处理接收到的消息。
+### PerformanceObserver 如何统计FP、FCP
 
-当发送消息的组件点击按钮时，会触发`sendMessage`方法，该方法通过`EventBus.$emit`发送一个事件，并将消息作为参数传递给该事件。
+要使用 PerformanceObserver 统计 FP（First Paint）和 FCP（First Contentful Paint），可以按照以下步骤进行：
 
-在接收消息的组件中，`mounted`钩子函数会在组件挂载后执行，此时会调用`EventBus.$on`方法来监听事件。当`messageReceived`事件被触发时，回调函数中的逻辑会执行，将接收到的消息更新到`message`的值上。
+1. 创建 PerformanceObserver 实例，并指定一个回调函数作为参数。
 
-这样，通过Event Bus实例，可以实现不同组件之间的通信，组件A通过发送事件，组件B通过监听事件来接收消息。
-
-需要注意的是，使用Event Bus时需要确保事件名称唯一，并在适当的生命周期钩子中进行事件监听和解绑操作，以避免内存泄漏和不必要的事件监听。
-
-#### Vuex
-
-在Vue中，可以使用Vuex来进行组件之间的通信。Vuex是一个专为Vue.js应用程序开发的状态管理模式。以下是一个使用Vuex进行组件之间通信的示例：
-
-1. 安装并配置Vuex：
-   安装Vuex：`npm install vuex --save`
-   创建store.js文件：
 ```javascript
-import Vue from 'vue';
-import Vuex from 'vuex';
-
-Vue.use(Vuex);
-
-export default new Vuex.Store({
-  state: {
-    message: ''
-  },
-  mutations: {
-    setMessage(state, payload) {
-      state.message = payload;
+const observer = new PerformanceObserver((list) => {
+  const entries = list.getEntries();
+  entries.forEach((entry) => {
+    if (entry.name === 'first-paint') {
+      console.log('FP:', entry.startTime);
+    } else if (entry.name === 'first-contentful-paint') {
+      console.log('FCP:', entry.startTime);
     }
-  }
+  });
 });
 ```
-在main.js中引入store.js并注册：
+
+2. 使用 PerformanceObserver 的 observe() 方法监听 'paint' 类型的性能事件。
+
 ```javascript
-import Vue from 'vue'
-import App from './App.vue'
-import store from './store.js'
-
-new Vue({
-  store,
-  render: h => h(App),
-}).$mount('#app')
+observer.observe({ entryTypes: ['paint'] });
 ```
 
-2. 在需要通信的组件中，使用Vuex来发送和接收数据：
-```html
-<template>
-  <div>
-    <button @click="sendMessage">发送消息给另一个组件</button>
-  </div>
-</template>
+3. 在回调函数中，通过遍历 PerformanceEntryList 对象的 getEntries() 方法获取所有触发的性能事件，然后根据 entry.name 来判断是否是 FP 或 FCP。
 
-<script>
-export default {
-  methods: {
-    sendMessage() {
-      this.$store.commit('setMessage', 'Hello from Component A');
+4. 如果是 FP，可以通过 entry.startTime 获取其开始的时间戳，进行相应的处理。同样，如果是 FCP，也可以通过 entry.startTime 获取其开始的时间戳。
+
+完整的示例代码如下：
+
+```javascript
+const observer = new PerformanceObserver((list) => {
+  const entries = list.getEntries();
+  entries.forEach((entry) => {
+    if (entry.name === 'first-paint') {
+      console.log('FP:', entry.startTime);
+    } else if (entry.name === 'first-contentful-paint') {
+      console.log('FCP:', entry.startTime);
     }
-  }
-};
-</script>
+  });
+});
+
+observer.observe({ entryTypes: ['paint'] });
 ```
 
-```html
-<template>
-  <div>
-    <p>{{ message }}</p>
-  </div>
-</template>
+在上述代码中，创建了一个 PerformanceObserver 实例，并指定一个回调函数。在回调函数中，根据 entry.name 的值判断是否是 FP 或 FCP，并打印出对应的开始时间戳。然后通过调用 observer.observe() 方法监听 'paint' 类型的性能事件。
 
-<script>
-export default {
-  computed: {
-    message() {
-      return this.$store.state.message;
-    }
-  }
-};
-</script>
-```
-在这个示例中，我们首先安装并配置了Vuex。
+通过以上步骤，就可以使用 PerformanceObserver 统计 FP 和 FCP，并对这些性能指标进行进一步的处理和分析。
 
-然后，在store.js文件中，我们创建了一个store实例，并定义了一个名为message的状态和一个名为setMessage的mutation，用于更新message的值。
+#### PerformanceObserver 如何统计 long tasks
 
-在发送消息的组件中，我们通过`this.$store.commit('mutationName', payload)`的形式来调用mutation，从而更新Vuex的状态。
+要使用 PerformanceObserver 统计长任务（Long Tasks），可以按照以下步骤进行：
 
-在接收消息的组件中，我们通过计算属性来获取Vuex中的message状态，并在模板中使用该计算属性来展示消息。
+1. 创建 PerformanceObserver 实例，并指定一个回调函数作为参数。
 
-这样，通过Vuex的状态管理，可以实现组件之间的通信。组件A通过调用mutation来更新状态，组件B通过计算属性来获取状态并进行展示。
-
-需要注意的是，在实际应用中，可以根据需求来定义更多的状态和mutations，以满足组件之间的通信需求。
-
-#### Provide/Inject
-
-在Vue中，可以使用provide/inject来实现组件之间的通信。provide和inject是Vue的高级特性，可以在祖先组件中提供数据，并在后代组件中注入数据。以下是一个使用provide/inject实现组件之间通信的示例：
-
-父组件：
-```html
-<template>
-  <div>
-    <child-component></child-component>
-  </div>
-</template>
-
-<script>
-import ChildComponent from './ChildComponent.vue';
-
-export default {
-  components: {
-    ChildComponent
-  },
-  provide() {
-    return {
-      message: 'Hello from Parent Component'
-    };
-  }
-};
-</script>
+```javascript
+const observer = new PerformanceObserver((list) => {
+  const entries = list.getEntries();
+  entries.forEach((entry) => {
+    console.log('Long Task:', entry);
+  });
+});
 ```
 
-子组件：
-```html
-<template>
-  <div>
-    <p>{{ injectedMessage }}</p>
-  </div>
-</template>
+2. 使用 PerformanceObserver 的 observe() 方法监听 'longtask' 类型的性能事件。
 
-<script>
-export default {
-  inject: ['message'],
-  computed: {
-    injectedMessage() {
-      return this.message;
-    }
-  }
-};
-</script>
+```javascript
+observer.observe({ entryTypes: ['longtask'] });
 ```
 
-在这个示例中，父组件通过provide属性提供了一个名为message的数据，值为'Hello from Parent Component'。
+3. 在回调函数中，通过遍历 PerformanceEntryList 对象的 getEntries() 方法获取所有触发的长任务事件。
 
-子组件通过inject属性注入了父组件提供的message数据，并将其存储在一个名为injectedMessage的计算属性中。
+4. 可以通过遍历获得的长任务事件数据，并进行进一步的处理和分析。
 
-最后，子组件通过模板中的{{ injectedMessage }}来展示通过provide/inject传递的数据。
+完整的示例代码如下：
 
-这样，通过provide/inject，父组件可以将数据提供给后代组件，并且后代组件可以通过注入的方式来获取这些数据，实现了组件之间的通信。
+```javascript
+const observer = new PerformanceObserver((list) => {
+  const entries = list.getEntries();
+  entries.forEach((entry) => {
+    console.log('Long Task:', entry);
+  });
+});
 
-需要注意的是，provide/inject是一种上下文注入的方式，因此数据的变化会影响到所有注入了该数据的组件。在实际应用中，要谨慎使用provide/inject，确保数据的使用和变化符合预期。
+observer.observe({ entryTypes: ['longtask'] });
+```
 
-通过provide/inject，可以在组件之间实现数据的传递和共享，从而实现组件之间的通信。
+在上述代码中，创建了一个 PerformanceObserver 实例，并指定一个回调函数。在回调函数中，遍历 PerformanceEntryList 对象的 getEntries() 方法获取所有长任务事件，并打印出相关的长任务数据。
+
+通过以上步骤，就可以使用 PerformanceObserver 统计长任务，并对这些长任务进行进一步的处理和分析。
+
+### 补充： 页面性能指标有哪些？
+
+以下是常见的页面性能指标，按照阶段顺序进行表述：
+
+| 阶段              | 指标名称                       | 描述                                                                                         |
+|------------------|--------------------------------|----------------------------------------------------------------------------------------------|
+| 导航阶段          | DNS 解析时间                   | 浏览器解析域名并获取目标服务器IP地址所花费的时间                                            |
+| 导航阶段          | TCP 连接时间                   | 浏览器与服务器建立 TCP 连接所花费的时间                                                     |
+| 导航阶段          | SSL/TLS 握手时间                | 如果网站启用了 HTTPS，浏览器与服务器进行 SSL/TLS 握手所花费的时间                          |
+| 导航阶段          | 请求时间                       | 浏览器发送 HTTP 请求并等待服务器响应的时间                                                  |
+| 导航阶段          | 首字节时间（TTFB）              | 浏览器收到服务器响应的第一个字节所花费的时间                                                |
+| 渲染阶段          | DOM 解析时间                   | 浏览器将 HTML 文档解析为 DOM 树的时间                                                      |
+| 渲染阶段          | CSS 解析时间                   | 浏览器将 CSS 样式表解析为 CSSOM 树的时间                                                    |
+| 渲染阶段          | 首次渲染时间（FP）              | 浏览器将 DOM 树和 CSSOM 树合并，开始绘制页面的时间                                          |
+| 渲染阶段          | 首次内容绘制时间（FCP）         | 页面首次有可见内容被绘制的时间                                                              |
+| 渲染阶段          | 首次有意义绘制时间（FMP）       | 页面首次有有意义的内容被绘制的时间                                                          |
+| 交互阶段          | 首次输入延迟时间（FID）         | 用户首次与页面进行交互（点击按钮、输入框等）后，页面响应交互的时间                           |
+| 交互阶段          | 首次可交互时间（TTI）           | 页面变得完全可交互（用户可以进行大部分常规操作）所花费的时间                                 |
+| 交互阶段          | 页面完全加载时间（Page Load）  | 页面所有资源（包括图片、CSS、JavaScript等）加载完成、渲染完毕并且可交互的时间                  |
+| 用户体验阶段      | 页面响应时间                   | 用户发起请求后，页面完成响应所花费的时间                                                    |
+| 用户体验阶段      | 页面加载时间                   | 用户打开页面到页面加载完成所花费的时间                                                      |
+| 用户体验阶段      | 页面交互性能                   | 页面响应用户交互（点击、滚动等）的流畅程度                                                  |
+
+请注意，以上仅为常见的页面性能指标，并非所有指标都适用于每个网站。具体的指标选择取决于你的应用的特点和需求。

@@ -7,15 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "link 标签有 那些属性，作用都是啥？",
+  title: "[Vue] 组件之间的通信方式有哪些？",
   key_world: [
-    "link 标签属性",
+    "vue组件通信",
+    "vue通信",
+    "Vuex组件通信",
+    "$refs组件通信",
   ],
   labels: [
-    labels.chrome,
-    // company.pdd,
+    labels.frameWork,
+    company.pdd,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

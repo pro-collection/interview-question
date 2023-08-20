@@ -1,134 +1,64 @@
-**关键词**：web性能指标获取
+**关键词**：rel preload 作用、rel prefetch 作用、rel defer 作用、rel prefetch
 
-### 常见性能指标获取方式
+`rel` 属性定义了所链接的资源与当前文档的关系，在 `<a>、<area> 和 <link>` 元素上有效。支持的值取决于拥有该属性的元素。
 
-相关性能指标问题， 可以看这个文章：[https://github.com/pro-collection/interview-question/issues/515](https://github.com/pro-collection/interview-question/issues/515)
+`preload和prefetch`是浏览器提供的两种对静态资源预下载的方式，对于优化页面的渲染速度是很有作用的。
 
-**指标所反映的用户体验**
-下表概述了我们的性能指标如何对应到我们的问题之上：
+### preload - 立即下载
 
-**开始了吗？**
+preload针对的是当前页面需要加载的资源，使用preload加载的资源会提前下载，但是并不会立即执行，`而且等到使用的时候才会执行`。
 
-- 首次绘制、首次内容绘制 First Paint (FP) / First Contentful Paint (FCP)
+**preload 使用方式**
 
-**有用吗？**
+preload是<link>元素中rel属性的一个值，所以需要使用link标签来实现资源的预加载
 
-- 首次有效绘制、主要元素时间点 First Meaningful Paint (FMP) / Hero Element Timing
-
-**能用吗？**
-
-- 可交互时间点 Time to Interactive (TTI)
-
-**好用吗？**
-
-- 慢会话 Long Tasks (从技术上来讲应该是：没有慢会话)
-
-
-#### 页面何时开始渲染 - FP & FCP
-
-这两个指标，我们可以通过 performance.getEntry、performance.getEntriesByName、performanceObserver 来获取。
-
-```ts
-performance.getEntries().filter(item => item.name === 'first-paint')[0];  // 获取 FP 时间
-
-performance.getEntries().filter(item => item.name === 'first-contentful-paint')[0];  // 获取 FCP 时间
-
-performance.getEntriesByName('first-paint'); // 获取 FP 时间
-
-performance.getEntriesByName('first-contentful-paint');  // 获取 FCP 时间
-
-// 也可以通过 performanceObserver 的方式获取
-var observer = new PerformanceObserver(function(list, obj) {
-    var entries = list.getEntries();
-    entries.forEach(item => {
-        if (item.name === 'first-paint') {
-            ...
-        }
-        if (item.name === 'first-contentful-paint') {
-            ...
-        }
-    })
-});
-observer.observe({type: 'paint'});
+```html
+<link rel="preload" as="script" href='https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js'>
 ```
 
-#### 页面何时渲染主要内容 - FMP & SI & LCP
+对于预加载的资源来说，一般需要设置以下三个属性：
 
-`FMP`, 是一个已经废弃的性能指标。在实践过程中，由于 FMP 对页面加载的微小差异过于敏感，经常会出现结果不一致的情况。此外，该指标的定义依赖于特定于浏览器的实现细节，这意味着它不能标准化，也不能在所有 Web 浏览器中实现。目前，官方并没有提供有效的获取 FMP 的接口，因此性能分析的时候不再使用这个指标。
+- `rel`: preload或者prefetch，表示预加载的方式。必填（rel的值很多，这里只考虑预加载的情况）
+- `as`: 表示预加载资源的类型。必填
+- `href`: 表示预加载资源的地址。必填
 
-`SI` 和 FMP 一样，官方也没有提供有效的获取接口，只能通过 lighthouse 面板来查看，不作为 Sentry 等工具做性能分析的指标。
+当预加载的是字体资源时，必须加上`crossorigin`属性
 
-`LCP`，和 FMP 类似，但只聚焦页面首次加载时最大元素的绘制时间点，计算相对简单一些。通过 performanceObserver 这个接口，我们可以获取到 LCP 指标数据。
+**preload的好处**
 
-```ts
-new PerformanceObserver((entryList) => {
-    for (const entry of entryList.getEntries()) {
-        console.log('LCP candidate:', entry.startTime, entry);
-    }
-}).observe({type: 'largest-contentful-paint', buffered: true});
-```
+- 能够分离资源的下载和执行
+- 能够提高资源的下载优先级
+- 能够支持多种资源的预下载，比如脚本，样式，图片等等
 
-#### 何时可以交互 - TTI & TBT
+**preload VS defer**
 
-`TTI`, `time to ineractive`, 可交互时间， `lighthouse` 面板中的六大指标之一, 用于测量页面从开始加载到主要资源完成渲染，并能够快速、可靠地响应用户输入所需的时间, 值越小约好。 
-官方资料: [TTI](https://web.dev/i18n/zh/tti/) 。
+和preload一样，defer的script资源也会将下载和执行过程分离。不同的是，preload的资源是由开发者来确定何时执行，defer的script资源是由浏览器来决定何时执行。
 
-和 FMP、SI 一样，`官方并没有提供获取 TTI 的有效接口`，只能通过 lighthouse 面板来查看。
+除此之外，defer和preload相比还有以下缺点：
 
-**计算方式人如下**:
+只能支持script资源
 
-1. 先进行 First Contentful Paint 首次内容绘制；
 
-2. 沿时间轴正向搜索时长至少为 5 秒的安静窗口，其中，安静窗口的定义为：没有长任务且不超过 2 个正在处理的网络请求;
+**preload VS 预解析操作**
 
-3. 沿时间轴反向搜索安静窗口之前的最后一个长任务，如果没有找到长任务，则在 FCP 步骤停止执行。
+在分析页面渲染流程的时候我们提到过浏览器的一个优化操作，就是预解析操作。当浏览器获取到HTML文件之后，会分析其中依赖哪些外部资源，并提前下载这些外部资源。
 
-4. TTI 是安静窗口之前最后一个长任务的结束时间（如果没有找到长任务，则与 FCP 值相同）。
+看上去这个功能和preload基本上是一样的，可以达到同样的效果。
 
-理解计算过程如下图：
-<img width="1045" alt="image" src="https://github.com/pro-collection/interview-question/assets/22188674/7f26aa08-6360-4d4c-9aaf-d945690cd9d1">
+但是浏览器预解析操作有一个缺陷：就是只能预下载HTML文件中引入的静态资源，对于当前页面动态加载的资源是无能为力的。但是preload可以解析这个问题。
 
-TTI 表示的是完全可交互的时间， 每个 web 系统， 对 TTI 时间定义可能并不一定相同， 上面只是提供一个计算较为通用的 TTI 的一个方式。 
+### prefetch - 有空才下载
 
-#### 交互是否有延迟 - FID & MPFID & Long Task
+prefetch针对的资源是用户下个浏览的页面需要的资源，可以在当前页面开始预下载，提高下个页面渲染的速度。
 
-`FID 和 MPFID` 可用来衡量用户首次交互延迟的情况，`Long Task` 用来衡量用户在使用应用的过程中遇到的延迟、阻塞情况。
+在使用上，prefetch和preload基本是一致的。
 
-**`FID`**，`first input delay`, 首次输入延迟，测量从用户第一次与页面交互（例如当他们单击链接、点按按钮或使用由 JavaScript 驱动的自定义控件）直到浏览器对交互作出响应，并实际能够开始处理事件处理程序所经过的时间。官方资料: FID。
-FID 指标的值越小约好。通过 performanceObserver，我们可以获取到 FID 指标数据。
 
-```ts
-new PerformanceObserver((entryList) => {
-  for (const entry of entryList.getEntries()) {
-    const delay = entry.processingStart - entry.startTime;
-    console.log('FID candidate:', delay, entry);
-  }
-}).observe({type: 'first-input', buffered: true});
-```
+### preload VS prefetch
 
-**`MPFID`**, `Max Potential First Input Delay`，最大潜在首次输入延迟，用于测量用户可能遇到的最坏情况的首次输入延迟。和 FMP 一样，这个指标已经被废弃不再使用。
+preload 和 prefetch在使用上是有很大的不同的。
 
-**`Long Task`**，衡量用户在使用过程中遇到的交互延迟、阻塞情况。这个指标，可以告诉我们哪些任务执行耗费了 50ms 或更多时间。
+- **preload针对的资源是当前页面需要的资源，下载的优先级很高**
+- **prefetch针对的资源是下个页面需要的资源，下载的优先级很低，有空的时候才下载**
 
-```ts
-new PerformanceObserver(function(list) {
-    var perfEntries = list.getEntries();
-    for (var i = 0; i < perfEntries.length; i++) {
-        ...
-    }
-}).observe({ type: 'longtask'});
-```
-
-#### 页面视觉是否有稳定 - CLS
-
-**`CLS`**, `Cumulative Layout Shift`, 累积布局偏移，用于测量整个页面生命周期内发生的所有意外布局偏移中最大一连串的布局偏移情况。官方资料: CLS。
-
-CLS, 值越小，表示页面视觉越稳定。通过 performanceObserver，我们可以获取到 CLS 指标数据。
-```ts
-new PerformanceObserver(function(list) {
-    var perfEntries = list.getEntries();
-    for (var i = 0; i < perfEntries.length; i++) {
-        ...
-    }
-}).observe({type: 'layout-shift', buffered: true});
-```
+所以开发者是使用的时候需要区分场景，避免浪费用户的带宽资源。

@@ -7,15 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[性能] 常见性能指标获取方式？",
+  title: "html rel 属性 的参数 preload和prefetch 的作用是什么",
   key_world: [
-    "web性能指标获取",
+    "rel preload 作用",
+    "rel prefetch 作用",
+    "rel defer 作用",
+    "rel prefetch",
   ],
   labels: [
-    labels.engineering,
-    company.mt,
+    labels.chrome,
+    company.mi,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

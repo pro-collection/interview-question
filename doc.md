@@ -30,11 +30,6 @@
 - https://github.com/careyke/frontend_knowledge_structure
 
 
-- 性能监控功能问题研究
-    - https://juejin.cn/post/7097157902862909471
-    - https://juejin.cn/post/7148364027817623589
-    - https://juejin.cn/post/6844904112450994189
-
 -----------------
 
 

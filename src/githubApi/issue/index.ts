@@ -7,7 +7,7 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "for...of、for...in、for 循环， 三者有什么区别",
+  title: "实现一个可以用for...of遍历的对象",
   key_world: [
     "for...in遍历、for...of遍历",
   ],

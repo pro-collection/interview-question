@@ -7,12 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "html rel 属性 的参数 preload和prefetch 的作用是什么",
+  title: "HTML 属性 crossorigin 的作用是什么",
   key_world: [
-    "rel preload 作用",
-    "rel prefetch 作用",
-    "rel defer 作用",
-    "rel prefetch",
+    "crossorigin 属性",
+    "crossorigin 作用",
+    "crossorigin 资源错误处理",
   ],
   labels: [
     labels.chrome,

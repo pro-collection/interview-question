@@ -1,37 +1,58 @@
-**关键词**：crossorigin 属性、crossorigin 作用、crossorigin 资源错误处理
 
-`crossorigin` 属性在 `<audio>、<img>、<link>、<script> 和 <video>` 元素中有效，它们提供对 CORS 的支持，定义该元素如何处理跨源请求，从而实现对该元素获取数据的 CORS 请求的配置。根据元素的不同，该属性可以是一个 CORS 设置属性。
+代码如下，请问执行结果是多少？
+```ts
+let obj = {
+  name: "yanle",
+  age: 20,
+  getName: () => {
+    const _getName = () => {
+      console.log("this.getName", this.name);
+    };
+    _getName();
+  },
+  getAge: function() {
+    const _getAge = () => {
+      console.log("this.getAge", this.age);
+    };
+    _getAge();
+  },
+  extend: {
+    name: "le",
+    age: 20,
+    getName: function() {
+      console.log("name: ", this.name);
+    },
+    getAge: () => {
+      console.log("age: ", this.age);
+    },
+  },
+};
 
-**属性值**
+obj.getName();
+obj.getAge();
 
-`crossorigin` 属性有以下几个取值选项，每个选项的作用如下：
+obj.extend.getName();
+obj.extend.getAge();
 
-1. `anonymous`：表示跨域请求不发送凭证信息（如 cookie、HTTP 认证信息）。这是默认值，适用于无需发送凭证的跨域请求，可提高安全性。
-2. `use-credentials`：表示跨域请求发送凭证信息。适用于需要发送凭证的跨域请求，但需要服务器配置支持，并且需要设置 `Access-Control-Allow-Credentials` 头为 `true`。
-3. `null`：表示不返回跨域资源，并在控制台中报告错误，而不加载跨域资源。适用于跨域资源加载失败时的错误处理。
+obj.extend.getName.bind(obj)();
+obj.extend.getAge.bind(obj)();
+```
 
-这些取值选项用来在 HTML 中指定跨域资源请求的行为，通过设置不同的取值选项，可以控制是否发送凭证、如何处理跨域资源加载失败等。
+**执行结果**
+```shell
+this.getName undefined
+this.getAge 20
+name:  le
+age:  undefined
+name:  yanle
+age:  undefined
+```
 
-**作用**
+解释如下：
 
-`crossorigin` 属性是 HTML 中用来控制跨域资源请求行为的属性。它用于指定浏览器在加载跨域资源时如何处理跨域请求。
-
-主要作用有以下几点：
-
-1. 跨域资源请求：当在 HTML 中引用跨域的资源（如图片、音频、视频、脚本、样式表等）时，浏览器会发送跨域请求。`crossorigin` 属性可以控制这些跨域请求的行为。
-2. 控制凭证的发送：默认情况下，跨域请求会发送用户凭证（如 cookie、HTTP 认证信息）。通过 `crossorigin` 属性，可以控制资源请求时是否发送凭证信息。
-3. 防止资源污染：当加载跨域的脚本文件时，如果不使用 `crossorigin` 属性，可能会导致脚本文件被污染从而引发安全问题。使用 `crossorigin` 属性可以确保加载的脚本是可信任的。
-4. 错误处理：`crossorigin` 属性还可以用来处理跨域请求中可能发生的错误。通过设置不同的取值选项，可以在跨域请求出现错误时进行相应的处理。
-
-
-**资源加载错误处理方式**
-
-`crossorigin` 属性在错误处理方面有不同的行为，取决于属性的取值选项：
-
-1. 当 `crossorigin` 属性值为 `anonymous` 或未设置时，如果跨域资源加载失败，浏览器会忽略加载失败，不会报告任何错误，也不会影响页面的正常渲染。
-
-2. 当 `crossorigin` 属性值为 `use-credentials` 时，如果跨域资源加载失败，浏览器会在控制台报告错误，并且不会加载跨域资源。这样可以确保在有凭证的情况下，不加载错误的或未授权的跨域资源。
-
-3. 当 `crossorigin` 属性值为 `null` 时，如果跨域资源加载失败，浏览器会在控制台报告错误，并且不加载跨域资源。这种设置适用于当跨域资源加载失败时要显示错误信息，并且不加载其他资源。
-
-总之，通过设置 `crossorigin` 属性，可以控制跨域资源加载失败时的错误处理行为，从而在不同的情况下选择合适的错误处理方式。
+`obj.getName()`：在箭头函数getName中，this指向的是全局对象（在浏览器中是window对象，Node.js 中是Global对象）。因此this.getName输出undefined。
+`obj.getAge()`：在普通函数getAge中，this指向的是obj对象。因此this.getAge输出20。
+`obj.extend.getName()`：在普通函数getName中，this指向的是obj.extend对象。因此this.name输出le。
+`obj.extend.getAge()`：在箭头函数getAge中，this指向的是全局对象（在浏览器中是window对象，Node.js 中是Global对象）。因此this.age输出undefined。
+`obj.extend.getName.bind(obj)()`：通过bind方法将getName函数绑定到obj对象上，并立即调用绑定后的函数。在绑定后调用时，this指向的是obj对象。因此this.name输出yanle。
+`obj.extend.getAge.bind(obj)()`：在箭头函数 getAge 中，this 是在函数定义时绑定的，而不是在函数调用时绑定的。在这种情况下，箭头函数的 this 指向的是外层作用域的 this，即全局对象（在浏览器中是 window 对象，Node.js 中是 Global 对象）。因此，在 obj.extend.getAge.bind(obj)() 中，this.age 输出的是全局对象的 age，而全局对象中并没有定义 age 属性，所以结果是 undefined。

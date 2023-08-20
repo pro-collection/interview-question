@@ -7,9 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "实现一个可以用for...of遍历的对象",
+  title: "前端模块化的演进过程",
   key_world: [
-    "for...in遍历、for...of遍历",
+    "前端模块化演进",
   ],
   labels: [
     labels.js,

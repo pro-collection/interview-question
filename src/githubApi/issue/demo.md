@@ -1,58 +1,58 @@
+**关键词**：for...in遍历、for...of遍历
 
-代码如下，请问执行结果是多少？
-```ts
-let obj = {
-  name: "yanle",
-  age: 20,
-  getName: () => {
-    const _getName = () => {
-      console.log("this.getName", this.name);
-    };
-    _getName();
-  },
-  getAge: function() {
-    const _getAge = () => {
-      console.log("this.getAge", this.age);
-    };
-    _getAge();
-  },
-  extend: {
-    name: "le",
-    age: 20,
-    getName: function() {
-      console.log("name: ", this.name);
-    },
-    getAge: () => {
-      console.log("age: ", this.age);
-    },
-  },
-};
+以下是 `for...of`、`for...in` 和 `for` 循环的区别对比表格：
 
-obj.getName();
-obj.getAge();
+| 特性             | for...of 循环                                                    | for...in 循环                                             | for 循环                                                   |
+|------------------|----------------------------------------------------------------|-----------------------------------------------------------|------------------------------------------------------------|
+| 遍历对象类型     | 可以遍历可迭代对象（如数组、字符串、Set、Map、Generator 等）      | 可以遍历对象的可枚举属性                                    | 不适用于直接遍历对象，适用于遍历数组或固定个数的循环         |
+| 遍历数组         | 遍历数组的元素                                                  | 遍历数组的索引                                             | 遍历数组的索引或值                                         |
+| 遍历字符串       | 遍历字符串的字符                                                | 遍历字符串的索引                                           | 遍历字符串的索引或字符                                     |
+| 遍历 Set         | 遍历 Set 的值                                                   | 不适用                                                     | 不适用                                                     |
+| 遍历 Map         | 遍历 Map 的键值对                                               | 不适用                                                     | 不适用                                                     |
+| 遍历对象         | 不适用                                                         | 遍历对象的可枚举属性及其对应的值                            | 不适用                                                     |
+| 遍历 Generator   | 遍历 Generator 生成的值                                          | 不适用                                                     | 不适用                                                     |
+| 遍历可迭代对象   | 遍历可迭代对象的元素                                            | 不适用                                                     | 不适用                                                     |
+| 适用范围         | 适用于需要遍历可迭代对象的场景                                  | 适用于需要遍历对象的可枚举属性的场景                        | 适用于需要手动控制循环次数的场景                           |
+| 遍历顺序         | 按照可迭代对象的顺序进行遍历                                    | 不保证顺序                                                 | 按照循环次数进行遍历                                       |
 
-obj.extend.getName();
-obj.extend.getAge();
+需要注意的是，`for...of` 循环只能用于可迭代对象，并且会遍历对象的迭代器方法（即 `Symbol.iterator`），而 `for...in` 循环会遍历对象的所有可枚举属性，包括原型链上的属性。
 
-obj.extend.getName.bind(obj)();
-obj.extend.getAge.bind(obj)();
+对于遍历数组的场景，可以使用 `for...of` 循环遍历数组的元素，也可以使用 `for` 循环遍历数组的索引或值。具体选择哪种方式取决于遍历的目的和需求。
+
+以下是一个使用不同循环方式遍历数组的示例：
+
+```javascript
+var arr = [1, 2, 3];
+
+console.log("for...of 循环:");
+for (var element of arr) {
+  console.log(element);
+}
+
+console.log("for...in 循环:");
+for (var index in arr) {
+  console.log(arr[index]);
+}
+
+console.log("for 循环:");
+for (var i = 0; i < arr.length; i++) {
+  console.log(arr[i]);
+}
 ```
 
-**执行结果**
-```shell
-this.getName undefined
-this.getAge 20
-name:  le
-age:  undefined
-name:  yanle
-age:  undefined
+输出结果为：
+
 ```
-
-解释如下：
-
-`obj.getName()`：在箭头函数getName中，this指向的是全局对象（在浏览器中是window对象，Node.js 中是Global对象）。因此this.getName输出undefined。
-`obj.getAge()`：在普通函数getAge中，this指向的是obj对象。因此this.getAge输出20。
-`obj.extend.getName()`：在普通函数getName中，this指向的是obj.extend对象。因此this.name输出le。
-`obj.extend.getAge()`：在箭头函数getAge中，this指向的是全局对象（在浏览器中是window对象，Node.js 中是Global对象）。因此this.age输出undefined。
-`obj.extend.getName.bind(obj)()`：通过bind方法将getName函数绑定到obj对象上，并立即调用绑定后的函数。在绑定后调用时，this指向的是obj对象。因此this.name输出yanle。
-`obj.extend.getAge.bind(obj)()`：在箭头函数 getAge 中，this 是在函数定义时绑定的，而不是在函数调用时绑定的。在这种情况下，箭头函数的 this 指向的是外层作用域的 this，即全局对象（在浏览器中是 window 对象，Node.js 中是 Global 对象）。因此，在 obj.extend.getAge.bind(obj)() 中，this.age 输出的是全局对象的 age，而全局对象中并没有定义 age 属性，所以结果是 undefined。
+for...of 循环:
+1
+2
+3
+for...in 循环:
+1
+2
+3
+for 循环:
+1
+2
+3
+```

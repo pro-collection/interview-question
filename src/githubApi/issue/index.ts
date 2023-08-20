@@ -7,15 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "关于 this 的指向问题：下面代码执行结果是什么, 原因？",
+  title: "for...of、for...in、for 循环， 三者有什么区别",
   key_world: [
-    // "crossorigin 属性",
-    // "crossorigin 作用",
-    // "crossorigin 资源错误处理",
+    "for...in遍历、for...of遍历",
   ],
   labels: [
     labels.js,
-    company.baidu,
+    company.tencent,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -7,9 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[性能] 衡量页面性能的指标有哪些？",
+  title: "[性能] 常见性能指标获取方式？",
   key_world: [
-    "web性能指标",
+    "web性能指标获取",
   ],
   labels: [
     labels.engineering,

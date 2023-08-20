@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "前端模块化的演进过程",
+  title: "webpack tree-shaking 在什么情况下会失效？",
   key_world: [
-    "前端模块化演进",
+    "tree shaking 失效",
   ],
   labels: [
-    labels.js,
-    company.tencent,
+    labels.engineering,
+    company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

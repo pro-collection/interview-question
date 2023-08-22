@@ -7,16 +7,19 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "HTTP/1.0、HTTP/1.1、HTTP/2和HTTP/3之间的主要区别",
+  title: "http2 多路复用是什么, 原理是什么",
   key_world: [
-    "HTTP/1.0、HTTP/1.1、HTTP/2、HTTP/3 区别",
-    "HTTP各版本之间区别",
+    "http2多路复用",
+    "http2多路复用原理",
+    "http2帧和流",
+    "http2流的优先级",
+    "http2头部压缩",
   ],
   labels: [
     labels.network,
     company.tencent,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

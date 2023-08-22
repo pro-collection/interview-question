@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "webpack tree-shaking 在什么情况下会失效？",
+  title: "[Vue] vue3 的 diff 算法是什么，简单介绍一下",
   key_world: [
-    "tree shaking 失效",
+    "vue3 diff 算法",
+    "逐层比较和双端比较",
   ],
   labels: [
-    labels.engineering,
-    company.alibaba,
+    labels.frameWork,
+    company.tencent,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

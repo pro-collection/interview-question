@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "常见的请求头和响应头",
+  title: "HTTP/1.0、HTTP/1.1、HTTP/2和HTTP/3之间的主要区别",
   key_world: [
-    // "",
+    "HTTP/1.0、HTTP/1.1、HTTP/2、HTTP/3 区别",
+    "HTTP各版本之间区别",
   ],
   labels: [
     labels.network,
-    company.jd,
+    company.tencent,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

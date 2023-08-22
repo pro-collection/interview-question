@@ -29,9 +29,6 @@
 
 
 
-- https://github.com/careyke/frontend_knowledge_structure
-
-
 -----------------
 
 

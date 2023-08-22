@@ -7,16 +7,18 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Vue] vue3 的 diff 算法是什么，简单介绍一下",
+  title: "[Vue] 异常处理机制有哪些",
   key_world: [
-    "vue3 diff 算法",
-    "逐层比较和双端比较",
+    "vue错误捕获",
+    "vue错误边界",
+    "vue异常处理",
+    "vue errorHandler",
   ],
   labels: [
     labels.frameWork,
     company.tencent,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

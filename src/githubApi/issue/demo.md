@@ -1,15 +1,134 @@
-**关键词**：vue3 diff 算法、逐层比较和双端比较
+**关键词**：vue错误捕获、vue错误边界、vue异常处理、vue errorHandler
 
-Vue3的diff算法是一种用于比较虚拟DOM树之间差异的算法。它用于确定需要更新的部分，以便最小化对实际DOM的操作，从而提高性能。
+Vue的错误处理机制主要包括以下几个方面：
 
-Vue3的diff算法采用了一种称为"逐层比较"的策略，即从根节点开始逐层比较虚拟DOM树的节点。具体的比较过程如下：
+1. `Error Capturing（错误捕获）`：Vue提供了全局错误处理的钩子函数`errorCaptured`，可以在组件层级中捕获子组件产生的错误。通过在父组件中使用`errorCaptured`钩子函数，可以捕获子组件中的错误，并对其进行处理或展示错误信息。
 
-1. 对比两棵虚拟DOM树的根节点，判断它们是否相同。如果不相同，则直接替换整个根节点及其子节点，无需进一步比较。
-2. 如果根节点相同，则对比它们的子节点。这里采用了一种称为"双端比较"的策略，即同时从两棵树的头部和尾部开始比较子节点。
-3. 从头部开始，依次对比两棵树的相同位置的子节点。如果两个子节点相同，则继续比较它们的子节点。
-4. 如果两个子节点不同，根据一些启发式规则（如节点类型、key值等），判断是否需要替换、删除或插入子节点。
-5. 继续比较下一个位置的子节点，直到两棵树的所有子节点都被比较完。
+2. `Error Boundary（错误边界）`：Vue 2.x中没有内置的错误边界机制，但你可以通过自定义组件来实现。错误边界是一种特殊的组件，它可以捕获并处理其子组件中的错误。错误边界组件使用`errorCaptured`钩子函数来捕获子组件中的错误，并使用`v-if`或`v-show`等指令来显示错误信息或替代内容。
 
-通过逐层比较和双端比较的策略，Vue3的diff算法能够高效地找到虚拟DOM树之间的差异，并只对需要更新的部分进行操作，从而减少了对实际DOM的操作次数，提高了性能。
+3.` 异常处理`：在Vue组件的生命周期钩子函数中，可以使用`try-catch`语句捕获并处理可能出现的异常。例如，在`mounted`钩子函数中进行接口请求，可以使用`try-catch`来捕获请求过程中的异常，并进行相应的处理。
 
-值得注意的是，Vue3还引入了一种称为"静态标记"的优化策略，用于在编译阶段将一些静态节点标记出来，从而在diff算法中更快地跳过这些静态节点的比较，进一步提升性能。这一优化策略在处理大型列表、静态内容等场景下特别有效。
+4. `错误提示和日志记录`：在开发环境中，Vue会在浏览器的控制台中输出错误信息，以方便开发者进行调试。在生产环境中，可以使用日志记录工具（如Sentry）来记录错误信息，以便及时发现和解决问题。
+
+
+**代码举例**
+
+以下是使用代码举例说明以上四种Vue错误处理方式的示例：
+
+1. Error Capturing（错误捕获）：
+
+```javascript
+// ParentComponent.vue
+<template>
+  <div>
+    <ChildComponent />
+    <div v-if="error">{{ error }}</div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      error: null
+    };
+  },
+  errorCaptured(err, vm, info) {
+    this.error = err.toString(); // 将错误信息存储在父组件的data中
+    return false; // 阻止错误继续向上传播
+  }
+};
+</script>
+```
+
+2. Error Boundary（错误边界）：
+
+```javascript
+// ErrorBoundary.vue
+<template>
+  <div v-if="hasError">
+    Oops, something went wrong.
+    <button @click="resetError">Retry</button>
+  </div>
+  <div v-else>
+    <slot></slot>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      hasError: false
+    };
+  },
+  errorCaptured() {
+    this.hasError = true;
+    return false;
+  },
+  methods: {
+    resetError() {
+      this.hasError = false;
+    }
+  }
+};
+</script>
+
+// ParentComponent.vue
+<template>
+  <div>
+    <ErrorBoundary>
+      <ChildComponent />
+    </ErrorBoundary>
+  </div>
+</template>
+```
+
+3. 异常处理：
+
+```javascript
+// ChildComponent.vue
+<template>
+  <div>{{ data }}</div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      data: null
+    };
+  },
+  mounted() {
+    try {
+      // 模拟接口请求
+      const response = await fetch('/api/data');
+      this.data = await response.json();
+    } catch (error) {
+      console.error(error); // 处理异常，输出错误信息
+    }
+  }
+};
+</script>
+```
+
+4. 错误提示和日志记录：
+
+```javascript
+// main.js
+import Vue from 'vue';
+import * as Sentry from '@sentry/browser';
+
+Vue.config.errorHandler = (err) => {
+  console.error(err); // 错误提示
+  Sentry.captureException(err); // 错误日志记录
+};
+
+new Vue({
+  // ...
+}).$mount('#app');
+```
+
+上述代码中，`Error Capturing`通过在父组件中的`errorCaptured`钩子函数中捕获子组件的错误，并展示在父组件中。`Error Boundary`通过自定义错误边界组件，在子组件发生错误时展示错误信息或替代内容。`异常处理`通过在子组件的生命周期钩子函数中使用`try-catch`语句来捕获异常并进行处理。`错误提示和日志记录`通过在`Vue.config.errorHandler`中定义全局的错误处理函数，将错误信息输出到控制台，并使用Sentry等工具记录错误日志。
+
+这些示例展示了不同的错误处理方式，可以根据实际需求选择合适的方式来处理Vue应用中的错误。

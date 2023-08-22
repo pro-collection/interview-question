@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "html 标签属性 src 和 href 有什么区别",
+  title: "常见的请求头和响应头",
   key_world: [
-    "src和href 有什么区别",
+    // "",
   ],
   labels: [
-    labels.chrome,
-    company.pdd,
+    labels.network,
+    company.jd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

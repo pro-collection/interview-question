@@ -7,16 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Vue] 异常处理机制有哪些",
+  title: "html 标签属性 src 和 href 有什么区别",
   key_world: [
-    "vue错误捕获",
-    "vue错误边界",
-    "vue异常处理",
-    "vue errorHandler",
+    "src和href 有什么区别",
   ],
   labels: [
-    labels.frameWork,
-    company.tencent,
+    labels.chrome,
+    company.pdd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -7,14 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "Http 状态码 301 和 302 的应用场景分别是什么",
+  title: "什么是 JWT",
   key_world: [
-    // "http 状态码 301 和 302",
-    // "状态码 301 和 302 应用场景",
+    "jwt 基本概念"
   ],
   labels: [
     labels.network,
-    company.baidu,
+    company.mi,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

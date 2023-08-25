@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "什么是 JWT",
+  title: "单点登录是是什么， 具体流程是什么",
   key_world: [
-    "jwt 基本概念"
+    "单点登录流程"
   ],
   labels: [
-    labels.network,
+    labels.application,
     company.mi,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

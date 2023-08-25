@@ -7,9 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "http 常见状态码有哪些",
+  title: "Http 状态码 301 和 302 的应用场景分别是什么",
   key_world: [
-    "http常见状态码",
+    // "http 状态码 301 和 302",
+    // "状态码 301 和 302 应用场景",
   ],
   labels: [
     labels.network,

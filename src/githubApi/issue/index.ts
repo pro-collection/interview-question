@@ -7,9 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "长连接了解多少",
+  title: "如何实现大文件断点续传",
   key_world: [
-    "http 长连接过程",
+    "文件上传断点续传",
   ],
   labels: [
     labels.network,

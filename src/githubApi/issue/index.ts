@@ -7,19 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "http2 多路复用是什么, 原理是什么",
+  title: "http 常见状态码有哪些",
   key_world: [
-    "http2多路复用",
-    "http2多路复用原理",
-    "http2帧和流",
-    "http2流的优先级",
-    "http2头部压缩",
+    "http常见状态码",
   ],
   labels: [
     labels.network,
-    company.tencent,
+    company.baidu,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何实现大文件断点续传",
+  title: "http 请求中 GET 和 POST 有什么区别",
   key_world: [
-    "文件上传断点续传",
+    "GET 和 POST 区别",
   ],
   labels: [
     labels.network,
-    company.netEase,
+    company.shopee,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

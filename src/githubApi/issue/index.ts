@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "单点登录是什么， 具体流程是什么",
+  title: "长连接了解多少",
   key_world: [
-    "单点登录流程"
+    "http 长连接过程",
   ],
   labels: [
-    labels.application,
-    company.mi,
+    labels.network,
+    company.netEase,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

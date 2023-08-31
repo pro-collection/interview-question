@@ -7,15 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "typeof 与 instanceof 的区别",
+  title: "引用类型有哪些，有什么特点",
   key_world: [
-    "typeof 与 instanceof",
-    "typeof 作用",
-    "instanceof 作用",
+    "js引用类型",
   ],
   labels: [
     labels.js,
-    company.shopee,
+    company.quic,
   ],
   milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

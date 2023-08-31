@@ -7,12 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "http 请求中 GET 和 POST 有什么区别",
+  title: "typeof 与 instanceof 的区别",
   key_world: [
-    "GET 和 POST 区别",
+    "typeof 与 instanceof",
+    "typeof 作用",
+    "instanceof 作用",
   ],
   labels: [
-    labels.network,
+    labels.js,
     company.shopee,
   ],
   milestone: MileStone.base,

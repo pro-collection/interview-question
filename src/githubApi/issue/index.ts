@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "引用类型有哪些，有什么特点",
+  title: "箭头函数解决了什么问题",
   key_world: [
-    "js引用类型",
+    "箭头函数",
+    "箭头函数特点",
   ],
   labels: [
     labels.js,
-    company.quic,
+    company.dd,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

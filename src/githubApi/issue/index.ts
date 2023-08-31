@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "类型的转换有哪些",
+  title: "副作用是什么概念",
   key_world: [
-    "js类型转换",
+    "js副作用",
   ],
   labels: [
     labels.js,
-    company.dd,
+    company.baidu,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

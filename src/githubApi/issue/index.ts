@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "箭头函数解决了什么问题",
+  title: "类型的转换有哪些",
   key_world: [
-    "箭头函数",
-    "箭头函数特点",
+    "js类型转换",
   ],
   labels: [
     labels.js,
     company.dd,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

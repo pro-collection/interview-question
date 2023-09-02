@@ -7,7 +7,7 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何理解前端架构？",
+  title: "如何理解前端工程化？",
   key_world: [
     // "前端防止移除水印",
   ],
@@ -15,7 +15,7 @@ const remote = {
     labels.engineering,
     company.alibaba,
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

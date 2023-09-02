@@ -1,167 +1,27 @@
-前端基建是指在前端开发过程中，为提高开发效率、代码质量和团队协作而构建的一些基础设施和工具。下面是前端基建可以做的一些事情：
+计算机知识庞大冗杂，尤其前端领域，知识概念，框架原理不断推崇出新。在学习的过程中我们要不断进行总结梳理，形成某一个知识领域的知识图谱。这个知识图谱还可以帮助我们后期进行回顾复习。
 
-1. `脚手架工具`
+下面是前端前辈进行的总结：
 
-开发和维护一个通用的脚手架工具，可以帮助团队快速初始化项目结构、配置构建工具、集成常用的开发依赖等。
+* [JavaScript Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Fjavascript-guidebook%2F "https://tsejx.github.io/javascript-guidebook/")：JavaScript 知识图谱 – ECMAScript | DOM | BOM | HTML5 | 计算机网络 | 设计模式
+* [React Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Freact-guidebook%2F "https://tsejx.github.io/react-guidebook/")：：React 知识图谱 – 基本概念 | 进阶用法 | 框架生态 | 前沿技术 | 源码核心
+* [Webpack Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Fwebpack-guidebook%2F "https://tsejx.github.io/webpack-guidebook/")：：Webpack 知识图谱 – 模块化 | 基础概念 | 工作原理 | 实战应用
+* [DevOps Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Fdevops-guidebook%2F "https://tsejx.github.io/devops-guidebook/")：：DevOps 知识图谱 – Linux | Nginx | 数据库 | 部署 | DevOps
+* [Vue Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Fvue-guidebook%2F "https://tsejx.github.io/vue-guidebook/")：Vue 知识图谱 – 基本概念 | 响应式原理 | 编译原理 | 框架生态
+* [CSS Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Fcss-guidebook%2F "https://tsejx.github.io/css-guidebook/")：CSS 知识图谱 – 特性 | 属性 | 布局 | 响应式 | 动画
+* [Node Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Fnode-guidebook%2F "https://tsejx.github.io/node-guidebook/")：Node.js 知识图谱 – 模块 | 异步编程 | 进程 | I/O | 服务端应用
+* [TypeScript Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Ftypescript-guidebook%2F "https://tsejx.github.io/typescript-guidebook/")：TypeScript 知识图谱 – 静态类型检查 | 语法基础 | 配置使用 | 编译原理
+* [Cross Platform Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Fcross-platform-guidebook%2F "https://tsejx.github.io/cross-platform-guidebook/")：跨平台开发知识图谱 – HybridApp、ReactNative、小程序、Flutter、Electron
+* [Data Structure and Algorithms Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Fdata-structure-and-algorithms-guidebook%2F "https://tsejx.github.io/data-structure-and-algorithms-guidebook/")：数据结构与算法知识图谱 – 数据结构 | 算法 | 编程实现
+* [Visualizaition Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Fvisualization-guidebook%2F "https://tsejx.github.io/visualization-guidebook/")：前端图像学知识图谱 – Canvas | SVG | WebGL
+* [Database Guidebook](https://link.juejin.cn?target=https%3A%2F%2Ftsejx.github.io%2Fdatabase-guidebook%2F "https://tsejx.github.io/database-guidebook/")：MySQL、MongoDB
 
-2. `组件库`
+要想自己的前端知识学的扎实，我们就一定要形成这样一个个知识图谱，里面从基础概念到应用到原理，让自己的知识脉络形成一张网，然后我们不断地在这张网上进行修补或扩充。很多人觉得前端的知识点零碎杂就是因为没有形成这样的知识网，这样也容易导致开发中遇到问题的时候，不知道该往哪个方向去想。
 
-开发和维护一个内部的组件库，包含常用的UI组件、业务组件等，提供给团队成员复用，减少重复开发的工作量。
+平时写博客记录的是零碎的知识点，我们还要做一个这样的知识图谱站，系统去梳理某个知识领域的所有知识点。这个可以有效的去帮我们在面试前巩固知识点，从容应对！
 
-3. `构建工具和打包工具` 
+最近我的前端编程知识站“[spacexcode](https://link.juejin.cn?target=https%3A%2F%2Fspacexcode.com%2F "https://spacexcode.com/")”上线了，区别于“[前端开发笔记](https://link.juejin.cn?target=https%3A%2F%2Fi-fanr.com%2F "https://i-fanr.com/")”站点，它不再是专注开发中的各个知识细节，而是从整个前端开发知识体系出发，以网带面，做到各个知识点的链接和覆盖。还有一点就是，你可以从这个网站上看到很多代码的动态演示效果，这也是我目前在探索的领域，希望以生动直接的方式来讲解知识点。
 
-搭建和维护一套完善的构建和打包工具链，包括使用Webpack、Parcel等工具进行代码的压缩、合并、打包等工具，优化前端资源加载和性能。
+如果你也想搭建这样一个站点，可以参考：
 
-4. `自动化测试工具`
-
-引入自动化测试工具，如Jest、Mocha等，编写和维护测试用例，进行单元测试、集成测试、UI测试等，提高代码质量和可靠性。
-
-5. `文档工具`
-
-使用工具如JSDoc、Swagger等，生成项目的API文档、接口文档等，方便团队成员查阅和维护。
-
-6. `Git工作流`
-
-制定和规范团队的Git工作流程，使用版本控制工具管理代码，方便团队协作和代码回退。
-
-7. `性能监控和优化`
-
-引入性能监控工具，如Lighthouse、Web Vitals等，对项目进行性能分析，优化网页加载速度、响应时间等。
-
-8. `工程化规范`
-
-制定并推广团队的代码规范、目录结构规范等，提高代码的可读性、可维护性和可扩展性。
-
-9. `持续集成和部署`
-
-搭建持续集成和部署系统，如Jenkins、Travis CI等，实现代码的自动构建、测试和部署，提高开发效率和代码质量。
-
-10. `项目文档和知识库`
-
-建立一个内部的项目文档和知识库，记录项目的技术细节、开发经验、常见问题等，方便团队成员查阅和学习。
-
-
-11. `代码质量工具`
-
-引入代码质量工具，如ESLint、Prettier等，对代码进行静态分析和格式化，提高代码的一致性和可读性。
-
-12. `国际化支持`
-
-为项目添加国际化支持，可以通过引入国际化库，如i18next、vue-i18n等，实现多语言的切换和管理。
-
-13. `错误监控和日志收集`
-
-引入错误监控工具，如Sentry、Bugsnag等，实时监控前端错误，并收集错误日志，方便进行问题排查和修复。
-
-14. `前端性能优化工具`
-
-使用工具如WebPageTest、Chrome DevTools等，对项目进行性能分析和优化，提高页面加载速度、响应时间等。
-
-15. `缓存管理`
-
-考虑合理利用浏览器缓存和服务端缓存，减少网络请求，提升用户访问速度和体验。
-
-16. `移动端适配`
-
-针对移动端设备，采用响应式设计或使用CSS媒体查询等技术，实现移动端适配，保证页面在不同尺寸的设备上有良好的显示效果。
-
-17. `安全防护`
-
-对项目进行安全审计，使用安全防护工具，如CSP（Content Security Policy）、XSS过滤等，保护网站免受常见的安全攻击。
-
-18. `性能优化指标监控`
-
-监控和分析关键的性能指标，如页面加载时间、首次渲染时间、交互响应时间等，以便及时发现和解决性能问题。
-
-19. `前端日志分析`
-
-使用日志分析工具，如ELK（Elasticsearch、Logstash、Kibana）等，对前端日志进行收集和分析，了解用户行为和页面异常情况。
-
-20. `跨平台开发`
-
-考虑使用跨平台开发框架，如React Native、Flutter等，实现一套代码在多个平台上复用，提高开发效率。
-
-21. `编辑器配置和插件`
-
-为团队提供统一的编辑器配置文件，包括代码格式化、语法高亮、代码自动补全等，并推荐常用的编辑器插件，提高开发效率。
-
-22. `文档生成工具`
-
-使用工具如Docusaurus、VuePress等，为项目生成漂亮的文档网站，方便团队成员查阅和维护项目文档。
-
-23. `Mock数据和接口管理`
-
-搭建一个Mock服务器，用于模拟后端接口数据，方便前端开发和测试，同时可以考虑使用接口管理工具，如Swagger等，方便接口的定义和调试。
-
-24. `前端监控和统计`
-
-引入前端监控工具，如Google Analytics、百度统计等，收集用户访问数据和行为信息，用于分析和优化用户体验。
-
-25. `移动端调试工具`
-
-使用工具如Eruda、VConsole等，帮助在移动端设备上进行调试和错误排查，提高开发效率。
-
-26. `自动化部署`
-
-配置自动化部署流程，将项目的代码自动部署到服务器或云平台，减少人工操作，提高发布效率和稳定性。
-
-27. `前端团队协作工具`
-
-使用团队协作工具，如GitLab、Bitbucket等，提供代码托管、项目管理、任务分配和团队沟通等功能，增强团队协作效率。
-
-28. `前端培训和知识分享`
-
-组织定期的前端培训和技术分享会，让团队成员相互学习和交流，推动技术的共享和提升。
-
-29. `客户端性能优化`
-
-针对移动端应用，可以使用工具如React Native Performance、Weex等，进行客户端性能优化，提高应用的响应速度和流畅度。
-
-30. `技术选型和评估`
-
-定期评估和研究前端技术的发展趋势，选择适用的技术栈和框架，以保持项目的竞争力和可持续发展。
-
-31. `统一的状态管理`
-
-引入状态管理工具，如Redux、Vuex等，帮助团队管理前端应用的状态，提高代码的可维护性和可扩展性。
-
-32. `前端日志记录`
-
-引入前端日志记录工具，如log4javascript、logrocket等，记录前端应用的运行日志，方便排查和解决问题。
-
-33. `前端代码扫描`
-
-使用静态代码扫描工具，如SonarQube、CodeClimate等，对前端代码进行扫描和分析，发现潜在的问题和漏洞。
-
-34. `前端数据可视化`
-
-使用数据可视化工具，如ECharts、Chart.js等，将数据以图表或图形的形式展示，增强数据的可理解性和可视化效果。
-
-35. `前端容灾和故障处理`
-
-制定容灾方案和故障处理流程，对前端应用进行监控和预警，及时处理和恢复故障，提高系统的可靠性和稳定性。
-
-36. `前端安全加固`
-
-对前端应用进行安全加固，如防止XSS攻击、CSRF攻击、数据加密等，保护用户数据的安全性和隐私。
-
-37. `前端版本管理`
-
-建立前端代码的版本管理机制，使用工具如Git、SVN等，管理和追踪代码的变更，方便团队成员之间的协作和版本控制。
-
-38. `前端数据缓存`
-
-考虑使用Local Storage、Session Storage等技术，对一些频繁使用的数据进行缓存，提高应用的性能和用户体验。
-
-39. `前端代码分割`
-
-使用代码分割技术，如Webpack的动态导入（Dynamic Import），将代码按需加载，减少初始加载的资源大小，提高页面加载速度。
-
-40. `前端性能监测工具`
-
-使用性能监测工具，如WebPageTest、GTmetrix等，监测前端应用的性能指标，如页面加载时间、资源加载时间等，进行性能优化。
-
-
-
-**参考文档**
-- [前端基建原来可以做这么多事情](https://juejin.cn/post/7256879435339628604)
+* [关于页面](https://link.juejin.cn?target=https%3A%2F%2Fspacexcode.com%2Fabout "https://spacexcode.com/about")
+* [我是如何使用 Docusaurus 来搭建网站的](https://link.juejin.cn?target=https%3A%2F%2Fspacexcode.com%2Fblog%2Fhow-to-use-docusaurus "https://spacexcode.com/blog/how-to-use-docusaurus")

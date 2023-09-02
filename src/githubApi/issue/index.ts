@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "副作用是什么概念",
+  title: "前端基建设计到哪些方面",
   key_world: [
-    "js副作用",
+    "前端工程化建设",
+    "前端基建",
   ],
   labels: [
-    labels.js,
-    company.baidu,
+    labels.engineering,
+    // company.baidu,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.master,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

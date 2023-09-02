@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "web 网页如何禁止别人移除水印",
+  title: "如何理解前端架构？",
   key_world: [
-    "前端防止移除水印",
+    // "前端防止移除水印",
   ],
   labels: [
-    labels.application,
-    company.mi,
+    labels.engineering,
+    company.alibaba,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.master,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

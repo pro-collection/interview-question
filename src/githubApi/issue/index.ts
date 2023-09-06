@@ -7,13 +7,12 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如果用户反馈说感觉网页很卡顿，这个时候该如何排查问题?",
+  title: "用户访问页面白屏了， 原因是啥， 如何排查？",
   key_world: [
-    "网页卡顿",
-    "网页卡顿处理办法",
+    "白屏处理办法",
   ],
   labels: [
-    labels.engineering,
+    labels.application,
     company.tencent,
   ],
   milestone: MileStone.senior,

@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "前端架构和前端工程化有什么区别？",
+  title: "如果用户反馈说感觉网页很卡顿，这个时候该如何排查问题?",
   key_world: [
-    // "前端防止移除水印",
+    "网页卡顿",
+    "网页卡顿处理办法",
   ],
   labels: [
     labels.engineering,
-    company.alibaba,
+    company.tencent,
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

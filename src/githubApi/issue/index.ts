@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "用户访问页面白屏了， 原因是啥， 如何排查？",
+  title: "[代码实现] JS 中如何实现大对象深度对比",
   key_world: [
-    "白屏处理办法",
+    "JS对象对比",
   ],
   labels: [
     labels.application,
-    company.tencent,
+    company.baidu,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

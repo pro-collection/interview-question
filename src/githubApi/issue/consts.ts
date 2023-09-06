@@ -15,6 +15,7 @@ export const labels = {
   frameWork: "web框架",
   engineering: "工程化",
   application: "web应用场景",
+  code: "代码实现/算法",
 };
 
 export const company = {

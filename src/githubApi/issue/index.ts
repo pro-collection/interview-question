@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[代码实现] JS 中如何实现大对象深度对比",
+  title: "[代码实现] JS 中数组深对比实现",
   key_world: [
-    "JS对象对比",
+    "JS数组对比",
   ],
   labels: [
-    labels.application,
-    company.baidu,
+    labels.code,
+    company.netEase,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

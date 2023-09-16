@@ -7,15 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "什么是匿名函数？",
+  title: "splice 和 slice 有什么区别？",
   key_world: [
-    "匿名函数",
+    "Array 方法 splice",
+    "Array 方法 slice",
+    "splice 和 slice 区别",
   ],
   labels: [
     labels.js,
-    company.quic,
+    company.dd,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

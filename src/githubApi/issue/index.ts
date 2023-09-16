@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何理解数据驱动视图， 有哪些核心要素？",
+  title: "vue-cli 都做了哪些事儿，有哪些功能？",
   key_world: [
-    "理解数据驱动视图",
+    "vue-cli 作用",
+    "vue-cli 功能",
   ],
   labels: [
     labels.application,
-    company.netEase,
+    company.shopee,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

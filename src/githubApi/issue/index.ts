@@ -7,10 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "git reset 作用是啥，有哪些操作？",
+  title: "git 中回滚代码有哪些操作？",
   key_world: [
-    "git reset 作用",
+    "git 回滚代码",
     "git reset 操作",
+    "git revert 操作",
   ],
   labels: [
     labels.engineering,

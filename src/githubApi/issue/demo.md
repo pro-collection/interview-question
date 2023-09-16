@@ -1,4 +1,4 @@
-**关键词**：JS数组对比
+**关键词**：WeakMap应用、WeakMap数据、WeakMap api
 
 **基本概念**
 

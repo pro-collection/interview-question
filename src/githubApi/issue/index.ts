@@ -9,7 +9,9 @@ import { omit } from "lodash";
 const remote = {
   title: "WeakMap 是什么样的数据结构",
   key_world: [
-    "JS数组对比",
+    "WeakMap应用",
+    "WeakMap数据",
+    "WeakMap api",
   ],
   labels: [
     labels.js,

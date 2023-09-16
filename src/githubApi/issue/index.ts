@@ -7,14 +7,12 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "git 中回滚代码有哪些操作？",
+  title: "什么是匿名函数？",
   key_world: [
-    "git 回滚代码",
-    "git reset 操作",
-    "git revert 操作",
+    "匿名函数",
   ],
   labels: [
-    labels.engineering,
+    labels.js,
     company.quic,
   ],
   milestone: MileStone.inProgress,

@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "为什么现代前端应用需要打包工具进行打包编译？",
+  title: "git reset 作用是啥，有哪些操作？",
   key_world: [
-    "打包构建必要性",
+    "git reset 作用",
+    "git reset 操作",
   ],
   labels: [
     labels.engineering,
     company.quic,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -7,17 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "splice 和 slice 有什么区别？",
+  title: "weakSet 是什么数据结构， 有什么应用场景",
   key_world: [
-    "Array 方法 splice",
-    "Array 方法 slice",
-    "splice 和 slice 区别",
+    "weakSet 数据",
+    "weakSet 结构",
+    "weakSet 作用",
   ],
   labels: [
     labels.js,
-    company.dd,
+    company.alibaba,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

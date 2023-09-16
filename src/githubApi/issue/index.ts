@@ -7,14 +7,12 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "WeakMap 是什么样的数据结构",
+  title: "如何理解数据驱动视图， 有哪些核心要素？",
   key_world: [
-    "WeakMap应用",
-    "WeakMap数据",
-    "WeakMap api",
+    "理解数据驱动视图",
   ],
   labels: [
-    labels.js,
+    labels.application,
     company.netEase,
   ],
   milestone: MileStone.inProgress,

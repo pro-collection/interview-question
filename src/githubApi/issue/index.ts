@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "vue-cli 都做了哪些事儿，有哪些功能？",
+  title: "为什么现代前端应用需要打包工具进行打包编译？",
   key_world: [
-    "vue-cli 作用",
-    "vue-cli 功能",
+    "打包构建必要性",
   ],
   labels: [
-    labels.application,
-    company.shopee,
+    labels.engineering,
+    company.quic,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -7,12 +7,12 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[代码实现] JS 中数组深对比实现",
+  title: "WeakMap 是什么样的数据结构",
   key_world: [
     "JS数组对比",
   ],
   labels: [
-    labels.code,
+    labels.js,
     company.netEase,
   ],
   milestone: MileStone.inProgress,

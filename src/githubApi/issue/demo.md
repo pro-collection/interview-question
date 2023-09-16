@@ -1,48 +1,25 @@
 **关键词**：JS数组对比
 
-在JavaScript中，可以使用递归的方式实现数组的深度对比。以下是一个示例函数，用于比较两个数组是否相等：
+**基本概念**
 
-```javascript
-function deepArrayEqual(arr1, arr2) {
-  // 检查数组长度是否相同
-  if (arr1.length !== arr2.length) {
-    return false;
-  }
-  
-  for (let i = 0; i < arr1.length; i++) {
-    const value1 = arr1[i];
-    const value2 = arr2[i];
-    
-    // 递归比较每个元素的值
-    if (Array.isArray(value1) && Array.isArray(value2)) {
-      if (!deepArrayEqual(value1, value2)) {
-        return false;
-      }
-    } else if (typeof value1 === 'object' && typeof value2 === 'object') {
-      if (!deepEqual(value1, value2)) {
-        return false;
-      }
-    } else {
-      // 比较基本类型的值
-      if (value1 !== value2) {
-        return false;
-      }
-    }
-  }
-  
-  return true;
-}
-```
+WeakMap 是一种键值对存储的数据结构，类似于 Map。它的特点是键必须是对象，值可以是任意类型的数据。
 
-使用示例：
+WeakMap 内部使用了引用计数的方式来判断键是否存活，当键不再被引用时，垃圾回收机制会自动清除对应的键值对。这意味着如果没有其他地方引用该键，WeakMap 中的键值对会被自动清理，并释放内存。
 
-```javascript
-const arr1 = [1, [2, 3], { name: 'John' }];
-const arr2 = [1, [2, 3], { name: 'John' }];
-const arr3 = [1, [2, 3], { name: 'Jane' }];
+与 Map 不同的是，WeakMap 的键是弱引用，不会阻止垃圾回收。这意味着在 WeakMap 中，键不能被枚举、迭代或获取键的数量。同时，WeakMap 也没有提供像 Map 中的 size 属性和 clear 方法。
 
-console.log(deepArrayEqual(arr1, arr2)); // true
-console.log(deepArrayEqual(arr1, arr3)); // false
-```
+因为键是弱引用，所以 WeakMap 也不能使用普通对象作为键，只能使用具有引用类型的对象作为键。这是为了避免内存泄漏问题，因为如果键是普通对象，即使它没有被其他地方引用，也无法被垃圾回收。
 
-在上述示例中，`deepArrayEqual`函数会递归比较两个数组的每个元素的值，包括嵌套的数组和对象。如果两个数组是相等的，则返回`true`，否则返回`false`。注意，该函数不会检查函数、正则表达式、日期等复杂类型的值。
+因为 WeakMap 的键是弱引用并且没有提供常用的方法，所以它的使用场景相对有限，主要用于存储对象的私有数据或附加元数据。
+
+**有哪些 api**
+
+WeakMap 提供了以下的 API：
+
+- `set(key, value)`: 向 WeakMap 中设置键值对，键必须是对象。
+- `get(key)`: 获取指定键对应的值。
+- `has(key)`: 判断指定键是否存在于 WeakMap 中。
+- `delete(key)`: 删除指定键对应的键值对。
+- 注意：WeakMap 没有提供 `size` 属性和 `clear` 方法，也不能直接迭代或枚举键。
+
+需要注意的是，由于 WeakMap 的键是弱引用，只能使用对象作为键，同时也意味着无法通过值来查找对应的键。所以 WeakMap 适用于需要存储对象的私有数据或附加元数据的场景，而不适合用于需要根据值来查找键的情况。

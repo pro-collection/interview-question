@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "JavaScript 中， 隐藏类是什么概念？",
+  title: "CSS 如何实现文本溢出？",
   key_world: [
-    "JavaScript隐藏类",
+    "文本溢出样式",
   ],
   labels: [
-    labels.js,
-    company.netEase,
+    labels.css,
+    company.shopee,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

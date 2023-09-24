@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "JavaScript 如何做内存管理？",
+  title: "JavaScript 中， 隐藏类是什么概念？",
   key_world: [
-    "JavaScript内存管理",
+    "JavaScript隐藏类",
   ],
   labels: [
     labels.js,
     company.netEase,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

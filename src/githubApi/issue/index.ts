@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "https 如何保证安全的？",
+  title: "实现一个函数， 计算两个日期之间的天数差",
   key_world: [
-    "文本溢出样式",
+    // "文本溢出样式",
   ],
   labels: [
-    labels.network,
+    labels.code,
     company.netEase,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -1,14 +1,26 @@
-**关键词**：文本溢出样式
+以下是使用JavaScript实现计算两个日期之间的天数差的函数：
 
-HTTPS相比HTTP更安全的原因主要有以下几点：
+```javascript
+function calculateDateDifference(date1, date2) {
+  // 将日期字符串转换为 Date 对象
+  const d1 = new Date(date1);
+  const d2 = new Date(date2);
 
-1. 数据传输加密：HTTPS使用SSL/TLS协议对数据进行加密传输，通过使用对称密钥加密传输数据，并使用非对称密钥进行身份验证和密钥交换。这意味着即使攻击者截获了数据包，也无法解密其中的内容。
+  // 计算两个日期的时间差（毫秒数）
+  const timeDiff = Math.abs(d2.getTime() - d1.getTime());
 
-2. 身份验证和数据完整性：HTTPS使用数字证书对网站进行身份验证，确保用户连接的是正确的网站。同时，数字证书也用于确保数据的完整性，以防止数据在传输过程中被篡改。
+  // 将时间差转换为天数
+  const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-3. 防止中间人攻击：HTTPS通过使用公钥加密和数字签名等技术，可以防止中间人攻击。中间人攻击是指攻击者在用户与服务器之间插入自己的恶意代理，在两者之间进行通信并窃取敏感信息。
+  return daysDiff;
+}
 
-4. HTTP头隐私保护：HTTPS可以提供对HTTP头信息的隐私保护，防止攻击者通过分析HTTP头信息获取用户的敏感信息。
+// 示例用法
+const date1 = '2022-01-01';
+const date2 = '2022-01-10';
 
-HTTPS通过数据加密、身份验证和数据完整性保护等机制，提供了更高的安全性，能够有效防止数据被窃取、篡改和中间人攻击等风险。相比之下，HTTP是明文传输，不具备这些安全保护机制。因此，对于需要保护用户隐私和防止数据被攻击的网站，使用HTTPS是更安全的选择。
+const difference = calculateDateDifference(date1, date2);
+console.log(difference); // 输出结果为 9
+```
 
+上述函数首先将两个日期字符串转换为Date对象，然后计算两个日期对象之间的时间差（以毫秒表示），最后将时间差转换为天数。通过调用`calculateDateDifference`函数，可以获取两个日期之间的天数差。

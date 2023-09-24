@@ -7,13 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "CSS 如何实现文本溢出？",
+  title: "https 如何保证安全的？",
   key_world: [
     "文本溢出样式",
   ],
   labels: [
-    labels.css,
-    company.shopee,
+    labels.network,
+    company.netEase,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

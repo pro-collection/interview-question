@@ -7,17 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "weakSet 是什么数据结构， 有什么应用场景",
+  title: "JavaScript 和 BOM、DOM 、ECMAScript、Nodejs 之间是什么关系",
   key_world: [
-    "weakSet 数据",
-    "weakSet 结构",
-    "weakSet 作用",
+    // "weakSet 数据",
+    // "weakSet 结构",
+    // "weakSet 作用",
   ],
   labels: [
     labels.js,
     company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

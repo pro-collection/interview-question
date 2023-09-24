@@ -1,28 +1,20 @@
-**关键词**：weakSet 数据、weakSet 结构、weakSet 作用
+**ECMAScript**
 
-WeakSet 是一种特殊的集合数据结构，它只能存储对象引用，并且这些对象是弱引用。WeakSet 中的对象是被弱引用的，意味着如果没有其他引用指向这个对象，垃圾回收机制就会自动将其回收，即使该对象存在于 WeakSet 中。与 Set 不同，WeakSet 不支持迭代和遍历。
+`ECMAScript`是`JavaScript`的标准化规范，它定义了`JavaScript`的语法、数据类型、函数、控制流等。`ECMAScript`最早在1997年发布，由欧洲计算机制造商协会（ECMA）负责制定和维护。
 
-**API**
+`ECMAScript`的目的是为了确保不同厂商的`JavaScript`实现在语法和行为方面保持一致性，以便开发者能够轻松地编写跨平台、跨浏览器的`JavaScript`代码。标准化的`ECMAScript`规范使得开发者可以在不同的`JavaScript`环境中编写相同的代码，而不必担心语法差异和行为不一致性。
 
-WeakSet 提供了以下几个常用的 API：
+`ECMAScript`规范每年进行一次更新，新版本通常包含了新的语法特性、API和改进。在每个`ECMAScript`版本发布之前，由各个浏览器厂商先行实现并测试新特性，然后将其添加到浏览器中。这就是为什么不同浏览器可能对同一版本的`ECMAScript`支持程度不同的原因。
 
-1. `add(value)`：向 WeakSet 中添加一个值。
-
-2. `delete(value)`：从 WeakSet 中删除指定的值。
-
-3. `has(value)`：判断 WeakSet 中是否存在指定的值，返回一个布尔值。
-
-需要注意的是，WeakSet 不支持迭代和遍历操作，所以没有类似于 Set 的 `keys()`、`values()`、`entries()` 或 `forEach()` 等方法。同时，WeakSet 也没有类似于 Set 的 `size` 属性来获取 WeakSet 中的元素个数。
-
-另外，WeakSet 是一个构造函数，可以使用 `new WeakSet()` 来创建一个空的 WeakSet。
+常见的`ECMAScript`版本包括ES5（2009年发布）、ES6（2015年发布，也被称为ES2015）、ES7（2016年发布，也被称为ES2016）等。每个版本都引入了新的语法和功能，使得`JavaScript`变得更加强大和灵活。开发者可以根据目标浏览器的支持情况选择使用不同版本的`ECMAScript`特性。
 
 
-**使用场景**
+**`JavaScript`**是一种高级编程语言，用于为网页添加交互和动态功能。它实现了ECMAScript标准，该标准定义了`JavaScript`的语法、数据类型、函数、控制流等。`JavaScript`是一种解释性脚本语言，代码在运行时由浏览器解析和执行。
 
-WeakSet 的主要应用场景是在需要存储对象集合，并且不希望这些对象的存在阻止它们被垃圾回收时使用。一些常见的使用场景包括：
+**`BOM（Browser Object Model）`**是浏览器对象模型，它提供了与浏览器交互的API。`BOM`并不是ECMAScript的一部分，而是浏览器厂商自行实现的一组对象和方法。通过`BOM`，开发者可以操作浏览器窗口、解析URL、发送HTTP请求、控制浏览器历史记录等。其中最常见的`BOM`对象是window对象，它代表了浏览器的窗口或框架。
 
-1. 对象存储：WeakSet 可以用来存储一组对象，并且不会阻止这些对象被垃圾回收。这在需要跟踪一组对象，但又不希望这些对象阻止被释放时很有用。
+**`DOM（Document Object Model）`**是文档对象模型，它定义了用于访问和操作HTML、XML等文档的API。`DOM`提供了一组对象和方法，用于表示文档的结构和内容。通过`DOM`，开发者可以通过`JavaScript`动态地创建、修改和删除HTML元素，修改样式和属性，处理事件等。`DOM`也不是ECMAScript的一部分，而是由浏览器厂商实现的标准。
 
-2. 数据缓存：由于 WeakSet 中的对象是弱引用的，当对象从其他地方被删除时，它们会自动从 WeakSet 中移除。这在需要缓存一些对象，但又希望能够自动清理不再需要的对象时很有用。
+**`Node.js`**是一个基于V8引擎的`JavaScript`运行时环境，使`JavaScript`可以在服务器端运行。与浏览器中的`JavaScript`不同，`Node.js`提供了一组基于事件驱动的API，用于构建高性能和可伸缩的网络应用程序。`Node.js`可以执行文件操作、网络通信、数据库访问等服务器端任务，并且可以通过包管理器npm安装和管理第三方模块。
 
-需要注意的是，由于 WeakSet 中的对象是弱引用的，所以不能通过遍历或迭代来访问 WeakSet 中的对象。同时，WeakSet 也不提供像 Set 那样的方法，无法判断对象是否存在于 WeakSet 中。
+总结来说，`JavaScript`是一种编程语言，实现了ECMAScript标准。`BOM`和`DOM`是浏览器提供的API，用于与浏览器交互并操作文档。`Node.js`是一个独立的运行时环境，使`JavaScript`可以在服务器端运行，并提供了一组用于构建网络应用程序的API。

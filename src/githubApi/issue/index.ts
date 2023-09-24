@@ -7,17 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "JavaScript 和 BOM、DOM 、ECMAScript、Nodejs 之间是什么关系",
+  title: "JavaScript 如何做内存管理？",
   key_world: [
-    // "weakSet 数据",
-    // "weakSet 结构",
-    // "weakSet 作用",
+    "JavaScript内存管理",
   ],
   labels: [
     labels.js,
-    company.alibaba,
+    company.netEase,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -3,10 +3,6 @@
 > 09.02
 
 https://juejin.cn/post/7236668766955307069
- 
-> 07.26
-
-合集：https://q.shanyue.tech/interview
 
 
 > 05.09
@@ -37,3 +33,5 @@ https://juejin.cn/post/7236668766955307069
 发现题库羊毛
 
 - https://fe.ecool.fun/topic-list
+- https://github.com/linwu-hi/code-interview/issues
+- https://q.shanyue.tech/interview

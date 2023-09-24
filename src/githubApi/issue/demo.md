@@ -1,53 +1,19 @@
 **关键词**：日期format函数、日期format实现
 
-**问题**
-```ts
-// js 实现日期的  format 函数
-//
-// YYYY 对应年
-// MM 对应月
-// DD 对应日
-//
-// HH 对应 24 小时制度
-// hh 对应 12 小时制度
-// mm 对应分钟
-// ss 对应秒
+在前端中，有多种跨页面通信的方式，下面列举了其中一些常见的方式：
 
-const date = new Date();
-const formattedDate = date.format('YYYY-MM-DD HH:mm:ss');
-console.log(formattedDate); // 输出结果为当前日期和时间的格式化字符串
-```
+1. **使用URL参数**：可以通过URL参数在不同页面之间传递数据。例如，可以在URL中添加查询字符串参数来传递数据，并通过解析URL参数来获取传递的数据。
 
+2. **使用localStorage或sessionStorage**：可以使用浏览器的本地存储（localStorage或sessionStorage）在不同页面之间共享数据。一个页面可以将数据存储在本地存储中，另一个页面可以读取该数据。
 
-**解答**
-以下是使用JavaScript实现日期格式化的`format`函数：
+3. **使用Cookies**：可以使用Cookies在不同页面之间共享数据。一个页面可以将数据存储在Cookie中，另一个页面可以读取该Cookie。
 
-```javascript
-Date.prototype.format = function (format) {
-  const date = this;
+4. **使用postMessage API**：postMessage API允许不同窗口或iframe之间进行跨页面通信。可以使用postMessage发送消息，接收方可以通过监听message事件来接收消息。
 
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
+5. **使用Broadcast Channel API**：Broadcast Channel API允许不同页面或不同浏览器标签之间进行广播式的消息传递。可以使用Broadcast Channel发送消息，其他订阅同一频道的页面都可以接收到消息。
 
-  format = format.replace('YYYY', year);
-  format = format.replace('MM', month.toString().padStart(2, '0'));
-  format = format.replace('DD', day.toString().padStart(2, '0'));
-  format = format.replace('HH', hours.toString().padStart(2, '0'));
-  format = format.replace('hh', (hours % 12).toString().padStart(2, '0'));
-  format = format.replace('mm', minutes.toString().padStart(2, '0'));
-  format = format.replace('ss', seconds.toString().padStart(2, '0'));
+6. **使用Shared Worker**：Shared Worker是一种特殊的Web Worker，可以在多个页面之间共享。可以通过Shared Worker进行通信和共享数据。
 
-  return format;
-};
+7. **使用WebSocket**：WebSocket是一种双向通信协议，可以在不同页面之间建立持久的连接，实现实时的跨页面通信。
 
-// 示例用法
-const date = new Date();
-const formattedDate = date.format('YYYY-MM-DD HH:mm:ss');
-console.log(formattedDate); // 输出结果为当前日期和时间的格式化字符串
-```
-
-上述代码中，我们通过在`Date`对象的原型上定义`format`函数，使得所有的`Date`对象都可以调用`format`函数进行日期格式化。在函数内部，我们使用`getFullYear`、`getMonth`、`getDate`等方法获取日期的年、月、日、时、分、秒的值，并将其替换到传入的`format`字符串中对应的占位符。最后返回格式化后的字符串。
+以上是一些常见的跨页面通信方式，选择适合自己需求的方式来实现跨页面通信。

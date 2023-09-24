@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "实现日期格式化 format 函数",
+  title: "前端有哪些跨页面通信方式？",
   key_world: [
     "日期format函数",
     "日期format实现",
   ],
   labels: [
-    labels.code,
-    company.netEase,
+    labels.application,
+    company.jd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "实现一个函数， 计算两个日期之间的天数差",
+  title: "实现日期格式化 format 函数",
   key_world: [
-    // "文本溢出样式",
+    "日期format函数",
+    "日期format实现",
   ],
   labels: [
     labels.code,
     company.netEase,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

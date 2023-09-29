@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "Object 对象有哪些场景 api ？",
+  title: "[Vue] 动态给 data 添加一个新的属性时会发生什么",
   key_world: [
-    "Object对象api",
+    "vue更改data属性",
   ],
   labels: [
-    labels.js,
-    company.netEase,
+    labels.frameWork,
+    company.shopee,
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

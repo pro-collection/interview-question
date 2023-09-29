@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "前端有哪些跨页面通信方式？",
+  title: "Object 对象有哪些场景 api ？",
   key_world: [
-    "日期format函数",
-    "日期format实现",
+    "Object对象api",
   ],
   labels: [
-    labels.application,
-    company.jd,
+    labels.js,
+    company.netEase,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

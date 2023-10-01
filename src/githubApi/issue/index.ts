@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "将静态资源缓存在本地的方式有哪些？",
+  title: "[Vue] 中为何不要把 v-if 和 v-for 同时用在同一个元素上， 原理是什么？",
   key_world: [
-    "静态资源缓存本地",
+    "v-if和v-for性能",
   ],
   labels: [
-    labels.engineering,
+    labels.frameWork,
     company.netEase,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

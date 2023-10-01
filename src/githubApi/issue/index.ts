@@ -7,17 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 如何实现vue 中 keep-alive 的功能？",
+  title: "[React] 构建组件的方式有哪些",
   key_world: [
-    "keep-alive组件缓存",
-    "keep-alive实现",
-    "keep-alive原理",
+    "React构建组件方式",
   ],
   labels: [
     labels.frameWork,
-    company.netEase,
+    company.tencent,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

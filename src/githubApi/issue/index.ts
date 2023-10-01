@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 从 React 层面上， 能做的性能优化有哪些？",
+  title: "[React] 是如何进行渲染的？",
   key_world: [
-    "React性能优化",
+    "jsx渲染",
+    "react渲染过程",
   ],
   labels: [
     labels.frameWork,
-    company.mt,
+    company.alibaba,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Vue] 为什么 data 属性是一个函数而不是一个对象？",
+  title: "SPA首屏加载速度慢的怎么解决",
   key_world: [
-    "vue data 函数",
+    "SPA首屏",
+    "加快首屏加载",
   ],
   labels: [
-    labels.frameWork,
-    company.shopee,
+    labels.engineering,
+    company.netEase,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

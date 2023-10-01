@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "如何拦截 web 应用的请求",
+  title: "axios 有哪些特性？",
   key_world: [
-    "web前端监听请求",
-    "前端拦截请求",
+    "axios特性",
   ],
   labels: [
     labels.network,
-    company.quic,
+    company.alibaba,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -7,14 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "XHR 和 Fetch 是否支持取消请求",
+  title: "[Vue] 为什么 data 属性是一个函数而不是一个对象？",
   key_world: [
-    "XHR 取消请求",
-    "Fetch 取消请求",
+    "vue data 函数",
   ],
   labels: [
-    labels.network,
-    company.alibaba,
+    labels.frameWork,
+    company.shopee,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

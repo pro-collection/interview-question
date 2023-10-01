@@ -7,10 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "SPA首屏加载速度慢的怎么解决",
+  title: "将静态资源缓存在本地的方式有哪些？",
   key_world: [
-    "SPA首屏",
-    "加快首屏加载",
+    "静态资源缓存本地",
   ],
   labels: [
     labels.engineering,

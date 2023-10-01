@@ -7,15 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 高阶组件理解多少？",
+  title: "[React] 从 React 层面上， 能做的性能优化有哪些？",
   key_world: [
-    "什么是React高阶组件",
-    "React高阶组件满足的条件",
-    "React高阶组件使用场景",
+    "React性能优化",
   ],
   labels: [
     labels.frameWork,
-    company.tencent,
+    company.mt,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

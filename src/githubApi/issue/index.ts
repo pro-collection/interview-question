@@ -7,17 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] Class Components 和 Function Components 有区别？",
+  title: "[React] 高阶组件理解多少？",
   key_world: [
-    "Class Components 和 Function Components",
-    "Class Components 和 Function Components 区别",
-    "Class Components 和 Function Components 差异",
+    "什么是React高阶组件",
+    "React高阶组件满足的条件",
+    "React高阶组件使用场景",
   ],
   labels: [
     labels.frameWork,
     company.tencent,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

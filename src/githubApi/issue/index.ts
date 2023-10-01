@@ -7,13 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Vue] 动态给 data 添加一个新的属性时会发生什么",
+  title: "如何拦截 web 应用的请求",
   key_world: [
-    "vue更改data属性",
+    "web前端监听请求",
+    "前端拦截请求",
   ],
   labels: [
-    labels.frameWork,
-    company.shopee,
+    labels.network,
+    company.quic,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

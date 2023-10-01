@@ -7,15 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Vue] 中为何不要把 v-if 和 v-for 同时用在同一个元素上， 原理是什么？",
+  title: "[React] 如何实现vue 中 keep-alive 的功能？",
   key_world: [
-    "v-if和v-for性能",
+    "keep-alive组件缓存",
+    "keep-alive实现",
+    "keep-alive原理",
   ],
   labels: [
     labels.frameWork,
     company.netEase,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

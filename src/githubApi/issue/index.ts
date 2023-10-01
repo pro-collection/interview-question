@@ -7,9 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "axios 有哪些特性？",
+  title: "axios 是如何区分是 nodejs 环境还是 浏览器环境 的？",
   key_world: [
-    "axios特性",
+    "nodejs与浏览器环境判定",
   ],
   labels: [
     labels.network,

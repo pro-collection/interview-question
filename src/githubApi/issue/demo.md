@@ -1,23 +1,20 @@
-**关键词**：axios特性
+**关键词**：nodejs与浏览器环境判定
 
-直接可以参考官网链接： https://axios-http.com/docs/intro
+Axios 是一个跨平台的 HTTP 客户端库，可以在浏览器和 Node.js 中使用。Axios 通过判断当前环境来确定是在浏览器还是在 Node.js 环境中运行。
 
-特点
-- 从浏览器创建XMLHttpRequest
-- 从node.js生成http请求
-- 支持承诺API
-- 拦截请求和响应
-- 转换请求和响应数据
-- 取消请求
-- 超时时间
-- 支持嵌套项的查询参数序列化
-- 自动请求体序列化为:
-    - JSON (应用程序/ison)
-    - 多部分/表格数据 (多部分/表格数据)
-    - URL编码形式 (申请书/x-www-form-urlencoded )
-- 以JSON格式发布HTML表单
-- 响应中的自动JSON数据处理
-- 为浏览器和node.js捕获进度，附带额外信息 (速度、剩余时间)
-- 设置node.is的带宽限制
-- 兼容符合规范的FormData和Blob (包括节点) js)
-- 客户端对XSRF的保护支持
+在浏览器环境中，Axios 默认会使用浏览器提供的 XMLHttpRequest 对象来发送 HTTP 请求。
+
+在 Node.js 环境中，**Axios 会检查是否存在 `process` 全局对象，以及 `process` 对象中是否存在 `nextTick` 方法**。如果存在以上两个条件，Axios 就默认在 Node.js 环境中运行，并使用 Node.js 内置的 `http` 模块发送 HTTP 请求。
+
+如果需要明确指定运行环境，可以使用 `axios.defaults.adapter` 属性来设置适配器（adapter），以便在需要时手动选择使用 XMLHttpRequest 或 Node.js 内置的 `http` 模块。
+
+例如，在 Node.js 环境中可以这样设置适配器：
+
+```javascript
+const axios = require('axios');
+const httpAdapter = require('axios/lib/adapters/http');
+
+axios.defaults.adapter = httpAdapter;
+```
+
+通过上述方式，Axios 可以根据环境自动选择适当的底层实现来发送 HTTP 请求，使其在不同的环境中都能正常工作。

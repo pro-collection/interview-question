@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "axios 是如何区分是 nodejs 环境还是 浏览器环境 的？",
+  title: "XHR 和 Fetch 是否支持取消请求",
   key_world: [
-    "nodejs与浏览器环境判定",
+    "XHR 取消请求",
+    "Fetch 取消请求",
   ],
   labels: [
     labels.network,
     company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

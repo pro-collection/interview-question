@@ -7,9 +7,11 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 构建组件的方式有哪些",
+  title: "[React] Class Components 和 Function Components 有区别？",
   key_world: [
-    "React构建组件方式",
+    "Class Components 和 Function Components",
+    "Class Components 和 Function Components 区别",
+    "Class Components 和 Function Components 差异",
   ],
   labels: [
     labels.frameWork,

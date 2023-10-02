@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 是如何进行渲染的？",
+  title: "[React] react router 主要包有哪些，主要 api 有哪些？",
   key_world: [
-    "jsx渲染",
-    "react渲染过程",
+    // "jsx渲染",
+    // "react渲染过程",
   ],
   labels: [
     labels.frameWork,
     company.alibaba,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

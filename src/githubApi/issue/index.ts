@@ -7,7 +7,7 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] react router 主要包有哪些，主要 api 有哪些？",
+  title: "[React] 如何实现专场动画？",
   key_world: [
     // "jsx渲染",
     // "react渲染过程",
@@ -16,7 +16,7 @@ const remote = {
     labels.frameWork,
     company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

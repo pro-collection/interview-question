@@ -1,24 +1,20 @@
-React Router是React官方提供的用于构建单页应用的路由库，主要包括以下几个主要包和API：
+这个问题非常复杂， 我这边用白话文解释一下原理， 若有不对的地方， 请大家更正：
 
-主要包：
-1. react-router-dom：用于Web应用的路由库。
-2. react-router-native：用于原生应用（如React Native）的路由库。
-3. react-router-config：用于配置静态路由的工具包。
+如果没有专场动画， 那么在路由切换的一瞬间， 加载下一个路由页面的组件， 注销上一个路由页面的组件；
 
-主要API：
-1. BrowserRouter：一个使用HTML5 history API实现的路由器组件，用于在Web应用中处理路由。
-2. HashRouter：一个使用URL hash值实现的路由器组件，用于在不支持HTML5 history API的Web应用中处理路由。
-3. Route：定义了路由匹配规则及对应的组件，可以在路由器中使用。
-4. Switch：用于渲染与当前URL匹配的第一个Route或Redirect，只能包含Route或Redirect组件。
-5. Link：用于创建导航链接，点击后会更新URL，触发路由的切换。
-6. NavLink：与Link类似，但在匹配当前URL时会添加指定的样式。
+但是如果加上专场动画， 比如专场动画时间为 500ms， 那么， 在咋合格 500ms 过程中， 首先要加载下一个路由页面的组件， 然后加载上一个渐进的动画。 
+同时不能注销掉当前路由， 需要给当前路由加载一个渐出的动画。 
+需要当两个页面完成动画时间， 完成页面覆盖切换之后， 然后注销上一个路由页面的组件；
 
-其他常用API：
-1. Redirect：用于重定向到指定的路由。
-2. withRouter：高阶组件，用于将路由器的相关信息（如history、location）传递给被包裹的组件。
-3. useHistory：自定义hook，用于在函数式组件中获取history对象。
-4. useLocation：自定义hook，用于在函数式组件中获取location对象。
-5. useParams：自定义hook，用于在函数式组件中获取路由参数。
-6. useRouteMatch：自定义hook，用于在函数式组件中获取与当前URL匹配的路由信息。
+所以涉及到的知识点：
+1. 如何做页面跳转拦截；
+2. 如何在页面路由组件不跳转的同时， 加载下一个页面的组件；
+3. 配置页面层级；
+3. 如何执行、加载、完成专场动画；
+4. 动画结束的时候手动注销组件；
 
-以上是React Router的主要包和API。根据具体的需求，你可以使用这些API来构建和处理路由相关的逻辑。
+具体实现， 可以参考以下两个文档：
+
+- https://github.com/SmallStoneSK/Blog/issues/8
+- https://juejin.cn/post/6887471865720209415
+

@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 如何避免不必要的渲染?",
+  title: "[React] useLayoutEffect 和 useEffect 有什么区别?",
   key_world: [
-    "react 渲染优化",
+    "useLayoutEffect 和 useEffect 区别",
   ],
   labels: [
     labels.frameWork,
     company.tencent,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

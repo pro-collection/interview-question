@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] 如何实现专场动画？",
+  title: "全局样式命名冲突和样式覆盖问题怎么解决？",
   key_world: [
-    // "jsx渲染",
-    // "react渲染过程",
+    "全局样式命名冲突",
   ],
   labels: [
-    labels.frameWork,
-    company.alibaba,
+    labels.css,
+    company.tencent,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

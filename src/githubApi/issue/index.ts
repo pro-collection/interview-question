@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "css  module 是什么？",
+  title: "[React] 如何避免不必要的渲染?",
   key_world: [
-    "css  module 概念",
-    "css  module 作用",
+    "react 渲染优化",
   ],
   labels: [
-    labels.css,
+    labels.frameWork,
     company.tencent,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

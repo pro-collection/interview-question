@@ -7,9 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "全局样式命名冲突和样式覆盖问题怎么解决？",
+  title: "css  module 是什么？",
   key_world: [
-    "全局样式命名冲突",
+    "css  module 概念",
+    "css  module 作用",
   ],
   labels: [
     labels.css,

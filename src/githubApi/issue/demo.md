@@ -1,27 +1,29 @@
-| Loader 名称                | 作用                                                                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `babel-loader`              | 将 ES6+ 代码转换为 ES5 代码，以便在旧版浏览器中运行。                                                              |
-| `css-loader`                | 解析 CSS 文件，处理 CSS 中的依赖关系，并将 CSS 转换为 JS 模块。                                                       |
-| `style-loader`              | 将 CSS 代码以内联的方式注入到 HTML 页面中。                                                                          |
-| `file-loader`               | 处理文件资源（如图片、字体等），将文件复制到输出目录，并返回文件路径。                                               |
-| `url-loader`                | 与 `file-loader` 类似，但可以根据文件大小将文件转换为 Data URL（base64 格式）或文件路径。                          |
-| `sass-loader`               | 解析 Sass/SCSS 文件，并将其转换为 CSS 代码。                                                                         |
-| `less-loader`               | 解析 Less 文件，并将其转换为 CSS 代码。                                                                              |
-| `postcss-loader`            | 使用 PostCSS 处理 CSS，可以进行自动添加前缀、压缩、CSS Modules 等操作。                                              |
-| `ts-loader`                 | 将 TypeScript 代码转换为 JavaScript 代码。                                                                           |
-| `eslint-loader`             | 在构建过程中使用 ESLint 进行代码检查。                                                                               |
-| `stylelint-webpack-plugin`  | 在构建过程中使用 Stylelint 进行 CSS/SCSS 代码检查。                                                                   |
-| `vue-loader`                | 解析 Vue 单文件组件（.vue 文件），并将其转换为 JavaScript 代码。                                                      |
-| `image-webpack-loader`      | 优化图片资源，包括压缩、转换格式等操作。                                                                             |
-| `html-loader`               | 解析 HTML 文件，处理其中的引用资源（如图片、字体等），并返回处理后的 HTML 代码。                                      |
-| `markdown-loader`           | 将 Markdown 文件转换为 HTML 代码。                                                                                   |
-| `json-loader`               | 解析 JSON 文件，并返回解析后的 JavaScript 对象。                                                                     |
-| `eslint-loader`             | 在构建过程中使用 ESLint 进行代码检查。                                                                               |
-| `tslint-loader`             | 在构建过程中使用 TSLint 进行 TypeScript 代码检查。                                                                    |
-| `prettier-loader`           | 在构建过程中使用 Prettier 进行代码格式化。                                                                           |
-| `stylelint-webpack-plugin`  | 在构建过程中使用 Stylelint 进行 CSS/SCSS 代码检查。                                                                   |
-| `mini-css-extract-plugin`   | 提取 CSS 代码到单独的文件，而不是内联到 JavaScript 代码中。                                                           |
-| `optimize-css-assets-webpack-plugin` | 压缩 CSS 代码。                                                                                       |
-| `terser-webpack-plugin`     | 压缩 JavaScript 代码。                                                                                             |
+下表列出了常见的 Webpack 插件及其作用：
 
-这些 Loader 可以根据需要配置在 Webpack 的模块规则（`module.rules`）中，以实现对不同类型文件的处理和转换操作。
+| 插件名称                                     | 作用                                                                                                                      |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `HtmlWebpackPlugin`                      | 自动生成 HTML 文件，并将打包后的资源自动注入到 HTML 中。                                                                     |
+| `MiniCssExtractPlugin`                | 将 CSS 代码提取到单独的文件中，而不是内联到 JavaScript 中。                                                                   |
+| `CopyWebpackPlugin`                   | 将指定的文件或目录复制到输出目录。                                                                                         |
+| `CleanWebpackPlugin`                  | 在每次构建之前清理输出目录，避免旧的文件残留。                                                                               |
+| `DefinePlugin`                          | 在编译过程中创建全局常量，可以在代码中直接使用。                                                                             |
+| `HotModuleReplacementPlugin` | 启用热模块更换（Hot Module Replacement），在开发过程中实现代码修改后实时更新页面，无需刷新。                           |
+| `ProvidePlugin`                           | 自动加载模块，使模块在使用时可以直接使用对应的全局变量，无需引入。                                                               |
+| `MiniCssExtractPlugin`                | 将 CSS 代码提取到单独的文件中，而不是内联到 JavaScript 中。                                                                   |
+| `OptimizeCSSAssetsPlugin`        | 压缩提取出的 CSS 文件。                                                                                                    |
+| `uglifyjs-webpack-plugin`           | 压缩 JavaScript 代码。                                                                                                      |
+| `webpack-bundle-analyzer`        | 分析打包后的文件大小，并可视化展示，方便优化打包结果。                                                                       |
+| `CompressionWebpackPlugin`   | 使用 gzip 或其他压缩算法对文件进行压缩，减小文件大小，加快网络传输速度。                                                      |
+| `CopyWebpackPlugin`                 | 将指定的文件或目录复制到输出目录。                                                                                          |
+| `FriendlyErrorsWebpackPlugin`     | 提供友好的构建错误提示和优化构建速度的功能。                                                                                 |
+| `ImageminWebpackPlugin`           | 压缩图片资源，减小文件大小，提升加载速度。                                                                                  |
+| `HotModuleReplacementPlugin` | 启用热模块更换（Hot Module Replacement），在开发过程中实现代码修改后实时更新页面，无需刷新。                            |
+| `HtmlWebpackPlugin`                      | 自动生成 HTML 文件，并将打包后的资源自动注入到 HTML 中。                                                                     |
+| `IgnorePlugin`                                | 忽略特定的模块，避免将其打包到最终的输出文件中。                                                                             |
+| `BannerPlugin`                                | 在打包的文件块顶部添加自定义的注释和信息。                                                                                   |
+| `webpack.DefinePlugin`              | 在编译过程中创建全局常量，可以在代码中直接使用。                                                                             |
+| `webpack.ProgressPlugin`          | 在控制台输出构建进度信息。                                                                                                  |
+| `webpack-bundle-analyzer`        | 分析打包后的文件大小，并可视化展示，方便优化打包结果。                                                                       |
+| `webpackbar`                                  | 在命令行中显示构建进度条，提供更直观的构建进度信息。                                                                          |
+
+这些插件可以根据需要配置在 Webpack 的插件列表（`plugins`）中，以实现对构建过程的各种增强和优化操作。

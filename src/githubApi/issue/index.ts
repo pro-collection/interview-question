@@ -7,7 +7,7 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "在你的项目中， 使用过哪些 webpack loader, 说一下他们的作用",
+  title: "在你的项目中， 使用过哪些 webpack plugin, 说一下他们的作用",
   key_world: [
     // "mini-css-extract-plugin作用",
     // "mini-css-extract-plugin使用",

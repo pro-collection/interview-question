@@ -7,15 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[React] useLayoutEffect 和 useEffect 有什么区别?",
+  title: "在 webpack 中，通常用于 css 提取的工具是什么？",
   key_world: [
-    "useLayoutEffect 和 useEffect 区别",
+    "mini-css-extract-plugin作用",
+    "mini-css-extract-plugin使用",
   ],
   labels: [
-    labels.frameWork,
+    labels.engineering,
     company.tencent,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -1,15 +1,38 @@
-**关键词**：useLayoutEffect 和 useEffect 区别
+**关键词**：mini-css-extract-plugin作用、mini-css-extract-plugin使用
 
-useLayoutEffect 和 useEffect 的主要区别在于它们执行的时机。
+在 webpack 中，通常使用 `mini-css-extract-plugin` 来提取 CSS。它是一个独立的插件，可以将 CSS 从 JavaScript 文件中提取出来，生成独立的 CSS 文件。
+使用 `mini-css-extract-plugin` 可以优化代码分离和缓存，以及提高加载速度。
 
-- **useLayoutEffect**:
-   useLayoutEffect 是在 DOM 更新完成但在浏览器绘制之前同步执行的钩子函数。它会在 DOM 更新之后立即执行，阻塞浏览器的绘制过程。这使得它更适合于需要立即获取最新 DOM 布局信息的操作，如测量元素尺寸或位置等。使用 useLayoutEffect 可以在更新后同步触发副作用，从而保证 DOM 的一致性。
+通过配置 webpack 的插件选项，可以将 `mini-css-extract-plugin` 添加到 webpack 构建流程中。在配置中，需要将该插件实例化，并指定输出的 CSS 文件名和路径。
+一旦配置完成并运行 webpack 构建，`mini-css-extract-plugin` 就会将 CSS 提取到独立的文件中，而不是将其嵌入到 JavaScript 文件中。
 
-- **useEffect**:
-   useEffect 是在组件渲染完毕后异步执行的钩子函数。它会在浏览器完成绘制后延迟执行，不会阻塞浏览器的绘制过程。这使得它更适合于处理副作用操作，如发送网络请求、订阅事件等。使用 useEffect 可以将副作用操作放到组件渲染完成后执行，以避免阻塞浏览器绘制。
+示例代码如下：
 
-总结：
-- useLayoutEffect 是同步执行的钩子函数，在 DOM 更新后立即执行，可能会阻塞浏览器的绘制过程；
-- useEffect 是异步执行的钩子函数，在浏览器完成绘制后延迟执行，不会阻塞浏览器的绘制过程。
+```javascript
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-通常情况下，应优先使用 useEffect，因为它不会阻塞浏览器的渲染，并且能够满足大多数的副作用操作需求。只有在需要获取最新的 DOM 布局信息并立即触发副作用时，才需要使用 useLayoutEffect。
+module.exports = {
+  // ...其他配置
+  module: {
+    rules: [
+      // ...其他规则
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+        ],
+      },
+    ],
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
+  ],
+};
+```
+
+在上述示例中，`MiniCssExtractPlugin.loader` 是用于提取 CSS 的 loader。`css-loader` 用于处理 CSS 文件的导入和解析。
+`MiniCssExtractPlugin`则是插件实例，用于配置输出的 CSS 文件名。

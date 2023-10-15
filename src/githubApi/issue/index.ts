@@ -7,13 +7,12 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "http1.1 的 keep-alive 和 http2 的多路复用 有什么区别？",
+  title: "PM2 部署 nodejs 有哪些优势？",
   key_world: [
-    "http1.1 keep-alive",
-    "http2 多路复用",
+    "PM2 Nodejs",
   ],
   labels: [
-    labels.network,
+    labels.node,
     company.tencent,
   ],
   milestone: MileStone.senior,

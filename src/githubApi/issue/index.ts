@@ -7,16 +7,16 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "在你的项目中， 使用过哪些 webpack plugin, 说一下他们的作用",
+  title: "[Vue] 响应式为何要从 Object.defineProperty 改为 proxy?",
   key_world: [
-    // "mini-css-extract-plugin作用",
-    // "mini-css-extract-plugin使用",
+    "vue Object.defineProperty",
+    "vue proxy 使用",
   ],
   labels: [
     labels.engineering,
     company.alibaba,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

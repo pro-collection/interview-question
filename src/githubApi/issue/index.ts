@@ -7,16 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Vue] 响应式为何要从 Object.defineProperty 改为 proxy?",
+  title: "为何 http2 非常快速的就过度到了 HTTP3 ？",
   key_world: [
-    "vue Object.defineProperty",
-    "vue proxy 使用",
+    "http3",
   ],
   labels: [
-    labels.engineering,
-    company.alibaba,
+    labels.network,
+    company.tencent,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

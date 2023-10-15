@@ -7,9 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "为何 http2 非常快速的就过度到了 HTTP3 ？",
+  title: "http1.1 的 keep-alive 和 http2 的多路复用 有什么区别？",
   key_world: [
-    "http3",
+    "http1.1 keep-alive",
+    "http2 多路复用",
   ],
   labels: [
     labels.network,

@@ -1,17 +1,106 @@
-**关键词**：PM2 Nodejs
+**关键词**：实现setInterval、requestAnimationFrame实现setInterval、setTimeout实现setInterval
 
-PM2部署Node.js应用程序有以下几个优势：
+如果不使用 `setTimeout` 来实现 `setInterval`，可以使用 `requestAnimationFrame` 函数和时间戳来实现定时循环。下面是实现的代码示例：
 
-1. 进程管理和监控：PM2可以自动监控Node.js应用程序的运行状态，并在进程崩溃或无响应时自动重启进程。它还提供了实时的日志输出和监控面板，方便查看和分析应用程序的运行情况。
+**实现方式1**
 
-2. 无缝部署和热重载：使用PM2可以实现无缝部署Node.js应用程序，无需手动停止和启动进程。通过使用PM2的热重载功能，可以在不中断服务的情况下重新加载应用程序代码，实现零停机更新。
+```javascript
+function mySetInterval(callback, interval) {
+  let startTime = Date.now();
+  let elapsedTime = 0;
 
-3. 环境管理和配置：PM2可以通过环境变量来管理应用程序的配置，如端口号、数据库连接等。它还支持在不同的环境（如开发、测试、生产）之间切换配置，方便应用程序的部署和管理。
+  function loop() {
+    const currentTime = Date.now();
+    const deltaTime = currentTime - startTime;
 
-4. 高可用性和负载均衡：PM2支持启动多个进程，并自动在多个CPU核心间平衡负载。这样可以提高应用程序的并发处理能力和性能，确保应用的高可用性和稳定性。
+    if (deltaTime >= interval) {
+      callback();
+      startTime = currentTime;
+    }
 
-5. 集中化管理：PM2提供了命令行工具和Web界面，可以集中管理和操作所有的Node.js应用程序。通过PM2，可以方便地查看和管理进程、查看日志、监控性能指标等，提升管理效率。
+    requestAnimationFrame(loop);
+  }
 
-综上所述，PM2提供了完善的进程管理和监控功能，以及便捷的部署和配置管理方式，可以大大简化Node.js应用程序的部署和运维工作，提高应用的可用性和性能。
+  requestAnimationFrame(loop);
 
-参考文档： https://zhuanlan.zhihu.com/p/627009546
+  return {
+    clear: function() {
+      startTime = 0;
+      elapsedTime = 0;
+    }
+  };
+}
+```
+
+这个实现中，我们通过 `requestAnimationFrame` 函数来循环执行 `loop` 函数。在 `loop` 函数中，我们获取当前时间戳 `currentTime`，并计算与上一次执行的时间间隔 `deltaTime`
+。如果 `deltaTime` 大于等于指定的间隔时间 `interval`，则执行回调函数 `callback`，并更新 `startTime` 为当前时间，以便下一次判断。
+
+最后，返回一个具有 `clear` 方法的对象，用于清除定时器。调用 `clear` 方法时，将 `startTime` 和 `elapsedTime` 重置为初始值。
+
+**实现方式2**
+
+```js
+const obj = {
+  timer: null,
+  setInterval: function(callback, interval) {
+    const now = Date.now
+    let startTime = now()
+    let endTime = startTime
+    const self = this
+    const loop = function() {
+      self.timer = requestAnimationFrame(loop)
+      endTime = now()
+      if (endTime - startTime >= interval) {
+        startTime = endTime = now()
+        callback && callback()
+      }
+    }
+    this.timer = requestAnimationFrame(loop)
+    return this.timer
+  },
+  clearInterval: function() {
+    cancelAnimationFrame(this.timer)
+  }
+}
+
+let count = 0
+const timer = obj.setInterval(() => {
+  console.log('interval...')
+  count++
+  if (count >= 3) {
+    obj.clearInterval()
+  }
+}, 500)
+```
+
+**实现方式3**
+
+使用 `setTimeout` 来实现
+
+```ts
+/**
+ * setTimeout 版本
+ */
+function _setIntervalUseTimeout(
+  fn: () => void,
+  millisec: number,
+  count?: number
+) {
+  let timer: number;
+  function interval() {
+    if (typeof count === 'undefined' || count-- > 0) {
+      timer = setTimeout(interval, millisec);
+      try {
+        fn();
+      } catch (e: any) {
+        count = 0;
+        throw e.toString();
+      }
+    }
+  }
+  timer = setTimeout(interval, millisec);
+  return {
+    clear: () => clearTimeout(timer),
+  };
+}
+```

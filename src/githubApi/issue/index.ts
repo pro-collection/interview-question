@@ -7,15 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "PM2 部署 nodejs 有哪些优势？",
+  title: "不使用 setTimeout 来实现 setInterval",
   key_world: [
-    "PM2 Nodejs",
+    "实现setInterval",
+    "requestAnimationFrame实现setInterval",
+    "setTimeout实现setInterval",
   ],
   labels: [
-    labels.node,
+    labels.code,
     company.tencent,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

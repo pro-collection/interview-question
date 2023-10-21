@@ -7,15 +7,13 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "不使用 setTimeout 来实现 setInterval",
+  title: "手写 dom 分段渲染",
   key_world: [
-    "实现setInterval",
-    "requestAnimationFrame实现setInterval",
-    "setTimeout实现setInterval",
+    "dom 分段渲染",
   ],
   labels: [
     labels.code,
-    company.tencent,
+    company.alibaba,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),

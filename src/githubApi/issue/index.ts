@@ -7,9 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "手写 dom 分段渲染",
+  title: "手写数组降维flat方法",
   key_world: [
-    "dom 分段渲染",
+    "JS数组降维",
+    "reduce数组降维",
   ],
   labels: [
     labels.code,

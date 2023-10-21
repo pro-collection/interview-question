@@ -1,37 +1,42 @@
-**关键词**：dom 分段渲染
+**关键词**：JS数组降维、reduce数组降维
 
-分时函数案例：把1秒创建1000个DOM节点，改成每隔200毫秒创建10个节点，这样不用短时间在页面中创建大量的DOM。
+原生Array.prototype.flat方法接受一个depth参数，默认值为1，depth表示要降维的维数：
 
-```jsx
-var timeChunk = function(arr,fn,count,interval) {
-  var timer = null;
-  var data = null;
-  var start = function() {
-    for(var i = 0 ; i < Math.min(count || 1 , arr.length) ; i++) {
-      fn(arr.shift());
-    }
-  }
-  return function() {
-    timer = setInterval(function(){
-      if(arr.length == 0) {
-        clearInterval(timer);
-        timer = null;
-        return;
-      }
-      start();
-    }, interval || 200)
-  }
-}
+输出结果：
 
-var arr = [];
-for(var i = 0 ; i < 1000 ; i++) {
-  arr.push(i);
-}
-
-var renderDOMList = timeChunk(arr, function(data) {
-  var div = document.createElement('div');
-  div.innerHTML = data;
-  document.body.appendChild(div);
-},10,200);
-renderDOMList();
+```js
+const arr = [1, [2, 3], [4, [5, 6]]]
+console.log(arr.flat(1))         // [1, 2, 3, 4, [5, 6]]
+console.log(arr.flat(Infinity))  // [1, 2, 3, 4, 5, 6]
 ```
+
+reduce + 递归实现方案
+
+```js
+// MDN: 可查看更多flat实现方法
+function flat(arr = [], depth = 1) {
+  if (arr.length === 0) {
+    return []
+  }
+  let result = []
+  if (depth > 0) {
+    result = arr.reduce((acc, val) => {
+      return acc.concat(Array.isArray(val) ? flat(val, depth - 1) : val)
+    }, [])
+  } else {
+    result = arr.slice()
+  }
+  return result
+}
+
+const arr = [1, 2, 3, [1, 2, 3, 4, [2, 3, 4]]]
+const myResult1 = flat(arr, 1)
+const originResult1 = arr.flat(1)
+const myResult2 = flat(arr, Infinity)
+const originResult2 = arr.flat(Infinity)
+console.log(myResult1)      // [1, 2, 3, 1, 2, 3, 4, [2, 3, 4]]
+console.log(originResult1)  // [1, 2, 3, 1, 2, 3, 4, [2, 3, 4]]
+console.log(myResult2)     // [1, 2, 3, 1, 2, 3, 4, 2, 3, 4]
+console.log(originResult2) // [1, 2, 3, 1, 2, 3, 4, 2, 3, 4]
+```
+

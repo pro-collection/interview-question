@@ -7,15 +7,15 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[微前端] 设计原则有哪些？",
+  title: "[微前端] 路由加载流程是如何的？",
   key_world: [
-    "微前端设计原则",
+    "微前端路由加载",
   ],
   labels: [
     labels.frameWork,
     company.alibaba,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

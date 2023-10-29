@@ -7,14 +7,12 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "为何现在市面上做表格渲染可视化技术的，大多数都是 canvas ， 而很少用 svg 的？",
+  title: "[微前端] 设计原则有哪些？",
   key_world: [
-    "canvas使用场景",
-    "canvas可视化",
-    "svg使用场景",
+    "微前端设计原则",
   ],
   labels: [
-    labels.application,
+    labels.frameWork,
     company.alibaba,
   ],
   milestone: MileStone.senior,

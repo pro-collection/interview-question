@@ -7,16 +7,17 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "手写数组降维flat方法",
+  title: "为何现在市面上做表格渲染可视化技术的，大多数都是 canvas ， 而很少用 svg 的？",
   key_world: [
-    "JS数组降维",
-    "reduce数组降维",
+    "canvas使用场景",
+    "canvas可视化",
+    "svg使用场景",
   ],
   labels: [
-    labels.code,
+    labels.application,
     company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

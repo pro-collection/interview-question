@@ -7,9 +7,10 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Webpack] 为什么选择 webpack？",
+  title: "[Webpack] 有哪些基础概念",
   key_world: [
     "webpack 作用",
+    "webpack 概念",
   ],
   labels: [
     labels.frameWork,

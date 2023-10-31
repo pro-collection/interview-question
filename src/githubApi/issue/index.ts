@@ -7,9 +7,9 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[微前端] 路由加载流程是如何的？",
+  title: "[Webpack] chunk 是什么概念，介绍一下？",
   key_world: [
-    "微前端路由加载",
+    // "微前端路由加载",
   ],
   labels: [
     labels.frameWork,

@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Webpack] 如何配置多入口应用， 且区分公共依赖的？",
+  title: "[Webpack] 如何打包运行时 chunk ， 且在项目工程中， 如何去加载这个运行时 chunk ?",
   key_world: [
   ],
   labels: [
     labels.frameWork,
     company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

@@ -1,68 +1,97 @@
-在Webpack中配置多入口应用并区分公共依赖，可以通过以下步骤进行配置：
-
-1. 在Webpack配置文件中，使用entry属性指定多个入口文件，并为每个入口文件命名一个唯一的键名。例如：
+Webpack打包运行时chunk的方式可以通过optimization.runtimeChunk选项来配置。下面是一个示例的配置：
 
 ```javascript
 module.exports = {
-  entry: {
-    app1: './src/app1.js',
-    app2: './src/app2.js'
-  },
-  // 其他配置项...
-};
-```
-
-上面的配置指定了两个入口文件app1.js和app2.js，并为它们分别指定了键名app1和app2。
-
-2. 使用SplitChunks插件进行公共依赖的提取。在Webpack配置文件中添加以下配置：
-
-```javascript
-module.exports = {
-  // 其他配置项...
+  // ...
   optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          name: 'commons',
-          chunks: 'all',
-          minChunks: 2
-        }
-      }
-    }
-  }
+    runtimeChunk: 'single',
+  },
 };
 ```
 
-上面的配置中，我们使用optimization.splitChunks.cacheGroups选项配置了一个名为commons的缓存组。该缓存组将对公共依赖进行提取，name属性指定了提取后文件的名称，chunks属性指定了提取的范围为所有类型的块（入口文件和异步加载的块），minChunks属性指定了至少被引用两次的模块才会被提取为公共依赖。
+上述配置中，通过设置optimization.runtimeChunk为'single'，将会把所有的webpack运行时代码打包为一个单独的chunk。
 
-3. 添加output配置，指定打包后文件的输出路径和文件名。例如：
+在项目工程中加载运行时chunk有两种方式：
+
+1. 通过script标签加载：可以使用HtmlWebpackPlugin插件来自动将运行时chunk添加到 HTML 文件中。在webpack配置文件中添加以下配置：
 
 ```javascript
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
-  // 其他配置项...
-  output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist')
-  }
+  // ...
+  plugins: [
+    new HtmlWebpackPlugin({
+      // ...
+      chunks: ['runtime', 'app'],
+    }),
+  ],
 };
 ```
 
-上面的配置中，使用[name]占位符来动态生成根据入口文件的键名生成对应的文件名。
+上述配置中，chunks选项指定了要加载的chunk，包括运行时chunk（'runtime'）和其他的业务代码chunk（'app'）。最终生成的HTML文件会自动引入这些chunk。
 
-通过以上配置，Webpack将会根据指定的多个入口文件进行打包，并在打包过程中自动提取公共依赖为一个独立的文件。例如，假设app1.js和app2.js都引用了lodash库，那么在打包后的结果中，lodash库将会被提取为commons.bundle.js文件，而app1.js和app2.js则分别生成对应的app1.bundle.js和app2.bundle.js。
+2. 通过import语句动态加载：可以使用动态导入的方式来加载运行时chunk。在需要加载运行时chunk的地方，使用以下代码：
+
+```javascript
+import(/* webpackChunkName: "runtime" */ './path/to/runtime').then((runtime) => {
+  // 运行时chunk加载完成后的逻辑
+});
+```
+
+上述代码中，通过import()函数动态加载运行时chunk，通过webpackChunkName注释指定要加载的chunk名称（这里是'runtime'）。加载完成后，可以进行相关逻辑处理。
+
+总结：Webpack可以通过optimization.runtimeChunk选项配置打包运行时chunk，可以通过script标签加载或者使用动态导入的方式来加载运行时chunk。
 
 
 **追问**
-> 上面的配置， 最终会输出几个文件？ 
+> 如果只想把某几个文件打包成运行时加载， 该如何处理呢？
 
-根据上述的打包配置，最终将会输出3个文件。假设配置的多入口应用有两个入口文件app1.js和app2.js，并且两个入口文件都引用了lodash库作为公共依赖。
+如果你想将某几个文件打包成运行时加载，可以使用Webpack的`entry`配置和`import()`语法来实现。
 
-根据上述的配置，Webpack将会进行以下操作：
+首先，在Webpack的配置文件中，将这几个文件指定为单独的`entry`点。例如：
 
-1. 根据entry配置，将app1.js和app2.js作为入口文件进行打包。
-2. 遇到公共依赖lodash库时，使用SplitChunks插件将其提取为独立的文件commons.bundle.js。
-3. 根据output配置，将app1.js打包后生成app1.bundle.js，将app2.js打包后生成app2.bundle.js，将commons.bundle.js生成commons.bundle.js。
-4. 最终，在输出路径下将会生成3个文件：app1.bundle.js、app2.bundle.js和commons.bundle.js。
+```javascript
+module.exports = {
+  // ...
+  entry: {
+    main: './src/main.js',
+    runtime: './src/runtime.js',
+  },
+};
+```
+
+上述配置中，`main.js`是业务代码的入口文件，`runtime.js`是你想要打包成运行时加载的文件。
+
+然后，在你的业务代码中，通过`import()`动态导入这些文件。例如：
+
+```javascript
+function loadRuntime() {
+  return import('./runtime.js');
+}
+
+// 使用动态导入的方式加载运行时文件
+loadRuntime().then(runtime => {
+  // 运行时文件加载完成后的逻辑
+});
+```
+
+使用`import()`会返回一个`Promise`，可以通过`.then()`来处理文件加载完成后的逻辑。
+
+最后，使用Webpack进行打包时，会根据配置的`entry`点和`import()`语法自动将这几个文件打包成运行时加载的模块。运行时模块会在需要时动态加载并执行。
+
+注意：在使用`import()`动态导入文件时，需要确保你的环境支持`Promise`和动态导入语法。
+
+**作为上面回复的补充**
+
+除了 `entry` 的方式可以处理自己申明的 runtime 文件以外， 还可以直接在 `import('xx')` 的时候申明；                  
+例如：
+```js
+import(/* webpackChunkName: "runtime" */ './path/to/runtime').then((runtime) => {
+  // 运行时chunk加载完成后的逻辑
+});
+```
+上面的方式， 可以在也可以达到同样的效果， 只是在 `import` 的时候申明runtime文件名称而已
 
 
 

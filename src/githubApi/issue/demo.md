@@ -1,21 +1,69 @@
-**关键词**：webpack 作用、webpack 概念
+在Webpack中配置多入口应用并区分公共依赖，可以通过以下步骤进行配置：
 
-Webpack是一个现代的JavaScript模块打包工具，它的核心概念包括以下几个方面：
+1. 在Webpack配置文件中，使用entry属性指定多个入口文件，并为每个入口文件命名一个唯一的键名。例如：
 
-1. 入口（Entry）：指定Webpack开始构建依赖图谱的起点。可以通过配置文件中的entry属性来指定入口文件，也可以指定多个入口文件。
+```javascript
+module.exports = {
+  entry: {
+    app1: './src/app1.js',
+    app2: './src/app2.js'
+  },
+  // 其他配置项...
+};
+```
 
-2. 输出（Output）：指定Webpack打包后的文件输出的路径和文件名。可以通过配置文件中的output属性来定义输出路径和文件名的规则。
+上面的配置指定了两个入口文件app1.js和app2.js，并为它们分别指定了键名app1和app2。
 
-3. 加载器（Loader）：Webpack本身只能处理JavaScript文件，通过加载器，Webpack可以处理其他类型的文件，如CSS、图片、字体等。加载器会在打包过程中对文件进行转换和处理。
+2. 使用SplitChunks插件进行公共依赖的提取。在Webpack配置文件中添加以下配置：
 
-4. 插件（Plugin）：插件是Webpack的核心功能扩展机制，可以用于解决很多构建过程中的复杂问题或实现特定的需求。插件可以用于优化打包结果、自动生成HTML文件、提取CSS文件等。
+```javascript
+module.exports = {
+  // 其他配置项...
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          name: 'commons',
+          chunks: 'all',
+          minChunks: 2
+        }
+      }
+    }
+  }
+};
+```
 
-5. 模式（Mode）：Webpack提供了两种模式，分别是开发模式（development）和生产模式（production）。开发模式会启用一些有助于开发调试的功能，而生产模式则会启用代码压缩、优化等功能。
+上面的配置中，我们使用optimization.splitChunks.cacheGroups选项配置了一个名为commons的缓存组。该缓存组将对公共依赖进行提取，name属性指定了提取后文件的名称，chunks属性指定了提取的范围为所有类型的块（入口文件和异步加载的块），minChunks属性指定了至少被引用两次的模块才会被提取为公共依赖。
 
-6. 代码分割（Code Splitting）：Webpack支持将代码分割成多个块，实现按需加载和提高应用性能。可以使用动态导入、SplitChunks插件等方式进行代码分割。
+3. 添加output配置，指定打包后文件的输出路径和文件名。例如：
 
-7. 解析（Resolve）：Webpack会解析模块之间的依赖关系，通过解析规则来确定模块的依赖关系。可以通过配置resolve属性来设置模块的解析规则。
+```javascript
+module.exports = {
+  // 其他配置项...
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  }
+};
+```
 
-**参考文档**                        
+上面的配置中，使用[name]占位符来动态生成根据入口文件的键名生成对应的文件名。
 
-https://webpack.docschina.org/concepts/
+通过以上配置，Webpack将会根据指定的多个入口文件进行打包，并在打包过程中自动提取公共依赖为一个独立的文件。例如，假设app1.js和app2.js都引用了lodash库，那么在打包后的结果中，lodash库将会被提取为commons.bundle.js文件，而app1.js和app2.js则分别生成对应的app1.bundle.js和app2.bundle.js。
+
+
+**追问**
+> 上面的配置， 最终会输出几个文件？ 
+
+根据上述的打包配置，最终将会输出3个文件。假设配置的多入口应用有两个入口文件app1.js和app2.js，并且两个入口文件都引用了lodash库作为公共依赖。
+
+根据上述的配置，Webpack将会进行以下操作：
+
+1. 根据entry配置，将app1.js和app2.js作为入口文件进行打包。
+2. 遇到公共依赖lodash库时，使用SplitChunks插件将其提取为独立的文件commons.bundle.js。
+3. 根据output配置，将app1.js打包后生成app1.bundle.js，将app2.js打包后生成app2.bundle.js，将commons.bundle.js生成commons.bundle.js。
+4. 最终，在输出路径下将会生成3个文件：app1.bundle.js、app2.bundle.js和commons.bundle.js。
+
+
+
+

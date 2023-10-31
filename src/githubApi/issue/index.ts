@@ -7,10 +7,8 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Webpack] 有哪些基础概念",
+  title: "[Webpack] 如何配置多入口应用， 且区分公共依赖的？",
   key_world: [
-    "webpack 作用",
-    "webpack 概念",
   ],
   labels: [
     labels.frameWork,

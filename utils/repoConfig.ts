@@ -15,6 +15,13 @@ export default {
       "X-GitHub-Api-Version": "2022-11-28",
     },
   },
+  nodeIndex: {
+    "owner": "yanlele",
+    "repo": "node-index",
+    "header": {
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  },
   "yanleleInfo": {
     "owner": "yanlele",
     "repo": "interview-question",

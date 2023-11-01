@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Webpack] 如何打包运行时 chunk ， 且在项目工程中， 如何去加载这个运行时 chunk ?",
+  title: "[Webpack] 通过 babel-loader 来编译 tsx 文件， 应该如何配置呢？",
   key_world: [
   ],
   labels: [
     labels.frameWork,
-    company.alibaba,
+    company.tencent,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

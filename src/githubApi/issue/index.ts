@@ -7,14 +7,14 @@ import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
 
 const remote = {
-  title: "[Webpack] 通过 babel-loader 来编译 tsx 文件， 应该如何配置呢？",
+  title: "[Webpack] 全面了解 tree shaking",
   key_world: [
   ],
   labels: [
-    labels.frameWork,
-    company.tencent,
+    labels.engineering,
+    company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
 };
 

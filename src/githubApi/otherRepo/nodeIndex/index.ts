@@ -17,12 +17,12 @@ const update = (options: UpdateIssueOptions) => octokit.request(apiUrl.updateIss
 });
 
 const remote = {
-  title: "useImperativeHandle 使用",
+  title: "DOM 和 BOM 手册",
   labels: [
-    labels.react,
+    labels.chrome,
   ],
   body: () => fs.readFileSync(
-    "/Users/yanle/code/self/node-index/books/专题知识库/01、react专题/04、其他/08、react新特性/02、useImperativeHandle/02、useImperativeHandle.md",
+    "/Users/yanle/code/self/node-index/books/专题知识库/09、DOM和BOM/README.md",
     { encoding: "utf8" }),
 };
 

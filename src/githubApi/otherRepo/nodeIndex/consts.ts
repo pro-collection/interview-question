@@ -4,7 +4,7 @@ export const labels = {
   style: "css 与 样式",
   interview: "面试问题",
   canvas: "canvas",
-  algorithm: "数据结构与算法",
+  algorithm: "数据结构、算法、设计模式",
   chrome: "浏览器",
   engineering: "工程化",
   linuxDevops: "Linux & Devops",

@@ -5,10 +5,6 @@ export interface WriteIssueOptions {
   milestone?: number;
 }
 
-export interface UpdateIssueOptions {
-  title: string;
-  body: (() => string) | string;
-  labels?: string[];
-  milestone?: number;
-  issue_number?: string;
+export interface UpdateIssueOptions extends WriteIssueOptions {
+  issue_number?: string | number;
 }

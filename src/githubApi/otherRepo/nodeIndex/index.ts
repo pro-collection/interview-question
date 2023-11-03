@@ -17,13 +17,14 @@ const update = (options: UpdateIssueOptions) => octokit.request(apiUrl.updateIss
 });
 
 const remote = {
-  title: "DOM 和 BOM 手册",
+  title: "JS数组42个方法汇总",
   labels: [
-    labels.chrome,
+    labels.js,
   ],
   body: () => fs.readFileSync(
-    "/Users/yanle/code/self/node-index/books/专题知识库/09、DOM和BOM/README.md",
-    { encoding: "utf8" }),
+    "/Users/yanle/code/self/node-index/books/专题知识库/02、ECMAScript最新语法/3、字符串的扩展/JS数组42个方法汇总.md",
+    { encoding: "utf8" },
+  ),
 };
 
 // 创建 issue

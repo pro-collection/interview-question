@@ -41,10 +41,10 @@ const main = async () => {
 };
 
 // 写入本地 temp.md
-// writeToTemp();
+writeToTemp();
 
 // html 写入远端
 // htmlWriteIssue(remote);
 
 // 直接写入远端
-main();
+// main();

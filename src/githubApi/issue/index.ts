@@ -8,13 +8,17 @@ import { omit } from "lodash";
 import { filePath } from "@src/githubApi/file/consts";
 
 const remote = {
-  title: "[Webpack] 全面了解 tree shaking",
-  key_world: [],
-  labels: [
-    labels.engineering,
-    company.alibaba,
+  title: "箭头函数的作用以及使用场景",
+  key_world: [
+    "箭头函数的作用",
+    "箭头函数使用场景",
+    "箭头函数使用",
   ],
-  milestone: MileStone.senior,
+  labels: [
+    labels.js,
+    company.mi,
+  ],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 
@@ -47,4 +51,4 @@ const main = async () => {
 // htmlWriteIssue(remote);
 
 // 直接写入远端
-// main();
+main();

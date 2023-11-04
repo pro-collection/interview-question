@@ -2,11 +2,17 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs";
 import { writeToTemp } from "@src/githubApi/issue/helper";
-import { htmlPath } from "@src/githubApi/file/consts";
+import { htmlPath, tempFilePath } from "@src/githubApi/file/consts";
 
+const url = "https://juejin.cn/post/7239241544959885369";
 
 const main = async () => {
-  const res = await axios.get("https://juejin.cn/post/7239241544959885369");
+  console.log("yanle - logger: 获取文章, 链接：", url);
+
+  const res = await axios.get(url);
+
+  console.log("yanle - logger: 文章获取成功");
+
   const content = res?.data;
 
   const $ = cheerio.load(content);
@@ -20,10 +26,12 @@ const main = async () => {
   // html 写入本地
   fs.writeFileSync(htmlPath, articleHtml, { encoding: "utf-8" });
 
-  // html 转 markdown
-  await writeToTemp();
+  console.log("yanle - logger: 写入 html 成功， 文件路径： ", htmlPath);
+
+  // html 转 markdown --> 输出文档为 temp file
+  await writeToTemp(tempFilePath, htmlPath);
+
+  console.log("yanle - logger: 写入 temp 成功， 文件路径： ", tempFilePath);
 };
 
-// main().then();
-
-console.log("yanle - logger: htmlPath", htmlPath);
+main().then();

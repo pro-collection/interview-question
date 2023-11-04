@@ -1,1027 +1,1381 @@
-<style>.markdown-body{color:#595959;font-size:15px;font-family:-apple-system,system-ui,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;background-image:linear-gradient(90deg,rgba(60,10,30,.04) 3%,transparent 0),linear-gradient(1turn,rgba(60,10,30,.04) 3%,transparent 0);background-size:20px 20px;background-position:50%}.markdown-body p{color:#595959;font-size:15px;line-height:2;font-weight:400}.markdown-body p+p{margin-top:16px}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{padding:30px 0;margin:0;color:#135ce0}.markdown-body h1{position:relative;text-align:center;font-size:22px;margin:50px 0}.markdown-body h1:before{position:absolute;content:"";top:-10px;left:50%;width:32px;height:32px;transform:translateX(-50%);background-size:100% 100%;opacity:.36;background-repeat:no-repeat;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABfVBMVEX///8Ad/8AgP8AgP8AgP8Aff8AgP8Af/8AgP8AVf8Af/8Af/8AgP8AgP8Af/8Afv8AAP8Afv8Afv8Aef8AgP8AdP8Afv8AgP8AgP8Acf8Ae/8AgP8Af/8AgP8Af/8Af/8AfP8Afv8AgP8Af/8Af/8Afv8Afv8AgP8Afv8AgP8Af/8Af/8AgP8AgP8Afv8AgP8Af/8AgP8AgP8AgP8Ae/8Afv8Af/8AgP8Af/8AgP8Af/8Af/8Aff8Af/8Abf8AgP8Af/8AgP8Af/8Af/8Afv8AgP8AgP8Afv8Afv8AgP8Af/8Aff8AgP8Afv8AgP8Aff8AgP8AfP8AgP8Ae/8AgP8Af/8AgP8AgP8AgP8Afv8AgP8AgP8AgP8Afv8AgP8AgP8AgP8AgP8AgP8Af/8AgP8Af/8Af/8Aev8Af/8AgP8Aff8Afv8AgP8AgP8AgP8Af/8AgP8Af/8Af/8AgP8Afv8AgP8AgP8AgP8AgP8Af/8AeP8Af/8Af/8Af//////rzEHnAAAAfXRSTlMAD7CCAivatxIDx5EMrP19AXdLEwgLR+6iCR/M0yLRzyFF7JupSXn8cw6v60Q0QeqzKtgeG237HMne850/6Qeq7QaZ+WdydHtj+OM3qENCMRYl1B3K2U7wnlWE/mhlirjkODa9FN/BF7/iNV/2kASNZpX1Wlf03C4stRGxgUPclqoAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gEaBzgZ4yeM3AAAAT9JREFUOMvNUldbwkAQvCAqsSBoABE7asSOBRUVVBQNNuy9996789+9cMFAMHnVebmdm+/bmdtbQv4dOFOW2UjPzgFyLfo6nweKfIMOBYWwFtmMPGz2Yj2pJI0JDq3udJW6VVbmKa9I192VQFV1ktXUAl5NB0cd4KpnORqsEO2ZIRpF9gJfE9Dckqq0KuZt7UAH5+8EPF3spjsRpCeQNO/tA/qDwIDA+OCQbBoKA8NOdjMySgcZGVM6jwcgRuUiSs0nlPFNSrEpJfU0jTLD6llqbvKxei7OzvkFNQohi0vAsj81+MoqsCaoPOQFgus/1LyxichW+hS2JWCHZ7VlF9jb187pIAYcHiViHAMnp5mTjJ8B5xeEXF4B1ze/fTh/C0h398DDI9HB07O8ci+vRBdvdGnfP4gBuM8vw7X/G3wDmFhFZEdxzjMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDEtMjZUMDc6NTY6MjUrMDE6MDA67pVWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTAxLTI2VDA3OjU2OjI1KzAxOjAwS7Mt6gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAWdEVYdFRpdGxlAGp1ZWppbl9sb2dvIGNvcHlxapmKAAAAV3pUWHRSYXcgcHJvZmlsZSB0eXBlIGlwdGMAAHic4/IMCHFWKCjKT8vMSeVSAAMjCy5jCxMjE0uTFAMTIESANMNkAyOzVCDL2NTIxMzEHMQHy4BIoEouAOoXEXTyQjWVAAAAAElFTkSuQmCC)}.markdown-body h2{position:relative;font-size:20px;border-left:4px solid;padding:0 0 0 10px;margin:30px 0}.markdown-body h3{font-size:16px}.markdown-body ul{list-style:disc outside;margin-left:2em;margin-top:1em}.markdown-body li{line-height:2;color:#595959}.markdown-body img.loaded{margin:0 auto;display:block}.markdown-body blockquote{background:#fff9f9;margin:2em 0;padding:2px 20px;border-left:4px solid #b2aec5}.markdown-body blockquote p{color:#666;line-height:2}.markdown-body a{color:#036aca;border-bottom:1px solid rgba(3,106,202,.8);font-weight:400;text-decoration:none}.markdown-body em strong,.markdown-body strong{color:#036aca}.markdown-body hr{border-top:1px solid #135ce0}.markdown-body pre{overflow:auto}.markdown-body code,.markdown-body pre{overflow:auto;position:relative;line-height:1.75;font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body table{border-collapse:collapse;margin:1rem 0;overflow-x:auto}.markdown-body table td,.markdown-body table th{border:1px solid #dfe2e5;padding:.6em 1em}.markdown-body table tr{border-top:1px solid #dfe2e5}.markdown-body table tr:nth-child(2n){background-color:#f6f8fa}</style><style data-highlight="" data-highlight-key="atelier-forest-light">.hljs-comment,.hljs-quote{color:#766e6b}.hljs-attribute,.hljs-link,.hljs-name,.hljs-regexp,.hljs-selector-class,.hljs-selector-id,.hljs-tag,.hljs-template-variable,.hljs-variable{color:#f22c40}.hljs-built_in,.hljs-builtin-name,.hljs-literal,.hljs-meta,.hljs-number,.hljs-params,.hljs-type{color:#df5320}.hljs-bullet,.hljs-string,.hljs-symbol{color:#7b9726}.hljs-section,.hljs-title{color:#407ee7}.hljs-keyword,.hljs-selector-tag{color:#6666ea}.markdown-body pre,.markdown-body pre>code.hljs{background:#f1efee;color:#68615e}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><h2 data-id="heading-0">前言</h2>
-<p>经过上一轮的面试，我信心一下子就建立起来了，说巧不巧，前几周正好看到美团校招，想着试一下也不会怎样，就找了学长要了内推码，试着投递了一下，然后就通知周六参加笔试，结果惨不忍睹。然后周二杭州一家（200-300/天）又通知参加面试，急匆匆看了下公司招聘要求，开始了面前突击。面试开始，面试结束，整个人如同被泼了冷水，心灰意冷。根据回忆总结复盘出这篇文章，希望记录下面试中的心态和遇到的难题，以及之后复盘中的一些面试技巧，重拾心态再度启程。</p>
-<blockquote>
-<p>本文其实就是为了自己以后面试前复习方便写下来的，当我面试时遇到不会的实在没办法，但是遇到会的和之前被问到过的，必须保证不能丢分。抱着这样的想法，就想着一定要把每一个细节都弄懂并且最好有代码解释，林林总总下来没想到就万字了。</p>
-</blockquote>
-<h1 data-id="heading-1">一、 杭州（实习 200-300 / 天）</h1>
-<h2 data-id="heading-2">1. ES6常用的API有哪些？</h2>
-<blockquote>
-<p>这里先不要急着深入描述这些方法的具体用法，有什么优缺点啊什么的，就只需要简单的列出来描述一下，面试官老师在问完这个问题后肯定会从中挑出一些拿来问你具体的。不要过于急于求成，把握好节奏，掌握技巧，不然太过于表现容易让面试官老师认为你在背八股。</p>
-</blockquote>
-<ol>
-<li><strong>let和const</strong>：引入了块级作用域变量的声明方式。</li>
-<li><strong>箭头函数</strong>：提供了更简洁的函数声明语法。</li>
-<li><strong>模板字符串</strong>：允许使用反引号（`）创建多行字符串和插入变量。</li>
-<li><strong>解构赋值</strong>：可以从数组或对象中快速提取值并赋给变量。</li>
-<li><strong>默认参数</strong>：在函数声明时可以设置参数的默认值。</li>
-<li><strong>扩展运算符</strong>：用于将数组或对象展开为独立的元素。</li>
-<li><strong>类（Class）</strong>：引入了类和面向对象编程的概念。</li>
-<li><strong>模块化（Modules）</strong>：通过import和export语句实现模块的导入和导出。</li>
-<li><strong>Promise</strong>：用于处理异步操作，提供了更优雅的方式来处理回调函数。</li>
-<li><strong>Set和Map</strong>：提供了集合和字典数据结构，分别对应Set和Map对象。</li>
-<li><strong>Symbol</strong>：引入了一种新的原始数据类型，用于创建唯一的标识符。</li>
-<li><strong>Proxy</strong>：允许创建一个代理对象，用于拦截和自定义对象的操作。</li>
-<li><strong>数组方法</strong>：ES6添加了许多数组的新方法，如forEach、map、filter、reduce等。</li>
-<li><strong>对象方法</strong>：ES6引入了一些新的对象方法，如Object.assign、Object.keys、Object.values等。</li>
-</ol>
-<h2 data-id="heading-3">2. Promise有几个方法以及它们之间的区别？</h2>
-<blockquote>
-<p>该问题是前一个你回答的答案中的Promise，所以当你回答面试官问题时，心里自己也要有心理准备，回答时尽量把自己懂得回答出来，逐渐引导面试官来问你自己有把握的问题，展现自己擅长的部分。</p>
-</blockquote>
-<blockquote>
-<p>先一句话描述下常用的PromisePromise的方法</p>
-</blockquote>
+<style>@charset "UTF-8";.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:15px;overflow-x:hidden;color:#333}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1:first-child,.markdown-body h2:first-child,.markdown-body h3:first-child,.markdown-body h4:first-child,.markdown-body h5:first-child,.markdown-body h6:first-child{margin-top:-1.5rem;margin-bottom:1rem}.markdown-body h1:before,.markdown-body h2:before,.markdown-body h3:before,.markdown-body h4:before,.markdown-body h5:before,.markdown-body h6:before{content:"#";display:inline-block;color:#3eaf7c;padding-right:.23em}.markdown-body h1{position:relative;font-size:2.5rem;margin-bottom:5px}.markdown-body h1:before{font-size:2.5rem}.markdown-body h2{padding-bottom:.5rem;font-size:2.2rem;border-bottom:1px solid #ececec}.markdown-body h3{font-size:1.5rem;padding-bottom:0}.markdown-body h4{font-size:1.25rem}.markdown-body h5{font-size:1rem}.markdown-body h6{margin-top:5px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body strong{color:#3eaf7c}.markdown-body img{max-width:100%;border-radius:2px;display:block;margin:auto;border:3px solid rgba(62,175,124,.2)}.markdown-body hr{border:none;border-top:1px solid #3eaf7c;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;overflow-x:auto;padding:.2rem .5rem;margin:0;color:#3eaf7c;font-weight:700;font-size:.85em;background-color:rgba(27,31,35,.05);border-radius:3px}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75;border-radius:6px;border:2px solid #3eaf7c}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{font-weight:500;text-decoration:none;color:#3eaf7c}.markdown-body a:active,.markdown-body a:hover{border-bottom:1.5px solid #3eaf7c}.markdown-body a:before{content:"⇲"}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #3eaf7c}.markdown-body thead{background:#3eaf7c;color:#fff;text-align:left}.markdown-body tr:nth-child(2n){background-color:rgba(62,175,124,.2)}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:.5rem solid;border-color:#42b983;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body details{outline:none;border:none;border-left:4px solid #3eaf7c;padding-left:10px;margin-left:4px}.markdown-body details summary{cursor:pointer;border:none;outline:none;background:#fff;margin:0 -17px}.markdown-body details summary::-webkit-details-marker{color:#3eaf7c}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body ol li::marker{color:#3eaf7c}.markdown-body ul li{list-style:none}.markdown-body ul li:before{content:"•";margin-right:4px;color:#3eaf7c}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="atom-one-dark">.markdown-body pre,.markdown-body pre>code.hljs{color:#abb2bf;background:#282c34}.hljs-comment,.hljs-quote{color:#5c6370;font-style:italic}.hljs-doctag,.hljs-formula,.hljs-keyword{color:#c678dd}.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#e06c75}.hljs-literal{color:#56b6c2}.hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#98c379}.hljs-built_in,.hljs-class .hljs-title{color:#e6c07b}.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#d19a66}.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#61aeee}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}.hljs-link{text-decoration:underline}</style><h3 data-id="heading-0">Html5和CSS3</h3>
+<h5 data-id="heading-1">常见的水平垂直居中实现方案</h5>
 <ul>
-<li><code>Promise.all()</code>：中的Promise序列会全部执行通过才认为是成功，否则认为是失败；</li>
-<li><code>Promise.race()</code>：中的Promise序列中第一个执行完毕的是通过，则认为成功，如果第一个执行完毕的Promise是拒绝，则认为失败；</li>
-<li><code>Promise.any()</code>：中的Promise序列只要有一个执行通过，则认为成功，如果全部拒绝，则认为失败；</li>
-<li><code>Promise.allSettled()</code>：是一个用于处理多个 Promise 对象的方法，并且会返回一个包含每个 Promise 对象的解决状态的数组；</li>
-<li><code>Promise.resolve()</code>：会返回一个新的 Promise 实例，该实例的状态为<code>fulfilled</code>。</li>
-<li><code>Promise.reject()</code>：也会返回一个新的 Promise 实例，该实例的状态为<code>rejected</code>。</li>
+<li>最简单的方案当然是flex布局</li>
 </ul>
-<blockquote>
-<p>接着再描述一下它们各自的使用场景</p>
-</blockquote>
-<ul>
-<li>
-<p><code>Promise.all()</code>：当需要同时发起多个异步请求，并在所有请求都完成后进行处理时，可以使用<code>Promise.all()</code> 来等待所有请求的结果返回。（<em>例如</em>：在图片批量上传的时候很有用，可以知道什么时候这批图片全部上传完毕，保证了并行，同时知道最终的上传结果。）</p>
-</li>
-<li>
-<p><code>Promise.race()</code>：当需要同时发起多个异步请求，并且只关心最先返回的结果时，可以使用 <code>Promise.race()</code> 来获取最快的响应。（<em>例如</em>：当用户可以搜索不同城市的天气信息，你希望通过并行发送多个请求来获取不同天气数据源的结果，并显示最快返回的结果给用户。）</p>
-</li>
-<li>
-<p><code>Promise.any()</code>：当需要同时发起多个异步请求，并且只关心第一个非拒绝状态的结果时，可以使用 <code>Promise.any()</code>。（<em>例如</em>：Vue3.0在unpkg和jsdelivr都有在线的CDN资源，都是国外的CDN，国内直接调用不确定哪个站点会抽风，加载慢，这时候可以两个资源都请求，哪个请求先成功就使用哪一个。）</p>
-</li>
-<li>
-<p>当你想要等待多个异步操作全部完成（不管是解决还是拒绝），并获取每个操作的结果时，可以使用 <code>Promise.allSettled()</code>。（<em>例如</em>：管理员同时执行多个操作来处理用户退款请求，这些操作包括退款通知、退款日志。使用 <code>Promise.allSettled()</code> 可以获取每个操作的状态（成功或失败），并根据情况采取进一步的处理措施。）</p>
-</li>
-<li>
-<p>当你需要创建一个已经解决（resolved）的 Promise 对象，并使用特定的值作为解决结果时，可以使用 <code>Promise.resolve()</code>。（<em>例如</em>：当用户登录成功通过身份验证时，使用 <code>Promise.resolve()</code> 创建一个已经解决的 Promise 对象，并将用户的身份验证结果作为解决值返回给调用者。）</p>
-</li>
-<li>
-<p>当你需要创建一个已经拒绝（rejected）的 Promise 对象，并使用特定的原因作为拒绝原因时，可以使用 <code>Promise.reject()</code>。（<em>例如</em>：当用户尝试上传一个不支持的文件类型，你可以使用 <code>Promise.reject()</code> 创建一个已经拒绝的 Promise 对象，并将一个错误消息作为拒绝原因返回给用户。）</p>
-</li>
-</ul>
-<h2 data-id="heading-4">3. 阮一峰老师有一个博客，专门讲解一个flex布局，你可以讲一下flex布局吗？</h2>
-<blockquote>
-<p>因为我在自我介绍的时候说了我看过阮一峰老师相关的博客，在这里我也挺推荐对于ES6，flex布局等不熟的可以去看看</p>
-</blockquote>
-<blockquote>
-<p>当你讲到这道题的时候，不要急着一股脑的全说出来，一定要注意自己的语速，要和面试官像聊天一样缓缓地聊出来，思路要清晰。</p>
-</blockquote>
-<p><code>Flex布局</code>是通过给父容器设置样式<code>(display:flex)</code>从而形成一个弹性容器<code>（flex container）</code>，其中这个容器里的子元素被称为弹性项目<code>（flex item）</code>，而在容器中有两根默认的轴，一根是水平的主轴<code>（main axis）</code>，另一根是垂直的交叉轴<code>（cross axis）</code>，弹性项目根据这两根轴在弹性容器中进行排列布局，从而形成了flex布局。</p>
-<p><strong>弹性容器</strong>有常用的6个属性：</p>
-<ul>
-<li><code>flex-direction</code></li>
-<li><code>flex-wrap</code></li>
-<li><code>flex-flow</code></li>
-<li><code>justify-content</code></li>
-<li><code>align-items</code></li>
-<li><code>align-content</code></li>
-</ul>
-<p><code>flex-direction</code>：属性决定主轴的方向（即项目的排列方向）。</p>
-<pre><code class="hljs language-css" lang="css">    <span class="hljs-selector-class">.box</span> {
-      <span class="hljs-attribute">flex-direction</span>: row | row-reverse | column | column-reverse;
-    }
-</code></pre>
-<p><code>flex-wrap</code>：属性定义，如果子元素在一条轴线排不下，换不换行。</p>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.box</span>{
-  <span class="hljs-attribute">flex-wrap</span>: nowrap | wrap | wrap-reverse;
-}
-</code></pre>
-<p><code>flex-flow</code>：属性是<code>flex-direction</code>属性和<code>flex-wrap</code>属性的简写形式</p>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.box</span> {
-  <span class="hljs-attribute">flex-flow</span>: &lt;flex-direction&gt; || &lt;flex-wrap&gt;;
-}
-</code></pre>
-<p><code>justify-content</code>：属性定义了项目在主轴上的对齐方式。</p>
-<pre><code class="hljs language-css" lang="css">
-<span class="hljs-selector-class">.box</span> {
-  <span class="hljs-attribute">justify-content</span>: flex-start | flex-end | center | space-between | space-around;
-}
-</code></pre>
-<p><code>align-items</code>属性定义项目在交叉轴上如何对齐。</p>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.box</span> {
- <span class="hljs-attribute">align-items</span>: flex-start | flex-end | center | baseline | stretch;
-}
-</code></pre>
-<p><code>align-content</code>属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用。</p>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.box</span> {
-   <span class="hljs-attribute">align-content</span>: flex-start | flex-end | center | space-between | space-around | stretch;
-}
-</code></pre>
-<blockquote>
-<p>这里一定要记得弹性项目它也是有属性，可能在开发项目时用的不是很多，导致在问到的时候遗漏了这些子元素的属性，然后面试官就逮着你问这里的东西。</p>
-</blockquote>
-<p>弹性项目也有常用的6个属性</p>
-<ul>
-<li><code>order</code></li>
-<li><code>flex-grow</code></li>
-<li><code>flex-shrink</code></li>
-<li><code>flex-basis</code></li>
-<li><code>flex</code></li>
-<li><code>align-self</code></li>
-</ul>
-<p><code>order</code>属性定义项目的排列顺序。数值越小，排列越靠前，默认为0。</p>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.item</span> {
-  <span class="hljs-attribute">order</span>: &lt;integer&gt;;
-}
-</code></pre>
-<p><code>flex-grow</code>属性定义项目的放大比例，默认为<code>0</code>，即如果存在剩余空间，也不放大。</p>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.item</span> {
- <span class="hljs-attribute">flex-grow</span>: &lt;number&gt;; <span class="hljs-comment">/* default 0 */</span>
-}
-</code></pre>
-<p><code>flex-shrink</code>属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。</p>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.item</span> {
-  <span class="hljs-attribute">flex-shrink</span>: &lt;number&gt;; <span class="hljs-comment">/* default 1 */</span>
-}
-</code></pre>
-<p><code>flex-basis</code>属性定义了在分配多余空间之前，设置项目占据的主轴空间。它的默认值为<code>auto</code>，即项目的本来大小。</p>
-<blockquote>
-<p>它可以设为跟<code>width</code>或<code>height</code>属性一样的值（比如350px），则项目将占据固定空间。</p>
-</blockquote>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.item</span> {
-  <span class="hljs-attribute">flex-basis</span>: &lt;length&gt; | auto; <span class="hljs-comment">/* default auto */</span>
-}
-</code></pre>
-<p><code>flex</code>属性是<code>flex-grow</code>,&nbsp;<code>flex-shrink</code>&nbsp;和&nbsp;<code>flex-basis</code>的简写，默认值为<code>0 1 auto</code>。后两个属性可选。</p>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.item</span> {
-  <span class="hljs-attribute">flex</span>: none | [ &lt;<span class="hljs-string">'flex-grow'</span>&gt; &lt;<span class="hljs-string">'flex-shrink'</span>&gt;? || &lt;<span class="hljs-string">'flex-basis'</span>&gt; ]
-}
-</code></pre>
-<p>该属性有两个快捷值：<code>auto</code>&nbsp;(<code>1 1 auto</code>) 和 none (<code>0 0 auto</code>)。</p>
-<p><em>建议优先使用这个属性，而不是单独写三个分离的属性，因为浏览器会推算相关值。</em></p>
-<p><code>align-self</code>属性允许单个项目有与其他项目不一样的对齐方式，可覆盖<code>align-items</code>属性。默认值为<code>auto</code>，表示继承父元素的<code>align-items</code>属性，如果没有父元素，则等同于<code>stretch</code>。</p>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.item</span> {
-  <span class="hljs-attribute">align-self</span>: auto | flex-start | flex-end | center | baseline | stretch;
-}
-</code></pre>
-<h2 data-id="heading-5">5.（场景题）flex布局如何实现子元素在右下角</h2>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"container"</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"item"</span>&gt;</span>子元素1<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-</code></pre>
-<p><strong>第一种方式</strong></p>
-<blockquote>
-<p>先在父元素通过<code>display:flex</code>设置 Flex 布局，并使用 <code>justify-content: flex-end;</code> 将子元素在主轴水平方向上右对齐，同时使用 <code>align-items: flex-end;</code> 将子元素在交叉轴垂直方向上底部对齐。</p>
-</blockquote>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.container</span> {
-  <span class="hljs-attribute">display</span>: flex;
-  <span class="hljs-attribute">justify-content</span>: flex-end; <span class="hljs-comment">/* 子元素在主轴上右对齐 */</span>
-  <span class="hljs-attribute">align-items</span>: flex-end; <span class="hljs-comment">/* 子元素在交叉轴上底部对齐 */</span>
-  <span class="hljs-attribute">height</span>: <span class="hljs-number">100vh</span>; <span class="hljs-comment">/* 设置容器高度，可以根据实际情况调整 */</span>
-}
-
-<span class="hljs-selector-class">.item</span> {
-  <span class="hljs-attribute">margin</span>: <span class="hljs-number">10px</span>; <span class="hljs-comment">/* 可以根据实际情况调整子元素之间的间距 */</span>
-}
-</code></pre>
-<p><strong>第二种方式</strong></p>
-<blockquote>
-<p>直接在子元素上动手脚，设置<code>align-self: flex-end;</code>虽然实质上是一样的，但是面试官偏要在父容器上设置，子元素上也要设置。</p>
-</blockquote>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.container</span> {
+<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.father</span> {
     <span class="hljs-attribute">display</span>: flex;
-    <span class="hljs-attribute">justify-content</span>: flex-end; /\* 子元素在主轴上右对齐 */
-    <span class="hljs-attribute">height</span>: <span class="hljs-number">100vh</span>; <span class="hljs-comment">/* 设置容器高度，可以根据实际情况调整 \*/</span>
+    <span class="hljs-attribute">justify-content</span>: center;
+    <span class="hljs-attribute">align-items</span>: center;
 }
-
-<span class="hljs-selector-class">.item</span> {
-    <span class="hljs-attribute">align-self</span>: flex-end; <span class="hljs-comment">/* 将子元素在交叉轴上底部对齐 */</span> 
-}
-</code></pre>
-<h2 data-id="heading-6">6.（场景题）有四个按钮，实现鼠标移上去有高亮，移出高亮消失</h2>
-<blockquote>
-<p>其实这道题挺简单的，直接在相应的按钮上添加相应的伪类，并添加高亮的样式就差不多可以了。</p>
-</blockquote>
-<pre><code class="hljs language-html" lang="html">    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"button"</span>&gt;</span>按钮1<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"button"</span>&gt;</span>按钮2<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"button"</span>&gt;</span>按钮3<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"button"</span>&gt;</span>按钮4<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-</code></pre>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.button</span> {
-    <span class="hljs-attribute">display</span>: inline-block;
-    <span class="hljs-attribute">padding</span>: <span class="hljs-number">10px</span> <span class="hljs-number">20px</span>;
-    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#ccc</span>;
-    <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">5px</span>;
-    <span class="hljs-attribute">cursor</span>: pointer;
-}
-
-<span class="hljs-selector-class">.button</span><span class="hljs-selector-pseudo">:hover</span> {
-    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#ff0000</span>; /\* 高亮颜色 \*/
+<span class="hljs-selector-class">.son</span> {
+   ...
 }
 </code></pre>
-<blockquote>
-<h2 data-id="heading-7">7. （场景题）有四个按钮，实现鼠标移上去，下面有横条，鼠标移动到另一个按钮上，横条跟着鼠标有跟随的动画效果</h2>
-</blockquote>
-<h2 data-id="heading-8">8. 有五个组件嵌套，Vue中实现这些组件传值的方法有哪些？</h2>
-<p>Vue中组件间通信的分类可以分成以下</p>
 <ul>
-<li>父子组件之间的通信</li>
-<li>兄弟组件之间的通信</li>
-<li>祖孙与后代组件之间的通信</li>
-<li>非关系组件间之间的通信</li>
+<li>绝对定位配合margin:auto,的实现方案</li>
 </ul>
-<p>常用的组件通信一共有8种</p>
+<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.father</span> {
+    <span class="hljs-attribute">position</span>: relative;
+}
+<span class="hljs-selector-class">.son</span> {
+    <span class="hljs-attribute">position</span>: absolute;
+    <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">bottom</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">right</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">margin</span>: auto;
+}
+</code></pre>
+<ul>
+<li>绝对定位配合transform实现</li>
+</ul>
+<pre><code class="hljs language-css" lang="css"><span class="hljs-selector-class">.father</span> {
+    <span class="hljs-attribute">position</span>: relative;
+}
+<span class="hljs-selector-class">.son</span> {
+    <span class="hljs-attribute">position</span>: absolute;
+    <span class="hljs-attribute">top</span>: <span class="hljs-number">50%</span>;
+    <span class="hljs-attribute">left</span>: <span class="hljs-number">50%</span>;
+    <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translate</span>(-<span class="hljs-number">50%</span>, -<span class="hljs-number">50%</span>);
+}
+</code></pre>
+<h5 data-id="heading-2">BFC问题</h5>
+<p>BFC：块格式上下文，是一块独立的渲染区域，内部元素不会影响外部的元素。</p>
+<h5 data-id="heading-3">flex:1; 是哪些属性的缩写，对应的属性代表什么含义</h5>
+<p>flex: 1;在浏览器中查看分别是flex-grow（设置了对应元素的增长系数）、flex-shrink(指定了对应元素的收缩规则，只有在所有元素的默认宽度之和大于容器宽度时才会触发)、flex-basis（指定了对应元素在主轴上的大小）</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/eb600d1132e24be88d77b200ae7ab28e~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></p>
+<h5 data-id="heading-4">隐藏元素的属性有哪些</h5>
+<ul>
+<li>display: none;</li>
+<li>visibility: hidden;</li>
+<li>opacity: 0;</li>
+</ul>
+<h3 data-id="heading-5">Js相关</h3>
+<h5 data-id="heading-6">Js的基础类型，typeof和instanceof的区别</h5>
+<p>基础类型有：boolean、string、number、bigint、undefined、symbol、null。</p>
+<p>typeof能识别所有的值类型，识别函数，能区分是否是引用类型。</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> a = <span class="hljs-string">"str"</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"typeof a :&gt;&gt; "</span>, <span class="hljs-keyword">typeof</span> a); <span class="hljs-comment">// typeof a :&gt;&gt;  string</span>
+
+<span class="hljs-keyword">const</span> b = <span class="hljs-number">999</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"typeof b :&gt;&gt; "</span>, <span class="hljs-keyword">typeof</span> b); <span class="hljs-comment">// typeof b :&gt;&gt;  number</span>
+
+<span class="hljs-keyword">const</span> c = <span class="hljs-title class_">BigInt</span>(<span class="hljs-number">9007199254740991</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"typeof c :&gt;&gt; "</span>, <span class="hljs-keyword">typeof</span> c); <span class="hljs-comment">// typeof c :&gt;&gt;  bigint</span>
+
+<span class="hljs-keyword">const</span> d = <span class="hljs-literal">false</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"typeof d :&gt;&gt; "</span>, <span class="hljs-keyword">typeof</span> d); <span class="hljs-comment">// typeof d :&gt;&gt;  boolean</span>
+
+<span class="hljs-keyword">const</span> e = <span class="hljs-literal">undefined</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"typeof e :&gt;&gt; "</span>, <span class="hljs-keyword">typeof</span> e); <span class="hljs-comment">// typeof e :&gt;&gt;  undefined</span>
+
+<span class="hljs-keyword">const</span> f = <span class="hljs-title class_">Symbol</span>(<span class="hljs-string">"f"</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"typeof f :&gt;&gt; "</span>, <span class="hljs-keyword">typeof</span> f); <span class="hljs-comment">// typeof f :&gt;&gt;  symbol</span>
+
+<span class="hljs-keyword">const</span> g = <span class="hljs-literal">null</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"typeof g :&gt;&gt; "</span>, <span class="hljs-keyword">typeof</span> g); <span class="hljs-comment">// typeof g :&gt;&gt;  object</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">h</span> = (<span class="hljs-params"></span>) =&gt; {};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"typeof h :&gt;&gt; "</span>, <span class="hljs-keyword">typeof</span> h); <span class="hljs-comment">// typeof h :&gt;&gt;  function</span>
+
+<span class="hljs-keyword">const</span> i = [];
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"typeof i :&gt;&gt; "</span>, <span class="hljs-keyword">typeof</span> i); <span class="hljs-comment">// typeof i :&gt;&gt;  object</span>
+</code></pre>
+<p>instanceof用于检测构造函数的&nbsp;<code>prototype</code>&nbsp;属性是否出现在某个实例对象的原型链上。</p>
+<h5 data-id="heading-7">数组的forEach和map方法有哪些区别？常用哪些方法去对数组进行增、删、改</h5>
+<ul>
+<li>forEach是对数组的每一个元素执行一次给定的函数。</li>
+<li>map是创建一个新数组,该新数组由原数组的每个元素都调用一次提供的函数返回的值。</li>
+<li>pop():删除数组后面的最后一个元素,返回值为被删除的那个元素。</li>
+<li>push():将一个元素或多个元素添加到数组末尾，并返回新的长度。</li>
+<li>shift():删除数组中的第一个元素，并返回被删除元素的值。</li>
+<li>unshift():将一个或多个元素添加到数组的<strong>开头</strong>，并返回该数组的<strong>新长度</strong>。</li>
+<li>splice():通过删除或替换现有元素或者原地添加新的元素来修改数组，并以数组形式返回被修改的内容。</li>
+<li>reverse(): 反转数组。</li>
+</ul>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>];
+
+arr.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> {
+  x = x + <span class="hljs-number">1</span>;
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"x :&gt;&gt; "</span>, x);
+});
+<span class="hljs-comment">// x :&gt;&gt;  2</span>
+<span class="hljs-comment">// x :&gt;&gt;  3</span>
+<span class="hljs-comment">// x :&gt;&gt;  4</span>
+<span class="hljs-comment">// x :&gt;&gt;  5</span>
+<span class="hljs-comment">// x :&gt;&gt;  6</span>
+<span class="hljs-comment">// x :&gt;&gt;  7</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arr :&gt;&gt; "</span>, arr); <span class="hljs-comment">// arr :&gt;&gt;  [ 1, 2, 3, 4, 5, 6 ]</span>
+
+<span class="hljs-keyword">const</span> mapArr = arr.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> {
+  x = x * <span class="hljs-number">2</span>;
+  <span class="hljs-keyword">return</span> x;
+});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"mapArr :&gt;&gt; "</span>, mapArr); <span class="hljs-comment">// mapArr :&gt;&gt;  [ 2, 4, 6, 8, 10, 12 ]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arr :&gt;&gt; "</span>, arr); <span class="hljs-comment">// arr :&gt;&gt;  [ 1, 2, 3, 4, 5, 6 ]</span>
+
+<span class="hljs-keyword">const</span> popArr = arr.<span class="hljs-title function_">pop</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"popArr :&gt;&gt; "</span>, popArr); <span class="hljs-comment">// popArr :&gt;&gt;  6</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arr :&gt;&gt; "</span>, arr); <span class="hljs-comment">// arr :&gt;&gt;  [ 1, 2, 3, 4, 5 ]</span>
+
+<span class="hljs-keyword">const</span> pushArr = arr.<span class="hljs-title function_">push</span>(<span class="hljs-string">"a"</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"pushArr :&gt;&gt; "</span>, pushArr); <span class="hljs-comment">// pushArr :&gt;&gt;  6</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arr :&gt;&gt; "</span>, arr); <span class="hljs-comment">// arr :&gt;&gt;  [ 1, 2, 3, 4, 5, 'a' ]</span>
+
+<span class="hljs-keyword">const</span> shiftArr = arr.<span class="hljs-title function_">shift</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"shiftArr :&gt;&gt; "</span>, shiftArr); <span class="hljs-comment">// shiftArr :&gt;&gt;  1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arr :&gt;&gt; "</span>, arr); <span class="hljs-comment">// arr :&gt;&gt;  [ 2, 3, 4, 5, 'a' ]</span>
+
+<span class="hljs-keyword">const</span> unshiftArr = arr.<span class="hljs-title function_">unshift</span>(<span class="hljs-string">"b"</span>, <span class="hljs-string">"c"</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"unshiftArr :&gt;&gt; "</span>, unshiftArr); <span class="hljs-comment">// unshiftArr :&gt;&gt;  7</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arr :&gt;&gt; "</span>, arr); <span class="hljs-comment">// arr :&gt;&gt;  ['b', 'c', 2,3,4,5,'a']</span>
+
+<span class="hljs-keyword">const</span> spliceArr = arr.<span class="hljs-title function_">splice</span>(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-string">"d"</span>, <span class="hljs-string">"e"</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"spliceArr :&gt;&gt; "</span>, spliceArr); <span class="hljs-comment">// spliceArr :&gt;&gt;  [ 2, 3, 4, 5 ]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arr :&gt;&gt; "</span>, arr); <span class="hljs-comment">// arr :&gt;&gt;  [ 'b', 'c', 'd', 'e', 'a' ]</span>
+
+<span class="hljs-keyword">const</span> reverseArr = arr.<span class="hljs-title function_">reverse</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"reverseArr :&gt;&gt; "</span>, reverseArr); <span class="hljs-comment">// reverseArr :&gt;&gt;  [ 'a', 'e', 'd', 'c', 'b' ]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arr :&gt;&gt; "</span>, arr); <span class="hljs-comment">// arr :&gt;&gt;  [ 'a', 'e', 'd', 'c', 'b' ]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"reverseArr === arr :&gt;&gt; "</span>, reverseArr === arr); <span class="hljs-comment">// reverseArr === arr :&gt;&gt;  true</span>
+</code></pre>
+<h5 data-id="heading-8">闭包和作用域</h5>
+<p>闭包是作用域应用的特殊场景。
+js中常见的作用域包括全局作用域、函数作用域、块级作用域。要知道<strong>js中自由变量的查找是在函数定义的地方，向上级作用域查找，不是在执行的地方</strong>。
+常见的闭包使用有两种场景：一种是函数作为参数被传递；一种是函数作为返回值被返回。</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-comment">// 函数作为返回值</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">create</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">let</span> a = <span class="hljs-number">100</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a);
+  };
+}
+
+<span class="hljs-keyword">const</span> fn = <span class="hljs-title function_">create</span>();
+<span class="hljs-keyword">const</span> a = <span class="hljs-number">200</span>;
+<span class="hljs-title function_">fn</span>(); <span class="hljs-comment">// 100</span>
+
+<span class="hljs-comment">// 函数作为参数被传递</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">print</span>(<span class="hljs-params">fb</span>) {
+  <span class="hljs-keyword">const</span> b = <span class="hljs-number">200</span>;
+  <span class="hljs-title function_">fb</span>();
+}
+<span class="hljs-keyword">const</span> b = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fb</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(b);
+}
+<span class="hljs-title function_">print</span>(fb); <span class="hljs-comment">// 100</span>
+
+</code></pre>
+<h5 data-id="heading-9">实现一个类似关键字new功能的函数</h5>
+<p>在js中new关键字主要做了：首先创建一个空对象，这个对象会作为执行new构造函数之后返回的对象实例，将创建的空对象原型（<code>__proto__</code>）指向构造函数的prototype属性，同时将这个空对象赋值给构造函数内部的this，并执行构造函数逻辑，根据构造函数的执行逻辑，返回初始创建的对象或构造函数的显式返回值。</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">newFn</span>(<span class="hljs-params">...args</span>) {
+  <span class="hljs-keyword">const</span> constructor = args.<span class="hljs-title function_">shift</span>();
+  <span class="hljs-keyword">const</span> obj = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">create</span>(constructor.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>);
+  <span class="hljs-keyword">const</span> result = constructor.<span class="hljs-title function_">apply</span>(obj, args);
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> result === <span class="hljs-string">"object"</span> &amp;&amp; result !== <span class="hljs-literal">null</span> ? result : obj;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Person</span>(<span class="hljs-params">name</span>) {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name;
+}
+
+<span class="hljs-keyword">const</span> p = <span class="hljs-title function_">newFn</span>(<span class="hljs-title class_">Person</span>, <span class="hljs-string">"Jerome"</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"p.name :&gt;&gt; "</span>, p.<span class="hljs-property">name</span>); <span class="hljs-comment">// p.name :&gt;&gt;  Jerome</span>
+
+</code></pre>
+<h5 data-id="heading-10">如何实现继承（原型和原型链）</h5>
+<p>使用class语法，用extends进行继承,或直接改变对象的__proto__指向。</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Car</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">brand</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">brand</span> = brand;
+  }
+  <span class="hljs-title function_">showBrand</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"the brand of car :&gt;&gt; "</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">brand</span>);
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ElectricCar</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Car</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">brand, duration</span>) {
+    <span class="hljs-variable language_">super</span>(brand);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">duration</span> = duration;
+  }
+  <span class="hljs-title function_">showDuration</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`duration of this <span class="hljs-subst">${<span class="hljs-variable language_">this</span>.brand}</span> ElectricCar :&gt;&gt; `</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">duration</span>);
+  }
+}
+
+<span class="hljs-title class_">ElectricCar</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">showOriginator</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">originator</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`originator of this ElectricCar :&gt;&gt; `</span>, originator);
+};
+
+<span class="hljs-keyword">const</span> tesla = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ElectricCar</span>(<span class="hljs-string">"tesla"</span>, <span class="hljs-string">"600km"</span>);
+tesla.<span class="hljs-title function_">showBrand</span>(); <span class="hljs-comment">// the brand of car :&gt;&gt;  tesla</span>
+tesla.<span class="hljs-title function_">showDuration</span>(); <span class="hljs-comment">// duration of this tesla ElectricCar :&gt;&gt;  600km</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"tesla instanceof Car :&gt;&gt; "</span>, tesla <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Car</span>); <span class="hljs-comment">// tesla instanceof Car :&gt;&gt;  true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"tesla instanceof ElectricCar :&gt;&gt; "</span>, tesla <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">ElectricCar</span>); <span class="hljs-comment">// tesla instanceof ElectricCar :&gt;&gt;  true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"tesla.__proto__ :&gt;&gt; "</span>, tesla.<span class="hljs-property">__proto__</span>); <span class="hljs-comment">// tesla.__proto__ :&gt;&gt;  Car {}</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"ElectricCar.prototype === tesla.__proto__  :&gt;&gt; "</span>, <span class="hljs-title class_">ElectricCar</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span> === tesla.<span class="hljs-property">__proto__</span>); <span class="hljs-comment">// ElectricCar.prototype === tesla.__proto__  :&gt;&gt;  true</span>
+tesla.<span class="hljs-title function_">showOriginator</span>(<span class="hljs-string">"Mask"</span>); <span class="hljs-comment">// originator of this  ElectricCar :&gt;&gt;  Mask</span>
+
+<span class="hljs-keyword">const</span> bydCar = {
+  <span class="hljs-attr">brand</span>: <span class="hljs-string">"比亚迪"</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-string">"666km"</span>,
+};
+bydCar.<span class="hljs-property">__proto__</span> = <span class="hljs-title class_">ElectricCar</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>;
+
+bydCar.<span class="hljs-title function_">showBrand</span>(); <span class="hljs-comment">//the brand of car :&gt;&gt;  比亚迪</span>
+bydCar.<span class="hljs-title function_">showDuration</span>(); <span class="hljs-comment">// duration of this 比亚迪 ElectricCar :&gt;&gt;  666km</span>
+
+</code></pre>
+<h5 data-id="heading-11">箭头函数和普通函数有什么区别</h5>
+<p>箭头函数不会创建自身的this，只会从上一级继承this，箭头函数的this在定义的时候就已经确认了，之后不会改变。同时箭头函数无法作为构造函数使用，没有自身的prototype，也没有arguments。</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span> = <span class="hljs-string">"global"</span>;
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"this.id :&gt;&gt; "</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span>); <span class="hljs-comment">// this.id :&gt;&gt;  global</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">normalFun</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span>;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">arrowFun</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span>;
+};
+
+<span class="hljs-keyword">const</span> newNormal = <span class="hljs-keyword">new</span> <span class="hljs-title function_">normalFun</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"newNormal :&gt;&gt; "</span>, newNormal); <span class="hljs-comment">// newNormal :&gt;&gt;  normalFun {}</span>
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">const</span> newArrow = <span class="hljs-keyword">new</span> <span class="hljs-title function_">arrowFun</span>();
+} <span class="hljs-keyword">catch</span> (error) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"error :&gt;&gt; "</span>, error); <span class="hljs-comment">// error :&gt;&gt;  TypeError: arrowFun is not a constructor</span>
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"normalFun :&gt;&gt; "</span>, <span class="hljs-title function_">normalFun</span>()); <span class="hljs-comment">// normalFun :&gt;&gt;  undefined</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arrowFun() :&gt;&gt; "</span>, <span class="hljs-title function_">arrowFun</span>()); <span class="hljs-comment">// arrowFun() :&gt;&gt;  global</span>
+
+<span class="hljs-keyword">const</span> obj = {
+  <span class="hljs-attr">id</span>: <span class="hljs-string">"obj"</span>,
+  normalFun,
+  arrowFun,
+};
+
+<span class="hljs-keyword">const</span> normalFunBindObj = normalFun.<span class="hljs-title function_">bind</span>(obj);
+<span class="hljs-keyword">const</span> arrowFunBindObj = arrowFun.<span class="hljs-title function_">bind</span>(obj);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"normalFun.call(obj) :&gt;&gt; "</span>, normalFun.<span class="hljs-title function_">call</span>(obj)); <span class="hljs-comment">// normalFun.call(obj) :&gt;&gt;  obj</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"normalFunBindObj() :&gt;&gt; "</span>, <span class="hljs-title function_">normalFunBindObj</span>()); <span class="hljs-comment">// normalFunBindObj() :&gt;&gt;  obj</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arrowFun.call(obj) :&gt;&gt; :&gt;&gt; "</span>, arrowFun.<span class="hljs-title function_">call</span>(obj)); <span class="hljs-comment">// arrowFun.call(obj) :&gt;&gt; :&gt;&gt;  global</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arrowFunBindObj() :&gt;&gt; "</span>, <span class="hljs-title function_">arrowFunBindObj</span>()); <span class="hljs-comment">// arrowFunBindObj() :&gt;&gt;  global</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"obj.normalFun() :&gt;&gt; "</span>, obj.<span class="hljs-title function_">normalFun</span>()); <span class="hljs-comment">// obj.normalFun() :&gt;&gt;  obj</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"obj.arrowFun() :&gt;&gt; "</span>, obj.<span class="hljs-title function_">arrowFun</span>()); <span class="hljs-comment">// obj.arrowFun() :&gt;&gt;  global</span>
+</code></pre>
+<h5 data-id="heading-12">迭代器(iterator)接口和生成器(generator)函数的关系</h5>
+<p>任意一个对象实现了遵守迭代器协议的[Symbol.iterator]方法，那么该对象就可以调用[Symbol.iterator]返回一个遍历器对象。生成器函数就是遍历器生成函数，故可以把generator赋值给对象的[Symbol.iterator]属性，从而使该对象具有迭代器接口。</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ClassRoom</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">address, name, students</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">address</span> = address;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">students</span> = students;
+  }
+
+  <span class="hljs-title function_">entry</span>(<span class="hljs-params">student</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">students</span>.<span class="hljs-title function_">push</span>(student);
+  }
+
+  *[<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">iterator</span>]() {
+    <span class="hljs-keyword">yield</span>* <span class="hljs-variable language_">this</span>.<span class="hljs-property">students</span>;
+  }
+
+  <span class="hljs-comment">// [Symbol.iterator]() {</span>
+  <span class="hljs-comment">//   let index = 0;</span>
+  <span class="hljs-comment">//   return {</span>
+  <span class="hljs-comment">//     next: () =&gt; {</span>
+  <span class="hljs-comment">//       if (index &lt; this.students.length) {</span>
+  <span class="hljs-comment">//         return { done: false, value: this.students[index++] };</span>
+  <span class="hljs-comment">//       } else {</span>
+  <span class="hljs-comment">//         return { done: true, value: undefined };</span>
+  <span class="hljs-comment">//       }</span>
+  <span class="hljs-comment">//     },</span>
+  <span class="hljs-comment">//     return: () =&gt; {</span>
+  <span class="hljs-comment">//       console.log("iterator has early termination");</span>
+  <span class="hljs-comment">//       return { done: true, value: undefined };</span>
+  <span class="hljs-comment">//     },</span>
+  <span class="hljs-comment">//   };</span>
+  <span class="hljs-comment">// }</span>
+}
+
+<span class="hljs-keyword">const</span> classOne = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ClassRoom</span>(<span class="hljs-string">"7-101"</span>, <span class="hljs-string">"teach-one-room"</span>, [<span class="hljs-string">"rose"</span>, <span class="hljs-string">"jack"</span>, <span class="hljs-string">"lily"</span>, <span class="hljs-string">"james"</span>]);
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> stu <span class="hljs-keyword">of</span> classOne) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"stu :&gt;&gt; "</span>, stu);
+  <span class="hljs-comment">// stu :&gt;&gt;  rose</span>
+  <span class="hljs-comment">// stu :&gt;&gt;  jack</span>
+  <span class="hljs-comment">// stu :&gt;&gt;  lily</span>
+  <span class="hljs-comment">// stu :&gt;&gt;  james</span>
+  <span class="hljs-comment">// if (stu === "lily") return;</span>
+}
+</code></pre>
+<h5 data-id="heading-13">浏览器的事件循环机制</h5>
+<p>首先要知道一件事，JavaScript是单线程的（指的是js引擎在执行代码的时候只有一个主线程，每次只能干一件事），同时还是非阻塞运行的（执行异步任务的时候，会先挂起相应任务，待异步返回结果再执行回调），这就要知道其事件的循环机制才能正确理解js代码的执行顺序。</p>
+<p>在js代码执行时，会将对象存在堆（heap）中，在栈（stack）中存放一些基础类型变量和对象的指针。在执行方法时，会根据当前方法的执行上下文，来进行一个执行。对于普通函数就是正常的入栈出栈即可，涉及到异步任务的时候，js执行会将对应的任务放到事件队列中（微任务队列、宏任务队列）。</p>
+<ul>
+<li>常见微任务：queueMicrotask、Promise、MutationObserve等。</li>
+<li>常见宏任务：ajax、setTimeout、setInterval、script（js整体代码）、IO操作、UI交互、postMessage等。</li>
+</ul>
+<p>故事件循环可以理解为是一个桥梁，连接着应用程序的js和系统调用之间的通道。其过程为：</p>
 <ol>
-<li>通过 props 传递</li>
-<li>通过 $emit 触发自定义事件</li>
-<li>使用 ref</li>
-<li>EventBus</li>
-<li>$parent 或$root</li>
-<li>attrs 与 listeners</li>
-<li>Provide 与 Inject</li>
-<li>Vuex</li>
+<li>执行一个宏任务（一般为一段script），若没有可选的宏任务，就直接处理微任务。</li>
+<li>执行中遇到微任务，就将其添加到微任务的任务队列中。</li>
+<li>执行中遇到宏任务，就将其提交到宏任务队列中。</li>
+<li>执行完当前执行的宏任务后，去查询当前有无需要执行的微任务，有就执行</li>
+<li>检查渲染，若需要渲染，浏览器执行渲染任务</li>
+<li>渲染完毕后，Js线程会去执行下一个宏任务。。。（如此循环）</li>
 </ol>
-<h3 data-id="heading-9">父传子</h3>
-<ul>
-<li>
-<p><strong>props</strong></p>
-<p>在父组件上传一些属性和值，然后子组件进行接收</p>
-<p><code>Father.vue</code>组件</p>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">Children</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"jack"</span> <span class="hljs-attr">age</span>=<span class="hljs-string">18</span> /&gt;</span>  
-</code></pre>
-<p><code>Children.vue</code></p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-attr">props</span>:{  
-    <span class="hljs-comment">// 字符串形式  </span>
- <span class="hljs-attr">name</span>:<span class="hljs-title class_">String</span> <span class="hljs-comment">// 接收的类型参数  </span>
-    <span class="hljs-comment">// 对象形式  </span>
-    <span class="hljs-attr">age</span>:{    
-        <span class="hljs-attr">type</span>:<span class="hljs-title class_">Number</span>, <span class="hljs-comment">// 接收的类型为数值  </span>
-        <span class="hljs-attr">defaule</span>:<span class="hljs-number">18</span>,  <span class="hljs-comment">// 默认值为18  </span>
-        <span class="hljs-attr">require</span>:<span class="hljs-literal">true</span> <span class="hljs-comment">// age属性必须传递  </span>
-    }
-}
-</code></pre>
-</li>
-</ul>
-<h3 data-id="heading-10">子传父</h3>
-<ul>
-<li>
-<p><strong>$emit 触发自定义事件</strong>
-子组件通过<code>$emit触发</code>自定义事件，<code>$emit</code>第二个参数为传递的数值，父组件绑定监听器获取到子组件传递过来的参数</p>
-<p><code>Children.vue</code></p>
-<pre><code class="hljs language-js" lang="js">&lt;div @click=<span class="hljs-string">"onSubmit"</span>&gt;发送&lt;/div&gt;
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">onSubmit</span> = (<span class="hljs-params"></span>) =&gt; {
- <span class="hljs-variable language_">this</span>.$emit(<span class="hljs-string">'add'</span>, <span class="hljs-string">'good'</span>) 
-}
-</code></pre>
-<p><code>Father.vue</code></p>
-<pre><code class="hljs language-js" lang="js">&lt;<span class="hljs-title class_">Children</span> @add=<span class="hljs-string">"cartAdd($event)"</span> /&gt;
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">cartAdd</span> = (<span class="hljs-params">msg</span>) =&gt; {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(msg) <span class="hljs-comment">// 'good'</span>
-}
-</code></pre>
-</li>
-<li>
-<p><strong>$ref</strong></p>
-<p><code>$ref</code>主要是在父组件中操作，在模板中创建好子组件，然后打个<code>child</code>ref标记，此时<code>this.$refs.child</code>代表的是获取到子组件<code>Children.vue</code>的vue实例，相当于在子组件中使用this，接着this.$refs.child.test()就是通过父组件调用子组件的方法或者值。</p>
-<p><code>Father.vue</code></p>
-<pre><code class="hljs language-js" lang="js"> &lt;<span class="hljs-title class_">Children</span> ref=<span class="hljs-string">"child"</span>&gt;&lt;/<span class="hljs-title class_">Children</span>&gt;
+<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"script start"</span>);
 
- <span class="hljs-title function_">addClick</span>(<span class="hljs-params"></span>) {
-     <span class="hljs-variable language_">this</span>.<span class="hljs-property">$refs</span>.<span class="hljs-property">child</span>.<span class="hljs-title function_">test</span>(); <span class="hljs-comment">// 相当于直接Children.vue中的this.test()</span>
- };
-</code></pre>
-<p><code>Children.vue</code></p>
-<pre><code class="hljs language-js" lang="js"> <span class="hljs-keyword">const</span> <span class="hljs-title function_">test</span> = (<span class="hljs-params"></span>) =&gt; {
-     <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'test'</span>);
- }
-</code></pre>
-</li>
-</ul>
-<h3 data-id="heading-11">兄弟组件传值</h3>
-<ul>
-<li>
-<p><strong>EventBus</strong></p>
-<ul>
-<li>
-<p><strong>A兄弟组件</strong>通过<code>$emit</code>触发自定义事件，<code>$emit</code>第二个参数为传递的数值</p>
-</li>
-<li>
-<p>另一个<strong>B兄弟组件</strong>通过<code>$on</code>监听自定义事件</p>
-</li>
-</ul>
-<p><code>A兄弟组件.vue</code></p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">import</span> mitt <span class="hljs-keyword">from</span> <span class="hljs-string">'mitt'</span>; <span class="hljs-comment">// 引入第三方的EventEmitters</span>
-<span class="hljs-keyword">const</span> emitter = <span class="hljs-title function_">mitt</span>();
+<span class="hljs-keyword">const</span> promiseA = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"init promiseA"</span>);
+  <span class="hljs-title function_">resolve</span>(<span class="hljs-string">"promiseA"</span>);
+});
 
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">onEventHandle</span> = (<span class="hljs-params">msg</span>) =&gt; {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(msg); <span class="hljs-comment">// 666</span>
+<span class="hljs-keyword">const</span> promiseB = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"init promiseB"</span>);
+  <span class="hljs-title function_">resolve</span>(<span class="hljs-string">"promiseB"</span>);
+});
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"setTimeout run"</span>);
+  promiseB.<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"promiseB res :&gt;&gt; "</span>, res);
+  });
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"setTimeout end"</span>);
+}, <span class="hljs-number">500</span>);
+
+promiseA.<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"promiseA res :&gt;&gt; "</span>, res);
+});
+
+<span class="hljs-title function_">queueMicrotask</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"queue Microtask run"</span>);
+});
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"script end"</span>);
+
+<span class="hljs-comment">// script start</span>
+<span class="hljs-comment">// init promiseA</span>
+<span class="hljs-comment">// init promiseB</span>
+<span class="hljs-comment">// script end</span>
+<span class="hljs-comment">// promiseA res :&gt;&gt;  promiseA</span>
+<span class="hljs-comment">// queue Microtask run</span>
+<span class="hljs-comment">// setTimeout run</span>
+<span class="hljs-comment">// setTimeout end</span>
+<span class="hljs-comment">// promiseB res :&gt;&gt;  promiseB</span>
+
+</code></pre>
+<h3 data-id="heading-14">TypeScript</h3>
+<h5 data-id="heading-15">type和interface的区别</h5>
+<p>interface可以重复声明，type不行，继承方式不一样，type使用交叉类型方式，interface使用extends实现。在对象扩展的情况下，使用接口继承要比交叉类型的性能更好。建议使用interface来描述对象对外暴露的借口，使用type将一组类型重命名（或对类型进行复杂编程）。</p>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-keyword">interface</span> iMan {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">age</span>: <span class="hljs-built_in">number</span>;
+}
+<span class="hljs-comment">// 接口可以进行声明合并</span>
+<span class="hljs-keyword">interface</span> iMan {
+  <span class="hljs-attr">hobby</span>: <span class="hljs-built_in">string</span>;
 }
 
- <span class="hljs-title function_">onMounted</span>(<span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-comment">// 订阅</span>
-    emitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">'eventName'</span>, onEventHandle);
-})
+<span class="hljs-keyword">type</span> tMan = {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">age</span>: <span class="hljs-built_in">number</span>;
+};
+<span class="hljs-comment">// type不能重复定义</span>
+<span class="hljs-comment">// type tMan = {}</span>
+
+<span class="hljs-comment">// 继承方式不同,接口继承使用extends</span>
+<span class="hljs-keyword">interface</span> iManPlus <span class="hljs-keyword">extends</span> iMan {
+  <span class="hljs-attr">height</span>: <span class="hljs-built_in">string</span>;
+}
+<span class="hljs-comment">// type继承使用&amp;，又称交叉类型</span>
+<span class="hljs-keyword">type</span> tManPlus = { <span class="hljs-attr">height</span>: <span class="hljs-built_in">string</span> } &amp; tMan;
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">aMan</span>: iManPlus = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">"aa"</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">15</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-string">"175cm"</span>,
+  <span class="hljs-attr">hobby</span>: <span class="hljs-string">"eat"</span>,
+};
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">bMan</span>: tManPlus = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">"bb"</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">15</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-string">"150cm"</span>,
+};
 </code></pre>
-<p><code>B兄弟组件.vue</code></p>
-<pre><code class="hljs language-js" lang="js">&lt;template&gt;
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">"doSomething"</span>&gt;</span>按钮<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
-&lt;/template&gt;
-<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">setup</span>&gt;</span><span class="javascript">
-    <span class="hljs-keyword">import</span> mitt <span class="hljs-keyword">from</span> <span class="hljs-string">'mitt'</span>; <span class="hljs-comment">// 引入第三方的EventEmitters</span>
-    <span class="hljs-keyword">const</span> emitter = <span class="hljs-title function_">mitt</span>();
-    <span class="hljs-comment">// 发布</span>
-    <span class="hljs-keyword">const</span> <span class="hljs-title function_">doSomething</span> = (<span class="hljs-params"></span>) =&gt; {
-        emitter.<span class="hljs-title function_">emit</span>(<span class="hljs-string">'eventName'</span>, <span class="hljs-string">'666'</span>);
-    }
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
-</code></pre>
-</li>
-<li>
-<p><strong>$parent 或 $&nbsp;root</strong></p>
-<p>通过共同的父组件<code>$parent</code>或者共同的根组件<code>$root</code>搭建通信桥梁，可以通过使用订阅与发布或者直接赋值和取值即可。</p>
-<p><strong>发布与订阅</strong></p>
-<p>兄弟组件</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">$parent</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">'add'</span>)
-</code></pre>
-<p>另一个兄弟组件</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">$parent</span>.<span class="hljs-title function_">emit</span>(<span class="hljs-string">'add'</span>,<span class="hljs-variable language_">this</span>.<span class="hljs-property">add</span>)
-</code></pre>
-<p><strong>兄弟组件</strong></p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">$parent</span>.<span class="hljs-property">msg</span> = <span class="hljs-string">'123'</span>
-</code></pre>
-<p>另一个兄弟组件</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>( <span class="hljs-string">'this.$parent.msg'</span>)
-</code></pre>
-<p><code>$root</code>与<code>$parent</code>类似</p>
-</li>
-</ul>
-<h3 data-id="heading-12">祖孙与后代组件传值</h3>
+<h5 data-id="heading-16">any、unkonwn、never</h5>
+<p>any和unkonwn在TS类型中属于最顶层的Top Type，即所有的类型都是它俩的子类型。而never则相反，它作为Bottom Type是所有类型的子类型。</p>
+<h5 data-id="heading-17">常见的工具类型</h5>
 <ul>
-<li>
-<p><strong>provide 与 inject</strong></p>
-<ul>
-<li>在祖先组件使用<code>provide</code>传递值</li>
-<li>在后代组件通过<code>inject</code>接收组件传递过来的值</li>
+<li>Partial：满足部分属性(一个都没满足也可)即可</li>
+<li>Required：所有属性都需要</li>
+<li>Readonly: 包装后的所有属性只读
+<img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dea2d0e6d6254dbe8da2c4f9dc8850a5~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></li>
+<li>Pick: 选取部分属性</li>
+<li>Omit: 去除部分属性
+<img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/237464ba46bc4fa29e335e1dde6ff70b~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></li>
+<li>Extract: 交集</li>
+<li>Exclude: 差集
+<img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3d5dd3396ab04fd8995305cbbc6a8ea2~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></li>
 </ul>
-<p>祖先组件</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-title function_">provide</span>(<span class="hljs-params"></span>){  
-    <span class="hljs-attr">foo</span>:<span class="hljs-string">'test'</span>
-}  
+<h3 data-id="heading-18">关于Vue</h3>
+<h5 data-id="heading-19">虚拟DOM</h5>
+<p>采用虚拟DOM的更新技术在性能这块，理论上是不可能比原生Js操作DOM高的。不过在大部分情况下，开发者很难写出绝对优化的命令式代码。所以虚拟DOM就是用来解决这一问题，让开发者系的代码在性能上得到保障，甚至无限接近命令式代码的性能。
+通常情况下，纯Js层面的操作远比DOM操作快。虚拟DOM就是用Js来模拟出DOM结构，通过diff算法来计算出最小的变更，通过对应的渲染器，来渲染到页面上。</p>
+<p>同时虚拟DOM也为跨平台开发提供了极大的便利，开发者写的同一套代码（有些需要针对不同平台做区分），通过不同的渲染规则，就可以生成不同平台的代码。</p>
+<p>在vue中会通过<strong>渲染器</strong>来将虚拟DOM转换为对应平台的真实DOM。如renderer(vnode， container)，该方法会根据vnode描述的信息（如tag、props、children）来创建DOM元素，根据规则为对应的元素添加属性和事件，处理vnode下的children。</p>
+<h5 data-id="heading-20">vue3的变化（改进）</h5>
+<p><em><strong>响应式方面</strong></em></p>
+<p>vue3的响应式是基于Proxy来实现的，利用代理来拦截对象的基本操作，配合Refelect.*方法来完成响应式的操作。</p>
+<p><em><strong>书写方面</strong></em></p>
+<p>提供了setup的方式，配合组合式API，可以建立组合逻辑、创建响应式数据、创建通用函数、注册生命周期钩子等。</p>
+<p><em><strong>diff算法方面：</strong></em></p>
+<ul>
+<li>在vue2中使用的是双端diff算法：是一种同时比较新旧两组节点的两个端点的算法（比头、比尾、头尾比、尾头比）。一般情况下，先找出变更后的头部，再对剩下的进行双端diff。</li>
+<li>在vue3中使用的是快速diff算法：它借鉴了文本diff算法的预处理思路，先处理新旧两组节点中相同的前置节点和后置节点。当前置节点和后置节点全部处理完毕后，如果无法通过简单的挂载新节点或者卸载已经不存在的节点来更新，则需要根据节点间的索引关系，构造出一个最长递增子序列。最长递增子序列所指向的节点即为不需要移动的节点。</li>
+</ul>
+<p><em><strong>编译上的优化</strong></em></p>
+<ul>
+<li>vue3新增了PatchFlags来标记节点类型（动态节点收集与补丁标志），会在一个Block维度下的vnode下收集到对应的dynamicChildren（动态节点），在执行更新时，忽略vnode的children，去直接找到动态节点数组进行更新，这是一种高效率的靶向更新。</li>
+<li>vue3提供了静态提升方式来优化重复渲染静态节点的问题，结合静态提升，还对静态节点进行预字符串化，减少了虚拟节点的性能开销，降低了内存占用。</li>
+<li>vue3会将内联事件进行缓存，每次渲染函数重新执行时会优先取缓存里的事件</li>
+</ul>
+<h5 data-id="heading-21">关于vue3双向绑定的实现</h5>
+<p>vue3实现双向绑定的核心是Proxy（代理的使用），它会对需要响应式处理的对象进行一层代理，对象的所有操作（get、set等）都会被Prxoy代理到。在vue中，所有响应式对象相关的副作用函数会使用weakMap来存储。当执行对应的操作时，会去执行操作中所收集到的副作用函数。</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-comment">// WeakMap常用于存储只有当key所引用的对象存在时（没有被回收）才有价值的消息，十分贴合双向绑定场景</span>
+<span class="hljs-keyword">const</span> bucket = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>(); <span class="hljs-comment">// 存储副作用函数</span>
+
+<span class="hljs-keyword">let</span> activeEffect; <span class="hljs-comment">// 用一个全局变量处理被注册的函数</span>
+
+<span class="hljs-keyword">const</span> tempObj = {}; <span class="hljs-comment">// 临时对象，用于操作</span>
+
+<span class="hljs-keyword">const</span> data = { <span class="hljs-attr">text</span>: <span class="hljs-string">"hello world"</span> }; <span class="hljs-comment">// 响应数据源</span>
+
+<span class="hljs-comment">// 用于清除依赖</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">cleanup</span>(<span class="hljs-params">effectFn</span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; effectFn.<span class="hljs-property">deps</span>.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-keyword">const</span> deps = effectFn.<span class="hljs-property">deps</span>[i];
+    deps.<span class="hljs-title function_">delete</span>(effectFn);
+  }
+  effectFn.<span class="hljs-property">deps</span>.<span class="hljs-property">length</span> = <span class="hljs-number">0</span>;
+}
+
+<span class="hljs-comment">// 处理依赖函数</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn</span>) {
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">effectFn</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-title function_">cleanup</span>(effectFn);
+    activeEffect = effectFn;
+    <span class="hljs-title function_">fn</span>();
+  };
+  effectFn.<span class="hljs-property">deps</span> = [];
+  <span class="hljs-title function_">effectFn</span>();
+}
+
+<span class="hljs-comment">// 在get时拦截函数调用track函数追踪变化</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">track</span>(<span class="hljs-params">target, key</span>) {
+  <span class="hljs-keyword">if</span> (!activeEffect) <span class="hljs-keyword">return</span>; <span class="hljs-comment">//</span>
+  <span class="hljs-keyword">let</span> depsMap = bucket.<span class="hljs-title function_">get</span>(target);
+  <span class="hljs-keyword">if</span> (!depsMap) {
+    bucket.<span class="hljs-title function_">set</span>(target, (depsMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>()));
+  }
+  <span class="hljs-keyword">let</span> deps = depsMap.<span class="hljs-title function_">get</span>(key);
+  <span class="hljs-keyword">if</span> (!deps) {
+    depsMap.<span class="hljs-title function_">set</span>(key, (deps = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>()));
+  }
+
+  deps.<span class="hljs-title function_">add</span>(activeEffect);
+
+  activeEffect.<span class="hljs-property">deps</span>.<span class="hljs-title function_">push</span>(deps);
+}
+
+<span class="hljs-comment">// 在set拦截函数内调用trigger来触发变化</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, key</span>) {
+  <span class="hljs-keyword">const</span> depsMap = bucket.<span class="hljs-title function_">get</span>(target);
+  <span class="hljs-keyword">if</span> (!depsMap) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">const</span> effects = depsMap.<span class="hljs-title function_">get</span>(key);
+  <span class="hljs-keyword">const</span> effectsToRun = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>(effects);
+  effectsToRun.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">effectFn</span> =&gt;</span> <span class="hljs-title function_">effectFn</span>());
+  <span class="hljs-comment">// effects &amp;&amp; effects.forEach(fn =&gt; fn());</span>
+}
+
+<span class="hljs-keyword">const</span> obj = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(data, {
+  <span class="hljs-comment">// 拦截读取操作</span>
+  <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key</span>) {
+    <span class="hljs-keyword">if</span> (!activeEffect) <span class="hljs-keyword">return</span>; <span class="hljs-comment">//</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"get -&gt; key"</span>, key);
+    <span class="hljs-title function_">track</span>(target, key);
+    <span class="hljs-keyword">return</span> target[key];
+  },
+
+  <span class="hljs-comment">// 拦截设置操作</span>
+  <span class="hljs-title function_">set</span>(<span class="hljs-params">target, key, newValue</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"set -&gt; key: newValue"</span>, key, newValue);
+    target[key] = newValue;
+    <span class="hljs-title function_">trigger</span>(target, key);
+  },
+});
+
+<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> {
+  tempObj.<span class="hljs-property">text</span> = obj.<span class="hljs-property">text</span>;
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"tempObj.text :&gt;&gt; "</span>, tempObj.<span class="hljs-property">text</span>);
+});
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  obj.<span class="hljs-property">text</span> = <span class="hljs-string">"hi vue3"</span>;
+}, <span class="hljs-number">1000</span>);
+
 </code></pre>
-<p>后代组件</p>
-<pre><code class="hljs language-html" lang="html">    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>{{foo}}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span> //  <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
-    
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-        <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
-            <span class="hljs-attr">inject</span>:[<span class="hljs-string">'foo'</span>] <span class="hljs-comment">// 获取到祖先组件传递过来的值</span>
+<h5 data-id="heading-22">vue3中的ref、toRef、toRefs</h5>
+<ul>
+<li>ref:接收一个内部值，生成对应的响应式数据，该内部值挂载在ref对象的value属性上；该对象可以用于模版和reactive。使用ref是为了解决值类型在setup、computed、合成函数等情况下的响应式丢失问题。</li>
+<li>toRef:为响应式对象（reactive）的一个属性创建对应的ref，且该方式创建的ref与源属性保持同步。</li>
+<li>toRefs：将响应式对象转换成普通对象，对象的每个属性都是对应的ref，两者间保持同步。使用toRefs进行对象解构。</li>
+</ul>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ref</span>(<span class="hljs-params">val</span>) {
+    <span class="hljs-keyword">const</span> wrapper = {<span class="hljs-attr">value</span>: val}
+    <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(wrapper, <span class="hljs-string">'__v_isRef'</span>, {<span class="hljs-attr">value</span>: <span class="hljs-literal">true</span>})
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">reactive</span>(wrapper)
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">toRef</span>(<span class="hljs-params">obj, key</span>) {
+    <span class="hljs-keyword">const</span> wrapper = {
+        <span class="hljs-keyword">get</span> <span class="hljs-title function_">value</span>() {
+            <span class="hljs-keyword">return</span> obj[key]
+        },
+        <span class="hljs-keyword">set</span> <span class="hljs-title function_">value</span>(<span class="hljs-params">val</span>) {
+            obj[key] = val
         }
-    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
-</li>
-<li>
-<p><strong>$attrs 与 $ listeners</strong></p>
-<p><code>$attrs</code>，先通过爷组件传值传给父组件，然后父组件使用<code>v-bind="$attrs"</code>把爷组件传过来的值放到<code>\$attrs</code>里，再到子组件中使用<code>\$attrs</code></p>
-<p><code>爷组件</code></p>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span> 
-   <span class="hljs-tag">&lt;<span class="hljs-name">child</span>&nbsp;<span class="hljs-attr">msg</span>=<span class="hljs-string">"参数"</span>&nbsp;@<span class="hljs-attr">eventFn</span>=<span class="hljs-string">"handle"</span>&gt;</span>
- <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
-</code></pre>
-<p><code>Child父组件</code></p>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span> 
-    <span class="hljs-tag">&lt;<span class="hljs-name">son</span>&nbsp;<span class="hljs-attr">v-bind</span>=<span class="hljs-string">"$attrs"</span>&nbsp;<span class="hljs-attr">v-on</span>=<span class="hljs-string">"$listener"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">son</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
-</code></pre>
-<p><code>Son子组件</code></p>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
-   {{ $attrs.msg }}
-<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
-</code></pre>
-<p><code>listeners</code>相当于一个中转站一样，通过设置<code>v-on="$listeners"'</code>可以监听子组件的$emit定义的函数指令，然后爷组件可以直接使用这个自定义的函数指令</p>
-<p><code>爷组件</code></p>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span> 
-   <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>爷组件<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> 
-   <span class="hljs-tag">&lt;<span class="hljs-name">child</span>&nbsp;@<span class="hljs-attr">eventFn</span>=<span class="hljs-string">"handle"</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-     <span class="hljs-keyword">const</span> <span class="hljs-title function_">handle</span> = (<span class="hljs-params">val</span>) =&gt; {
-         <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(val) <span class="hljs-comment">// foooo</span>
-     }
- </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
-<p><code>Child父组件</code></p>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span> 
-    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>父组件<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> 
-    <span class="hljs-tag">&lt;<span class="hljs-name">son</span> <span class="hljs-attr">v-on</span>=<span class="hljs-string">"$listener"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">son</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
-</code></pre>
-<p><code>Son子组件</code></p>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span> 
-    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>孙组件<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> 
-    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">"clickFn"</span>&gt;</span>发送事件<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span> 
-<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-    <span class="hljs-keyword">const</span> <span class="hljs-title function_">clickFn</span> = (<span class="hljs-params"></span>) =&gt; {
-        <span class="hljs-variable language_">this</span>.$emit(<span class="hljs-string">'eventFn'</span>,<span class="hljs-string">'fooooo'</span>) <span class="hljs-comment">// 第一个参数是自定义函数</span>
     }
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
-</li>
-</ul>
-<p><strong>非关系组件间之间的通信</strong></p>
-<ul>
-<li>
-<p><strong>vuex</strong></p>
-<ul>
-<li>
-<p><code>Vuex</code>作用相当于一个用来存储共享变量的容器</p>
-</li>
-<li>
-<p><code>state</code>用来存放共享变量的地方</p>
-</li>
-<li>
-<p><code>getter</code>，可以增加一个<code>getter</code>派生状态，(相当于<code>store</code>中的计算属性），用来获得共享变量的值</p>
-</li>
-<li>
-<p><code>mutations</code>用来存放修改<code>state</code>的方法。</p>
-</li>
-<li>
-<p><code>actions</code>也是用来存放修改state的方法，不过<code>action</code>是在<code>mutations</code>的基础上进行。常用来做一些异步操作</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 data-id="heading-13">9. Vue生命周期的执行顺序？</h2>
-<blockquote>
-<p>其实就是官网上的一张图，只需要理解了它的流程之后，你能够清晰的说出来就可以了，这里我说的是vue2的</p>
-</blockquote>
-<ul>
-<li>
-<p>首先创建一个vue实例</p>
-</li>
-<li>
-<p><code>Init Events Lifecycle</code>：在<code>beforeCreate</code>之前，对vue的生命周期钩子函数和vue的一些内置事件（如事件修饰符所代表的事件，<code>.once, .enter</code>等），此时数据代理还没有开始</p>
-</li>
-<li>
-<p><code>beforeCreate</code>：此时data和methods都没有初始化，所以<code>无法</code>通过vue实例来访问data的数据和methods中的方法</p>
-</li>
-<li>
-<p><code>Init injections reactivity</code>：在<code>created</code>之前，初始化组件实例的依赖注入<code>(init injections)</code>，就是对你在<code>main.js</code>中<code>use</code>的路由和<code>vuex</code>等一些第三方库，以便能够确保在组件创建和使用过程中正确地注入这些依赖项。</p>
-</li>
-<li>
-<p><code>created</code>：该阶段data和methods已经初始化了，<code>可以</code>通过vue实例来访问data的数据和methods中的方法，但整个页面没有挂载到页面上，还无法获取到el的值</p>
-</li>
-<li>
-<p><code>el</code>选项的判断：如果有<code>el</code>选项（options)，则继续执行；如果没有，则等待<code>vm.$mounted(el)</code>这个函数被调用，直到调用了这个函数才继续执行。</p>
-</li>
-<li>
-<p><code>template</code>选项的判断：如果有<code>template</code>这个选项，则直接用这个<code>template</code>；如果没有，则去找<code>el</code>这个节点上的整个外部HTNL结构，包含</p><div id="user-content-app">这个节点。<p></p>
-<p>比如<code>el：'#app'</code></p>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"app"</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>World<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-</code></pre>
-<p><code>在判断阶段</code>，此时开始解析模板，在内存中生成虚拟DOM，浏览器页面还不能显示解析好内容</p>
-</div></li>
-<li>
-<p><code>beforeMounted</code>：此时</p>
-<ol>
-<li>页面呈现的是未经Vue编译的DOM结构。</li>
-<li>所有对DOM的操作，最终都不奏效。</li>
-</ol>
-</li>
-<li>
-<p><code>create vm.$el and replace "el" with it</code>：创建<code>vm.$el</code>，然后将内存中的虚拟DOM转为真实DOM插入页面</p>
-</li>
-<li>
-<p><code>mounted</code>：此时，</p>
-<ol>
-<li>
-<p>页面中呈现的是经过Vue编译的DOM。</p>
-</li>
-<li>
-<p>对DOM的操作均有效（尽可能避免）。至此初始化过程结束，一般在此进行：开启定时器、发送网络请求、订阅消息、绑定自定义事件、等初始化操作。</p>
-</li>
-</ol>
-</li>
-</ul>
+    <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(wrapper, <span class="hljs-string">'__v_isRef'</span>, {<span class="hljs-attr">value</span>: <span class="hljs-literal">true</span>})
+    <span class="hljs-keyword">return</span> wrapper
+}
 
-<ul>
-<li>
-<p><code>beforeUpdate</code>：此时：数据是新的，但页面是旧的，即：页面尚未和数据保持同步。</p>
-</li>
-<li>
-<p><code>Virtual DOM re-render and patch</code>：根据新数据复集成新的虚拟 <code>DOM</code>,随后与引旧的虚拟<code>DOM</code>进行比较，最终完成页面更新，即：完成了<code>Model View</code>的更新，也就是进行了<code>diff</code>算法。</p>
-</li>
-<li>
-<p><code>updated</code>： 此时：数据是新的，页面也是新的，即：页面和数据保持同步。</p>
-</li>
-<li>
-<p><code>beforeDestroy</code>：此时：<code>vm</code>中所有的：<code>data</code>、<code>methods</code>、指令等等，都做处于可用状态，马上要执行销毁过程，一般在此阶段：关闭定时器、取消订阅消息、解绑自定义事件等收尾操作</p>
-</li>
-<li>
-<p><code>destroyed</code>：当执行到<code>destroyed</code>函数时，组件已经被完全销吸，此时所有的数据、方法、指令、过滤器都不可用</p>
-</li>
-</ul>
-<p align="center"><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/24be7753457a404485757e05c8976a25~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp" alt="生命周期.png" width="100%" loading="lazy"></p>
-<h2 data-id="heading-14">10. 数据结构有哪几种？</h2>
-<p>数据结构是指组织和存储数据的方式，常用的数据结构包括以下几种：</p>
-<ol>
-<li><strong>数组（Array）</strong>：是一种线性数据结构，用于存储一组有序的元素。数组的特点是通过索引访问元素，具有随机访问和连续存储的特性。</li>
-<li><strong>链表（Linked List）</strong>：也是一种线性数据结构，但与数组不同，链表中的元素通过指针相互连接。链表的特点是插入和删除元素更加高效，但随机访问需要遍历整个链表。</li>
-<li><strong>栈（Stack）</strong>：是一种后进先出（LIFO）的数据结构，元素的插入和删除操作只能在一端进行，称为栈顶。栈的典型应用包括函数调用、表达式求值和撤销操作等。</li>
-<li><strong>队列（Queue）</strong>：是一种先进先出（FIFO）的数据结构，元素的插入操作在一端进行，而删除操作在另一端进行。队列的常见应用包括任务调度、消息传递等。</li>
-<li><strong>树（Tree）</strong>：是一种非线性数据结构，由节点和边组成，具有层级关系。树的常见类型包括二叉树、二叉搜索树、堆、平衡树等，树的应用广泛，如文件系统、数据库索引等。</li>
-<li><strong>图（Graph）</strong>：也是一种非线性数据结构，由节点和边组成，节点之间可以有多种关系。图的常见应用包括社交网络、网络路由等。</li>
-<li><strong>哈希表（Hash Table）</strong>：是一种基于哈希函数实现的数据结构，用于存储键值对。哈希表的特点是通过键的哈希值进行快速的插入、删除和查找操作。</li>
-<li><strong>堆（Heap）</strong>：是一种特殊的树形数据结构，具有堆序性质，即父节点的值大于等于（或小于等于）其子节点的值。堆常用于实现优先队列和堆排序等算法。</li>
-</ol>
-<blockquote>
-<p>除了上述常见的数据结构，还有一些高级的数据结构如红黑树、字典树、并查集等，它们在特定场景下具有更高效的性能和应用价值。选择合适的数据结构对于解决问题和提高算法效率至关重要。</p>
-</blockquote>
-<h2 data-id="heading-15">11. 单向链表如何插入一个值？（说一下思路）</h2>
-<blockquote>
-<p>对于单向链表进行操作，你得先和面试官介绍一下在JS中如何创建链表的，这样才好在后面讲清楚如何进行操作的</p>
-</blockquote>
-<p>JS 中的链表，是以嵌套的对象的形式来实现的：</p>
-<pre><code class="hljs language-kotlin" lang="kotlin">{
-    <span class="hljs-comment">// 数据域</span>
-    <span class="hljs-keyword">val</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-comment">// 指针域，指向下一个结点</span>
-    next: {
-        <span class="hljs-keyword">val</span>:<span class="hljs-number">2</span>,
-        next: ...
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">toRefs</span>(<span class="hljs-params">obj</span>) {
+    <span class="hljs-keyword">const</span> ret = {}
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> key <span class="hljs-keyword">in</span> obj) {
+        ret[key] = <span class="hljs-title function_">toRef</span>(obj, key)
     }
-}
-</code></pre>
-<img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2c60ff35372e40dca06479790637d28c~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp" alt="image.png" width="100%" loading="lazy">
-<h3 data-id="heading-16">链表结点的创建</h3>
-<p>创建链表结点，是以一个构造函数开始的：</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ListNode</span>(<span class="hljs-params">val</span>) {
-    <span class="hljs-variable language_">this</span>.<span class="hljs-property">val</span> = val;
-    <span class="hljs-variable language_">this</span>.<span class="hljs-property">next</span> = <span class="hljs-literal">null</span>;
-}
-</code></pre>
-<p>在使用构造函数创建结点时，传入 val （数据域对应的值内容）、指定 next （下一个链表结点）即可：</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> node = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ListNode</span>(<span class="hljs-number">1</span>)  
-node.<span class="hljs-property">next</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ListNode</span>(<span class="hljs-number">2</span>)
-</code></pre>
-<p>然后，就创建出了一个数据域值为1，<code>next</code> 结点数据域值为2的链表结点：</p>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/da538d5287864c6b9cd35de8844faf31~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp" alt="image.png" loading="lazy"></p>
-<h3 data-id="heading-17">链表元素的添加</h3>
-<p>链表的结点间关系是通过 <code>next</code> 指针来维系的。因此，链表元素的添加和删除操作，本质上都是在围绕 <code>next</code> 指针。</p>
-<p><strong>在尾部添加结点</strong>：只要改变一个 next 指针就行。这里记值为2的 node 结点为 node2（假设 node2 是现在的尾部结点），值为3的 node 结点为 node3。假如我要把 node3 添加到 node2 所在链表的尾部，直接把 node2 的 next 指针指向 node3 即可：</p>
-<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2b066b7f58c448688a0499c466e3100f~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp" alt="" width="100%" loading="lazy">
-<p><strong>在两个结点间插入一个结点</strong>：要想完成这个动作，我们需要变更的是<strong>前驱结点</strong>和<strong>目标结点</strong>的 next 指针指向，过程如下图：</p>
-<p>插入前：</p>
-<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/07ca037be54641c087aa5f14038cfb81~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp" alt="" width="100%" loading="lazy">
-<p>插入后：</p>
-<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/32a854b778fa4e16ad635fac2d5bc834~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp" alt="" width="100%" loading="lazy">
-<p>下面用代码来表述一下这个改变。：</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> node3 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ListNode</span>(<span class="hljs-number">3</span>) <span class="hljs-comment">// 如果目标结点本来不存在，那么记得手动创建     </span>
-
-node3.<span class="hljs-property">next</span> = node1.<span class="hljs-property">next</span> <span class="hljs-comment">// 把node3的 next 指针指向 node2（即 node1.next）</span>
-
-node1.<span class="hljs-property">next</span> = node3 <span class="hljs-comment">// 把node1的 next 指针指向 node3</span>
-</code></pre>
-<p><strong>在头部增加结点</strong>：由于链表有时会有头结点，这时即便你是往链表头部增加结点，其本质也是“在头结点和第一个结点之间插入一个新结点”。</p>
-<h2 data-id="heading-18">12. 你能把动态规划向我讲解清楚一下吗？</h2>
-<p>当涉及到解决某些具有重叠子问题性质的复杂问题时，动态规划是一种常用的算法思想。它通过将原问题拆解成一系列重叠子问题，并通过解决子问题来求解原问题。</p>
-<p>动态规划的基本思路如下：</p>
-<ol>
-<li>
-<p><strong>确定状态</strong>：将原问题划分成若干个子问题，并定义状态，通常用一个或多个变量来表示状态。</p>
-</li>
-<li>
-<p><strong>定义状态转移方程</strong>：找出子问题与原问题之间的关系，建立状态转移方程，描述状态之间的转移。</p>
-</li>
-<li>
-<p><strong>确定初始条件</strong>：确定初始状态对应的值，作为动态规划的起点。</p>
-</li>
-<li>
-<p><strong>计算顺序</strong>：根据状态转移方程和初始条件，按照一定的顺序计算出所有状态的值，通常是从小规模问题向大规模问题逐步推进。</p>
-</li>
-<li>
-<p><strong>解决原问题</strong>：根据计算得到的各个状态的值，得到原问题的解。</p>
-</li>
-</ol>
-<p>下面通过一个示例来说明动态规划的应用。</p>
-<p>假设有一组数值，我们的目标是选择其中一些数值，使得它们的和最大，但选择的数值不能相邻。例如，对于数组[1, 2, 3, 1]，最大的非相邻数值和是4（选择1和3）。</p>
-<p>可以使用动态规划来解决这个问题。以下是使用 JavaScript 实现的代码：</p>
-<pre><code class="hljs language-javascript" lang="javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">maxNonAdjacentSum</span>(<span class="hljs-params">nums</span>) {
-  <span class="hljs-keyword">if</span> (nums.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) {
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-  }
-  
-  <span class="hljs-keyword">const</span> dp = []; <span class="hljs-comment">// 用于存储中间状态的数组</span>
-  dp[<span class="hljs-number">0</span>] = nums[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 初始状态，第一个数作为初始值</span>
-  dp[<span class="hljs-number">1</span>] = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(nums[<span class="hljs-number">0</span>], nums[<span class="hljs-number">1</span>]); <span class="hljs-comment">// 第二个数的最大和为较大的那个数</span>
-
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">2</span>; i 小于 nums.<span class="hljs-property">length</span>; i++) {
-    dp[i] = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(dp[i - <span class="hljs-number">1</span>], dp[i - <span class="hljs-number">2</span>] + nums[i]);
-    <span class="hljs-comment">// 状态转移方程：当前位置的最大和为前两个位置的最大和加上当前位置的数值，或者前一个位置的最大和</span>
-  }
-
-  <span class="hljs-keyword">return</span> dp[nums.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]; <span class="hljs-comment">// 返回最后一个位置的最大和</span>
+    
+    <span class="hljs-keyword">return</span> ret
 }
 
-<span class="hljs-comment">// 示例用法</span>
-<span class="hljs-keyword">const</span> nums = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>];
-<span class="hljs-keyword">const</span> result = <span class="hljs-title function_">maxNonAdjacentSum</span>(nums);
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result); <span class="hljs-comment">// 输出 4</span>
-</code></pre>
-<p>在上述代码中，使用 <code>dp</code> 数组来存储中间状态，通过状态转移方程 <code>dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i])</code> 计算出每个位置的最大和。最终，返回 <code>dp[nums.length - 1]</code>，即最后一个位置的最大和，即为原问题的解。</p>
-<p>动态规划常用于解决一些最优化问题，例如最大值、最小值等。通过拆分问题、定义状态和状态转移方程，动态规划能够高效地解决许多复杂问题。</p>
-<h1 data-id="heading-19">二、上海（实习)</h1>
-<h2 data-id="heading-20">1. vue2和vue3的区别</h2>
-<p>我的上篇文章中：第一家公司第一题 <a href="https://juejin.cn/post/7233307834456375353#heading-2" target="_blank" title="https://juejin.cn/post/7233307834456375353#heading-2">面试题：小男孩毕业之初次面试</a></p>
-<h2 data-id="heading-21">2. 项目中登录权限是如何处理的</h2>
-<p>首先，我在路由配置中对需要登录权限的页面添加一个<code>meta：{isRequireLogin:true}</code>，表示跳转到该页面后需要进行登录权限验证，</p>
-<pre><code class="hljs language-js" lang="js">{
-    <span class="hljs-attr">path</span>: <span class="hljs-string">'/user'</span>,
-    <span class="hljs-attr">meta</span>: {
-        <span class="hljs-attr">requiredLogin</span>: <span class="hljs-literal">true</span>
-    },
-    <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'@/views/User/Index.vue'</span>)
+<span class="hljs-comment">// 自动脱ref</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">proxyRefs</span>(<span class="hljs-params">target</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(target, {
+        <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key, receiver</span>) {
+            <span class="hljs-keyword">const</span> value = <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key, receiver)
+            <span class="hljs-keyword">return</span> value.<span class="hljs-property">__v_isRef</span> ? value.<span class="hljs-property">value</span> : value
+        },
+        <span class="hljs-title function_">set</span>(<span class="hljs-params">target, key, newValue, receiver</span>) {
+            <span class="hljs-keyword">const</span> value = target[key]
+            <span class="hljs-keyword">if</span>(value.<span class="hljs-property">__v_isRef</span>) {
+                value.<span class="hljs-property">value</span> = newValue
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+            }
+            <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">set</span>(target, key, newValue, receiver)
+        }
+    })
 }
 </code></pre>
-<p>之后在路由守卫中<code>(to, from, next)</code>三个参数中的<code>to</code>获取到<code>meta.isRequireLogin</code>，如果有且为真，则需要对该页面进行登录校验，</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-comment">// 路由守卫，登录判断，以及主子页面之间的切换</span>
-router.<span class="hljs-title function_">beforeEach</span>(<span class="hljs-function">(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> { requiredLogin } = to.<span class="hljs-property">meta</span>;
-});
-</code></pre>
-<p>然后再从本地存储<code>localstore</code>中获取login，看看用户有没有登录，如果登录了，则能获取到login且为真，之后放行，执行<code>next</code>,如果不能获取，则表示用户没有登录，那么就跳转到登录页面</p>
+<h5 data-id="heading-23">computed和watch的区别</h5>
+<p>使用场景：computed适用于一个数据受多个数据影响使用；watch适合一个数据影响多个数据使用。</p>
+<p>区别：computed属性默认会走<strong>缓存</strong>，只有依赖数据发生变化，才会重新计算，不支持异步，有异步导致数据发生变化时，无法做出相应改变；watch不依赖缓存，一旦数据发生变化就直接触发响应操作，支持异步。</p>
+<h5 data-id="heading-24">vue-router的路由守卫</h5>
+<ul>
+<li>全局前置守卫</li>
+</ul>
 <pre><code class="hljs language-js" lang="js">router.<span class="hljs-title function_">beforeEach</span>(<span class="hljs-function">(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> { requiredLogin } = to.<span class="hljs-property">meta</span>;
-  <span class="hljs-keyword">const</span> isLogin = <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">"isLogin"</span>);
-  <span class="hljs-comment">// 判断是否已经登录并是否页面需要登录权限，如果是，跳转到登录页面，若否，则放行</span>
-  <span class="hljs-keyword">if</span> (!isLogin &amp;&amp; requiredLogin) {
-    <span class="hljs-title function_">next</span>(<span class="hljs-string">"login"</span>);
-  } <span class="hljs-keyword">else</span> {
-    <span class="hljs-title function_">next</span>();
-  }
-});
-</code></pre>
-<h2 data-id="heading-22">3. 在项目中如何使用localStore本地存储的</h2>
-<blockquote>
-<p>除了第一个其他都是我现场想的，项目赶得太急了，这些功能都还没来得及加，但没关系，大胆说，只要你能清楚怎么实现就行。</p>
-</blockquote>
-<ol>
-<li><strong>用户登录状态的持久化</strong>：当用户登录成功后，将用户的身份标识或认证令牌存储在<code>localStorage</code>中。这样，在用户刷新页面或重新打开应用时，可以检查<code>localStorage</code>中是否存在有效的登录信息，从而保持用户的登录状态。</li>
-<li><strong>购买时表单数据的保存和恢复</strong>：使用<code>localStorage</code>来保存表单数据。当用户暂时离开页面或刷新页面时，可以将表单数据存储在<code>localStorage</code>中，并在用户回到页面时从<code>localStorage</code>中恢复数据，避免用户需要重新填写。</li>
-<li><strong>搜索界面的搜索记录</strong>：将搜索后的记录数据存储在<code>localStorage</code>中，并在需要时从本地获取，提高用户的体验感。</li>
-</ol>
-<h2 data-id="heading-23">4. 登录中如果token失效了，你是怎么处理的</h2>
-<ol>
-<li><strong>清除失效的token</strong>：在前端，你可以清除本地存储（例如localStorage或sessionStorage）中的token以及与之相关的任何认证信息。这可以通过调用相应的方法（如<code>localStorage.removeItem('token')</code>）来实现。</li>
-<li><strong>重定向到登录页</strong>：一旦token失效，用户需要重新进行身份验证并获取新的有效token。在前端，你可以通过重定向用户到登录页来实现这一点。你可以使用Vue Router提供的<code>router.push('/login')</code>方法将用户导航到登录页面。</li>
-<li><strong>提示用户重新登录</strong>：为了给用户明确的反馈，你可以显示一条消息或弹出对话框，提示用户他们的token已经失效，并需要重新登录。</li>
-</ol>
-<h2 data-id="heading-24">5. vue中的v-model对它的原理你知道吗？如果让你手写一个你是怎么处理？</h2>
-<p><a href="https://juejin.cn/post/7289667869578592275" target="_blank" title="https://juejin.cn/post/7289667869578592275"># 万能面试题：手写一个Vue2的MVVM响应式原理</a></p>
-<h2 data-id="heading-25">6. ES6中的新特性你把你知道的稍微说一说</h2>
-<blockquote>
-<p>本文中第一家公司的第一题</p>
-</blockquote>
-<h2 data-id="heading-26">7. 你知道箭头函数的作用以及使用场景？</h2>
-<blockquote>
-<p>当我被问到这道题时，我有点懵，因为我只知道箭头函数的特点，却没怎么关注于作用和使用场景。当你遇到这种情况时，你应该向面试官阐述一下你所知道的，并不是你不会，而是你平时没有关注到这方面，但另一方面你知道的一定要向面试官表达出来。所以我向面试官说，关于作用我没怎么关注，不过关于箭头函数的一些特性我还是了解一些的，之后开始表达你的观点，，如果面试官没喊停，你就可以继续讲下去了，</p>
-</blockquote>
-<p><strong>特点</strong></p>
-<ol>
-<li><strong>简洁的语法形式</strong>：箭头函数使用了更简洁的语法形式，省略了传统函数声明中的<code>function</code>关键字和大括号。它通常可以在更少的代码行数中表达相同的逻辑。</li>
-<li><strong>没有自己的this</strong>：箭头函数没有自己的<code>this</code>绑定，它会捕获所在上下文的<code>this</code>值。这意味着箭头函数中的<code>this</code>与其定义时所在的上下文中的<code>this</code>保持一致，而不是在函数被调用时动态绑定。这可以避免传统函数中常见的<code>this</code>指向问题，简化了对<code>this</code>的使用和理解。</li>
-<li><strong>没有<code>arguments</code>对象</strong>：箭头函数也没有自己的<code>arguments</code>对象。如果需要访问函数的参数，可以使用剩余参数（Rest Parameters）或使用展开运算符（Spread Operator）将参数传递给其他函数。</li>
-<li><strong>无法作为构造函数</strong>：箭头函数不能用作构造函数，不能使用<code>new</code>关键字调用。它们没有<code>prototype</code>属性，因此无法使用<code>new</code>关键字创建实例。</li>
-<li><strong>隐式的返回值</strong>：如果箭头函数的函数体只有一条表达式，并且不需要额外的处理逻辑，那么可以省略大括号并且该表达式将隐式作为返回值返回。</li>
-<li><strong>不能绑定自己的this、super、new.target</strong>：由于箭头函数没有自己的<code>this</code>绑定，也无法使用<code>super</code>关键字引用父类的方法，也无法使用<code>new.target</code>获取构造函数的引用。</li>
-</ol>
-<p><strong>作用</strong></p>
-<ol>
-<li><strong>简化普通函数</strong>：箭头函数提供了更简洁的语法形式，可以在需要定义函数的地方使用更短的代码来表达同样的逻辑。这可以提高代码的可读性和维护性。</li>
-<li><strong>保留上下文</strong>：箭头函数没有自己的<code>this</code>绑定，它会捕获所在上下文的<code>this</code>值。这意味着在箭头函数中，<code>this</code>的值是在函数定义时确定的，而不是在函数被调用时动态绑定。这种特性可以避免传统函数中的<code>this</code>绑定问题，并使代码更易于理解和维护。</li>
-</ol>
-<p><strong>使用场景</strong></p>
-<ol>
-<li>
-<p>简化函数表达式：当需要定义一个简单的函数表达式时，可以使用箭头函数代替传统的函数表达式，减少代码量。</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-comment">// 传统函数表达式</span>
-<span class="hljs-keyword">const</span> sum = <span class="hljs-keyword">function</span>(<span class="hljs-params">a, b</span>) {
-  <span class="hljs-keyword">return</span> a + b;
-};
-
-<span class="hljs-comment">// 箭头函数</span>
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">sum</span> = (<span class="hljs-params">a, b</span>) =&gt; a + b;
-</code></pre>
-</li>
-<li>
-<p>箭头函数作为回调函数：当需要传递回调函数时，箭头函数可以提供更简洁的语法形式，同时保留外层上下文中的<code>this</code>。</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-comment">// 传统回调函数</span>
-<span class="hljs-title function_">someFunction</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>); <span class="hljs-comment">// 外层上下文的this</span>
-});
-
-<span class="hljs-comment">// 箭头函数作为回调函数</span>
-<span class="hljs-title function_">someFunction</span>(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>); <span class="hljs-comment">// 外层上下文的this</span>
-});
-</code></pre>
-</li>
-<li>
-<p>简化函数中的<code>this</code>绑定问题：由于箭头函数没有自己的<code>this</code>绑定，可以避免使用传统函数中常见的<code>bind</code>、<code>call</code>或<code>apply</code>等方法来绑定<code>this</code>。</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-comment">// 传统函数中的this绑定</span>
-<span class="hljs-keyword">const</span> obj = {
-    <span class="hljs-attr">value</span>: <span class="hljs-number">42</span>,
-    <span class="hljs-attr">getValue</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
-        <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
-            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span>); <span class="hljs-comment">// undefined，因为此时this指向全局对象</span>
-        }, <span class="hljs-number">1000</span>);
-    }
-};
-
-<span class="hljs-comment">// 使用箭头函数避免this绑定问题</span>
-<span class="hljs-keyword">const</span> obj = {
-    <span class="hljs-attr">value</span>: <span class="hljs-number">42</span>,
-    <span class="hljs-attr">getValue</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
-        <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
-            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span>); <span class="hljs-comment">// 42，箭头函数捕获了外层上下文的this</span>
-        }, <span class="hljs-number">1000</span>);
-    }
-};
-
-    <span class="hljs-string">``</span><span class="hljs-string">`
-</span></code></pre>
-</li>
-</ol>
-<h2 data-id="heading-27">8. promise的一些方法，并且分别一般在什么情况下使用？</h2>
-<blockquote>
-<p>本文中第一家公司的第二题</p>
-</blockquote>
-<h2 data-id="heading-28">9. 项目中版本管理，对git这些操作你了解吗？</h2>
-<blockquote>
-<p>如果你有项目，并且你把项目地址写到了简历里，在这里我建议你对代码提交的注释进行规范一点，因为有些面试官可能会去你的项目仓库看你的项目，提前了解一下你，所以在你写项目的过程中一定要注意不能太随意了。</p>
-</blockquote>
-<p>可以看看这篇实际的git应用<a href="https://juejin.cn/post/7264556202138009656#heading-2" target="_blank" title="https://juejin.cn/post/7264556202138009656#heading-2">git命令</a></p>
-<p>初始化仓库：使用命令<code>git init</code>在当前目录下初始化一个Git仓库。<br>
-克隆仓库：使用命令<code>git clone &lt;repository&gt;</code>从远程仓库克隆一个本地副本。<br>
-添加文件：使用命令<code>git add &lt;file&gt;</code>将文件添加到Git的暂存区。<br>
-提交更改：使用命令<code>git commit -m "&lt;message&gt;"</code>将暂存区的更改提交到本地仓库。<br>
-查看状态：使用命令<code>git status</code>查看当前仓库的状态，包括已修改、已暂存和未跟踪的文件。<br>
-查看提交历史：使用命令<code>git log</code>查看当前分支的提交历史。<br>
-查看分支：git branch<br>
-创建分支：git branch<br>
-切换分支：git checkout<br>
-创建+切换分支：git checkout -b
-合并某分支到当前分支：git merge<br>
-删除分支：git branch -d<br>
-使用<code>git reset</code>命令回退版本：<code>git reset</code>命令可以将分支的HEAD指针和索引（暂存区）回退到指定的提交。具体的用法有三种：</p>
-<ul>
-<li>
-<p>回退到指定提交并丢弃之后的提交：使用命令<code>git reset &lt;commit&gt;</code>，例如<code>git reset HEAD~1</code>将回退到前一个提交。</p>
-</li>
-<li>
-<p>回退到指定提交并保留之后的提交作为未暂存的更改：使用命令<code>git reset --soft &lt;commit&gt;</code>，例如<code>git reset --soft HEAD~1</code>将回退到前一个提交。</p>
-</li>
-<li>
-<p>回退到指定提交并丢弃之后的提交和未暂存的更改：使用命令<code>git reset --hard &lt;commit&gt;</code>，例如<code>git reset --hard HEAD~1</code>将回退到前一个提交并丢弃未暂存的更改。</p>
-<p>注意：使用<code>git reset</code>命令回退版本会改变分支的历史记录，如果已经将回退前的提交推送到远程仓库，推荐使用<code>git revert</code>命令（下面会介绍）来回退版本，以避免造成分支历史冲突。</p>
-</li>
-</ul>
-<p>使用<code>git revert</code>命令回退版本：<code>git revert</code>命令用于创建一个新的提交，以撤销指定提交引入的更改。使用命令<code>git revert &lt;commit&gt;</code>，例如<code>git revert HEAD</code>将撤销最近的提交。</p>
-<ul>
-<li><code>git revert</code>命令的优点是可以在不改变分支历史的情况下回退版本，并且可以将撤销的提交推送到远程仓库。</li>
-</ul>
-<h2 data-id="heading-29">10. js里有哪些数据类型？</h2>
-<blockquote>
-<p>这里乍一看只是在问数据类型，回答很容易，其实下一个的问题才是面试官真正想问的，所以你在这道题上你得把一些堆栈的底层能够了解的非常清楚</p>
-</blockquote>
-<p><strong>基本类型(值类型)：</strong> Number(数字),String(字符串),Boolean(布尔),Symbol(符号),null(空),undefined(未定义)在内存中占据固定大小，数据保存在栈内存中</p>
-<p><strong>引用类型(复杂数据类型)：</strong> Object(对象)、Function(函数)、Array(数组)。其他还有Date(日期)、RegExp(正则表达式)等。引用类型的值是对象，数据是保存在堆内存中，栈内存存储的只是对象的变量标识符以及对象在堆内存中的存储地址。</p>
-<h2 data-id="heading-30">11. 如果我有一个对象数组A，想生成一个B的对象数组，把A赋值给了B，当我改变了B的话A会改变吗，为什么？（其实就是深浅拷贝问题)</h2>
-<blockquote>
-<p>先回答会改变，当面试官抛出一个判断题时，先判断再作解释及拓展</p>
-</blockquote>
-<p>当你将对象数组 A 赋值给对象数组 B，实际上是将 A 的引用（即内存地址）赋给了 B。因此，A 和 B 实际上指向了同一块内存地址，它们引用的是相同的对象。</p>
-<p>当你修改 B 中的对象时，A 中相应位置的对象也会发生改变，因为它们是指向同一个对象，所以当你通过 B 修改对象时，实际上是在修改对象本身，而该对象被 A 和 B 共享，从而A的值也跟B修改了。</p>
-<pre><code class="hljs language-css" lang="css">let <span class="hljs-selector-tag">A</span> = <span class="hljs-selector-attr">[{ name: <span class="hljs-string">'John'</span> }, { name: <span class="hljs-string">'Jane'</span> }]</span>;
-let <span class="hljs-selector-tag">B</span> = <span class="hljs-selector-tag">A</span>;
-
-<span class="hljs-selector-tag">B</span><span class="hljs-selector-attr">[0]</span><span class="hljs-selector-class">.name</span> = 'Alice';
-
-console<span class="hljs-selector-class">.log</span>(<span class="hljs-selector-tag">A</span>); // 输出: [{ name: <span class="hljs-string">'Alice'</span> }, { name: <span class="hljs-string">'Jane'</span> }]
-console<span class="hljs-selector-class">.log</span>(<span class="hljs-selector-tag">B</span>); // 输出: [{ name: <span class="hljs-string">'Alice'</span> }, { name: <span class="hljs-string">'Jane'</span> }]
-</code></pre>
-<h2 data-id="heading-31">12. ES6中有个拷贝的方法，你知道那个方法吗？你还知道其他哪些方法？</h2>
-<p>ES6中的拷贝方法为<code>Object.assign</code>，它是一个<strong>浅拷贝</strong>的使用</p>
-<h3 data-id="heading-32">Object.assign</h3>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">var</span> obj = {
-    <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>,
-    <span class="hljs-attr">nature</span>: [<span class="hljs-string">'smart'</span>, <span class="hljs-string">'good'</span>],
-    <span class="hljs-attr">names</span>: {
-        <span class="hljs-attr">name1</span>: <span class="hljs-string">'fx'</span>,
-        <span class="hljs-attr">name2</span>: <span class="hljs-string">'xka'</span>
-    },
-    <span class="hljs-attr">love</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
-        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'fx is a great girl'</span>)
-    }
-}
-<span class="hljs-keyword">var</span> newObj = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">assign</span>({}, fxObj);
-</code></pre>
-<p>除了<code>Object.assign</code>这个浅拷贝方法，还有</p>
-<ul>
-<li>
-<p><code>Array.prototype.slice()</code>,&nbsp;<code>Array.prototype.concat()</code></p>
-</li>
-<li>
-<p>使用拓展运算符实现的复制</p>
-</li>
-</ul>
-<h3 data-id="heading-33">slice()</h3>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> fxArr = [<span class="hljs-string">"One"</span>, <span class="hljs-string">"Two"</span>, <span class="hljs-string">"Three"</span>]
-<span class="hljs-keyword">const</span> fxArrs = fxArr.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>)
-fxArrs[<span class="hljs-number">1</span>] = <span class="hljs-string">"love"</span>;
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(fxArr) <span class="hljs-comment">// ["One", "Two", "Three"]</span>
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(fxArrs) <span class="hljs-comment">// ["One", "love", "Three"]</span>
-</code></pre>
-<h3 data-id="heading-34">concat()</h3>
-<pre><code class="hljs language-vbscript" lang="vbscript"><span class="hljs-keyword">const</span> fxArr = [<span class="hljs-string">"One"</span>, <span class="hljs-string">"Two"</span>, <span class="hljs-string">"Three"</span>]
-<span class="hljs-keyword">const</span> fxArrs = fxArr.concat()
-fxArrs[<span class="hljs-number">1</span>] = <span class="hljs-string">"love"</span>;
-console.<span class="hljs-built_in">log</span>(fxArr) // [<span class="hljs-string">"One"</span>, <span class="hljs-string">"Two"</span>, <span class="hljs-string">"Three"</span>]
-console.<span class="hljs-built_in">log</span>(fxArrs) // [<span class="hljs-string">"One"</span>, <span class="hljs-string">"love"</span>, <span class="hljs-string">"Three"</span>]
-</code></pre>
-<h3 data-id="heading-35">拓展运算符</h3>
-<pre><code class="hljs language-css" lang="css">const fxArr = <span class="hljs-selector-attr">[<span class="hljs-string">"One"</span>, <span class="hljs-string">"Two"</span>, <span class="hljs-string">"Three"</span>]</span>
-const fxArrs = <span class="hljs-selector-attr">[...fxArr]</span>
-fxArrs<span class="hljs-selector-attr">[1]</span> = "love";
-console<span class="hljs-selector-class">.log</span>(fxArr) // <span class="hljs-selector-attr">[<span class="hljs-string">"One"</span>, <span class="hljs-string">"Two"</span>, <span class="hljs-string">"Three"</span>]</span>
-console<span class="hljs-selector-class">.log</span>(fxArrs) // <span class="hljs-selector-attr">[<span class="hljs-string">"One"</span>, <span class="hljs-string">"love"</span>, <span class="hljs-string">"Three"</span>]</span>
-</code></pre>
-<h2 data-id="heading-36">深拷贝</h2>
-<p>深拷贝开辟一个新的栈，两个对象属完成相同，但是对应两个不同的地址，修改一个对象的属性，不会改变另一个对象的属性</p>
-<p>常见的深拷贝方式有：</p>
-<ul>
-<li>_.cloneDeep()</li>
-<li>JSON.stringify()</li>
-<li>手写循环递归</li>
-</ul>
-<h3 data-id="heading-37">_.cloneDeep()</h3>
-<p>开发中常用的<code>lodash</code>库，<code>lodash</code>库中的<code>cloneDeep</code></p>
-<pre><code class="hljs language-ini" lang="ini">const <span class="hljs-attr">_</span> = require(<span class="hljs-string">'lodash'</span>)<span class="hljs-comment">;</span>
-const <span class="hljs-attr">obj1</span> = {
-    a: 1,
-    b: { f: { g: 1 } },
-    c: <span class="hljs-section">[1, 2, 3]</span>
-}<span class="hljs-comment">;</span>
-const <span class="hljs-attr">obj2</span> = _.cloneDeep(obj1)<span class="hljs-comment">;</span>
-console.log(<span class="hljs-attr">obj1.b.f</span> === obj2.b.f)<span class="hljs-comment">;// false</span>
-</code></pre>
-<h3 data-id="heading-38">JSON.stringify()</h3>
-<pre><code class="hljs language-ini" lang="ini">const <span class="hljs-attr">obj2</span>=JSON.parse(JSON.stringify(obj1))<span class="hljs-comment">;</span>
-</code></pre>
-<p>但是这种方式存在弊端，会忽略<code>undefined</code>、<code>symbol</code>和<code>函数</code></p>
-<pre><code class="hljs language-javascript" lang="javascript"><span class="hljs-keyword">const</span> obj = {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'A'</span>,
-    <span class="hljs-attr">name1</span>: <span class="hljs-literal">undefined</span>,
-    <span class="hljs-attr">name3</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {},
-    <span class="hljs-attr">name4</span>:  <span class="hljs-title class_">Symbol</span>(<span class="hljs-string">'A'</span>)
-}
-<span class="hljs-keyword">const</span> obj2 = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(obj));
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj2); <span class="hljs-comment">// {name: "A"}</span>
-</code></pre>
-<h3 data-id="heading-39">循环递归</h3>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">deepClone</span>(<span class="hljs-params">obj, hash = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>()</span>) {
-  <span class="hljs-keyword">if</span> (obj === <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> obj; <span class="hljs-comment">// 如果是null或者undefined我就不进行拷贝操作</span>
-  <span class="hljs-comment">// 可能是对象或者普通的值  如果是函数的话是不需要深拷贝</span>
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> obj !== <span class="hljs-string">"object"</span>) <span class="hljs-keyword">return</span> obj;
-  <span class="hljs-comment">// 是对象的话就要进行深拷贝</span>
-  <span class="hljs-keyword">if</span> (hash.<span class="hljs-title function_">get</span>(obj)) <span class="hljs-keyword">return</span> hash.<span class="hljs-title function_">get</span>(obj);
-  <span class="hljs-keyword">let</span> cloneObj = <span class="hljs-keyword">new</span> obj.<span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>);
-  <span class="hljs-comment">// 找到的是所属类原型上的constructor,而原型上的 constructor指向的是当前类本身</span>
-  hash.<span class="hljs-title function_">set</span>(obj, cloneObj);
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> obj) {
-    <span class="hljs-keyword">if</span> (obj.<span class="hljs-title function_">hasOwnProperty</span>(key)) {
-      <span class="hljs-comment">// 实现一个递归拷贝</span>
-      cloneObj[key] = <span class="hljs-title function_">deepClone</span>(obj[key], hash);
-    }
-  }
-  <span class="hljs-keyword">return</span> cloneObj;
-}
-</code></pre>
-<h2 data-id="heading-40">13. vant中你如何修改官方上定义的样式的？</h2>
-<ol>
-<li>
-<p>使用全局样式覆盖：你可以在项目中的全局样式表（如<code>App.vue</code>或<code>main.scss</code>）中重写 Vant 组件的样式。在这些样式中，你可以使用 CSS 选择器和属性覆盖官方定义的样式。例如，你可以通过使用更具体的选择器或更高的优先级来修改组件的样式。</p>
-</li>
-<li>
-<p>使用组件的自定义类名：Vant 组件通常提供了一个 <code>class-prefix</code> 属性，你可以通过该属性自定义组件的类名前缀。通过自定义类名前缀，你可以在组件中使用自己的样式类名，并在全局样式表中重写这些类名的样式。</p>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">van-button</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"my-custom-button"</span>&gt;</span>Custom Button<span class="hljs-tag">&lt;/<span class="hljs-name">van-button</span>&gt;</span>
-</code></pre>
-<pre><code class="hljs language-css" lang="css"><span class="hljs-comment">/* 在全局样式表中 */</span>
-<span class="hljs-selector-class">.my-custom-button</span> {
-  <span class="hljs-comment">/* 自定义样式 */</span>
-}
-</code></pre>
-</li>
-<li>
-<p>使用组件提供的样式覆盖选项：一些 Vant 组件提供了样式覆盖选项，以便更方便地修改它们的样式。通过这些选项，你可以传递一个包含你想要修改的样式属性的对象，并将其应用到组件上。具体的选项名称和使用方式可以查阅 Vant 的文档来了解。</p>
-</li>
-<li>
-<p>使用样式穿透，在样式规则前面加上 <code>/deep/</code> 或 <code>&gt;&gt;&gt;</code> 符号（视情况而定），然后再编写你想要修改的样式。这样可以让样式规则穿透组件封装，直接作用于组件内部的 DOM 元素。</p>
-<pre><code class="hljs language-html" lang="html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">van-button</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"custom-button"</span>&gt;</span>Custom Button<span class="hljs-tag">&lt;/<span class="hljs-name">van-button</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
-</code></pre>
-<pre><code class="hljs language-css" lang="css">&lt;style scoped&gt;
-<span class="hljs-selector-class">.custom-button</span> /deep/ <span class="hljs-selector-class">.van-button</span> {
-  <span class="hljs-comment">/* 修改样式 */</span>
-}
-&lt;/style&gt;
-</code></pre>
-</li>
-</ol>
-<h1 data-id="heading-41">杭州（实习 200-250/天 ？）</h1>
-<blockquote>
-<p>面试官玩偷袭，毫无通知直接电话面试，囧~。遇到这种情况，第一件事情应该先缓口气，冷静下来，不要像我一样自我介绍的时候声音都是颤抖着，直到在自我介绍之中我停了一会儿只为了缓一缓才冷静下来。如果没有准备好，可以和面试官商量商量。之后再详细的问清楚是哪一家公司，让自己心里有个底，缓缓面试节奏，在和面试官沟通的过程中状态也会逐渐的调整好了，之后就可以开始面试了。</p>
-</blockquote>
-<blockquote>
-<h2 data-id="heading-42">1.&nbsp;听你自己写了文章，你是如何把自己的收获从输入到输出的</h2>
-</blockquote>
-<h2 data-id="heading-43">2.&nbsp;Pinia和vuex的区别</h2>
-<blockquote>
-<p>问区别，管他三七二十一，先把共同点说出来</p>
-</blockquote>
-<p><strong>共同点</strong>：Pinia和Vuex都是为Vue.js框架设计的状态管理库，与Vue.js无缝集成，并提供了在Vue.js应用程序中管理和共享状态的机制。它们也是管理数据流的一种设计模式，使得在vue开发中可以分成<strong>数据流开发</strong>和<strong>UI组件开发</strong>两部分</p>
-<p><strong>区别：</strong></p>
-<ol>
-<li>Vuex是基于全局单一状态树的概念，所有组件共享一个状态。而Pinia则采用了分模块的状态树，每个模块有自己的状态，较小且更简单，使得Pinia在一些小型或简单的项目中可能更容易上手，而Vuex则更适合大型和复杂的项目。</li>
-<li>在Vuex中，你需要定义<code>state</code>、<code>mutations</code>、<code>actions</code>和<code>getters</code>来管理状态。而在Pinia中，你只需要定义一个类似<code>state</code>的响应式对象，和用一些方法来代替<code>actions</code>、<code>mutations</code>和<code>getters</code>这些复杂的方法。Pinia与Vuex在语法上的差异并不大，但是它更贴近Vue 3的响应式API设计。</li>
-<li>在Vuex中，你可以通过<code>mapState</code>、<code>mapGetters</code>、<code>mapMutations</code>和<code>mapActions</code>等辅助函数来简化状态的访问和调用。而Pinia没有提供类似的辅助函数，而是通过使用Composition API和Vue 3的响应式工具来访问和操作状态。</li>
-<li>Pinia支持TypeScript更好，可以更容易地进行类型推断和类型安全检查。Vuex也支持TypeScript，但在某些情况下可能需要额外的配置和类型注解。</li>
-</ol>
-<h2 data-id="heading-44">3.&nbsp;项目中如何做登录路由守卫的</h2>
-<blockquote>
-<p>本文中第二家第二题</p>
-</blockquote>
-<h2 data-id="heading-45">4.&nbsp;在你的项目中你是如何设置你的token时限</h2>
-<p>服务器端生成token时的有效期设置： 在服务器端生成token时，通常会使用一种称为JWT（JSON Web Token）的标准。JWT中可以包含有效期的声明，用于指定token的有效期限。服务器端在生成token时，可以设置<code>exp</code>（expiration）字段来指定token的过期时间。</p>
-<p>例如，使用jsonwebtoken库生成JWT的示例代码如下：</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">signToken</span> = (<span class="hljs-params">options</span>) =&gt; {
-<span class="hljs-comment">// 准备选项</span>
-<span class="hljs-keyword">const</span> { payload } = options;
-
-<span class="hljs-comment">// 签发 JWT并且设置token有效期为1个小时</span>
-<span class="hljs-keyword">const</span> token = jwt.<span class="hljs-title function_">sign</span>(payload, <span class="hljs-variable constant_">PRIVATE_KEY</span>, { <span class="hljs-attr">algorithm</span>: <span class="hljs-string">'RS256'</span>，<span class="hljs-attr">expiresIn</span>: <span class="hljs-string">'1h'</span> });
-
-<span class="hljs-comment">// 提供 JWT</span>
-<span class="hljs-keyword">return</span> token;
-
-};
-</code></pre>
-<pre><code class="hljs language-go" lang="go">上述示例中，<span class="hljs-string">`expiresIn`</span>参数设置了有效期为<span class="hljs-number">1</span>小时。可以根据需要调整有效期的长度。
-</code></pre>
-<h2 data-id="heading-46">5.&nbsp;在项目中如何使用pinia和localStore的，分别什么时候使用</h2>
-<ol>
-<li>
-<p>Pinia的使用场景：</p>
-<ul>
-<li><strong>状态管理</strong>：<code>Pinia</code>适用于管理应用程序的状态。当应用程序需要共享状态，例如用户认证信息、购物车数据、应用程序设置等，<code>Pinia</code>可以提供一种结构化的方式来管理和操作这些状态数据。通过Pinia，你可以定义状态、操作、变更和计算属性，并在不同组件中共享和访问这些数据。这样可以简化状态管理、组件通信和数据的一致性维护。</li>
-<li><strong>复杂应用程序</strong>：<code>Pinia</code>在大型或复杂的<code>Vue.js</code>应用程序中特别有用。当应用程序有多个模块或子系统，每个模块有自己的状态和逻辑时，<code>Pinia</code>的模块化状态树的设计可以提供更好的可扩展性和可维护性。</li>
-</ul>
-</li>
-<li>
-<p>LocalStorage的使用场景：</p>
-<ul>
-<li><strong>持久化数据</strong>：<code>LocalStorage</code>适合用于在客户端浏览器中存储持久化数据。这些数据可以包括用户的偏好设置、本地缓存、本地会话数据等。<code>LocalStorage</code>提供了一种简单的键值对存储方式，可以方便地将数据存储在浏览器中，以供后续访问和使用。</li>
-<li><strong>跨页面共享数据</strong>：<code>LocalStorage</code>允许不同页面之间共享数据。当需要在不同页面之间传递数据或同步数据状态时，可以使用<code>LocalStorage</code>进行数据的存储和读取。这对于需要在多个页面之间保持数据一致性或共享数据状态的应用程序非常有用。</li>
-</ul>
-</li>
-</ol>
-<p>需要注意的是，LocalStorage是浏览器提供的功能，数据存储在用户的本地环境中，而Pinia是一个用于状态管理的Vue.js库，用于在Vue.js应用程序中管理和操作共享状态。因此，在项目中根据具体需求，你可以同时使用Pinia和LocalStorage，以实现状态管理和本地数据持久化的需求。</p>
-<h2 data-id="heading-47">6.&nbsp;你如何封装了Axios的请求数据的？</h2>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">"axios"</span>;
-
-<span class="hljs-comment">// 设置默认域名</span>
-axios.<span class="hljs-property">defaults</span>.<span class="hljs-property">baseURL</span> = <span class="hljs-string">'http://localhost:3000'</span>
-<span class="hljs-comment">// 设置请求头的授权标记，为后端jwt作准备</span>
-axios.<span class="hljs-property">defaults</span>.<span class="hljs-property">headers</span>[<span class="hljs-string">'Authorization'</span>] = <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">'token'</span>) || <span class="hljs-string">''</span>
-<span class="hljs-comment">// 请求头 带上 Content-Type</span>
-axios.<span class="hljs-property">defaults</span>.<span class="hljs-property">headers</span>.<span class="hljs-property">post</span>[<span class="hljs-string">'Content-Type'</span>] = <span class="hljs-string">'application/json'</span>
-
-<span class="hljs-comment">// 响应拦截器,拦截后端传来的数据</span>
-axios.<span class="hljs-property">interceptors</span>.<span class="hljs-property">response</span>.<span class="hljs-title function_">use</span>(<span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> {
-    <span class="hljs-keyword">return</span> res.<span class="hljs-property">data</span>
+    <span class="hljs-comment">// to: 即将进入的目标</span>
+    <span class="hljs-comment">// from:当前导航正要离开的路由</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-comment">// 返回false用于取消导航</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-attr">name</span>: <span class="hljs-string">'Login'</span>} <span class="hljs-comment">// 返回到对应name的页面</span>
+    <span class="hljs-title function_">next</span>({<span class="hljs-attr">name</span>: <span class="hljs-string">'Login'</span>}) <span class="hljs-comment">// 进入到对应的页面</span>
+    <span class="hljs-title function_">next</span>() <span class="hljs-comment">// 放行</span>
 })
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> axios
 </code></pre>
-<blockquote>
-<h2 data-id="heading-48">7.&nbsp;你是如何学习前端的</h2>
-</blockquote>
-<h2 data-id="heading-49">结语</h2>
-<p>不断努力，不断坚持，一直不放弃</p>
-<h2 data-id="heading-50">参考资料</h2>
 <ul>
-<li><a href="https://link.juejin.cn?target=https%3A%2F%2Fes6.ruanyifeng.com%2F" target="_blank" title="https://es6.ruanyifeng.com/" ref="nofollow noopener noreferrer">阮一峰ES6入门</a></li>
-<li><a href="https://link.juejin.cn?target=https%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2015%2F07%2Fflex-grammar.html" target="_blank" title="https://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" ref="nofollow noopener noreferrer">阮一峰# Flex 布局教程：语法篇</a></li>
-<li><a href="https://link.juejin.cn?target=https%3A%2F%2Fwww.zhangxinxu.com%2Fwordpress%2F2021%2F05%2Fpromise-all-race-any%2F" target="_blank" title="https://www.zhangxinxu.com/wordpress/2021/05/promise-all-race-any/" ref="nofollow noopener noreferrer">张鑫旭Promise.all、race和any方法都是什么意思？</a>)</li>
-<li><a href="https://link.juejin.cn?target=https%3A%2F%2Fchat.openai.com%2F" target="_blank" title="https://chat.openai.com/" ref="nofollow noopener noreferrer">chatgpt</a></li>
-<li><a href="https://link.juejin.cn?target=https%3A%2F%2Fvue3js.cn%2Finterview%2F" target="_blank" title="https://vue3js.cn/interview/" ref="nofollow noopener noreferrer">web前端面试 - 面试官系列</a></li>
+<li>全局解析守卫:类似beforeEach</li>
 </ul>
+<pre><code class="hljs language-js" lang="js">router.<span class="hljs-title function_">beforeResolve</span>(<span class="hljs-function"><span class="hljs-params">to</span> =&gt;</span> {
+    <span class="hljs-keyword">if</span>(to.<span class="hljs-property">meta</span>.<span class="hljs-property">canCopy</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-comment">// 也可取消导航</span>
+    }
+})
+</code></pre>
+<ul>
+<li>全局后置钩子</li>
+</ul>
+<pre><code class="hljs language-js" lang="js">router.<span class="hljs-title function_">afterEach</span>(<span class="hljs-function">(<span class="hljs-params">to, <span class="hljs-keyword">from</span></span>) =&gt;</span> {
+    <span class="hljs-title function_">logInfo</span>(to.<span class="hljs-property">fullPath</span>)
+})
+</code></pre>
+<ul>
+<li>导航错误钩子，导航发生错误调用</li>
+</ul>
+<pre><code class="hljs language-js" lang="js">router.<span class="hljs-title function_">onError</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+    <span class="hljs-title function_">logError</span>(error)
+})
+</code></pre>
+<ul>
+<li>路由独享守卫,beforeEnter可以传入单个函数，也可传入多个函数。</li>
+</ul>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">dealParams</span>(<span class="hljs-params">to</span>) {
+    <span class="hljs-comment">// ...</span>
+}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">dealPermission</span>(<span class="hljs-params">to</span>) {
+    <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-keyword">const</span> routes = [
+    {
+        <span class="hljs-attr">path</span>: <span class="hljs-string">'/home'</span>,
+        <span class="hljs-attr">component</span>: <span class="hljs-title class_">Home</span>,
+        <span class="hljs-attr">beforeEnter</span>: <span class="hljs-function">(<span class="hljs-params">to, <span class="hljs-keyword">from</span></span>) =&gt;</span> {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-comment">// 取消导航</span>
+        },
+        <span class="hljs-comment">// beforeEnter: [dealParams, dealPermission]</span>
+    }
+]
+</code></pre>
+<p>组件内的守卫</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Home</span> = {
+    <span class="hljs-attr">template</span>: <span class="hljs-string">`...`</span>,
+    <span class="hljs-title function_">beforeRouteEnter</span>(<span class="hljs-params">to, <span class="hljs-keyword">from</span></span>) {
+        <span class="hljs-comment">// 此时组件实例还未被创建，不能获取this</span>
+    },
+    <span class="hljs-title function_">beforeRouteUpdate</span>(<span class="hljs-params">to, <span class="hljs-keyword">from</span></span>) {
+        <span class="hljs-comment">// 当前路由改变，但是组件被复用的时候调用，此时组件已挂载好</span>
+    },
+    <span class="hljs-title function_">beforeRouteLeave</span>(<span class="hljs-params">to, <span class="hljs-keyword">from</span></span>) {
+        <span class="hljs-comment">// 导航离开渲染组件的对应路由时调用</span>
+    }
+}
+</code></pre>
+<h5 data-id="heading-25">composition Api对比 option Api的优势</h5>
+<ul>
+<li>更好的代码组织</li>
+<li>更好的逻辑复用</li>
+<li>更好的类型推导</li>
+</ul>
+<h3 data-id="heading-26">浏览器相关</h3>
+<h5 data-id="heading-27">跨域问题</h5>
+<p>由于浏览器同源策略（浏览器安全功能，它会阻止一个域与另一个域的内容进行交互，能有效防止XSS、CSRF攻击）的限制，非同源的请求会被限制。</p>
+<p>解决跨域问题的方法：</p>
+<ul>
+<li>配置nginx反向代理</li>
+<li>使用jsonp方式（script方式）</li>
+<li>使用图片</li>
+<li>设置CORS（跨域资源共享）</li>
+<li>利用iframe实现</li>
+<li>WebSocket</li>
+</ul>
+<h5 data-id="heading-28">浏览器的存储有哪些及它们间的区别</h5>
+<ul>
+<li>cookie</li>
+<li>session storage</li>
+<li>local storage</li>
+<li>indexedDB:用于客户端存储大量的结构化数据（文件/二进制大型对象（blobs））。该API使用索引实现对数据的高性能搜索。</li>
+<li>cache storage：用于对Cache对象的存储。</li>
+</ul>
+<h5 data-id="heading-29">说说浏览器渲染页面的过程</h5>
+<p>首先输入一个网址，浏览器会向服务器发起DNS请求，得到对应的IP地址（会被缓存一段时间，后续访问就不用再去向服务器查询）。之后会进行TCP三次握手与服务器建立连接，连接建立后，浏览器会代表用户发送一个初始的GET请求，通常是请求一个HTML文件。服务器收到对应请求后 ，会根据相关的响应头和HTML内容进行回复。</p>
+<p>一旦浏览器拿到了数据，就会开始解析信息，这个过程中，浏览器会根据HTML文件去构建DOM树，当遇到一些阻塞资源时（如同步加载的script标签）会去加载阻塞资源而停止当前DOM树构建（所以能够异步的或延迟加载的就尽量异步或延迟，同时页面的脚本还是越少越好）。在构建DOM树时，浏览器的主线程被占据着，不过浏览器的预加载扫描器会去请求高优先级的资源（如css、js、字体），预加载扫描器很好的优化了阻塞问题。接下来浏览器会处理CSS生成CSSDOM树，将CSS规则转换为可以理解和使用的样式映射，这个过程非常快（通常小于一次DNS查询所需时间）。有了DOM树和CSSDOM树，浏览器会将其组合生成一个Render树，计算样式或渲染树会从DOM的根节点开始构建，遍历每一个可见节点（将相关样式匹配到每一个可见节点，并根据CSS级联去的每个节点的计算样式）。接下来开始布局，该过程（依旧是从根节点开始）会确定所有节点的宽高和位置，最后通过渲染器将其在页面上绘制。绘制完成了，并不代表交互也都生效了，因为主线程可能还无法抽出时间去处理滚动、触摸等交互，要等到js加载完成，同时主线程空闲了整个页面才是正常可用的状态。</p>
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6f6d560b9d954daa9e2be1ca8bfb1db9~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="screenshot_02.png" loading="lazy"></p>
+<h3 data-id="heading-30">工具链相关题目</h3>
+<h5 data-id="heading-31">对webpack的理解</h5>
+<p>webpack是一个前端打包器，帮助开发者将js模块（各种类型的模块化规范）打包成一个或多个js脚本。webpack的工作过程可以分为依赖解析过程和代码打包过程，首先执行对应的build命令，webpack首先分析入口文件，会递归解析AST获取对应依赖，得到一个依赖图。然后为每一个模块添加包裹函数（webpack的模块化），从入口文件为起点，递归执行模块，进行拼接IIFE（立即调用函数表达式：保证了模块变量不会影响全局作用域），产出对应的bundle。</p>
+<h5 data-id="heading-32">webpack中plugin和loader分别做什么？它们之间的执行顺序？</h5>
+<ul>
+<li>loader：用于将不同类型的文件转换成webpack可以识别的文件（webpack只认识js和json）。</li>
+<li>plugin：存在于webpack整个生命周期中，是一种基于事件机制工作的模式，可以在webpck打包过程对某些节点做某些定制化处理。同时plugin可以对loader解析过程中做一些处理，协同处理文件。</li>
+<li>执行顺序：两者不存在明显的先后顺序，不过webpack在初始化处理时，会优先识别到plugin中的内容。</li>
+</ul>
+<h5 data-id="heading-33">webpack常见的优化方案</h5>
+<ul>
+<li>基于esm的tree shaking</li>
+<li>对balel设置缓存，缩小babel-loader的处理范围,及精准指定要处理的目录。</li>
+<li>压缩资源（mini-css-extract-plugin，compression-webpack-plugin）</li>
+<li>配置资源的按需引入（第三方组件库）</li>
+<li>配置splitChunks来进行按需加载（根据）</li>
+<li>设置CDN优化</li>
+</ul>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-attr">rules</span>: [
+    {
+        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.m?js$/</span>,
+        <span class="hljs-attr">exclude</span>: <span class="hljs-regexp">/node_modules/</span>
+        <span class="hljs-attr">include</span>: path.<span class="hljs-title function_">resolve</span>(__dirname, <span class="hljs-string">'src'</span>）,
+        <span class="hljs-attr">use</span>: {
+            <span class="hljs-attr">loader</span>: <span class="hljs-string">'babel-loader?cacheDirectory'</span>
+        }
+    }，
+    
+]
+</code></pre>
+<h5 data-id="heading-34">关于babel的理解</h5>
+<p>babel是一个工具链，主要用于将ES2015+代码转换为当前和旧浏览器或环境中向后兼容的Js版本。这句话比较官方，其实babel就是一个语法转换工具链，它会将我们书写的代码（vue或react）通过相关的解析（对应的Preset），主要是词法解析和语法解析，通过babel-parser转换成对应的AST树，再对得到的抽象语法树根据相关的规则配置，转换成最终需要的目标平台识别的AST树，再得到目标代码。</p>
+<p>在日程的Webpack使用主要有三个插件：babel-loader、babel-core、babel-preset-env。
+babel本质上会运行babel-loader一个函数，在运行时会匹配到对应的文件，根据babel.config.js（.balelrc）的配置（这里会配置相关的babel-preset-env,它会告诉babel用什么规则去进行代码转换）去将代码进行一个解析和转换（转换依靠的是babel-core），最终得到目标平台的代码。</p>
+<h5 data-id="heading-35">vite和webpak的区别</h5>
+<p>vite在开环境时基于ESBuild打包，相比webpack的编译方式，大大提高了项目的启动和热更新速度。</p>
+<h3 data-id="heading-36">关于React</h3>
+<h5 data-id="heading-37">说说看类组件的生命周期，函数组件使用哪些hook来代替的哪些生命周期</h5>
+<ul>
+<li>类组件生命周期</li>
+</ul>
+<ol>
+<li>初始化阶段，类组件会执行constructor（其只会在初始化阶段执行一次，使用super(props)确保props传递成功，同时做一些初始化操作，如声明state，绑定this等）。接下来，如果存在getDerivedStateFromProps就执行getDerivedStateFromProps（该函数传入两个参数（nextProps，prevState），其作用是：代替componentWillMount和componentWillReceiveProps;在组件初始化或更新时，将props映射到state；其返回值会与state合并，可作为shouldComponentUpdate的第二个参数newState，用于判断是否需要渲染），不存在的话componentWillMount（由于存在隐匿风险已经废弃，不建议使用）将会被执行，到此mountClassComponent函数咨询完成，之后会执行render（创建React.element元素的过程）渲染函数，形成children，接下来React会调用reconcileChildren方法深度调和children。react调和完所有的fiber节点，就会进入到commit阶段，然后会执行componentDidMount（其执行时机和componentDidUpdate一样，只是一个是初始化阶段，一个是更新阶段，此时DOM已经挂载，可以进行DOM操作，同时可以向服务端请求数据，渲染视图）。</li>
+</ol>
+<pre><code class="hljs language-js" lang="js">constructor -&gt;
+getDerivedStateFromProps -&gt; 
+componentWillMount -&gt; 
+render -&gt; 
+componentDidMount
+</code></pre>
+<ol start="2">
+<li>更新阶段，类组件会判断是否存在getDerivedStateFromProps，不存在会执行componentWillReceiveProps，存在就执行getDerivedStateFromProps（返回的值用于合成新的state）。之后执行shouldComponentUpdate（用于性能优化），传入新的props、state、context，根据其返回值来决定是否执行render函数。接下来执行componentWillUpdate，到这里updateClassInstance方法执行完毕。接下来进入render函数，得到最新的React Element元素，然后继续调和子节点。 之后进入commit阶段，会执行getSnapshotBeforeUpdate（会返回一个DOM修改前的快照，作为传递给compontDidUpdate的第三个参数，该参数不限于DOM的信息，可以时DOM计算出的产物），然后会执行compontDidUpdate（此时dom已经修改完成，可以进行dom操作；不能再这个函数里执行setState操作，否则会导致无限循环）。这就是一个完整的更新。</li>
+</ol>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-title function_">componentWillReciveProps</span>(props改变)/getDrivedStateFromProp -&gt;
+shouldComponentUpdate -&gt;
+componentWillUpdate -&gt;
+render -&gt;
+getSnapshotBeforeUpdate -&gt;
+componentDidUpdate
+</code></pre>
+<ol start="3">
+<li>销毁阶段，类组件会先执行componentWillUnmount（清除一些定时器、事件监听器）</li>
+</ol>
+<ul>
+<li>函数组件的生命周期替代方案</li>
+</ul>
+<p>useEffect:其第一个参数cb，返回的destory作为下一次cb执行之前调用，用于清楚上一次cb产生的副作用；第二个参数是依赖项，为一个数组，依赖改变，执行上一次cb返回的destory，和执行新的effect的cb。
+useEffect的执行，React采用的异步调用的逻辑，对于每一个effect的cb，React会将其放入到事件队列中，等主线程完成，DOM更新，js执行完毕，视图绘制完成，才执行，故，effect的回调不会阻塞浏览器的视图绘制。</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> destory
+}, dep)
+</code></pre>
+<p>useLayoutEffect：不同于useEffect的是，其采用了同步执行，它是在DOM更新前，浏览器绘制之前执行，适合在这个时候修改DOM，这样浏览器只会绘制一次。如果将修改DOM操作放在useEffect中，会导致浏览器的重绘和回流。故useLayoutEffect的cb会阻塞浏览器绘制。</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-title function_">useLayoutEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// deal Dom</span>
+}, dep)
+</code></pre>
+<h5 data-id="heading-38">对于Fiber架构理解</h5>
+<p>Fiber出现在React16版本，在15及以前的版本，React更新DOM都是使用递归的方式进行遍历，每次更新都会从应用根部递归执行，且一旦开始，无法中断，这样层级越来越深，结构复杂度高的项目就会出现明显的卡顿。fiber架构出现就是为了解决这个问题，fiber是在React中最小粒度的执行单元，可以将fiber理解为是React的虚拟DOM。在React中，更新fiber的过程叫做调和，每一个fiber都可以作为一个执行单元进行处理，同时每个fiber都有一个优先级lane（16版本是expirationTime）来判断是否还有空间或时间来执行更新，如果没有时间更新，就会把主动权交给浏览器去做一些渲染（如动画、重排、重绘等），用户就不会感觉到卡顿。然后，当浏览器空闲了（requestIdleCallback），就通过scheduler（调度器）将执行恢复到执行单元上，这样本质上是中断了渲染，不过题改了用户的体验。React实现的fiber模式是一个具有链表和指针的异步模型。</p>
+<p>fiber作为react创建的element和真实DOM之间的桥梁，每一次更新的触发会在React element发起，经过fiber的调和，然后更新到真实DOM上。fiber上标识了各种不同类型的element，同时记录了对应和当前fiber有关的其他fiber信息（return指向父级、child指向子级、sibling指向兄弟）。</p>
+<p>在React应用中，应用首次构建时，会创建一个fiberRoot作为整个React应用的根基。然后当ReactDOM.render渲染出来时，会创建一个rootFiber对象（一个Ract应用可以用多个rootFiber，但只能有一个fiberRoot），当一次挂载完成时，fiberRoot的current属性会指向对应rootFiber。挂载完成后，会进入正式渲染阶段，在这个阶段必须知道一个workInProgerss树（它是正在内存在构建的Fiber树，在一次更新中，所有的更新都发生在workInProgeress树上，更新完成后，将变成current树用于渲染视图）,当前的current树（rootFiber）的alternate会作为workInProgerss，同时会用alternate将workInProgress与current树进行关联（该关联只有在初始化第一次创建alternate时进行）。</p>
+<pre><code class="hljs language-js" lang="js">currentFiber.<span class="hljs-property">alternate</span> = workInProgressFiber
+workInProgressFiber.<span class="hljs-property">alternate</span> = currentFiber
+</code></pre>
+<p>关联之后，会在心间的alternate上，完成整个fiber树的遍历。最后workInProgerss会作为最新的渲染树，来称为fiberRoot指向的current Fiber树。</p>
+<p>之后更新的时候依旧会重新创建一颗workInProgerss树，复用current上面的alternate，由于初始化的rootfiber有alternate，对于剩余的字节点，React都会创建一份，进行相同的关联。待渲染完毕之后，workInProgerss树再次变成current树。</p>
+<h3 data-id="heading-39">项目相关题</h3>
+<h5 data-id="heading-40">关于模块化</h5>
+<p>首先模块化的目的是将程序划分为一个个小的结构。在这些结构中编写自己的逻辑代码，有自己的作用域，不会影响到其他的结构。同时这些结构可以将自己希望暴露的函数、变量、对象等导出给其他结构使用，也可通过某种方式，将另外结构中的函数、变量、对象等导入使用。</p>
+<h5 data-id="heading-41">微前端</h5>
+<p>随着项目的开发，会出现一个前端项目模块巨多的情况，不利于开发和维护。微前端就能帮助我们解决这个问题，帮我们实现了前端复杂项目的解耦，同时能做到跨团队和跨部门协同开发。
+对于微前端，它与技术栈无关（主框架不限制介入应用的技术栈，微应用具有完全的自主权），各个微应用间仓库独立，每个微应用之间状态隔离，运行时状态不共享。
+常见的微前端实现方案：</p>
+<ul>
+<li>基于iframe的完全隔离，iframe是浏览器自带的功能，使用简单，隔离完美，不过它无法保持路由状态，页面一刷新状态就丢失，同时iframe中的状态无法突破对应的应用，同时整个应用是全量加载，速度慢。</li>
+<li>基于single-spa路由劫持的方案。qiankun就是基于这种方案实现的，通过对single-spa做一层封装，根据执行环境的修改，来解析微应用的资源，实现了JS沙箱、样式隔离等特性。</li>
+<li>借鉴WebComponent思想的micro-app，通过CustomElement结合自定义的ShadowDom，将微前端封装成一个类Web Component组件。</li>
+</ul>
+<h5 data-id="heading-42">前端低代码的认识</h5>
+<p>低代码平台一般提供一个可视化的编辑页面，供知晓低代码开发规则的人员进行编程，是一种声明式编程。
+常见的低代码工作流程如图：</p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/744b30e248dd4ad98b12ce130f29ff8a~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></p>
+<p>低代码的好处：</p>
+<ul>
+<li>门槛低，所见即所得，上手容易</li>
+<li>基于现成组件库开发，开发速度快</li>
+</ul>
+<p>低代码的缺点：</p>
+<ul>
+<li>灵活性差，只适合某些特定领域</li>
+<li>调试困难，对使用者来说是个黑盒</li>
+<li>对运行环境有一定要求，兼容性不好，低代码开发的兼容性完全取决于低代码平台的支持</li>
+</ul>
+<h5 data-id="heading-43">前端权限设计思路</h5>
+<p>项目中，尤其是管理后台必不可少的一个环节就是权限设计。通常一个系统下的不同用户会对应不同的角色，不同角色会对应不同的组织。在进入到管理里后台的时候会去请求对应的权限接口，这个接口里有和后台约定好的权限标识内容，如果权限管理不是很复杂，可以将当前用户的所有权限标识一次性返回，前端进行一个持久化存储，之后根据规则处理即可。如果是个极为复杂的权限管理，甚至存在不同操作导致同一用户对应后续流程权限变化的情况，这里就建议用户首次登录管理后台时，获取的是最高一层权限，即可以看到的页面权限，之后在用户每次做了不同操作，切换页面的时候，根据约定好的规则，在页面路由切换的时候去请求下一个页面对应的权限（可以精确到每个交互动作），这样能更加精确的管理权限。</p>
+<h5 data-id="heading-44">taro是如何将react代码转换成对应的小程序代码或其他平台代码</h5>
+<p>平时使用React JSX进行开发时，要知道React将其核心功能分成了三部分：React Core（负责处理核心API、与终端平台和渲染解耦，提供了createElement、createClass、Component、Children等方法）、React Renderer（渲染器，定义了React Tree如何构建以接轨不同平台，有React-dom、React-Natvie等）、React Reconciler（调和器，负责diff算法，接驳patch行为。为渲染器提供基础计算能力，主要有16版本之前的Stack Reconciler和16及其之后的Fiber Reconciler）。React团队将Reconciler作为一个单独的包发布，任何平台的渲染器函数只要在HostConfig（宿主配置）内置基本方法，就可以构造自己的渲染逻辑。有了react-reconciler的支持。Taro团队就是提供了taro-react（实现了HostConfig）包来连接react-reconciler和taro-runtime。开发者写的React代码，Taro通过CLI将代码进行webpack打包，taro实现了一套完整的DOM和BOM API在各个平台的适配，打包完之后，就可以将程序渲染到对应的平台上。
+核心就在于对输入的源代码的语法分析，语法树构建，随后对语法树进行转换操作再解析生成目标代码的过程。</p>
+<h5 data-id="heading-45">token可以放在cookie里吗？</h5>
+<p>当被问这个问题的时候，第一时间要想到安全问题。通常回答不可以，因为存在CSRF（跨站请求伪造）风险，攻击者可以冒用Cookie中的信息来发送恶意请求。解决CSRF问题，可以设置同源检测（Origin和Referer认证），也可以设置Samesite为Strict。最好嘛，就是不把token放在cookie里咯。</p>
+<h5 data-id="heading-46">前端埋点的实现，说说看思路</h5>
+<p>对于埋点方案：一般分为手动埋点（侵入性强，和业务强关联，用于需要精确搜集并分析数据，不过该方式耗时耗力，且容易出现误差，后续要调整，成本较高）、可视化埋点（提供一个可视化的埋点控制台，只能在可视化平台已支持的页面进行埋点）、无埋点（就是全埋点，监控页面发生的一切行为，优点是前端只需要处理一次埋点脚本，不过数据量过大会产生大量的脏数据，需要后端进行数据清洗）。</p>
+<p>埋点通常传采用img方式来上传，首先所有浏览器都支持Image对象，并且记录的过程很少出错，同时不存在跨域问题，请求Image也不会阻塞页面的渲染。建议使用1*1像素的GIF，其体积小。</p>
+<p>现在的浏览器如果支持Navigator.sendBeacon(url, data)方法，优先使用该方法来实现，它的主要作用就是用于统计数据发送到web服务器。当然如果不支持的话就继续使用图片的方式来上传数据。</p>
+<h5 data-id="heading-47">说说封装组件的思路</h5>
+<p>要考虑组件的灵活性、易用性、复用性。
+常见的封装思路是，对于视图层面，如相似度高的视图，进行一个封装，提供部分参数方便使用者修改。对于业务复用度较高的，提取出业务组件。</p>
+<h3 data-id="heading-48">性能优化题</h3>
+<h5 data-id="heading-49">什么情况下会重绘和回流，常见的改善方案</h5>
+<p>浏览器请求到对应页面资源的时候，会将HTML解析成DOM，把CSS解析成CSSDOM，然后将DOM和CSSDOM合并就产生了Render Tree。在有了渲染树之后，浏览器会根据流式布局模型来计算它们在页面上的大小和位置，最后将节点绘制在页面上。</p>
+<p>那么当Render Tree中部分或全部元素的尺寸、结构、或某些属性发生改变，浏览器就会重新渲染页面，这个就是浏览器的回流。常见的回流操作有：页面的首次渲染、浏览器窗口尺寸改变、部分元素尺寸或位置变化、添加或删除可见的DOM、激活伪类、查询某些属性或调用方法（各种宽高的获取，滚动方法的执行等）。</p>
+<p>当页面中的元素样式的改变不影响它在文档流的位置时（如color、background-color等），浏览器对应元素的样式，这个就是重绘。</p>
+<p>可见：<strong>回流必将导致重绘，重绘不一定会引起回流。回流比重绘的代价更高</strong>。</p>
+<p>常见改善方案：</p>
+<ul>
+<li>在进行频繁操作的时候，使用防抖和节流来控制调用频率。</li>
+<li>避免频繁操作DOM，可以利用DocumentFragment，来进行对应的DOM操作，将最后的结果添加到文档中。</li>
+<li>灵活使用display: none属性，操作结束后将其显示出来，因为display的属性为none的元素上进行的DOM操作不会引发回流和重绘。</li>
+<li>获取各种会引起重绘/回流的属性，尽量将其缓存起来，不要频繁的去获取。</li>
+<li>对复杂动画采用绝对定位，使其脱离文档流，否则它会频繁的引起父元素及其后续元素的回流。</li>
+</ul>
+<h5 data-id="heading-50">一次请求大量数据怎么优化，数据多导致渲染慢怎么优化</h5>
+<p>个人觉得这就是个伪命题，首先后端就不该一次把大量数据返回前端，但是会这么问，那么我们作为面试的就老老实实回答呗。</p>
+<p>首先大量数据的接收，那么肯定是用异步的方式进行接收，对数据进行一个分片处理，可以拆分成一个个的小单元数据，通过自定义的属性进行关联。这样数据分片完成。接下来渲染的话，由于是大量数据，如果是长列表的话，这里就可以使用虚拟列表（当前页面需要渲染的数据拿到进行渲染，然后对前面一段范围及后面一段范围，监听对应的滚动数据来切换需要渲染的数据，这样始终要渲染的就是三部分）。当然还有别的渲染情况，比如echarts图标大量点位数据优化等。</p>
+<h3 data-id="heading-51">手写题</h3>
+<h5 data-id="heading-52">模拟链表结构</h5>
+<p>主要思路就是要时刻清楚对应Node的next和prev的指向，并利用while循环去做对应的增删改查操作。</p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b913e7e8e375443ab82950ccb1bb83d7~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">data</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span> = data; <span class="hljs-comment">// 节点数据</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">next</span> = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 指向下一个节点</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">prev</span> = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 指向前一个节点</span>
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LinkedList</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 链表头</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span> = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 链表尾</span>
+  }
+
+  <span class="hljs-comment">// 在链表尾部添加新节点</span>
+  <span class="hljs-title function_">add</span>(<span class="hljs-params">item</span>) {
+    <span class="hljs-keyword">let</span> node = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>(item);
+    <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = node;
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span> = node;
+    } <span class="hljs-keyword">else</span> {
+      node.<span class="hljs-property">prev</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>;
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">next</span> = node;
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span> = node;
+    }
+  }
+
+  <span class="hljs-comment">// 链表指定位置添加新节点</span>
+  <span class="hljs-title function_">addAt</span>(<span class="hljs-params">index, item</span>) {
+    <span class="hljs-keyword">let</span> current = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+    <span class="hljs-keyword">let</span> counter = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">let</span> node = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>(item);
+
+    <span class="hljs-keyword">if</span> (index === <span class="hljs-number">0</span>) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">prev</span> = node;
+      node.<span class="hljs-property">next</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = node;
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">while</span> (current) {
+        current = current.<span class="hljs-property">next</span>;
+        <span class="hljs-keyword">if</span> (counter === index) {
+          node.<span class="hljs-property">prev</span> = current.<span class="hljs-property">prev</span>;
+          current.<span class="hljs-property">prev</span>.<span class="hljs-property">next</span> = node;
+          node.<span class="hljs-property">next</span> = current;
+          current.<span class="hljs-property">prev</span> = node;
+        }
+        counter++;
+      }
+    }
+  }
+
+  <span class="hljs-title function_">remove</span>(<span class="hljs-params">item</span>) {
+    <span class="hljs-keyword">let</span> current = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+    <span class="hljs-keyword">while</span> (current) {
+      <span class="hljs-keyword">if</span> (current.<span class="hljs-property">data</span> === item) {
+        <span class="hljs-keyword">if</span> (current == <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> &amp;&amp; current == <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>) {
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = <span class="hljs-literal">null</span>;
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span> = <span class="hljs-literal">null</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (current == <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>) {
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">next</span>;
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">prev</span> = <span class="hljs-literal">null</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (current == <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>) {
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span>;
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">next</span> = <span class="hljs-literal">null</span>;
+        } <span class="hljs-keyword">else</span> {
+          current.<span class="hljs-property">prev</span>.<span class="hljs-property">next</span> = current.<span class="hljs-property">next</span>;
+          current.<span class="hljs-property">next</span>.<span class="hljs-property">prev</span> = current.<span class="hljs-property">prev</span>;
+        }
+      }
+      current = current.<span class="hljs-property">next</span>;
+    }
+  }
+
+  <span class="hljs-title function_">removeAt</span>(<span class="hljs-params">index</span>) {
+    <span class="hljs-keyword">let</span> current = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+    <span class="hljs-keyword">let</span> counter = <span class="hljs-number">1</span>;
+
+    <span class="hljs-keyword">if</span> (index === <span class="hljs-number">0</span>) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">next</span>;
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">prev</span> = <span class="hljs-literal">null</span>;
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">while</span> (current) {
+        current = current.<span class="hljs-property">next</span>;
+        <span class="hljs-keyword">if</span> (current == <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>) {
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span>;
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">next</span> = <span class="hljs-literal">null</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (counter === index) {
+          current.<span class="hljs-property">prev</span>.<span class="hljs-property">next</span> = current.<span class="hljs-property">next</span>;
+          current.<span class="hljs-property">next</span>.<span class="hljs-property">prev</span> = current.<span class="hljs-property">prev</span>;
+          <span class="hljs-keyword">break</span>;
+        }
+        counter++;
+      }
+    }
+  }
+
+  <span class="hljs-title function_">reverse</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">let</span> current = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+    <span class="hljs-keyword">let</span> prev = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">while</span> (current) {
+      <span class="hljs-keyword">let</span> next = current.<span class="hljs-property">next</span>;
+      current.<span class="hljs-property">next</span> = prev;
+      current.<span class="hljs-property">prev</span> = next;
+      prev = current;
+      current = next;
+    }
+
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = prev;
+  }
+
+  <span class="hljs-title function_">swap</span>(<span class="hljs-params">index1, index2</span>) {
+    <span class="hljs-keyword">if</span> (index1 &gt; index2) {
+      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">swap</span>(index2, index1);
+    }
+
+    <span class="hljs-keyword">let</span> current = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+    <span class="hljs-keyword">let</span> counter = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">let</span> firstNode;
+
+    <span class="hljs-keyword">while</span> (current !== <span class="hljs-literal">null</span>) {
+      <span class="hljs-keyword">if</span> (counter === index1) {
+        firstNode = current;
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (counter === index2) {
+        <span class="hljs-keyword">let</span> temp = current.<span class="hljs-property">data</span>;
+        current.<span class="hljs-property">data</span> = firstNode.<span class="hljs-property">data</span>;
+        firstNode.<span class="hljs-property">data</span> = temp;
+      }
+
+      current = current.<span class="hljs-property">next</span>;
+      counter++;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+
+  <span class="hljs-title function_">traverse</span>(<span class="hljs-params">fn</span>) {
+    <span class="hljs-keyword">let</span> current = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+    <span class="hljs-keyword">while</span> (current !== <span class="hljs-literal">null</span>) {
+      <span class="hljs-title function_">fn</span>(current);
+      current = current.<span class="hljs-property">next</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+
+  <span class="hljs-title function_">find</span>(<span class="hljs-params">item</span>) {
+    <span class="hljs-keyword">let</span> current = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+    <span class="hljs-keyword">let</span> counter = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (current) {
+      <span class="hljs-keyword">if</span> (current.<span class="hljs-property">data</span> == item) {
+        <span class="hljs-keyword">return</span> counter;
+      }
+      current = current.<span class="hljs-property">next</span>;
+      counter++;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  }
+
+  <span class="hljs-title function_">isEmpty</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">length</span>() &lt; <span class="hljs-number">1</span>;
+  }
+
+  <span class="hljs-title function_">length</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">let</span> current = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+    <span class="hljs-keyword">let</span> counter = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (current !== <span class="hljs-literal">null</span>) {
+      counter++;
+      current = current.<span class="hljs-property">next</span>;
+    }
+    <span class="hljs-keyword">return</span> counter;
+  }
+}
+</code></pre>
+<h5 data-id="heading-53">手写一个深拷贝</h5>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-comment">// 手写一个深拷贝</span>
+
+<span class="hljs-keyword">function</span> deepClone&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Array</span>&lt;T&gt; | <span class="hljs-built_in">any</span>&gt;(<span class="hljs-attr">obj</span>: T): T {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> obj !== <span class="hljs-string">"object"</span> || obj === <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> obj;
+
+  <span class="hljs-keyword">const</span> <span class="hljs-attr">result</span>: T = obj <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Array</span> ? ([] <span class="hljs-keyword">as</span> T) : ({} <span class="hljs-keyword">as</span> T);
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> key <span class="hljs-keyword">in</span> obj) {
+    <span class="hljs-keyword">if</span> (obj.<span class="hljs-title function_">hasOwnProperty</span>(key)) {
+      result[key] = <span class="hljs-title function_">deepClone</span>(obj[key]);
+    }
+  }
+
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">const</span> obj = {
+  <span class="hljs-attr">a</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">b</span>: {
+    <span class="hljs-attr">bb</span>: <span class="hljs-string">"hh"</span>,
+  },
+  <span class="hljs-title function_">c</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"cc"</span>);
+  },
+};
+
+<span class="hljs-keyword">const</span> cloneObj = <span class="hljs-title function_">deepClone</span>(obj);
+obj.<span class="hljs-property">a</span> = <span class="hljs-number">999</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"cloneObj :&gt;&gt; "</span>, cloneObj);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"obj :&gt;&gt; "</span>, obj);
+<span class="hljs-comment">// cloneObj :&gt;&gt;  { a: 1, b: { bb: 'hh' }, c: [Function: c] }</span>
+<span class="hljs-comment">// obj :&gt;&gt;  { a: 999, b: { bb: 'hh' }, c: [Function: c] }</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">arr</span>: <span class="hljs-title class_">Array</span>&lt;<span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>&gt; = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-string">"6"</span>];
+<span class="hljs-keyword">const</span> copyArr = <span class="hljs-title function_">deepClone</span>(arr);
+arr[<span class="hljs-number">3</span>] = <span class="hljs-number">4</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"arr | copyArr :&gt;&gt; "</span>, arr, copyArr); <span class="hljs-comment">// arr | copyArr :&gt;&gt;  [ 1, 2, 3, 4 ] [ 1, 2, 3, '6' ]</span>
+
+</code></pre>
+<h5 data-id="heading-54">手写Promise</h5>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PROMISE_STATUS_PENDING</span> = <span class="hljs-string">"pending"</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PROMISE_STATUS_FULFILLED</span> = <span class="hljs-string">"fulfilled"</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PROMISE_STATUS_REJECTED</span> = <span class="hljs-string">"rejected"</span>;
+
+<span class="hljs-comment">// help fun</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">execFunctionWithCatchError</span>(<span class="hljs-params">execFun, value, resolve, reject</span>) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">execFun</span>(value);
+    <span class="hljs-title function_">resolve</span>(result);
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-title function_">reject</span>(error);
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyPromise</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">executor</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> = <span class="hljs-variable constant_">PROMISE_STATUS_PENDING</span>; <span class="hljs-comment">// 记录promise状态</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span> = <span class="hljs-literal">undefined</span>; <span class="hljs-comment">// resolve返回值</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">reason</span> = <span class="hljs-literal">undefined</span>; <span class="hljs-comment">// reject返回值</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">onFulfilledFns</span> = []; <span class="hljs-comment">// 存放成功回调</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">onRejectedFns</span> = []; <span class="hljs-comment">// 存放失败回调</span>
+
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">resolve</span> = value =&gt; {
+      <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">PROMISE_STATUS_PENDING</span>) {
+        <span class="hljs-title function_">queueMicrotask</span>(<span class="hljs-function">() =&gt;</span> {
+          <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> !== <span class="hljs-variable constant_">PROMISE_STATUS_PENDING</span>) <span class="hljs-keyword">return</span>;
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> = <span class="hljs-variable constant_">PROMISE_STATUS_FULFILLED</span>;
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span> = value;
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">onFulfilledFns</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> {
+            <span class="hljs-title function_">fn</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span>);
+          });
+        });
+      }
+    };
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">reject</span> = reason =&gt; {
+      <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">PROMISE_STATUS_PENDING</span>) {
+        <span class="hljs-title function_">queueMicrotask</span>(<span class="hljs-function">() =&gt;</span> {
+          <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> !== <span class="hljs-variable constant_">PROMISE_STATUS_PENDING</span>) <span class="hljs-keyword">return</span>;
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> = <span class="hljs-variable constant_">PROMISE_STATUS_REJECTED</span>;
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">reason</span> = reason;
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">onRejectedFns</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> {
+            <span class="hljs-title function_">fn</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">reason</span>);
+          });
+        });
+      }
+    };
+
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-title function_">executor</span>(resolve, reject);
+    } <span class="hljs-keyword">catch</span> (error) {
+      <span class="hljs-title function_">reject</span>(error);
+    }
+  }
+
+  <span class="hljs-title function_">then</span>(<span class="hljs-params">onFulfilled, onRejected</span>) {
+    onFulfilled =
+      onFulfilled ||
+      (<span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> {
+        <span class="hljs-keyword">return</span> value;
+      });
+
+    onRejected =
+      onRejected ||
+      (<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+        <span class="hljs-keyword">throw</span> err;
+      });
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+      <span class="hljs-comment">// 1、 when operate then, status have confirmed</span>
+      <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">PROMISE_STATUS_FULFILLED</span> &amp;&amp; onFulfilled) {
+        <span class="hljs-title function_">execFunctionWithCatchError</span>(onFulfilled, <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span>, resolve, reject);
+      }
+      <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">PROMISE_STATUS_REJECTED</span> &amp;&amp; onRejected) {
+        <span class="hljs-title function_">execFunctionWithCatchError</span>(onRejected, <span class="hljs-variable language_">this</span>.<span class="hljs-property">reason</span>, resolve, reject);
+      }
+
+      <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">PROMISE_STATUS_PENDING</span>) {
+        <span class="hljs-comment">// this.onFulfilledFns.push(onFulfilled);</span>
+        <span class="hljs-keyword">if</span> (onFulfilled) {
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">onFulfilledFns</span>.<span class="hljs-title function_">push</span>(<span class="hljs-function">() =&gt;</span> {
+            <span class="hljs-title function_">execFunctionWithCatchError</span>(onFulfilled, <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span>, resolve, reject);
+          });
+        }
+
+        <span class="hljs-comment">// this.onRejectedFns.push(onRejected);</span>
+        <span class="hljs-keyword">if</span> (onRejected) {
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">onRejectedFns</span>.<span class="hljs-title function_">push</span>(<span class="hljs-function">() =&gt;</span> {
+            <span class="hljs-title function_">execFunctionWithCatchError</span>(onRejected, <span class="hljs-variable language_">this</span>.<span class="hljs-property">reason</span>, resolve, reject);
+          });
+        }
+      }
+    });
+  }
+
+  <span class="hljs-keyword">catch</span>(onRejected) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">then</span>(<span class="hljs-literal">undefined</span>, onRejected);
+  }
+
+  <span class="hljs-title function_">finally</span>(<span class="hljs-params">onFinally</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">then</span>(
+      <span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-title function_">onFinally</span>();
+      },
+      <span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-title function_">onFinally</span>();
+      }
+    );
+  }
+
+  <span class="hljs-keyword">static</span> <span class="hljs-title function_">resolve</span>(<span class="hljs-params">value</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-title function_">resolve</span>(value));
+  }
+
+  <span class="hljs-keyword">static</span> <span class="hljs-title function_">reject</span>(<span class="hljs-params">reason</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> <span class="hljs-title function_">reject</span>(reason));
+  }
+
+  <span class="hljs-keyword">static</span> <span class="hljs-title function_">all</span>(<span class="hljs-params">promises</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+      <span class="hljs-keyword">const</span> values = [];
+      promises.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">promise</span> =&gt;</span> {
+        promise.<span class="hljs-title function_">then</span>(
+          <span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+            values.<span class="hljs-title function_">push</span>(res);
+            <span class="hljs-keyword">if</span> (values.<span class="hljs-property">length</span> === promises.<span class="hljs-property">length</span>) {
+              <span class="hljs-title function_">resolve</span>(values);
+            }
+          },
+          <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+            <span class="hljs-title function_">reject</span>(err);
+          }
+        );
+      });
+    });
+  }
+
+  <span class="hljs-keyword">static</span> <span class="hljs-title function_">allSettled</span>(<span class="hljs-params">promises</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> {
+      <span class="hljs-keyword">const</span> results = [];
+      promises.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">promise</span> =&gt;</span> {
+        promise.<span class="hljs-title function_">then</span>(
+          <span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+            results.<span class="hljs-title function_">push</span>({ <span class="hljs-attr">status</span>: <span class="hljs-variable constant_">PROMISE_STATUS_FULFILLED</span>, <span class="hljs-attr">value</span>: res });
+            <span class="hljs-keyword">if</span> (results.<span class="hljs-property">length</span> === promises.<span class="hljs-property">length</span>) {
+              <span class="hljs-title function_">resolve</span>(results);
+            }
+          },
+          <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+            results.<span class="hljs-title function_">push</span>({ <span class="hljs-attr">status</span>: <span class="hljs-variable constant_">PROMISE_STATUS_REJECTED</span>, <span class="hljs-attr">value</span>: err });
+            <span class="hljs-keyword">if</span> (results.<span class="hljs-property">length</span> === promises.<span class="hljs-property">length</span>) {
+              <span class="hljs-title function_">resolve</span>(results);
+            }
+          }
+        );
+      });
+    });
+  }
+
+  <span class="hljs-keyword">static</span> <span class="hljs-title function_">race</span>(<span class="hljs-params">promises</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+      promises.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">promise</span> =&gt;</span> {
+        promise.<span class="hljs-title function_">then</span>(
+          <span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+            <span class="hljs-title function_">resolve</span>(res);
+          },
+          <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+            <span class="hljs-title function_">reject</span>(err);
+          }
+        );
+      });
+    });
+  }
+
+  <span class="hljs-keyword">static</span> <span class="hljs-title function_">any</span>(<span class="hljs-params">promises</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+      <span class="hljs-keyword">const</span> reasons = [];
+      promises.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">promise</span> =&gt;</span> {
+        promise.<span class="hljs-title function_">then</span>(
+          <span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+            <span class="hljs-title function_">resolve</span>(res);
+          },
+          <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+            reasons.<span class="hljs-title function_">push</span>(err);
+            <span class="hljs-keyword">if</span> (reasons.<span class="hljs-property">length</span> === promise.<span class="hljs-property">length</span>) {
+              <span class="hljs-comment">// reject(new AggreagateError(reasons));</span>
+              <span class="hljs-title function_">reject</span>(reasons);
+            }
+          }
+        );
+      });
+    });
+  }
+}
+
+<span class="hljs-keyword">const</span> p1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"--- 1 ---"</span>);
+    <span class="hljs-title function_">resolve</span>(<span class="hljs-number">111</span>);
+  });
+}).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"p1 res :&gt;&gt; "</span>, res);
+});
+
+<span class="hljs-keyword">const</span> p2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"--- 2 ---"</span>);
+  <span class="hljs-title function_">resolve</span>(<span class="hljs-number">222</span>);
+});
+
+<span class="hljs-keyword">const</span> p3 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"--- 3 ---"</span>);
+  <span class="hljs-title function_">resolve</span>(<span class="hljs-number">333</span>);
+});
+
+<span class="hljs-keyword">const</span> p4 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPromise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"--- 4 ---"</span>);
+  <span class="hljs-title function_">reject</span>(<span class="hljs-number">444</span>);
+});
+
+<span class="hljs-title class_">MyPromise</span>.<span class="hljs-title function_">all</span>([p2, p3]).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"p2&amp;p3 res :&gt;&gt; "</span>, res);
+});
+
+<span class="hljs-title class_">MyPromise</span>.<span class="hljs-title function_">all</span>([p2, p4])
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"p2&amp;p4 res :&gt;&gt; "</span>, res);
+  })
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"err :&gt;&gt; "</span>, err);
+  });
+
+<span class="hljs-comment">// --- 2 ---</span>
+<span class="hljs-comment">// --- 3 ---</span>
+<span class="hljs-comment">// --- 4 ---</span>
+<span class="hljs-comment">// p2&amp;p3 res :&gt;&gt;  [ 222, 333 ]</span>
+<span class="hljs-comment">// err :&gt;&gt;  444</span>
+<span class="hljs-comment">// --- 1 ---</span>
+<span class="hljs-comment">// p1 res :&gt;&gt;  111</span>
+</code></pre>
+<h5 data-id="heading-55">手写防抖和节流函数</h5>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">debounce</span>(<span class="hljs-params">fn: <span class="hljs-built_in">Function</span>, delay: <span class="hljs-built_in">number</span></span>) {
+  <span class="hljs-keyword">let</span> <span class="hljs-attr">timer</span>: <span class="hljs-built_in">any</span> = <span class="hljs-literal">null</span>;
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">if</span> (timer) {
+      <span class="hljs-built_in">clearTimeout</span>(timer);
+    }
+    timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      fn.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, <span class="hljs-variable language_">arguments</span>);
+      timer = <span class="hljs-literal">null</span>;
+    }, delay);
+  };
+}
+
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">throttle</span>(<span class="hljs-params">fn: <span class="hljs-built_in">Function</span>, delay: <span class="hljs-built_in">number</span></span>) {
+  <span class="hljs-keyword">let</span> <span class="hljs-attr">timer</span>: <span class="hljs-built_in">any</span> = <span class="hljs-literal">null</span>;
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">if</span> (timer) <span class="hljs-keyword">return</span>;
+    timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      fn.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, <span class="hljs-variable language_">arguments</span>);
+      timer = <span class="hljs-literal">null</span>;
+    }, delay);
+  };
+}
+
+</code></pre>
+<h5 data-id="heading-56">手写快速排序</h5>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">quickSort</span>(<span class="hljs-params">arr: <span class="hljs-built_in">number</span>[], startIndex = <span class="hljs-number">0</span></span>): <span class="hljs-built_in">number</span>[] {
+  <span class="hljs-keyword">if</span> (arr.<span class="hljs-property">length</span> &lt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> arr;
+  <span class="hljs-keyword">const</span> <span class="hljs-attr">right</span>: <span class="hljs-built_in">number</span>[] = [],
+    <span class="hljs-attr">left</span>: <span class="hljs-built_in">number</span>[] = [],
+    startNum = arr.<span class="hljs-title function_">splice</span>(startIndex, <span class="hljs-number">1</span>)[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; arr.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-keyword">if</span> (arr[i] &lt; startNum) {
+      left.<span class="hljs-title function_">push</span>(arr[i]);
+    } <span class="hljs-keyword">else</span> {
+      right.<span class="hljs-title function_">push</span>(arr[i]);
+    }
+  }
+  <span class="hljs-keyword">return</span> [...<span class="hljs-title function_">quickSort</span>(left), startNum, ...<span class="hljs-title function_">quickSort</span>(right)];
+}
+</code></pre>
+<h5 data-id="heading-57">输入为两个一维数组，将这两个数组合并，去重，不要求排序，返回一维数组</h5>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">dealArr</span>(<span class="hljs-params">arr1: <span class="hljs-built_in">any</span>[], arr2: <span class="hljs-built_in">any</span>[]</span>): <span class="hljs-built_in">any</span>[] {
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>([...arr1.<span class="hljs-title function_">flat</span>(), ...arr2.<span class="hljs-title function_">flat</span>()]));
+}
+
+<span class="hljs-keyword">const</span> arr1 = [<span class="hljs-string">"a"</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, [<span class="hljs-string">"b"</span>, <span class="hljs-string">"c"</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>]];
+<span class="hljs-keyword">const</span> arr2 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-string">"d"</span>, [<span class="hljs-string">"e"</span>, <span class="hljs-string">"f"</span>, <span class="hljs-string">"5"</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>]];
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"dealArr(arr1, arr2 ); :&gt;&gt; "</span>, <span class="hljs-title function_">dealArr</span>(arr1, arr2)); <span class="hljs-comment">// dealArr(arr1, arr2 ); :&gt;&gt;  [ 'a', 1, 2, 3,'b', 'c', 5,6, 4, 'd', 'e', 'f','5', 7]</span>
+</code></pre>
+<h5 data-id="heading-58">编写函数convert(money) ，传入金额，将金额转换为千分位表示法。ex:-87654.3 =&gt; -87,654.3</h5>
+<p>思路：判断是否是负数，判断是否有小数点，将整数部分进行处理。</p>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">convert</span>(<span class="hljs-params">money: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">string</span> {
+  <span class="hljs-keyword">let</span> <span class="hljs-attr">result</span>: <span class="hljs-built_in">string</span>[] = []; <span class="hljs-comment">// 用于存放整数部分</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-attr">negativeFlag</span>: <span class="hljs-built_in">string</span> = <span class="hljs-string">""</span>; <span class="hljs-comment">// 是否要负号</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-attr">tail</span>: <span class="hljs-built_in">string</span> = <span class="hljs-string">""</span>; <span class="hljs-comment">// 用于存放小数点后面部分</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-attr">arr</span>: <span class="hljs-built_in">string</span>[] = [...<span class="hljs-title class_">String</span>(money)];
+
+  <span class="hljs-comment">// 判断是否是负数</span>
+  <span class="hljs-keyword">if</span> (arr[<span class="hljs-number">0</span>] === <span class="hljs-string">"-"</span>) {
+    negativeFlag = <span class="hljs-string">"-"</span>;
+    arr.<span class="hljs-title function_">shift</span>();
+  }
+
+  <span class="hljs-comment">// 判断是否存在小数点</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-attr">dotIndex</span>: <span class="hljs-built_in">number</span> = arr.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">"."</span>);
+  <span class="hljs-keyword">if</span> (dotIndex !== -<span class="hljs-number">1</span>) {
+    tail = arr.<span class="hljs-title function_">splice</span>(dotIndex, arr.<span class="hljs-property">length</span> - dotIndex).<span class="hljs-title function_">join</span>(<span class="hljs-string">""</span>);
+  }
+
+  <span class="hljs-comment">// 处理整数部分加上千分位</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-attr">reverseArray</span>: <span class="hljs-built_in">string</span>[] = arr.<span class="hljs-title function_">reverse</span>();
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; reverseArray.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-keyword">if</span> ((i + <span class="hljs-number">1</span>) % <span class="hljs-number">3</span> === <span class="hljs-number">0</span> &amp;&amp; i + <span class="hljs-number">1</span> &lt; reverseArray.<span class="hljs-property">length</span>) {
+      result[i] = <span class="hljs-string">","</span> + reverseArray[i];
+    } <span class="hljs-keyword">else</span> {
+      result[i] = reverseArray[i];
+    }
+  }
+  <span class="hljs-keyword">return</span> negativeFlag + result.<span class="hljs-title function_">reverse</span>().<span class="hljs-title function_">join</span>(<span class="hljs-string">""</span>) + tail;
+}
+</code></pre>
+<h3 data-id="heading-59">总结</h3>
+<p>一个渣渣前端在面试过程中遇到的题目😝。</p>

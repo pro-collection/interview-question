@@ -1,0 +1,181 @@
+<div id="article-root" itemprop="articleBody" class="article-viewer markdown-body cache result" data-v-125fc212=""><style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#252933}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;line-height:38px;margin-bottom:5px}.markdown-body h2{font-size:22px;line-height:34px;padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:20px;line-height:28px}.markdown-body h4{font-size:18px;line-height:26px}.markdown-body h5{font-size:17px;line-height:24px}.markdown-body h6{font-size:16px;line-height:24px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="juejin">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><p>大家好，我卡颂。</p>
+  <p>5月30日刚好是<code>React</code>10周年纪念日。</p>
+  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/15630ba7b6b341759def7c9d378d8d0e~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="" loading="lazy" class="medium-zoom-image"></p>
+  <p>我顺手拉了下<code>React</code>最新代码，这一看不要紧，居然已经有22个<code>hook</code>了。</p>
+  <p>其中：</p>
+  <ul>
+    <li>
+      <p><code>react</code>包导出了21个</p>
+    </li>
+    <li>
+      <p><code>react-dom</code>包导出了1个（<code>useFormStatus</code>）</p>
+    </li>
+  </ul>
+  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bf980ba656fa4cfdb390593f08322b59~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="" loading="lazy" class="medium-zoom-image"></p>
+  <p>本文会从<code>React</code>这些年发展脉络的角度，聊聊这些<code>hook</code>的作用。</p>
+  <p>欢迎加入<a href="https://juejin.cn/user/1943592291009511/pins" target="_blank" title="https://juejin.cn/user/1943592291009511/pins">人类高质量前端交流群</a>，带飞</p>
+  <h2 data-id="heading-0">时代的更迭</h2>
+  <p>截止当前，<code>React</code>的发展主要经历了3个时期：</p>
+  <ul>
+    <li>
+      <p><code>CSR</code>时期（客户端渲染时期）</p>
+    </li>
+    <li>
+      <p>并发时期</p>
+    </li>
+    <li>
+      <p><code>RSC</code>时期（服务端组件时期）</p>
+    </li>
+  </ul>
+  <p>当前的22个<code>hook</code>也都是这3个时期的产物。</p>
+  <h3 data-id="heading-1"><code>CSR</code>时期</h3>
+  <p>时间回到2013年，为了解决<code>facebook</code>日益复杂的交互，<strong>jordwalke</strong>开发了<code>React</code>。经过一段时间摸索，<code>React</code>逐渐形成一套满足<code>CSR</code>的开发模式。</p>
+  <p>这套开发模式从<code>ClassComponent</code>迁移到<code>FunctionComponent</code>后，便形成了最初的一批<code>hook</code>。这些<code>hook</code>都与<code>CSR</code>的开发模式相关。比如：</p>
+  <p>与状态的流转相关的：</p>
+  <ol>
+    <li>
+      <p><code>useState</code></p>
+    </li>
+    <li>
+      <p><code>useReducer</code></p>
+    </li>
+    <li>
+      <p><code>useContext</code></p>
+    </li>
+  </ol>
+  <p>与处理副作用相关的：</p>
+  <ol start="4">
+    <li>
+      <p><code>useEffect</code></p>
+    </li>
+    <li>
+      <p><code>useLayoutEffect</code></p>
+    </li>
+  </ol>
+  <p>与提高操作自由度相关的：</p>
+  <ol start="6">
+    <li><code>useRef</code></li>
+  </ol>
+  <p>与性能优化相关的：</p>
+  <ol start="7">
+    <li>
+      <p><code>useMemo</code></p>
+    </li>
+    <li>
+      <p><code>useCallback</code></p>
+    </li>
+  </ol>
+  <p>与调试相关：</p>
+  <ol start="9">
+    <li><code>useDebugValue</code></li>
+  </ol>
+  <p>随着<code>React</code>持续迭代，又引入了几个<code>hook</code>，本质来说他们都是为了完善<code>CSR</code>的开发模式，对现有<code>hook</code>能力进行补充或约束：</p>
+  <ol start="10">
+    <li>
+      <p><code>useImperativeHandle</code>（控制<code>useRef</code>防止其失控）</p>
+    </li>
+    <li>
+      <p><code>useEffectEvent</code>（对<code>useEffect</code>能力的补充）</p>
+    </li>
+    <li>
+      <p><code>useInsertionEffect</code>（对<code>useEffect</code>场景的补充）</p>
+    </li>
+    <li>
+      <p><a href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Ffacebook%2Freact%2Fpull%2F25123" title="https://github.com/facebook/react/pull/25123" target="_blank" ref="nofollow noopener noreferrer">useMemoCache</a>（减少性能优化心智负担）</p>
+    </li>
+  </ol>
+  <p>这里简单聊聊<code>useMemoCache</code>。长久以来，不管是<code>ClassComponent</code>的<code>shouldComponentUpdate</code>，还是<code>FC</code>中2个性能优化相关<code>hook</code>，都存在比较重的心智负担，比如：</p>
+  <ul>
+    <li>
+      <p>开发者需要考虑是否需要性能优化</p>
+    </li>
+    <li>
+      <p>开发者需要考虑何时使用<code>useMemo</code>、<code>useCallback</code></p>
+    </li>
+  </ul>
+  <p>为了解决这个问题，在2021年的<code>React Conf</code>，黄玄带来了<strong>能够通过编译器生成等效于useMemo、useCallback代码</strong>的方案 —— <code>React Forget</code>。</p>
+  <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/94a1bd5ee67a456083c3c73c74d294da~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="" loading="lazy" class="medium-zoom-image"></p>
+  <p><code>useMemoCache</code>就是<code>React</code>内部为<code>React Forget</code>提供缓存支持的<code>hook</code>。</p>
+  <p>所以这个<code>hook</code>是给编译器用的，而不是我们普通开发者。</p>
+  <h3 data-id="heading-2">并发时期</h3>
+  <p>在13年诞生之初，<code>React</code>的作者<strong>jordwalke</strong>就指出 —— <code>React</code>未来会发展<strong>并发特性</strong>。</p>
+  <p>这并不是什么高瞻远瞩的预言，<code>React</code>本身是个重运行时的框架，这意味着他的迭代方向需要围绕<strong>运行时</strong>展开。而<strong>并发特性</strong>是一种优秀的运行时性能优化策略。</p>
+  <p>随着并发特性落地，首先推出的是2个并发相关<code>hook</code>：</p>
+  <ol start="14">
+    <li>
+      <p><code>useTransition</code></p>
+    </li>
+    <li>
+      <p><code>useDeferredValue</code></p>
+    </li>
+  </ol>
+  <p>这2个<code>hook</code>的本质都是降低更新的优先级，<strong>更新</strong>意味着<strong>视图渲染</strong>，所以当更新拥有不同优先级后，这意味着<strong>视图渲染</strong>拥有不同优先级。</p>
+  <p>这就是并发更新的理论基础。</p>
+  <p>但是，并发更新的出现，打破了<code>React</code>沿袭多年的<strong>一次更新对应一次渲染</strong>的模式。</p>
+  <p>为了让现有的库兼容并发模式，推出了如下<code>hook</code>：</p>
+  <ol start="16">
+    <li>
+      <p><code>useMutableSource</code></p>
+    </li>
+    <li>
+      <p><code>useSyncExternalStore</code></p>
+    </li>
+  </ol>
+  <p>所以，上述2个<code>hook</code>主要是面向开源库作者。</p>
+  <h3 data-id="heading-3"><code>RSC</code>时期</h3>
+  <p><code>RSC</code>（服务端组件）是一个浩大的工程，他的实现不是一蹴而就的，这一点从新出的<code>hook</code>就能看出。</p>
+  <p>既然是服务端组件，那就涉及到组件在服务端渲染。那么，对于存在唯一标识（比如下面的<code>id props</code>）的组件，如何保证这个唯一标识在服务端与客户端一致呢？</p>
+  <pre><div class="code-block-extension-header" style="background-color: rgb(248, 248, 248);"><div class="code-block-extension-headerLeft"><div class="code-block-extension-foldBtn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.924 9.617A1 1 0 0 0 16 9H8a1 1 0 0 0-.707 1.707l4 4a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 .217-1.09z" data-name="Down"></path></svg></div></div><div class="code-block-extension-headerRight"><span class="code-block-extension-lang">js</span><div class="code-block-extension-copyCodeBtn">复制代码</div></div></div><code class="hljs language-js code-block-extension-codeShowNum" lang="js"><span class="code-block-extension-codeLine" data-line-num="1">&lt;<span class="hljs-title class_">SomeCpn</span> id={id}/&gt;</span>
+</code></pre>
+  <p>如果组件仅在一端渲染，简单使用<code>Math.random()</code>就能获得唯一标识：</p>
+  <pre><div class="code-block-extension-header" style="background-color: rgb(248, 248, 248);"><div class="code-block-extension-headerLeft"><div class="code-block-extension-foldBtn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.924 9.617A1 1 0 0 0 16 9H8a1 1 0 0 0-.707 1.707l4 4a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 .217-1.09z" data-name="Down"></path></svg></div></div><div class="code-block-extension-headerRight"><span class="code-block-extension-lang">js</span><div class="code-block-extension-copyCodeBtn">复制代码</div></div></div><code class="hljs language-js code-block-extension-codeShowNum" lang="js"><span class="code-block-extension-codeLine" data-line-num="1"><span class="hljs-keyword">const</span> id = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>();</span>
+<span class="code-block-extension-codeLine" data-line-num="2"></span>
+<span class="code-block-extension-codeLine" data-line-num="3"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">SomeCpn</span> <span class="hljs-attr">id</span>=<span class="hljs-string">{id}/</span>&gt;</span></span></span>
+</code></pre>
+  <p>但如果这段逻辑在服务端/客户端都运行一次，显然<code>id</code>就不唯一了。</p>
+  <p>为了生成在服务端/客户端唯一的<code>id</code>，有了：</p>
+  <ol start="18">
+    <li><code>useId</code></li>
+  </ol>
+  <p>在并发时期，由于引入了<strong>渲染优先级</strong>的概念，那势必存在一些由于优先级不足，而处于<code>pending</code>中的渲染。</p>
+  <p>如何展示<strong>渲染的pending状态</strong>呢？<code>React</code>引入了<code>&lt;Suspense&gt;</code>组件。</p>
+  <p>到了<code>RSC</code>时期，<code>React</code>团队发现，<strong>渲染的pending状态</strong>是<code>pending</code>，<strong>数据请求的pending状态</strong>不也是<code>pending</code>吗？</p>
+  <p>换言之，任何需要中间<code>pending</code>状态的流程，不都可以纳入<code>&lt;Suspense&gt;</code>的管理范围？</p>
+  <p>那该怎么标记一个流程可以被纳入<code>&lt;Suspense&gt;</code>的管理呢？于是有了：</p>
+  <ol start="19">
+    <li><code>use</code></li>
+  </ol>
+  <p>通过这个<code>hook</code>声明的流程中的<code>pending</code>状态都会被纳入<code>&lt;Suspense&gt;</code>的管理。</p>
+  <p>既然<code>&lt;Suspense&gt;</code>越来越重要，那我们是不是要针对他做些优化？既然<code>&lt;Suspense&gt;</code>可以在不同视图之间切换，那为他增加缓存显然是种不错的优化方式，于是有了：</p>
+  <ol start="20">
+    <li><a href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Freactwg%2Freact-18%2Fdiscussions%2F25" title="https://github.com/reactwg/react-18/discussions/25" target="_blank" ref="nofollow noopener noreferrer">useCacheRefresh</a>（用于建立<code>&lt;Suspense&gt;</code>缓存）</li>
+  </ol>
+  <p>到这一步，<code>RSC</code>的基础设施算是搭好了，下一步该构建上层应用了。</p>
+  <p>在浏览器端，与<code>RSC</code>理念最契合的便是<code>form</code>标签，围绕<code>form</code>标签的<code>action</code>属性，<code>React</code>推出了如下<code>hook</code>：</p>
+  <ol start="21">
+    <li>
+      <p><code>useOptimistic</code></p>
+    </li>
+    <li>
+      <p><code>useFormStatus</code></p>
+    </li>
+  </ol>
+  <p>这2个<code>hook</code>都是为了优化<strong>表单提交</strong>这一场景（也可以说是<code>RSC</code>与客户端的交互场景）。</p>
+  <blockquote>
+    <p>关于这2个<code>hook</code>，更详细的解释可以参考<a href="https://link.juejin.cn?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzkzMjIxNTcyMA%3D%3D%26mid%3D2247492133%26idx%3D1%26sn%3D7a0d24b1561fd295ca4e5a1c0abfa1be%26chksm%3Dc25d8ce2f52a05f4a97f788e3b2989e56b85cd5736d037c15dcc4f5307c6cdd919598ad9945b%23rd" target="_blank" title="https://mp.weixin.qq.com/s?__biz=MzkzMjIxNTcyMA==&amp;mid=2247492133&amp;idx=1&amp;sn=7a0d24b1561fd295ca4e5a1c0abfa1be&amp;chksm=c25d8ce2f52a05f4a97f788e3b2989e56b85cd5736d037c15dcc4f5307c6cdd919598ad9945b#rd" ref="nofollow noopener noreferrer">form 元素是 React 的未来</a>一文</p>
+  </blockquote>
+  <h2 data-id="heading-4">总结</h2>
+  <p>如果说<code>CSR</code>时期的<code>hook</code>都是面向开发者直接使用的。那么并发时期最初的2个<code>hook</code>（<code>useTransition</code>、<code>useDeferredValue</code>）已经鲜有开发者使用了，而后期类似<code>useMutableSource</code>这样的<code>hook</code>，普通开发者则根本用不到。</p>
+  <p>同样的，再往后的<code>RSC</code>时期的所有<code>hook</code>，普通开发者都用不到。他们都是为其他库、框架（比如<code>Next.js</code>）提供的。</p>
+  <p>这标志着<code>React</code>发展方向的不断变化：</p>
+  <ul>
+    <li>
+      <p>早期，定位是前端框架，主要为了解决<code>facebook</code>自身问题，顺便开源，受众是开发者</p>
+    </li>
+    <li>
+      <p>中期，定位是底层<code>UI</code>库，受众是开源库作者</p>
+    </li>
+    <li>
+      <p>当前，定位是<code>web</code>底层操作系统，受众是上层全栈框架</p>
+    </li>
+  </ul></div>

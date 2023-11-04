@@ -8,8 +8,8 @@ import * as path from "path";
 
 const execPromise = util.promisify(child_process.exec);
 
-export const writeToTemp = async (path = "./temp.md") => {
-  const getHtml = fs.readFileSync("./demo.html", { encoding: "utf-8" });
+export const writeToTemp = async (path = "./temp.md", htmlPath = "./demo.html") => {
+  const getHtml = fs.readFileSync(htmlPath, { encoding: "utf-8" });
 
   let markdown = h2m(getHtml);
 

@@ -5,17 +5,17 @@ import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
 import { omit } from "lodash";
+import { filePath } from "@src/githubApi/file/consts";
 
 const remote = {
   title: "[Webpack] 全面了解 tree shaking",
-  key_world: [
-  ],
+  key_world: [],
   labels: [
     labels.engineering,
     company.alibaba,
   ],
   milestone: MileStone.senior,
-  body: () => fs.readFileSync("./demo.md", { encoding: "utf8" }),
+  body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 
 const main = async () => {
@@ -28,7 +28,7 @@ const main = async () => {
 
     // 关键词
     const keyWordContent = `**关键词**：${remote.key_world.join("、")}\n\n`;
-    const oldFile = fs.readFileSync("./demo.md", { encoding: "utf8" });
+    const oldFile = fs.readFileSync(filePath, { encoding: "utf8" });
     fs.writeFileSync("./demo.md", keyWordContent + oldFile);
     console.log("yanle - logger: 关键词写入文档完成");
   }
@@ -41,7 +41,7 @@ const main = async () => {
 };
 
 // 写入本地 temp.md
-writeToTemp();
+// writeToTemp();
 
 // html 写入远端
 // htmlWriteIssue(remote);

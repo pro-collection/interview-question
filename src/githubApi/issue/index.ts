@@ -9,11 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "箭头函数的作用以及使用场景",
+  title: "介绍一下迭代器 Iterator, 以及有哪些用法",
   key_world: [
-    "箭头函数的作用",
-    "箭头函数使用场景",
-    "箭头函数使用",
+    "迭代器 Iterator",
   ],
   labels: [
     labels.js,

@@ -4,7 +4,7 @@
   "description": "想做一个很全的面试题库工程",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "write": "ts-node src/githubApi/issue/index.ts"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
+    "@inquirer/prompts": "^3.3.0",
     "axios": "^1.3.4",
     "chatgpt": "^5.0.6",
     "cheerio": "1.0.0-rc.12",

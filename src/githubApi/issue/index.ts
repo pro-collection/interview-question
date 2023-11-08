@@ -4,8 +4,9 @@ import { company, labels, MileStone } from "@src/githubApi/issue/consts";
 import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
 import { search } from "@src/githubApi/issue/search";
-import { omit } from "lodash";
+import { omit, toNumber } from "lodash";
 import { filePath } from "@src/githubApi/file/consts";
+import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
   title: "箭头函数的作用以及使用场景",
@@ -26,7 +27,16 @@ const main = async () => {
   console.log(`yanle - logger: 使用关键词: `, remote.key_world.join("、"));
 
   if (remote.key_world.length) {
-    const count = await search(remote.key_world);
+    let count = await search(remote.key_world);
+
+    console.log("yanle - logger: 获取热度结果: ", typeof count);
+
+    const isConfirm = await confirm({ message: `获取到热度为：${count}` });
+
+    if (isConfirm) {
+      const answer = await input({ message: "请输入复写热度评分: " });
+      count = toNumber(answer);
+    }
 
     remote.title = count && remote.key_world ? `${remote.title}【热度: ${count?.toLocaleString() || count}】` : remote.title;
 

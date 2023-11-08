@@ -4,7 +4,8 @@
   "description": "想做一个很全的面试题库工程",
   "main": "index.js",
   "scripts": {
-    "write": "ts-node src/githubApi/issue/index.ts"
+    "write": "ts-node src/githubApi/issue/index.ts",
+    "release": "ts-node src/githubApi/releaseNote/index.ts"
   },
   "repository": {
     "type": "git",

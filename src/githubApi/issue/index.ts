@@ -29,11 +29,11 @@ const main = async () => {
 
     console.log("yanle - logger: 获取热度结果: ", typeof count);
 
-    const isConfirm = await confirm({ message: `获取到热度为：${count}, 请确认，为否可以重新修改热度` });
+    const isConfirm = await confirm({ message: `获取到热度为：${count}, 请确认。(为「no」则可以重新修改热度, 为 「yes」则无需修改热度)` });
 
     if (!isConfirm) {
       const answer = await input({ message: "请输入复写热度评分: " });
-      count = toNumber(answer);
+      count = !!toNumber(answer) ? toNumber(answer) : count;
     }
 
     remote.title = count && remote.key_world ? `${remote.title}【热度: ${count?.toLocaleString() || count}】` : remote.title;

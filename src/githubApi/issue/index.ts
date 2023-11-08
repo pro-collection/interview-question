@@ -29,9 +29,9 @@ const main = async () => {
 
     console.log("yanle - logger: 获取热度结果: ", typeof count);
 
-    const isConfirm = await confirm({ message: `获取到热度为：${count}` });
+    const isConfirm = await confirm({ message: `获取到热度为：${count}, 请确认，为否可以重新修改热度` });
 
-    if (isConfirm) {
+    if (!isConfirm) {
       const answer = await input({ message: "请输入复写热度评分: " });
       count = toNumber(answer);
     }
@@ -41,7 +41,7 @@ const main = async () => {
     // 关键词
     const keyWordContent = `**关键词**：${remote.key_world.join("、")}\n\n`;
     const oldFile = fs.readFileSync(filePath, { encoding: "utf8" });
-    fs.writeFileSync("./demo.md", keyWordContent + oldFile);
+    fs.writeFileSync(filePath, keyWordContent + oldFile);
     console.log("yanle - logger: 关键词写入文档完成");
   }
 

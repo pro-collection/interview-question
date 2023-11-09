@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] computed 和 watch 有啥区别?",
+  title: "[Vue] 路由守卫",
   key_world: [
-    "computed 和 watch 区别",
+    "路由守卫",
   ],
   labels: [
     labels.frameWork,

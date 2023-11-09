@@ -1,45 +1,89 @@
-**关键词**：computed 和 watch 区别
+**关键词**：路由守卫
 
-在 Vue 中，`computed` 和 `watch` 是两种用于监听和响应数据变化的方式。
+路由守卫是 Vue Router 提供的一种机制，用于在路由导航过程中对路由进行拦截和控制。通过使用路由守卫，我们可以在路由导航前、导航后、导航中断等不同的阶段执行相应的逻辑。
 
-`computed` 是计算属性，它是基于响应式数据进行计算得到的一个新的派生属性。计算属性可以接收其他响应式数据作为依赖，并且只有当依赖数据发生变化时，计算属性才会重新计算。计算属性的值会被缓存，只有在依赖数据变化时才会重新计算，这样可以提高性能。计算属性的定义方式是使用 `computed` 函数或者在 Vue 组件中使用 `get` 和 `set` 方法。
+Vue Router 提供了三种类型的路由守卫：
 
-下面是一个使用计算属性的示例：
+1. 全局前置守卫（Global Before Guards）：在路由切换之前被调用，可以用于进行全局的权限校验或者路由跳转拦截等操作。
 
-```javascript
-import { reactive, computed } from 'vue';
+2. 路由独享守卫（Per-Route Guards）：在特定的路由配置中定义的守卫。这些守卫只会在当前路由匹配成功时被调用。
 
-const state = reactive({
-  firstName: 'John',
-  lastName: 'Doe'
-});
+3. 组件内的守卫（In-Component Guards）：在组件实例内部定义的守卫。这些守卫可以在组件内部对路由的变化进行相应的处理。
 
-const fullName = computed(() => {
-  return `${state.firstName} ${state.lastName}`;
-});
+* 全局前置守卫
 
-console.log(fullName.value); // 输出: "John Doe"
-
-state.firstName = 'Mike'; // 修改firstName
-console.log(fullName.value); // 输出: "Mike Doe"
+```js
+router.beforeEach((to, from, next) => {
+    // to: 即将进入的目标
+    // from:当前导航正要离开的路由
+    return false // 返回false用于取消导航
+    return {name: 'Login'} // 返回到对应name的页面
+    next({name: 'Login'}) // 进入到对应的页面
+    next() // 放行
+})
 ```
 
-`watch` 是用于监听特定响应式数据的变化，并在数据变化时执行相应的操作。`watch` 可以监听单个数据的变化，也可以监听多个数据的变化。当被监听的数据发生变化时，`watch` 的回调函数会被执行。`watch` 还支持深度监听对象的变化以及异步操作。
+* 全局解析守卫:类似beforeEach
 
-下面是一个使用 `watch` 的示例：
-
-```javascript
-import { reactive, watch } from 'vue';
-
-const state = reactive({
-  count: 0
-});
-
-watch(() => state.count, (newVal, oldVal) => {
-  console.log(`count 从 ${oldVal} 变为 ${newVal}`);
-});
-
-state.count++; // 输出: "count 从 0 变为 1"
+```js
+router.beforeResolve(to => {
+    if(to.meta.canCopy) {
+        return false // 也可取消导航
+    }
+})
 ```
 
-以上是 `computed` 和 `watch` 的基本用法。通过使用这两种方式，我们可以根据需要监听和响应数据的变化，实现更加灵活的逻辑和交互。
+* 全局后置钩子
+
+```js
+router.afterEach((to, from) => {
+    logInfo(to.fullPath)
+})
+```
+
+* 导航错误钩子，导航发生错误调用
+
+```js
+router.onError(error => {
+    logError(error)
+})
+```
+
+* 路由独享守卫,beforeEnter可以传入单个函数，也可传入多个函数。
+
+```js
+function dealParams(to) {
+    // ...
+}
+function dealPermission(to) {
+    // ...
+}
+
+const routes = [
+    {
+        path: '/home',
+        component: Home,
+        beforeEnter: (to, from) => {
+            return false // 取消导航
+        },
+        // beforeEnter: [dealParams, dealPermission]
+    }
+]
+```
+
+组件内的守卫
+
+```js
+const Home = {
+    template: `...`,
+    beforeRouteEnter(to, from) {
+        // 此时组件实例还未被创建，不能获取this
+    },
+    beforeRouteUpdate(to, from) {
+        // 当前路由改变，但是组件被复用的时候调用，此时组件已挂载好
+    },
+    beforeRouteLeave(to, from) {
+        // 导航离开渲染组件的对应路由时调用
+    }
+}
+```

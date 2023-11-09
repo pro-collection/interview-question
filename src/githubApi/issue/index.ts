@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 如何实现路由守卫",
+  title: "浏览器的存储有哪些",
   key_world: [
-    "路由守卫",
+    "浏览器存储",
   ],
   labels: [
-    labels.frameWork,
-    company.mt,
+    labels.chrome,
+    company.pdd,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

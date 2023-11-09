@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下迭代器 Iterator, 以及有哪些用法",
+  title: "[Vue] ref、toRef 和 toRefs 有啥区别？",
   key_world: [
-    "迭代器 Iterator",
+    "ref、toRef、toRefs 区别",
   ],
   labels: [
-    labels.js,
-    company.mi,
+    labels.frameWork,
+    company.mt,
   ],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

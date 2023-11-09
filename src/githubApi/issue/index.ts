@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "IndexedDB 存储空间大小是如何约束的？",
+  title: "[Webpack] 有哪些优化项目的手段？",
   key_world: [
-    "IndexedDB 存储空间大小设置",
+    "打包优化",
   ],
   labels: [
-    labels.chrome,
-    company.pdd,
+    labels.engineering,
+    company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

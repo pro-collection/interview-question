@@ -1,776 +1,499 @@
-##### 浏览器的存储有哪些及它们间的区别
+# 前言
 
-* cookie
-* session storage
-* local storage
-* indexedDB: 用于客户端存储大量的结构化数据（文件/二进制大型对象（blobs））。该API使用索引实现对数据的高性能搜索。
-* cache storage: 用于对Cache对象的存储。
+本篇围绕 `webpack` 做性能优化，分为两个方面：`构建时间优化`、`构建体积优化`
 
-##### 说说浏览器渲染页面的过程
+# 构建时间优化
 
-首先输入一个网址，浏览器会向服务器发起DNS请求，得到对应的IP地址（会被缓存一段时间，后续访问就不用再去向服务器查询）。之后会进行TCP三次握手与服务器建立连接，连接建立后，浏览器会代表用户发送一个初始的GET请求，通常是请求一个HTML文件。服务器收到对应请求后 ，会根据相关的响应头和HTML内容进行回复。
+### 缩小范围
 
-一旦浏览器拿到了数据，就会开始解析信息，这个过程中，浏览器会根据HTML文件去构建DOM树，当遇到一些阻塞资源时（如同步加载的script标签）会去加载阻塞资源而停止当前DOM树构建（所以能够异步的或延迟加载的就尽量异步或延迟，同时页面的脚本还是越少越好）。在构建DOM树时，浏览器的主线程被占据着，不过浏览器的预加载扫描器会去请求高优先级的资源（如css、js、字体），预加载扫描器很好的优化了阻塞问题。接下来浏览器会处理CSS生成CSSDOM树，将CSS规则转换为可以理解和使用的样式映射，这个过程非常快（通常小于一次DNS查询所需时间）。有了DOM树和CSSDOM树，浏览器会将其组合生成一个Render树，计算样式或渲染树会从DOM的根节点开始构建，遍历每一个可见节点（将相关样式匹配到每一个可见节点，并根据CSS级联去的每个节点的计算样式）。接下来开始布局，该过程（依旧是从根节点开始）会确定所有节点的宽高和位置，最后通过渲染器将其在页面上绘制。绘制完成了，并不代表交互也都生效了，因为主线程可能还无法抽出时间去处理滚动、触摸等交互，要等到js加载完成，同时主线程空闲了整个页面才是正常可用的状态。
+我们在使用 loader 时，可以配置 `include`、`exclude`缩小 loader 对文件的搜索范围，以此来提高构建速率。
 
-![screenshot_02.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6f6d560b9d954daa9e2be1ca8bfb1db9~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+像 `/node_moudles` 目录下的体积辣么大，又是第三方包的存储目录，直接 `exclude` 掉可以节省一定的时间的。
 
-### 工具链相关题目
-
-##### 对webpack的理解
-
-webpack是一个前端打包器，帮助开发者将js模块（各种类型的模块化规范）打包成一个或多个js脚本。webpack的工作过程可以分为依赖解析过程和代码打包过程，首先执行对应的build命令，webpack首先分析入口文件，会递归解析AST获取对应依赖，得到一个依赖图。然后为每一个模块添加包裹函数（webpack的模块化），从入口文件为起点，递归执行模块，进行拼接IIFE（立即调用函数表达式：保证了模块变量不会影响全局作用域），产出对应的bundle。
-
-##### webpack中plugin和loader分别做什么？它们之间的执行顺序？
-
-* loader：用于将不同类型的文件转换成webpack可以识别的文件（webpack只认识js和json）。
-* plugin：存在于webpack整个生命周期中，是一种基于事件机制工作的模式，可以在webpck打包过程对某些节点做某些定制化处理。同时plugin可以对loader解析过程中做一些处理，协同处理文件。
-* 执行顺序：两者不存在明显的先后顺序，不过webpack在初始化处理时，会优先识别到plugin中的内容。
-
-##### webpack常见的优化方案
-
-* 基于esm的tree shaking
-* 对balel设置缓存，缩小babel-loader的处理范围,及精准指定要处理的目录。
-* 压缩资源（mini-css-extract-plugin，compression-webpack-plugin）
-* 配置资源的按需引入（第三方组件库）
-* 配置splitChunks来进行按需加载（根据）
-* 设置CDN优化
+当然 `exclude` 和 `include` 可以一起配置，大部分情况下都是只需要使用 loader 编译 src 目录下的代码
 
 ```js
-rules: [
-    {
-        test: /\.m?js$/,
-        exclude: /node_modules/
-        include: path.resolve(__dirname, 'src'）,
-        use: {
-            loader: 'babel-loader?cacheDirectory'
-        }
-    }，
-    
-]
-```
-
-##### 关于babel的理解
-
-babel是一个工具链，主要用于将ES2015+代码转换为当前和旧浏览器或环境中向后兼容的Js版本。这句话比较官方，其实babel就是一个语法转换工具链，它会将我们书写的代码（vue或react）通过相关的解析（对应的Preset），主要是词法解析和语法解析，通过babel-parser转换成对应的AST树，再对得到的抽象语法树根据相关的规则配置，转换成最终需要的目标平台识别的AST树，再得到目标代码。
-
-在日程的Webpack使用主要有三个插件：babel-loader、babel-core、babel-preset-env。 babel本质上会运行babel-loader一个函数，在运行时会匹配到对应的文件，根据babel.config.js（.balelrc）的配置（这里会配置相关的babel-preset-env,它会告诉babel用什么规则去进行代码转换）去将代码进行一个解析和转换（转换依靠的是babel-core），最终得到目标平台的代码。
-
-##### vite和webpak的区别
-
-vite在开环境时基于ESBuild打包，相比webpack的编译方式，大大提高了项目的启动和热更新速度。
-
-### 关于React
-
-##### 说说看类组件的生命周期，函数组件使用哪些hook来代替的哪些生命周期
-
-* 类组件生命周期
-
-1. 初始化阶段，类组件会执行constructor（其只会在初始化阶段执行一次，使用super(props)确保props传递成功，同时做一些初始化操作，如声明state，绑定this等）。接下来，如果存在getDerivedStateFromProps就执行getDerivedStateFromProps（该函数传入两个参数（nextProps，prevState），其作用是：代替componentWillMount和componentWillReceiveProps;在组件初始化或更新时，将props映射到state；其返回值会与state合并，可作为shouldComponentUpdate的第二个参数newState，用于判断是否需要渲染），不存在的话componentWillMount（由于存在隐匿风险已经废弃，不建议使用）将会被执行，到此mountClassComponent函数咨询完成，之后会执行render（创建React.element元素的过程）渲染函数，形成children，接下来React会调用reconcileChildren方法深度调和children。react调和完所有的fiber节点，就会进入到commit阶段，然后会执行componentDidMount（其执行时机和componentDidUpdate一样，只是一个是初始化阶段，一个是更新阶段，此时DOM已经挂载，可以进行DOM操作，同时可以向服务端请求数据，渲染视图）。
-
-```js
-constructor ->
-getDerivedStateFromProps -> 
-componentWillMount -> 
-render -> 
-componentDidMount
-```
-
-2. 更新阶段，类组件会判断是否存在getDerivedStateFromProps，不存在会执行componentWillReceiveProps，存在就执行getDerivedStateFromProps（返回的值用于合成新的state）。之后执行shouldComponentUpdate（用于性能优化），传入新的props、state、context，根据其返回值来决定是否执行render函数。接下来执行componentWillUpdate，到这里updateClassInstance方法执行完毕。接下来进入render函数，得到最新的React Element元素，然后继续调和子节点。 之后进入commit阶段，会执行getSnapshotBeforeUpdate（会返回一个DOM修改前的快照，作为传递给compontDidUpdate的第三个参数，该参数不限于DOM的信息，可以时DOM计算出的产物），然后会执行compontDidUpdate（此时dom已经修改完成，可以进行dom操作；不能再这个函数里执行setState操作，否则会导致无限循环）。这就是一个完整的更新。
-
-```js
-componentWillReciveProps(props改变)/getDrivedStateFromProp ->
-shouldComponentUpdate ->
-componentWillUpdate ->
-render ->
-getSnapshotBeforeUpdate ->
-componentDidUpdate
-```
-
-3. 销毁阶段，类组件会先执行componentWillUnmount（清除一些定时器、事件监听器）
-
-* 函数组件的生命周期替代方案
-
-useEffect:其第一个参数cb，返回的destory作为下一次cb执行之前调用，用于清楚上一次cb产生的副作用；第二个参数是依赖项，为一个数组，依赖改变，执行上一次cb返回的destory，和执行新的effect的cb。 useEffect的执行，React采用的异步调用的逻辑，对于每一个effect的cb，React会将其放入到事件队列中，等主线程完成，DOM更新，js执行完毕，视图绘制完成，才执行，故，effect的回调不会阻塞浏览器的视图绘制。
-
-```js
-useEffect(() => {
-    return destory
-}, dep)
-```
-
-useLayoutEffect：不同于useEffect的是，其采用了同步执行，它是在DOM更新前，浏览器绘制之前执行，适合在这个时候修改DOM，这样浏览器只会绘制一次。如果将修改DOM操作放在useEffect中，会导致浏览器的重绘和回流。故useLayoutEffect的cb会阻塞浏览器绘制。
-
-```js
-useLayoutEffect(() => {
-    // deal Dom
-}, dep)
-```
-
-##### 对于Fiber架构理解
-
-Fiber出现在React16版本，在15及以前的版本，React更新DOM都是使用递归的方式进行遍历，每次更新都会从应用根部递归执行，且一旦开始，无法中断，这样层级越来越深，结构复杂度高的项目就会出现明显的卡顿。fiber架构出现就是为了解决这个问题，fiber是在React中最小粒度的执行单元，可以将fiber理解为是React的虚拟DOM。在React中，更新fiber的过程叫做调和，每一个fiber都可以作为一个执行单元进行处理，同时每个fiber都有一个优先级lane（16版本是expirationTime）来判断是否还有空间或时间来执行更新，如果没有时间更新，就会把主动权交给浏览器去做一些渲染（如动画、重排、重绘等），用户就不会感觉到卡顿。然后，当浏览器空闲了（requestIdleCallback），就通过scheduler（调度器）将执行恢复到执行单元上，这样本质上是中断了渲染，不过题改了用户的体验。React实现的fiber模式是一个具有链表和指针的异步模型。
-
-fiber作为react创建的element和真实DOM之间的桥梁，每一次更新的触发会在React element发起，经过fiber的调和，然后更新到真实DOM上。fiber上标识了各种不同类型的element，同时记录了对应和当前fiber有关的其他fiber信息（return指向父级、child指向子级、sibling指向兄弟）。
-
-在React应用中，应用首次构建时，会创建一个fiberRoot作为整个React应用的根基。然后当ReactDOM.render渲染出来时，会创建一个rootFiber对象（一个Ract应用可以用多个rootFiber，但只能有一个fiberRoot），当一次挂载完成时，fiberRoot的current属性会指向对应rootFiber。挂载完成后，会进入正式渲染阶段，在这个阶段必须知道一个workInProgerss树（它是正在内存在构建的Fiber树，在一次更新中，所有的更新都发生在workInProgeress树上，更新完成后，将变成current树用于渲染视图）,当前的current树（rootFiber）的alternate会作为workInProgerss，同时会用alternate将workInProgress与current树进行关联（该关联只有在初始化第一次创建alternate时进行）。
-
-```js
-currentFiber.alternate = workInProgressFiber
-workInProgressFiber.alternate = currentFiber
-```
-
-关联之后，会在心间的alternate上，完成整个fiber树的遍历。最后workInProgerss会作为最新的渲染树，来称为fiberRoot指向的current Fiber树。
-
-之后更新的时候依旧会重新创建一颗workInProgerss树，复用current上面的alternate，由于初始化的rootfiber有alternate，对于剩余的字节点，React都会创建一份，进行相同的关联。待渲染完毕之后，workInProgerss树再次变成current树。
-
-### 项目相关题
-
-##### 关于模块化
-
-首先模块化的目的是将程序划分为一个个小的结构。在这些结构中编写自己的逻辑代码，有自己的作用域，不会影响到其他的结构。同时这些结构可以将自己希望暴露的函数、变量、对象等导出给其他结构使用，也可通过某种方式，将另外结构中的函数、变量、对象等导入使用。
-
-##### 微前端
-
-随着项目的开发，会出现一个前端项目模块巨多的情况，不利于开发和维护。微前端就能帮助我们解决这个问题，帮我们实现了前端复杂项目的解耦，同时能做到跨团队和跨部门协同开发。 对于微前端，它与技术栈无关（主框架不限制介入应用的技术栈，微应用具有完全的自主权），各个微应用间仓库独立，每个微应用之间状态隔离，运行时状态不共享。 常见的微前端实现方案：
-
-* 基于iframe的完全隔离，iframe是浏览器自带的功能，使用简单，隔离完美，不过它无法保持路由状态，页面一刷新状态就丢失，同时iframe中的状态无法突破对应的应用，同时整个应用是全量加载，速度慢。
-* 基于single-spa路由劫持的方案。qiankun就是基于这种方案实现的，通过对single-spa做一层封装，根据执行环境的修改，来解析微应用的资源，实现了JS沙箱、样式隔离等特性。
-* 借鉴WebComponent思想的micro-app，通过CustomElement结合自定义的ShadowDom，将微前端封装成一个类Web Component组件。
-
-##### 前端低代码的认识
-
-低代码平台一般提供一个可视化的编辑页面，供知晓低代码开发规则的人员进行编程，是一种声明式编程。 常见的低代码工作流程如图：
-
-![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/744b30e248dd4ad98b12ce130f29ff8a~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
-
-低代码的好处：
-
-* 门槛低，所见即所得，上手容易
-* 基于现成组件库开发，开发速度快
-
-低代码的缺点：
-
-* 灵活性差，只适合某些特定领域
-* 调试困难，对使用者来说是个黑盒
-* 对运行环境有一定要求，兼容性不好，低代码开发的兼容性完全取决于低代码平台的支持
-
-##### 前端权限设计思路
-
-项目中，尤其是管理后台必不可少的一个环节就是权限设计。通常一个系统下的不同用户会对应不同的角色，不同角色会对应不同的组织。在进入到管理里后台的时候会去请求对应的权限接口，这个接口里有和后台约定好的权限标识内容，如果权限管理不是很复杂，可以将当前用户的所有权限标识一次性返回，前端进行一个持久化存储，之后根据规则处理即可。如果是个极为复杂的权限管理，甚至存在不同操作导致同一用户对应后续流程权限变化的情况，这里就建议用户首次登录管理后台时，获取的是最高一层权限，即可以看到的页面权限，之后在用户每次做了不同操作，切换页面的时候，根据约定好的规则，在页面路由切换的时候去请求下一个页面对应的权限（可以精确到每个交互动作），这样能更加精确的管理权限。
-
-##### taro是如何将react代码转换成对应的小程序代码或其他平台代码
-
-平时使用React JSX进行开发时，要知道React将其核心功能分成了三部分：React Core（负责处理核心API、与终端平台和渲染解耦，提供了createElement、createClass、Component、Children等方法）、React Renderer（渲染器，定义了React Tree如何构建以接轨不同平台，有React-dom、React-Natvie等）、React Reconciler（调和器，负责diff算法，接驳patch行为。为渲染器提供基础计算能力，主要有16版本之前的Stack Reconciler和16及其之后的Fiber Reconciler）。React团队将Reconciler作为一个单独的包发布，任何平台的渲染器函数只要在HostConfig（宿主配置）内置基本方法，就可以构造自己的渲染逻辑。有了react-reconciler的支持。Taro团队就是提供了taro-react（实现了HostConfig）包来连接react-reconciler和taro-runtime。开发者写的React代码，Taro通过CLI将代码进行webpack打包，taro实现了一套完整的DOM和BOM API在各个平台的适配，打包完之后，就可以将程序渲染到对应的平台上。 核心就在于对输入的源代码的语法分析，语法树构建，随后对语法树进行转换操作再解析生成目标代码的过程。
-
-##### token可以放在cookie里吗？
-
-当被问这个问题的时候，第一时间要想到安全问题。通常回答不可以，因为存在CSRF（跨站请求伪造）风险，攻击者可以冒用Cookie中的信息来发送恶意请求。解决CSRF问题，可以设置同源检测（Origin和Referer认证），也可以设置Samesite为Strict。最好嘛，就是不把token放在cookie里咯。
-
-##### 前端埋点的实现，说说看思路
-
-对于埋点方案：一般分为手动埋点（侵入性强，和业务强关联，用于需要精确搜集并分析数据，不过该方式耗时耗力，且容易出现误差，后续要调整，成本较高）、可视化埋点（提供一个可视化的埋点控制台，只能在可视化平台已支持的页面进行埋点）、无埋点（就是全埋点，监控页面发生的一切行为，优点是前端只需要处理一次埋点脚本，不过数据量过大会产生大量的脏数据，需要后端进行数据清洗）。
-
-埋点通常传采用img方式来上传，首先所有浏览器都支持Image对象，并且记录的过程很少出错，同时不存在跨域问题，请求Image也不会阻塞页面的渲染。建议使用1\*1像素的GIF，其体积小。
-
-现在的浏览器如果支持Navigator.sendBeacon(url, data)方法，优先使用该方法来实现，它的主要作用就是用于统计数据发送到web服务器。当然如果不支持的话就继续使用图片的方式来上传数据。
-
-##### 说说封装组件的思路
-
-要考虑组件的灵活性、易用性、复用性。 常见的封装思路是，对于视图层面，如相似度高的视图，进行一个封装，提供部分参数方便使用者修改。对于业务复用度较高的，提取出业务组件。
-
-### 性能优化题
-
-##### 什么情况下会重绘和回流，常见的改善方案
-
-浏览器请求到对应页面资源的时候，会将HTML解析成DOM，把CSS解析成CSSDOM，然后将DOM和CSSDOM合并就产生了Render Tree。在有了渲染树之后，浏览器会根据流式布局模型来计算它们在页面上的大小和位置，最后将节点绘制在页面上。
-
-那么当Render Tree中部分或全部元素的尺寸、结构、或某些属性发生改变，浏览器就会重新渲染页面，这个就是浏览器的回流。常见的回流操作有：页面的首次渲染、浏览器窗口尺寸改变、部分元素尺寸或位置变化、添加或删除可见的DOM、激活伪类、查询某些属性或调用方法（各种宽高的获取，滚动方法的执行等）。
-
-当页面中的元素样式的改变不影响它在文档流的位置时（如color、background-color等），浏览器对应元素的样式，这个就是重绘。
-
-可见：**回流必将导致重绘，重绘不一定会引起回流。回流比重绘的代价更高**。
-
-常见改善方案：
-
-* 在进行频繁操作的时候，使用防抖和节流来控制调用频率。
-* 避免频繁操作DOM，可以利用DocumentFragment，来进行对应的DOM操作，将最后的结果添加到文档中。
-* 灵活使用display: none属性，操作结束后将其显示出来，因为display的属性为none的元素上进行的DOM操作不会引发回流和重绘。
-* 获取各种会引起重绘/回流的属性，尽量将其缓存起来，不要频繁的去获取。
-* 对复杂动画采用绝对定位，使其脱离文档流，否则它会频繁的引起父元素及其后续元素的回流。
-
-##### 一次请求大量数据怎么优化，数据多导致渲染慢怎么优化
-
-个人觉得这就是个伪命题，首先后端就不该一次把大量数据返回前端，但是会这么问，那么我们作为面试的就老老实实回答呗。
-
-首先大量数据的接收，那么肯定是用异步的方式进行接收，对数据进行一个分片处理，可以拆分成一个个的小单元数据，通过自定义的属性进行关联。这样数据分片完成。接下来渲染的话，由于是大量数据，如果是长列表的话，这里就可以使用虚拟列表（当前页面需要渲染的数据拿到进行渲染，然后对前面一段范围及后面一段范围，监听对应的滚动数据来切换需要渲染的数据，这样始终要渲染的就是三部分）。当然还有别的渲染情况，比如echarts图标大量点位数据优化等。
-
-### 手写题
-
-##### 模拟链表结构
-
-主要思路就是要时刻清楚对应Node的next和prev的指向，并利用while循环去做对应的增删改查操作。
-
-![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b913e7e8e375443ab82950ccb1bb83d7~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
-
-```js
-class Node {
-  constructor(data) {
-    this.data = data; // 节点数据
-    this.next = null; // 指向下一个节点
-    this.prev = null; // 指向前一个节点
-  }
+module.exports = {
+    module: {
+        rules: [
+            {
+                test: /\.(|ts|tsx|js|jsx)$/,
+                // 只解析 src 文件夹下的 ts、tsx、js、jsx 文件
+                // include 可以是数组，表示多个文件夹下的模块都要解析
+                include: path.resolve(__dirname, '../src'), 
+                use: [ 'thread-loader', 'babel-loader'],
+                
+                //当然也可以配置 exclude，表示 loader 解析时不会编译这部分文件
+                //同样 exclude 也可以是数组
+                exclude: /node_modules/,
+            }
+        ]
+    }
 }
+```
 
-class LinkedList {
-  constructor() {
-    this.head = null; // 链表头
-    this.tail = null; // 链表尾
-  }
+还需注意一个点就是要确保 loader 的`准确性`，**比如不要使用 less-loader 去解析 css 文件**
 
-  // 在链表尾部添加新节点
-  add(item) {
-    let node = new Node(item);
-    if (!this.head) {
-      this.head = node;
-      this.tail = node;
-    } else {
-      node.prev = this.tail;
-      this.tail.next = node;
-      this.tail = node;
-    }
-  }
+### 文件后缀
 
-  // 链表指定位置添加新节点
-  addAt(index, item) {
-    let current = this.head;
-    let counter = 1;
-    let node = new Node(item);
+`resolve.extensions` 是我们常用的一个配置，他可以在导入语句没有带文件后缀时，可以按照配置的列表，自动补上后缀。**我们应该根据我们项目中文件的实际使用情况设置后缀列表，将使用频率高的放在前面、同时后缀列表也要尽可能的少，减少没有必要的匹配**。同时，我们在源码中写导入语句的时候，尽量带上后缀，避免查找匹配浪费时间。
 
-    if (index === 0) {
-      this.head.prev = node;
-      node.next = this.head;
-      this.head = node;
-    } else {
-      while (current) {
-        current = current.next;
-        if (counter === index) {
-          node.prev = current.prev;
-          current.prev.next = node;
-          node.next = current;
-          current.prev = node;
-        }
-        counter++;
-      }
-    }
-  }
-
-  remove(item) {
-    let current = this.head;
-    while (current) {
-      if (current.data === item) {
-        if (current == this.head && current == this.tail) {
-          this.head = null;
-          this.tail = null;
-        } else if (current == this.head) {
-          this.head = this.head.next;
-          this.head.prev = null;
-        } else if (current == this.tail) {
-          this.tail = this.tail.prev;
-          this.tail.next = null;
-        } else {
-          current.prev.next = current.next;
-          current.next.prev = current.prev;
-        }
-      }
-      current = current.next;
-    }
-  }
-
-  removeAt(index) {
-    let current = this.head;
-    let counter = 1;
-
-    if (index === 0) {
-      this.head = this.head.next;
-      this.head.prev = null;
-    } else {
-      while (current) {
-        current = current.next;
-        if (current == this.tail) {
-          this.tail = this.tail.prev;
-          this.tail.next = null;
-        } else if (counter === index) {
-          current.prev.next = current.next;
-          current.next.prev = current.prev;
-          break;
-        }
-        counter++;
-      }
-    }
-  }
-
-  reverse() {
-    let current = this.head;
-    let prev = null;
-    while (current) {
-      let next = current.next;
-      current.next = prev;
-      current.prev = next;
-      prev = current;
-      current = next;
-    }
-
-    this.tail = this.head;
-    this.head = prev;
-  }
-
-  swap(index1, index2) {
-    if (index1 > index2) {
-      return this.swap(index2, index1);
-    }
-
-    let current = this.head;
-    let counter = 0;
-    let firstNode;
-
-    while (current !== null) {
-      if (counter === index1) {
-        firstNode = current;
-      } else if (counter === index2) {
-        let temp = current.data;
-        current.data = firstNode.data;
-        firstNode.data = temp;
-      }
-
-      current = current.next;
-      counter++;
-    }
-    return true;
-  }
-
-  traverse(fn) {
-    let current = this.head;
-    while (current !== null) {
-      fn(current);
-      current = current.next;
-    }
-    return true;
-  }
-
-  find(item) {
-    let current = this.head;
-    let counter = 0;
-    while (current) {
-      if (current.data == item) {
-        return counter;
-      }
-      current = current.next;
-      counter++;
-    }
-    return false;
-  }
-
-  isEmpty() {
-    return this.length() < 1;
-  }
-
-  length() {
-    let current = this.head;
-    let counter = 0;
-    while (current !== null) {
-      counter++;
-      current = current.next;
-    }
-    return counter;
+```js
+module.export = {
+  resolve: {
+    // 按照 tsx、ts、jsx、js 的顺序匹配，若没匹配到则报错
+    extensions: ['.tsx', '.ts', '.jsx', '.js'],
   }
 }
 ```
 
-##### 手写一个深拷贝
+### 别名
 
-```ts
-// 手写一个深拷贝
+通过配置 `resolve.alias` 别名的方式，减少引用文件的路径复杂度
 
-function deepClone<T extends Array<T> | any>(obj: T): T {
-  if (typeof obj !== "object" || obj === null) return obj;
-
-  const result: T = obj instanceof Array ? ([] as T) : ({} as T);
-
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      result[key] = deepClone(obj[key]);
+```js
+module.exports = {
+    resolve: {
+        alias: {
+            //把 src 文件夹别名为 @
+            //引入 src 下的文件就可以 import xxx from '@/xxx'
+            '@': path.join(__dirname, '../src')
+        }
     }
-  }
-
-  return result;
 }
 
-const obj = {
-  a: 1,
-  b: {
-    bb: "hh",
+// 引入 src 下的某个模块时
+import XXX from '@/xxx/xxx.tsx'
+```
+
+### 缓存
+
+在优化的方案中，缓存也是其中重要的一环。在构建过程中，开启缓存提升二次打包速度。
+
+在项目中，js 文件是占大头的，当项目越来越大时，如果每次都需要去编译 JS 代码，那么构建的速度肯定会很慢的，所以我们可以配置 `babel-loader` 的缓存配置项 `cacheDirectory` 来缓存没有变过的 js 代码
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /.jsx?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true,
+            },
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+当我们编译后，会在 `/node_modules/.cache/babel-loader` 产生对应的缓存文件夹，在下一次编译时，将会尝试读取缓存来避免在每次执行时，可能产生的、高性能消耗的编译过程
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/90d0b5fb7698425f94e60622d760d4f9~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+对比一下第一次和第二次编译的速度：
+
+![e00641ae-2a45-4108-874c-0109b0f0615f.jpeg](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b4326689756c4b9f8ad3d1cc77fa13d0~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+![39394cae-c8e2-42f4-9ad5-5fcb3c230c84.jpeg](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8574d5e9ff2f4467af6ad6fc9b231c13~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+确实会提高编译的速度
+
+上面的缓存优化只是针对像 `babel-loader` 这样可以配置缓存的 loader，那没有缓存配置的 loader 该怎么使用缓存呢，此时需要 `cache-loader`
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /.jsx?$/,
+        use: [
+          'cache-loader', 
+          "babel-loader"
+        ],
+      }
+    ]
+  }
+}
+```
+
+编译后同样多一个 `/node_modules/.cache/cache-loader` 缓存目录
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4d53eacb918041c3ab6a3272c4e79a16~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+当然还有一种方式，`webpack5`直接提供了 `cache` 配置项，开启后即可缓存
+
+```js
+module.exports = {
+  cache: {
+    type: 'filesystem'
+  }
+}
+```
+
+编译后会多出 `/node_modules/.cache/webpack` 缓存目录
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d26500284e4b424e9fa3038672c39487~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+### 并行构建
+
+首先，运行在`Node`里的`webpack`是单线程的，所以一次性只能干一件事，那如果利用电脑的多核优势，也能提高构建速度 ？[thread-loader](https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fwebpack-contrib%2Fthread-loader "https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fwebpack-contrib%2Fthread-loader")可以开启多进程打包
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /.jsx?$/,
+        use: [
+          // 开启多进程打包。 
+          {
+            loader: 'thread-loader', 
+            options: {
+              workers: 3 // 开启 3个 进程
+            }
+          },
+          {
+            loader: 'babel-loader',
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+放置在这个 `thread-loader` 之后的 loader 就会在一个单独的 worker 池(worker pool) 中运行。
+
+每个 worker 都是一个单独的有 600ms 限制的 `node.js` 进程。同时跨进程的数据交换也会被限制。所以建议仅在耗时的 loader 上使用。若项目文件不算多就不要使用，毕竟开启多个线程也会存在性能开销。
+
+### 定向查找第三方模块
+
+`resolve.modules` 配置用于指定 `webpack` 去哪些目录下寻找第三方模块。默认值是 `['node_modules']`。而在引入模块的时候，会以 `node 核心模块 -----> node_modules ------> node全局模块` 的顺序查找模块。
+
+我们通过配置 resolve.modules 指定 webpack 搜索第三方模块的范围，提高构建速率
+
+```js
+module.export = {
+  resolve: {
+    modules: [path.resolve(__dirname, 'node_modules')]
+  }
+}
+```
+
+# 构建结果优化
+
+### 压缩代码
+
+首先浏览器在运行结果前要通过网络请求将代码下载下来然后解析最后呈现渲染页面上，因此减少文件体积，可以优化页面的加载时长
+
+### 压缩 js
+
+webpack5的话通过 `terser-webpack-plugin` 来压缩 JS，但在配置了 `mode: production` 时，会默认开启
+
+```js
+const TerserPlugin = require('terser-webpack-plugin');
+
+module.exports = {
+  optimization: {
+    // 开启压缩
+    minimize: true,
+    // 压缩工具
+    minimizer: [
+      new TerserPlugin({}),
+    ],
   },
-  c() {
-    console.log("cc");
+}
+```
+
+需要注意一个地方：生产环境会默认配置`terser-webpack-plugin`，所以如果你还有其它压缩插件使用的话需要将`TerserPlugin`显示配置或者使用`...`，否则`terser-webpack-plugin`会被覆盖。
+
+```js
+const TerserPlugin = require("terser-webpack-plugin"); 
+
+optimization: {
+  minimize: true,
+  minimizer: [
+    new TerserPlugin({}), // 显示配置
+    // "...", // 或者使用展开符，启用默认插件
+    // 其它压缩插件
+    new CssMinimizerPlugin(),
+  ],
+},
+```
+
+### 压缩 css
+
+压缩 css 我们使用 `css-minimizer-webpack-plugin`
+
+同时，应该把 css 提取成单独的文件，使用 `mini-css-extract-plugin`
+
+```js
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+           // 提取成单独的文件
+           MiniCssExtractPlugin.loader,
+           "css-loader"
+        ],
+        exclude: /node_modules/, 
+      },
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      // 定义输出文件名和目录
+      filename: "asset/css/main.css",
+    })
+  ],
+  optimization: {
+    minimize: true,
+    minimizer: [
+      // 压缩 css
+      new CssMinimizerPlugin({}),
+    ],
+  },
+}
+```
+
+### 压缩 html
+
+压缩 `html` 使用的还是 `html-webpack-plugin` 插件。该插件支持配置一个 [minify](https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fkangax%2Fhtml-minifier%23options-quick-reference "https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fkangax%2Fhtml-minifier%23options-quick-reference") 对象，用来配置压缩 `html`。
+
+```js
+module.export = {
+  plugins: [
+    new HtmlWebpackPlugin({
+      // 动态生成 html 文件
+      template: "./index.html",
+      minify: {
+        // 压缩HTML
+        removeComments: true, // 移除HTML中的注释
+        collapseWhitespace: true, // 删除空⽩符与换⾏符
+        minifyCSS: true // 压缩内联css
+      },
+    })
+  ]
+}
+```
+
+### 压缩图片
+
+可以通过 `image-webpack-loader` 来实现
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg|gif|jpeg|webp|svg)$/,
+        use: [
+          "file-loader",
+          {
+            loader: "image-webpack-loader",
+            options: {
+              mozjpeg: {
+                progressive: true,
+              },
+              optipng: {
+                enabled: false,
+              },
+              pngquant: {
+                quality: [0.65, 0.9],
+                speed: 4,
+              },
+              gifsicle: {
+                interlaced: false,
+              },
+            },
+          },
+        ],
+        exclude: /node_modules/, //排除 node_modules 目录
+      },
+    ]
+  },
+}
+```
+
+### 按需加载
+
+很多时候我们不需要一次性加载所有的`JS`文件，而应该在不同阶段去加载所需要的代码。
+
+**将路由页面/触发性功能单独打包为一个文件，使用时才加载**，好处是`减轻首屏渲染的负担`。因为项目功能越多其打包体积越大，导致首屏渲染速度越慢。
+
+实际项目中大部分是对懒加载路由，而懒加载路由可以打包到一个 chunk 里面。比如某个列表页和编辑页它们之间存在相互跳转，如果对它们拆分成两个 `import()` js 资源加载模块，在跳转过程中视图会出现白屏切换过程。
+
+因为在跳转期间，浏览器会动态创建 script 标签来加载这个 `chunk` 文件，在这期间，页面是没有任何内容的。
+
+所以一般会把路由懒加载打包到一个 chunk 里面
+
+```js
+const List = lazyComponent('list', () => import(/* webpackChunkName: "list" */ '@/pages/list'));
+const Edit = lazyComponent('edit', () => import(/* webpackChunkName: "list" */ '@/pages/edit'));
+```
+
+但需要注意一点：**动态导入 import() 一个模块，这个模块就不能再出现被其他模块使用 `同步 import` 方式导入。**
+
+比如，一个路由模块在注册 `<Route />` 时采用动态 import() 导入，但在这个模块对外暴露了一些变量方法供其他子模块使用，在这些子模块中使用了同步 ESModule import 方式引入，这就造成了 `动态 import()` 的失效。
+
+### prload、prefetch
+
+对于某些较大的模块，如果点击时再加载，那可能响应的时间反而延长。我们可以使用 `prefetch`、`preload` 去加载这些模块
+
+`prefetch`：将来可能需要一些模块资源（一般是其他页面的代码），在核心代码加载完成之后`带宽空闲`的时候再去加载需要用到的模块代码。
+
+`preload`：当前核心代码加载期间可能需要模块资源（**当前页面需要的但暂时还没使用到的**），其是和核心代码文件一起去加载的。
+
+只需要通过`魔法注释`即可实现，以 `prefetch` 为例：
+
+```js
+document.getElementById('btn1').onclick = function() {
+  import(
+  /* webpackChunkName: "btnChunk" */
+  /* webpackPrefetch: true*/
+  './module1.js'
+  ).then(fn => fn.default());
+}
+```
+
+这行代码表示在浏览器空闲时加载 module1.js 模块，并且单独拆一个 chunk，叫做 btnChunk
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c2e2b2771db547138ed818cd33d23139~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+可以看到，在`head`里面，我们的懒加载模块被直接引入了，并且加上了`rel='prefetch'`。
+
+这样，页面首次加载的时候，浏览器空闲的会后会提前加载`module1.js`。当我们点击按钮的时候，会直接从缓存中读取该文件，因此速度非常快。
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/95cd9e7ee4b345ec8ef5eca12947f650~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+### 代码分割
+
+在项目中，一般是使用同一套技术栈和公共资源。**如果每个页面的代码中都有这些公开资源，就会导致资源的浪费**。在每一个页面下都会加载重复的公共资源，一是会浪费用户的流量，二是不利于项目的性能，造成页面加载缓慢，影响用户体验。
+
+一般是把不变的**第三方库**、**一些公共模块**（比如 util.js）这些单独拆成一个 chunk，在访问页面的时候，就可以一直使用浏览器缓存中的资源
+
+webpack 里面通过 `splitChunks` 来分割代码
+
+```js
+module.exports = {
+  //...
+  optimization: {
+    splitChunks: {
+      chunks: 'async', // 值有 `all`，`async` 和 `initial`
+      minSize: 20000, // 生成 chunk 的最小体积（以 bytes 为单位）。
+      minRemainingSize: 0,
+      minChunks: 1, // 拆分前必须共享模块的最小 chunks 数。
+      maxAsyncRequests: 30, // 按需加载时的最大并行请求数。
+      maxInitialRequests: 30, // 入口点的最大并行请求数。
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\/]node_modules[\/]/,  //第三方模块拆出来
+          priority: -10,
+          reuseExistingChunk: true,
+        },
+        util.vendors: {
+          test: /[\/]utils[\/]/, //公共模块拆出来
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    },
   },
 };
-
-const cloneObj = deepClone(obj);
-obj.a = 999;
-console.log("cloneObj :>> ", cloneObj);
-console.log("obj :>> ", obj);
-// cloneObj :>>  { a: 1, b: { bb: 'hh' }, c: [Function: c] }
-// obj :>>  { a: 999, b: { bb: 'hh' }, c: [Function: c] }
-
-const arr: Array<number | string> = [1, 2, 3, "6"];
-const copyArr = deepClone(arr);
-arr[3] = 4;
-console.log("arr | copyArr :>> ", arr, copyArr); // arr | copyArr :>>  [ 1, 2, 3, 4 ] [ 1, 2, 3, '6' ]
-
 ```
 
-##### 手写Promise
+### tree shaking
+
+tree shaking 的原理细节可以看这篇文章[：# webpack tree-shaking解析](https://juejin.cn/post/7246219936594821180 "https://juejin.cn/post/7246219936594821180")
+
+`tree shaking`在**生产模式下已经默认开启了**
+
+只是需要注意下面几点：
+
+1. 只对`ESM`生效
+2. 只能是静态声明和引用的 `ES6` 模块，不能是动态引入和声明的。
+3. 只能处理模块级别，不能处理函数级别的冗余。
+4. 只能处理 `JS` 相关冗余代码，不能处理 `CSS` 冗余代码。
+
+而可能样式文件里面有些代码我们也没有使用，我们可以通过`purgecss-webpack-plugin` 插件来对 css 进行 tree shaking
 
 ```js
-const PROMISE_STATUS_PENDING = "pending";
-const PROMISE_STATUS_FULFILLED = "fulfilled";
-const PROMISE_STATUS_REJECTED = "rejected";
+const path = require("path");
+const PurgecssPlugin = require("purgecss-webpack-plugin");
+const glob = require("glob"); // 文件匹配模式
 
-// help fun
-function execFunctionWithCatchError(execFun, value, resolve, reject) {
-  try {
-    const result = execFun(value);
-    resolve(result);
-  } catch (error) {
-    reject(error);
-  }
-}
+module.exports = {
+  //...
+  plugins: [
+    ...
+    new PurgeCSSPlugin({
+      paths: glob.sync(`${PATH.src}/**/*`, { nodir: true }),
+    })
 
-class MyPromise {
-  constructor(executor) {
-    this.status = PROMISE_STATUS_PENDING; // 记录promise状态
-    this.value = undefined; // resolve返回值
-    this.reason = undefined; // reject返回值
-    this.onFulfilledFns = []; // 存放成功回调
-    this.onRejectedFns = []; // 存放失败回调
-
-    const resolve = value => {
-      if (this.status === PROMISE_STATUS_PENDING) {
-        queueMicrotask(() => {
-          if (this.status !== PROMISE_STATUS_PENDING) return;
-          this.status = PROMISE_STATUS_FULFILLED;
-          this.value = value;
-          this.onFulfilledFns.forEach(fn => {
-            fn(this.value);
-          });
-        });
-      }
-    };
-    const reject = reason => {
-      if (this.status === PROMISE_STATUS_PENDING) {
-        queueMicrotask(() => {
-          if (this.status !== PROMISE_STATUS_PENDING) return;
-          this.status = PROMISE_STATUS_REJECTED;
-          this.reason = reason;
-          this.onRejectedFns.forEach(fn => {
-            fn(this.reason);
-          });
-        });
-      }
-    };
-
-    try {
-      executor(resolve, reject);
-    } catch (error) {
-      reject(error);
-    }
-  }
-
-  then(onFulfilled, onRejected) {
-    onFulfilled =
-      onFulfilled ||
-      (value => {
-        return value;
-      });
-
-    onRejected =
-      onRejected ||
-      (err => {
-        throw err;
-      });
-
-    return new MyPromise((resolve, reject) => {
-      // 1、 when operate then, status have confirmed
-      if (this.status === PROMISE_STATUS_FULFILLED && onFulfilled) {
-        execFunctionWithCatchError(onFulfilled, this.value, resolve, reject);
-      }
-      if (this.status === PROMISE_STATUS_REJECTED && onRejected) {
-        execFunctionWithCatchError(onRejected, this.reason, resolve, reject);
-      }
-
-      if (this.status === PROMISE_STATUS_PENDING) {
-        // this.onFulfilledFns.push(onFulfilled);
-        if (onFulfilled) {
-          this.onFulfilledFns.push(() => {
-            execFunctionWithCatchError(onFulfilled, this.value, resolve, reject);
-          });
-        }
-
-        // this.onRejectedFns.push(onRejected);
-        if (onRejected) {
-          this.onRejectedFns.push(() => {
-            execFunctionWithCatchError(onRejected, this.reason, resolve, reject);
-          });
-        }
-      }
-    });
-  }
-
-  catch(onRejected) {
-    return this.then(undefined, onRejected);
-  }
-
-  finally(onFinally) {
-    this.then(
-      () => {
-        onFinally();
-      },
-      () => {
-        onFinally();
-      }
-    );
-  }
-
-  static resolve(value) {
-    return new MyPromise(resolve => resolve(value));
-  }
-
-  static reject(reason) {
-    return new MyPromise((resolve, reject) => reject(reason));
-  }
-
-  static all(promises) {
-    return new MyPromise((resolve, reject) => {
-      const values = [];
-      promises.forEach(promise => {
-        promise.then(
-          res => {
-            values.push(res);
-            if (values.length === promises.length) {
-              resolve(values);
-            }
-          },
-          err => {
-            reject(err);
-          }
-        );
-      });
-    });
-  }
-
-  static allSettled(promises) {
-    return new MyPromise(resolve => {
-      const results = [];
-      promises.forEach(promise => {
-        promise.then(
-          res => {
-            results.push({ status: PROMISE_STATUS_FULFILLED, value: res });
-            if (results.length === promises.length) {
-              resolve(results);
-            }
-          },
-          err => {
-            results.push({ status: PROMISE_STATUS_REJECTED, value: err });
-            if (results.length === promises.length) {
-              resolve(results);
-            }
-          }
-        );
-      });
-    });
-  }
-
-  static race(promises) {
-    return new MyPromise((resolve, reject) => {
-      promises.forEach(promise => {
-        promise.then(
-          res => {
-            resolve(res);
-          },
-          err => {
-            reject(err);
-          }
-        );
-      });
-    });
-  }
-
-  static any(promises) {
-    return new MyPromise((resolve, reject) => {
-      const reasons = [];
-      promises.forEach(promise => {
-        promise.then(
-          res => {
-            resolve(res);
-          },
-          err => {
-            reasons.push(err);
-            if (reasons.length === promise.length) {
-              // reject(new AggreagateError(reasons));
-              reject(reasons);
-            }
-          }
-        );
-      });
-    });
-  }
-}
-
-const p1 = new MyPromise((resolve, reject) => {
-  setTimeout(() => {
-    console.log("--- 1 ---");
-    resolve(111);
-  });
-}).then(res => {
-  console.log("p1 res :>> ", res);
-});
-
-const p2 = new MyPromise((resolve, reject) => {
-  console.log("--- 2 ---");
-  resolve(222);
-});
-
-const p3 = new MyPromise((resolve, reject) => {
-  console.log("--- 3 ---");
-  resolve(333);
-});
-
-const p4 = new MyPromise((resolve, reject) => {
-  console.log("--- 4 ---");
-  reject(444);
-});
-
-MyPromise.all([p2, p3]).then(res => {
-  console.log("p2&p3 res :>> ", res);
-});
-
-MyPromise.all([p2, p4])
-  .then(res => {
-    console.log("p2&p4 res :>> ", res);
-  })
-  .catch(err => {
-    console.log("err :>> ", err);
-  });
-
-// --- 2 ---
-// --- 3 ---
-// --- 4 ---
-// p2&p3 res :>>  [ 222, 333 ]
-// err :>>  444
-// --- 1 ---
-// p1 res :>>  111
+    // Add your plugins here
+    // Learn more about plugins from https://webpack.js.org/configuration/plugins/
+  ],
+};
 ```
 
-##### 手写防抖和节流函数
+### gzip
 
-```ts
-function debounce(fn: Function, delay: number) {
-  let timer: any = null;
+前端除了在打包的时候将无用的代码或者 `console`、注释剔除之外。我们还可以使用 `Gzip` 对资源进行进一步压缩。那么浏览器和服务端是如何通信来支持 `Gzip` 呢？
 
-  return function () {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(() => {
-      fn.apply(this, arguments);
-      timer = null;
-    }, delay);
-  };
-}
+1. 当用户访问 web 站点的时候，会在 `request header` 中设置 `accept-encoding:gzip`，表明浏览器是否支持 `Gzip`。
+2. 服务器在收到请求后，判断如果需要返回 `Gzip` 压缩后的文件那么服务器就会先将我们的 `JS\CSS` 等其他资源文件进行 `Gzip` 压缩后再传输到客户端，同时将 `response headers` 设置 `content-encoding:gzip`。反之，则返回源文件。
+3. 浏览器在接收到服务器返回的文件后，判断服务端返回的内容是否为压缩过的内容，是的话则进行解压操作。
 
+一般情况下我们并不会让服务器实时 `Gzip` 压缩，而是利用`webpack`提前将静态资源进行`Gzip` 压缩，然后将`Gzip` 资源放到服务器，当请求需要的时候直接将`Gzip` 资源发送给客户端。
 
-function throttle(fn: Function, delay: number) {
-  let timer: any = null;
+我们只需要安装 `compression-webpack-plugin` 并在`plugins`配置就可以了
 
-  return function () {
-    if (timer) return;
-    timer = setTimeout(() => {
-      fn.apply(this, arguments);
-      timer = null;
-    }, delay);
-  };
-}
+```js
+const CompressionWebpackPlugin = require("compression-webpack-plugin"); // 需要安装
 
-```
-
-##### 手写快速排序
-
-```ts
-function quickSort(arr: number[], startIndex = 0): number[] {
-  if (arr.length <= 1) return arr;
-  const right: number[] = [],
-    left: number[] = [],
-    startNum = arr.splice(startIndex, 1)[0];
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] < startNum) {
-      left.push(arr[i]);
-    } else {
-      right.push(arr[i]);
-    }
-  }
-  return [...quickSort(left), startNum, ...quickSort(right)];
+module.exports = {
+  plugins: [
+    new CompressionWebpackPlugin()
+  ]
 }
 ```
 
-##### 输入为两个一维数组，将这两个数组合并，去重，不要求排序，返回一维数组
+### 作用域提升
 
-```ts
-function dealArr(arr1: any[], arr2: any[]): any[] {
-  return Array.from(new Set([...arr1.flat(), ...arr2.flat()]));
-}
+`Scope Hoisting` 可以让 `webpack` 打包出来的代码文件体积更小，运行更快。
 
-const arr1 = ["a", 1, 2, 3, ["b", "c", 5, 6]];
-const arr2 = [1, 2, 4, "d", ["e", "f", "5", 6, 7]];
+在开启 `Scope Hoisting`后，**构建后的代码会按照引入顺序放到一个函数作用域里，通过适当重命名某些变量以防止变量名冲突**，从而减少函数声明和内存花销。
 
-console.log("dealArr(arr1, arr2 ); :>> ", dealArr(arr1, arr2)); // dealArr(arr1, arr2 ); :>>  [ 'a', 1, 2, 3,'b', 'c', 5,6, 4, 'd', 'e', 'f','5', 7]
-```
+需要注意：`Scope Hoisting` 需要分析模块之间的依赖关系，所以源码必须采用 ES6 模块化语法
 
-##### 编写函数convert(money) ，传入金额，将金额转换为千分位表示法。ex:-87654.3 => -87,654.3
+`Scope Hoisting` 是 webpack 内置功能，只需要在`plugins`里面使用即可，或者直接开启生产环境也可以让作用域提升生效。
 
-思路：判断是否是负数，判断是否有小数点，将整数部分进行处理。
+```js
+module.exports = {
+  //方式1
+  mode: 'production',
 
-```ts
-function convert(money: number): string {
-  let result: string[] = []; // 用于存放整数部分
-  let negativeFlag: string = ""; // 是否要负号
-  let tail: string = ""; // 用于存放小数点后面部分
-  let arr: string[] = [...String(money)];
-
-  // 判断是否是负数
-  if (arr[0] === "-") {
-    negativeFlag = "-";
-    arr.shift();
-  }
-
-  // 判断是否存在小数点
-  const dotIndex: number = arr.indexOf(".");
-  if (dotIndex !== -1) {
-    tail = arr.splice(dotIndex, arr.length - dotIndex).join("");
-  }
-
-  // 处理整数部分加上千分位
-  const reverseArray: string[] = arr.reverse();
-  for (let i = 0; i < reverseArray.length; i++) {
-    if ((i + 1) % 3 === 0 && i + 1 < reverseArray.length) {
-      result[i] = "," + reverseArray[i];
-    } else {
-      result[i] = reverseArray[i];
-    }
-  }
-  return negativeFlag + result.reverse().join("") + tail;
+  //方式2
+  plugins: [
+    // 开启 Scope Hoisting 功能
+    new webpack.optimize.ModuleConcatenationPlugin()
+  ]
 }
 ```
 
-### 总结
+# 最后
 
-一个渣渣前端在面试过程中遇到的题目😝。
+maybe 还会改或者新增内容

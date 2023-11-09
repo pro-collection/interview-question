@@ -1,28 +1,3 @@
-### 工具链相关题目
-
-##### webpack常见的优化方案
-
-* 基于esm的tree shaking
-* 对balel设置缓存，缩小babel-loader的处理范围,及精准指定要处理的目录。
-* 压缩资源（mini-css-extract-plugin，compression-webpack-plugin）
-* 配置资源的按需引入（第三方组件库）
-* 配置splitChunks来进行按需加载（根据）
-* 设置CDN优化
-
-```js
-rules: [
-    {
-        test: /\.m?js$/,
-        exclude: /node_modules/
-        include: path.resolve(__dirname, 'src'）,
-        use: {
-            loader: 'babel-loader?cacheDirectory'
-        }
-    }，
-    
-]
-```
-
 ##### 关于babel的理解
 
 babel是一个工具链，主要用于将ES2015+代码转换为当前和旧浏览器或环境中向后兼容的Js版本。这句话比较官方，其实babel就是一个语法转换工具链，它会将我们书写的代码（vue或react）通过相关的解析（对应的Preset），主要是词法解析和语法解析，通过babel-parser转换成对应的AST树，再对得到的抽象语法树根据相关的规则配置，转换成最终需要的目标平台识别的AST树，再得到目标代码。

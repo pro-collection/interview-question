@@ -9,9 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 有哪些优化项目的手段？",
+  title: "对 babel 的理解？",
   key_world: [
-    "打包优化",
+    "babel 作用",
+    "为何要使用 babel",
   ],
   labels: [
     labels.engineering,

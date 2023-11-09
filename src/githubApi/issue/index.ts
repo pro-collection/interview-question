@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "浏览器的存储有哪些",
+  title: "IndexedDB 存储空间大小是如何约束的？",
   key_world: [
-    "浏览器存储",
+    "IndexedDB 存储空间大小设置",
   ],
   labels: [
     labels.chrome,

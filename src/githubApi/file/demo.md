@@ -1,89 +1,53 @@
 **关键词**：路由守卫
 
-路由守卫是 Vue Router 提供的一种机制，用于在路由导航过程中对路由进行拦截和控制。通过使用路由守卫，我们可以在路由导航前、导航后、导航中断等不同的阶段执行相应的逻辑。
+在 React 中，虽然没有内置的路由守卫（Route Guards）功能，但可以使用第三方库来实现类似的功能。最常用的第三方路由库是 React Router。
 
-Vue Router 提供了三种类型的路由守卫：
+React Router 提供了一些组件和钩子函数，可以用于在路由导航过程中进行拦截和控制。
 
-1. 全局前置守卫（Global Before Guards）：在路由切换之前被调用，可以用于进行全局的权限校验或者路由跳转拦截等操作。
+1. `<Route>` 组件：可以在路由配置中定义特定路由的守卫逻辑。例如，可以设置 `render` 属性或者 `component` 属性来渲染组件，并在渲染前进行守卫逻辑的判断。
 
-2. 路由独享守卫（Per-Route Guards）：在特定的路由配置中定义的守卫。这些守卫只会在当前路由匹配成功时被调用。
+2. `useHistory` 钩子：可以获取当前路由的历史记录，并通过 `history` 对象进行路由导航的控制。可以使用 `history` 对象的 `push`、`replace` 方法来切换路由，并在切换前进行守卫逻辑的判断。
 
-3. 组件内的守卫（In-Component Guards）：在组件实例内部定义的守卫。这些守卫可以在组件内部对路由的变化进行相应的处理。
+3. `useLocation` 钩子：可以获取当前的路由位置信息，包括路径、查询参数等。可以根据这些信息进行守卫逻辑的判断。
 
-* 全局前置守卫
+下面是一个使用 React Router 实现路由守卫的示例：
 
-```js
-router.beforeEach((to, from, next) => {
-    // to: 即将进入的目标
-    // from:当前导航正要离开的路由
-    return false // 返回false用于取消导航
-    return {name: 'Login'} // 返回到对应name的页面
-    next({name: 'Login'}) // 进入到对应的页面
-    next() // 放行
-})
-```
+```javascript
+import { BrowserRouter as Router, Route, useHistory } from "react-router-dom";
 
-* 全局解析守卫:类似beforeEach
+function App() {
+  const history = useHistory();
 
-```js
-router.beforeResolve(to => {
-    if(to.meta.canCopy) {
-        return false // 也可取消导航
-    }
-})
-```
+  const isAuthenticated = () => {
+    // 判断用户是否已登录
+    return true;
+  };
 
-* 全局后置钩子
+  const requireAuth = (Component) => {
+    return () => {
+      if (isAuthenticated()) {
+        return <Component />;
+      } else {
+        history.push("/login");
+        return null;
+      }
+    };
+  };
 
-```js
-router.afterEach((to, from) => {
-    logInfo(to.fullPath)
-})
-```
-
-* 导航错误钩子，导航发生错误调用
-
-```js
-router.onError(error => {
-    logError(error)
-})
-```
-
-* 路由独享守卫,beforeEnter可以传入单个函数，也可传入多个函数。
-
-```js
-function dealParams(to) {
-    // ...
-}
-function dealPermission(to) {
-    // ...
-}
-
-const routes = [
-    {
-        path: '/home',
-        component: Home,
-        beforeEnter: (to, from) => {
-            return false // 取消导航
-        },
-        // beforeEnter: [dealParams, dealPermission]
-    }
-]
-```
-
-组件内的守卫
-
-```js
-const Home = {
-    template: `...`,
-    beforeRouteEnter(to, from) {
-        // 此时组件实例还未被创建，不能获取this
-    },
-    beforeRouteUpdate(to, from) {
-        // 当前路由改变，但是组件被复用的时候调用，此时组件已挂载好
-    },
-    beforeRouteLeave(to, from) {
-        // 导航离开渲染组件的对应路由时调用
-    }
+  return (
+    <Router>
+      <Route path="/home" render={requireAuth(Home)} />
+      <Route path="/login" component={Login} />
+      <Route path="/dashboard" render={requireAuth(Dashboard)} />
+    </Router>
+  );
 }
 ```
+
+在上述示例中，`requireAuth` 是一个自定义的函数，用于判断是否需要进行权限校验。在 `render` 属性中，我们调用 `requireAuth` 函数包裹组件，根据用户是否已登录来判断是否渲染该组件。如果用户未登录，则使用 `history.push` 方法进行路由跳转到登录页面。
+
+通过使用 React Router 提供的组件和钩子函数，我们可以实现类似于路由守卫的功能，进行路由的拦截和控制。
+
+**参考文档**
+- https://juejin.cn/post/7177374176141901861
+- https://juejin.cn/post/7253001747542720567

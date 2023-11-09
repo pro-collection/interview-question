@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 路由守卫",
+  title: "[React] 如何实现路由守卫",
   key_world: [
     "路由守卫",
   ],

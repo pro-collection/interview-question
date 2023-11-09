@@ -1,64 +1,45 @@
-**关键词**：ref、toRef、toRefs 区别
+**关键词**：computed 和 watch 区别
 
-在 Vue 3 中，`ref`、`toRef` 和 `toRefs` 是 Vue Composition API 提供的函数，用于处理响应式数据。
+在 Vue 中，`computed` 和 `watch` 是两种用于监听和响应数据变化的方式。
 
-1. `ref(value: T): Ref<T>`：创建一个响应式数据引用。接收一个初始值作为参数，并返回一个包含该值的响应式引用。`Ref` 是一个包装对象，它的 `.value` 属性用于访问和修改引用的值。
+`computed` 是计算属性，它是基于响应式数据进行计算得到的一个新的派生属性。计算属性可以接收其他响应式数据作为依赖，并且只有当依赖数据发生变化时，计算属性才会重新计算。计算属性的值会被缓存，只有在依赖数据变化时才会重新计算，这样可以提高性能。计算属性的定义方式是使用 `computed` 函数或者在 Vue 组件中使用 `get` 和 `set` 方法。
 
-使用 `ref` 创建响应式数据引用：
+下面是一个使用计算属性的示例：
+
 ```javascript
-import { ref } from 'vue';
-
-const count = ref(0); // 创建一个初始值为 0 的响应式引用
-
-console.log(count.value); // 输出: 0
-
-count.value++; // 修改引用的值
-console.log(count.value); // 输出: 1
-```
-
-2. `toRef(object: object, key: string | symbol): ToRef`：创建一个指向另一个响应式对象的响应式引用。接收一个响应式对象和其属性名作为参数，并返回一个指向该属性的响应式引用。`ToRef` 是一个只读的响应式引用。
-
-使用 `toRef` 创建指向另一个响应式对象的引用：
-```javascript
-import { ref, reactive, toRef } from 'vue';
+import { reactive, computed } from 'vue';
 
 const state = reactive({
-  name: 'John',
-  age: 30
+  firstName: 'John',
+  lastName: 'Doe'
 });
 
-const nameRef = toRef(state, 'name'); // 创建指向 state.name 的引用
+const fullName = computed(() => {
+  return `${state.firstName} ${state.lastName}`;
+});
 
-console.log(nameRef.value); // 输出: "John"
+console.log(fullName.value); // 输出: "John Doe"
 
-state.name = 'Mike'; // 修改原始对象的属性值
-console.log(nameRef.value); // 输出: "Mike"
-
-nameRef.value = 'Amy'; // 修改引用的值
-console.log(state.name); // 输出: "Amy"
+state.firstName = 'Mike'; // 修改firstName
+console.log(fullName.value); // 输出: "Mike Doe"
 ```
 
-3. `toRefs(object: T): ToRefs<T>`：将一个响应式对象的所有属性转换为响应式引用。接收一个响应式对象作为参数，并返回一个包含所有属性的响应式引用对象。`ToRefs` 是一个对象，每个属性都是一个只读的响应式引用。
+`watch` 是用于监听特定响应式数据的变化，并在数据变化时执行相应的操作。`watch` 可以监听单个数据的变化，也可以监听多个数据的变化。当被监听的数据发生变化时，`watch` 的回调函数会被执行。`watch` 还支持深度监听对象的变化以及异步操作。
 
-使用 `toRefs` 将对象的所有属性转换为响应式引用：
+下面是一个使用 `watch` 的示例：
+
 ```javascript
-import { reactive, toRefs } from 'vue';
+import { reactive, watch } from 'vue';
 
 const state = reactive({
-  name: 'John',
-  age: 30
+  count: 0
 });
 
-const refs = toRefs(state); // 将 state 中的所有属性转换为响应式引用
+watch(() => state.count, (newVal, oldVal) => {
+  console.log(`count 从 ${oldVal} 变为 ${newVal}`);
+});
 
-console.log(refs.name.value); // 输出: "John"
-console.log(refs.age.value); // 输出: 30
-
-state.name = 'Mike'; // 修改原始对象的属性值
-console.log(refs.name.value); // 输出: "Mike"
-
-refs.age.value = 25; // 修改引用的值
-console.log(state.age); // 输出: 25
+state.count++; // 输出: "count 从 0 变为 1"
 ```
 
-这些函数是 Vue 3 Composition API 中用于创建和处理响应式数据的重要工具。通过它们，我们可以更灵活地管理和使用响应式数据。
+以上是 `computed` 和 `watch` 的基本用法。通过使用这两种方式，我们可以根据需要监听和响应数据的变化，实现更加灵活的逻辑和交互。

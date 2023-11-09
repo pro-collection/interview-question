@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] ref、toRef 和 toRefs 有啥区别？",
+  title: "[Vue] computed 和 watch 有啥区别?",
   key_world: [
-    "ref、toRef、toRefs 区别",
+    "computed 和 watch 区别",
   ],
   labels: [
     labels.frameWork,

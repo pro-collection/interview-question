@@ -1,380 +1,52 @@
-<style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#252933}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;line-height:38px;margin-bottom:5px}.markdown-body h2{font-size:22px;line-height:34px;padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:20px;line-height:28px}.markdown-body h4{font-size:18px;line-height:26px}.markdown-body h5{font-size:17px;line-height:24px}.markdown-body h6{font-size:16px;line-height:24px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="juejin">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><h1 data-id="heading-0">前言</h1>
-<p>本篇围绕 <code>webpack</code> 做性能优化，分为两个方面：<code>构建时间优化</code>、<code>构建体积优化</code></p>
-<h1 data-id="heading-1">构建时间优化</h1>
-<h2 data-id="heading-2">缩小范围</h2>
-<p>我们在使用 loader 时，可以配置 <code>include</code>、<code>exclude</code>缩小 loader 对文件的搜索范围，以此来提高构建速率。</p>
-<p>像 <code>/node_moudles</code> 目录下的体积辣么大，又是第三方包的存储目录，直接 <code>exclude</code> 掉可以节省一定的时间的。</p>
-<p>当然 <code>exclude</code> 和 <code>include</code> 可以一起配置，大部分情况下都是只需要使用 loader 编译 src 目录下的代码</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-    <span class="hljs-attr">module</span>: {
-        <span class="hljs-attr">rules</span>: [
-            {
-                <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.(|ts|tsx|js|jsx)$/</span>,
-                <span class="hljs-comment">// 只解析 src 文件夹下的 ts、tsx、js、jsx 文件</span>
-                <span class="hljs-comment">// include 可以是数组，表示多个文件夹下的模块都要解析</span>
-                <span class="hljs-attr">include</span>: path.<span class="hljs-title function_">resolve</span>(__dirname, <span class="hljs-string">'../src'</span>), 
-                <span class="hljs-attr">use</span>: [ <span class="hljs-string">'thread-loader'</span>, <span class="hljs-string">'babel-loader'</span>],
-                
-                <span class="hljs-comment">//当然也可以配置 exclude，表示 loader 解析时不会编译这部分文件</span>
-                <span class="hljs-comment">//同样 exclude 也可以是数组</span>
-                <span class="hljs-attr">exclude</span>: <span class="hljs-regexp">/node_modules/</span>,
-            }
-        ]
-    }
-}
-</code></pre>
-<p>还需注意一个点就是要确保 loader 的<code>准确性</code>，<strong>比如不要使用 less-loader 去解析 css 文件</strong></p>
-<h2 data-id="heading-3">文件后缀</h2>
-<p><code>resolve.extensions</code>&nbsp;是我们常用的一个配置，他可以在导入语句没有带文件后缀时，可以按照配置的列表，自动补上后缀。<strong>我们应该根据我们项目中文件的实际使用情况设置后缀列表，将使用频率高的放在前面、同时后缀列表也要尽可能的少，减少没有必要的匹配</strong>。同时，我们在源码中写导入语句的时候，尽量带上后缀，避免查找匹配浪费时间。</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">export</span> = {
-  <span class="hljs-attr">resolve</span>: {
-    <span class="hljs-comment">// 按照 tsx、ts、jsx、js 的顺序匹配，若没匹配到则报错</span>
-    <span class="hljs-attr">extensions</span>: [<span class="hljs-string">'.tsx'</span>, <span class="hljs-string">'.ts'</span>, <span class="hljs-string">'.jsx'</span>, <span class="hljs-string">'.js'</span>],
-  }
-}
-</code></pre>
-<h2 data-id="heading-4">别名</h2>
-<p>通过配置 <code>resolve.alias</code> 别名的方式，减少引用文件的路径复杂度</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-    <span class="hljs-attr">resolve</span>: {
-        <span class="hljs-attr">alias</span>: {
-            <span class="hljs-comment">//把 src 文件夹别名为 @</span>
-            <span class="hljs-comment">//引入 src 下的文件就可以 import xxx from '@/xxx'</span>
-            <span class="hljs-string">'@'</span>: path.<span class="hljs-title function_">join</span>(__dirname, <span class="hljs-string">'../src'</span>)
-        }
-    }
-}
-
-<span class="hljs-comment">// 引入 src 下的某个模块时</span>
-<span class="hljs-keyword">import</span> <span class="hljs-variable constant_">XXX</span> <span class="hljs-keyword">from</span> <span class="hljs-string">'@/xxx/xxx.tsx'</span>
-</code></pre>
-<h2 data-id="heading-5">缓存</h2>
-<p>在优化的方案中，缓存也是其中重要的一环。在构建过程中，开启缓存提升二次打包速度。</p>
-<p>在项目中，js 文件是占大头的，当项目越来越大时，如果每次都需要去编译 JS 代码，那么构建的速度肯定会很慢的，所以我们可以配置 <code>babel-loader</code> 的缓存配置项 <code>cacheDirectory</code> 来缓存没有变过的 js 代码</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-attr">module</span>: {
-    <span class="hljs-attr">rules</span>: [
-      {
-        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/.jsx?$/</span>,
-        <span class="hljs-attr">use</span>: [
-          {
-            <span class="hljs-attr">loader</span>: <span class="hljs-string">'babel-loader'</span>,
-            <span class="hljs-attr">options</span>: {
-              <span class="hljs-attr">cacheDirectory</span>: <span class="hljs-literal">true</span>,
-            },
-          }
-        ]
-      }
-    ]
-  }
-}
-</code></pre>
-<p>当我们编译后，会在 <code>/node_modules/.cache/babel-loader</code> 产生对应的缓存文件夹，在下一次编译时，将会尝试读取缓存来避免在每次执行时，可能产生的、高性能消耗的编译过程</p>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/90d0b5fb7698425f94e60622d760d4f9~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></p>
-<p>对比一下第一次和第二次编译的速度：</p>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b4326689756c4b9f8ad3d1cc77fa13d0~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="e00641ae-2a45-4108-874c-0109b0f0615f.jpeg" loading="lazy"></p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8574d5e9ff2f4467af6ad6fc9b231c13~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="39394cae-c8e2-42f4-9ad5-5fcb3c230c84.jpeg" loading="lazy"></p>
-<p>确实会提高编译的速度</p>
-<p>上面的缓存优化只是针对像 <code>babel-loader</code> 这样可以配置缓存的 loader，那没有缓存配置的 loader 该怎么使用缓存呢，此时需要 <code>cache-loader</code></p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-attr">module</span>: {
-    <span class="hljs-attr">rules</span>: [
-      {
-        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/.jsx?$/</span>,
-        <span class="hljs-attr">use</span>: [
-          <span class="hljs-string">'cache-loader'</span>, 
-          <span class="hljs-string">"babel-loader"</span>
-        ],
-      }
-    ]
-  }
-}
-</code></pre>
-<p>编译后同样多一个 <code>/node_modules/.cache/cache-loader</code> 缓存目录</p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4d53eacb918041c3ab6a3272c4e79a16~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></p>
-<p>当然还有一种方式，<code>webpack5</code>直接提供了 <code>cache</code> 配置项，开启后即可缓存</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-attr">cache</span>: {
-    <span class="hljs-attr">type</span>: <span class="hljs-string">'filesystem'</span>
-  }
-}
-</code></pre>
-<p>编译后会多出 <code>/node_modules/.cache/webpack</code> 缓存目录</p>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d26500284e4b424e9fa3038672c39487~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></p>
-<h2 data-id="heading-6">并行构建</h2>
-<p>首先，运行在<code>Node</code>里的<code>webpack</code>是单线程的，所以一次性只能干一件事，那如果利用电脑的多核优势，也能提高构建速度
-？<a href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fwebpack-contrib%2Fthread-loader" title="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fwebpack-contrib%2Fthread-loader" target="_blank">thread-loader</a>可以开启多进程打包</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-attr">module</span>: {
-    <span class="hljs-attr">rules</span>: [
-      {
-        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/.jsx?$/</span>,
-        <span class="hljs-attr">use</span>: [
-          <span class="hljs-comment">// 开启多进程打包。 </span>
-          {
-            <span class="hljs-attr">loader</span>: <span class="hljs-string">'thread-loader'</span>, 
-            <span class="hljs-attr">options</span>: {
-              <span class="hljs-attr">workers</span>: <span class="hljs-number">3</span> <span class="hljs-comment">// 开启 3个 进程</span>
-            }
-          },
-          {
-            <span class="hljs-attr">loader</span>: <span class="hljs-string">'babel-loader'</span>,
-          }
-        ]
-      }
-    ]
-  }
-}
-</code></pre>
-<p>放置在这个&nbsp;<code>thread-loader</code>&nbsp;之后的 loader 就会在一个单独的 worker 池(worker pool) 中运行。</p>
-<p>每个 worker 都是一个单独的有 600ms 限制的&nbsp;<code>node.js</code>&nbsp;进程。同时跨进程的数据交换也会被限制。所以建议仅在耗时的 loader 上使用。若项目文件不算多就不要使用，毕竟开启多个线程也会存在性能开销。</p>
-<h2 data-id="heading-7">定向查找第三方模块</h2>
-<p><code>resolve.modules</code>&nbsp;配置用于指定&nbsp;<code>webpack</code>&nbsp;去哪些目录下寻找第三方模块。默认值是&nbsp;<code>['node_modules']</code>。而在引入模块的时候，会以&nbsp;<code>node 核心模块 -----&gt; node_modules ------&gt; node全局模块</code>&nbsp;的顺序查找模块。</p>
-<p>我们通过配置 resolve.modules 指定 webpack 搜索第三方模块的范围，提高构建速率</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">export</span> = {
-  <span class="hljs-attr">resolve</span>: {
-    <span class="hljs-attr">modules</span>: [path.<span class="hljs-title function_">resolve</span>(__dirname, <span class="hljs-string">'node_modules'</span>)]
-  }
-}
-</code></pre>
-<h1 data-id="heading-8">构建结果优化</h1>
-<h2 data-id="heading-9">压缩代码</h2>
-<p>首先浏览器在运行结果前要通过网络请求将代码下载下来然后解析最后呈现渲染页面上，因此减少文件体积，可以优化页面的加载时长</p>
-<h3 data-id="heading-10">压缩 js</h3>
-<p>webpack5的话通过 <code>terser-webpack-plugin</code> 来压缩 JS，但在配置了 <code>mode: production</code> 时，会默认开启</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">TerserPlugin</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'terser-webpack-plugin'</span>);
-
-<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-attr">optimization</span>: {
-    <span class="hljs-comment">// 开启压缩</span>
-    <span class="hljs-attr">minimize</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-comment">// 压缩工具</span>
-    <span class="hljs-attr">minimizer</span>: [
-      <span class="hljs-keyword">new</span> <span class="hljs-title class_">TerserPlugin</span>({}),
-    ],
-  },
-}
-</code></pre>
-<p>需要注意一个地方：生产环境会默认配置<code>terser-webpack-plugin</code>，所以如果你还有其它压缩插件使用的话需要将<code>TerserPlugin</code>显示配置或者使用<code>...</code>，否则<code>terser-webpack-plugin</code>会被覆盖。</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">TerserPlugin</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">"terser-webpack-plugin"</span>); 
-
-<span class="hljs-attr">optimization</span>: {
-  <span class="hljs-attr">minimize</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">minimizer</span>: [
-    <span class="hljs-keyword">new</span> <span class="hljs-title class_">TerserPlugin</span>({}), <span class="hljs-comment">// 显示配置</span>
-    <span class="hljs-comment">// "...", // 或者使用展开符，启用默认插件</span>
-    <span class="hljs-comment">// 其它压缩插件</span>
-    <span class="hljs-keyword">new</span> <span class="hljs-title class_">CssMinimizerPlugin</span>(),
-  ],
-},
-</code></pre>
-<h3 data-id="heading-11">压缩 css</h3>
-<p>压缩 css 我们使用 <code>css-minimizer-webpack-plugin</code></p>
-<p>同时，应该把 css 提取成单独的文件，使用 <code>mini-css-extract-plugin</code></p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">MiniCssExtractPlugin</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mini-css-extract-plugin"</span>);
-<span class="hljs-keyword">const</span> <span class="hljs-title class_">CssMinimizerPlugin</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">"css-minimizer-webpack-plugin"</span>);
-
-<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-attr">module</span>: {
-    <span class="hljs-attr">rules</span>: [
-      {
-        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.css$/</span>,
-        <span class="hljs-attr">use</span>: [
-           <span class="hljs-comment">// 提取成单独的文件</span>
-           <span class="hljs-title class_">MiniCssExtractPlugin</span>.<span class="hljs-property">loader</span>,
-           <span class="hljs-string">"css-loader"</span>
-        ],
-        <span class="hljs-attr">exclude</span>: <span class="hljs-regexp">/node_modules/</span>, 
-      },
-    ]
-  },
-  <span class="hljs-attr">plugins</span>: [
-    <span class="hljs-keyword">new</span> <span class="hljs-title class_">MiniCssExtractPlugin</span>({
-      <span class="hljs-comment">// 定义输出文件名和目录</span>
-      <span class="hljs-attr">filename</span>: <span class="hljs-string">"asset/css/main.css"</span>,
-    })
-  ],
-  <span class="hljs-attr">optimization</span>: {
-    <span class="hljs-attr">minimize</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">minimizer</span>: [
-      <span class="hljs-comment">// 压缩 css</span>
-      <span class="hljs-keyword">new</span> <span class="hljs-title class_">CssMinimizerPlugin</span>({}),
-    ],
-  },
-}
-</code></pre>
-<h3 data-id="heading-12">压缩 html</h3>
-<p>压缩&nbsp;<code>html</code>&nbsp;使用的还是&nbsp;<code>html-webpack-plugin</code>&nbsp;插件。该插件支持配置一个&nbsp;<a href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fkangax%2Fhtml-minifier%23options-quick-reference" title="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fkangax%2Fhtml-minifier%23options-quick-reference" target="_blank">minify</a>&nbsp;对象，用来配置压缩&nbsp;<code>html</code>。</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">export</span> = {
-  <span class="hljs-attr">plugins</span>: [
-    <span class="hljs-keyword">new</span> <span class="hljs-title class_">HtmlWebpackPlugin</span>({
-      <span class="hljs-comment">// 动态生成 html 文件</span>
-      <span class="hljs-attr">template</span>: <span class="hljs-string">"./index.html"</span>,
-      <span class="hljs-attr">minify</span>: {
-        <span class="hljs-comment">// 压缩HTML</span>
-        <span class="hljs-attr">removeComments</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// 移除HTML中的注释</span>
-        <span class="hljs-attr">collapseWhitespace</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// 删除空⽩符与换⾏符</span>
-        <span class="hljs-attr">minifyCSS</span>: <span class="hljs-literal">true</span> <span class="hljs-comment">// 压缩内联css</span>
-      },
-    })
-  ]
-}
-</code></pre>
-<h3 data-id="heading-13">压缩图片</h3>
-<p>可以通过 <code>image-webpack-loader</code> 来实现</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-attr">module</span>: {
-    <span class="hljs-attr">rules</span>: [
-      {
-        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.(png|jpg|gif|jpeg|webp|svg)$/</span>,
-        <span class="hljs-attr">use</span>: [
-          <span class="hljs-string">"file-loader"</span>,
-          {
-            <span class="hljs-attr">loader</span>: <span class="hljs-string">"image-webpack-loader"</span>,
-            <span class="hljs-attr">options</span>: {
-              <span class="hljs-attr">mozjpeg</span>: {
-                <span class="hljs-attr">progressive</span>: <span class="hljs-literal">true</span>,
-              },
-              <span class="hljs-attr">optipng</span>: {
-                <span class="hljs-attr">enabled</span>: <span class="hljs-literal">false</span>,
-              },
-              <span class="hljs-attr">pngquant</span>: {
-                <span class="hljs-attr">quality</span>: [<span class="hljs-number">0.65</span>, <span class="hljs-number">0.9</span>],
-                <span class="hljs-attr">speed</span>: <span class="hljs-number">4</span>,
-              },
-              <span class="hljs-attr">gifsicle</span>: {
-                <span class="hljs-attr">interlaced</span>: <span class="hljs-literal">false</span>,
-              },
-            },
-          },
-        ],
-        <span class="hljs-attr">exclude</span>: <span class="hljs-regexp">/node_modules/</span>, <span class="hljs-comment">//排除 node_modules 目录</span>
-      },
-    ]
-  },
-}
-</code></pre>
-<h2 data-id="heading-14">按需加载</h2>
-<p>很多时候我们不需要一次性加载所有的<code>JS</code>文件，而应该在不同阶段去加载所需要的代码。</p>
-<p><strong>将路由页面/触发性功能单独打包为一个文件，使用时才加载</strong>，好处是<code>减轻首屏渲染的负担</code>。因为项目功能越多其打包体积越大，导致首屏渲染速度越慢。</p>
-<p>实际项目中大部分是对懒加载路由，而懒加载路由可以打包到一个 chunk 里面。比如某个列表页和编辑页它们之间存在相互跳转，如果对它们拆分成两个 <code>import()</code> js 资源加载模块，在跳转过程中视图会出现白屏切换过程。</p>
-<p>因为在跳转期间，浏览器会动态创建 script 标签来加载这个 <code>chunk</code> 文件，在这期间，页面是没有任何内容的。</p>
-<p>所以一般会把路由懒加载打包到一个 chunk 里面</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">List</span> = <span class="hljs-title function_">lazyComponent</span>(<span class="hljs-string">'list'</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-comment">/* webpackChunkName: "list" */</span> <span class="hljs-string">'@/pages/list'</span>));
-<span class="hljs-keyword">const</span> <span class="hljs-title class_">Edit</span> = <span class="hljs-title function_">lazyComponent</span>(<span class="hljs-string">'edit'</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-comment">/* webpackChunkName: "list" */</span> <span class="hljs-string">'@/pages/edit'</span>));
-</code></pre>
-<p>但需要注意一点：<strong>动态导入 import() 一个模块，这个模块就不能再出现被其他模块使用&nbsp;<code>同步 import</code>&nbsp;方式导入。</strong></p>
-<p>比如，一个路由模块在注册&nbsp;<code>&lt;Route /&gt;</code>&nbsp;时采用动态 import() 导入，但在这个模块对外暴露了一些变量方法供其他子模块使用，在这些子模块中使用了同步 ESModule import 方式引入，这就造成了&nbsp;<code>动态 import()</code>&nbsp;的失效。</p>
-<h2 data-id="heading-15">prload、prefetch</h2>
-<p>对于某些较大的模块，如果点击时再加载，那可能响应的时间反而延长。我们可以使用 <code>prefetch</code>、<code>preload</code> 去加载这些模块</p>
-<p><code>prefetch</code>：将来可能需要一些模块资源（一般是其他页面的代码），在核心代码加载完成之后<code>带宽空闲</code>的时候再去加载需要用到的模块代码。</p>
-<p><code>preload</code>：当前核心代码加载期间可能需要模块资源（<strong>当前页面需要的但暂时还没使用到的</strong>），其是和核心代码文件一起去加载的。</p>
-<p>只需要通过<code>魔法注释</code>即可实现，以 <code>prefetch</code> 为例：</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">'btn1'</span>).<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">import</span>(
-  <span class="hljs-comment">/* webpackChunkName: "btnChunk" */</span>
-  <span class="hljs-comment">/* webpackPrefetch: true*/</span>
-  <span class="hljs-string">'./module1.js'</span>
-  ).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> fn.<span class="hljs-title function_">default</span>());
-}
-</code></pre>
-<p>这行代码表示在浏览器空闲时加载 module1.js 模块，并且单独拆一个 chunk，叫做 btnChunk</p>
-<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c2e2b2771db547138ed818cd33d23139~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></p>
-<p>可以看到，在<code>head</code>里面，我们的懒加载模块被直接引入了，并且加上了<code>rel='prefetch'</code>。</p>
-<p>这样，页面首次加载的时候，浏览器空闲的会后会提前加载<code>module1.js</code>。当我们点击按钮的时候，会直接从缓存中读取该文件，因此速度非常快。</p>
-<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/95cd9e7ee4b345ec8ef5eca12947f650~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png" loading="lazy"></p>
-<h2 data-id="heading-16">代码分割</h2>
-<p>在项目中，一般是使用同一套技术栈和公共资源。<strong>如果每个页面的代码中都有这些公开资源，就会导致资源的浪费</strong>。在每一个页面下都会加载重复的公共资源，一是会浪费用户的流量，二是不利于项目的性能，造成页面加载缓慢，影响用户体验。</p>
-<p>一般是把不变的<strong>第三方库</strong>、<strong>一些公共模块</strong>（比如 util.js）这些单独拆成一个 chunk，在访问页面的时候，就可以一直使用浏览器缓存中的资源</p>
-<p>webpack 里面通过 <code>splitChunks</code> 来分割代码</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-comment">//...</span>
-  <span class="hljs-attr">optimization</span>: {
-    <span class="hljs-attr">splitChunks</span>: {
-      <span class="hljs-attr">chunks</span>: <span class="hljs-string">'async'</span>, <span class="hljs-comment">// 值有 `all`，`async`&nbsp;和&nbsp;`initial`</span>
-      <span class="hljs-attr">minSize</span>: <span class="hljs-number">20000</span>, <span class="hljs-comment">// 生成 chunk 的最小体积（以 bytes 为单位）。</span>
-      <span class="hljs-attr">minRemainingSize</span>: <span class="hljs-number">0</span>,
-      <span class="hljs-attr">minChunks</span>: <span class="hljs-number">1</span>, <span class="hljs-comment">// 拆分前必须共享模块的最小 chunks 数。</span>
-      <span class="hljs-attr">maxAsyncRequests</span>: <span class="hljs-number">30</span>, <span class="hljs-comment">// 按需加载时的最大并行请求数。</span>
-      <span class="hljs-attr">maxInitialRequests</span>: <span class="hljs-number">30</span>, <span class="hljs-comment">// 入口点的最大并行请求数。</span>
-      <span class="hljs-attr">enforceSizeThreshold</span>: <span class="hljs-number">50000</span>,
-      <span class="hljs-attr">cacheGroups</span>: {
-        <span class="hljs-attr">defaultVendors</span>: {
-          <span class="hljs-attr">test</span>: <span class="hljs-regexp">/[\/]node_modules[\/]/</span>,  <span class="hljs-comment">//第三方模块拆出来</span>
-          <span class="hljs-attr">priority</span>: -<span class="hljs-number">10</span>,
-          <span class="hljs-attr">reuseExistingChunk</span>: <span class="hljs-literal">true</span>,
-        },
-        util.<span class="hljs-property">vendors</span>: {
-          <span class="hljs-attr">test</span>: <span class="hljs-regexp">/[\/]utils[\/]/</span>, <span class="hljs-comment">//公共模块拆出来</span>
-          <span class="hljs-attr">minChunks</span>: <span class="hljs-number">2</span>,
-          <span class="hljs-attr">priority</span>: -<span class="hljs-number">20</span>,
-          <span class="hljs-attr">reuseExistingChunk</span>: <span class="hljs-literal">true</span>,
-        },
-      },
-    },
-  },
-};
-</code></pre>
-<h2 data-id="heading-17">tree shaking</h2>
-<p>tree shaking 的原理细节可以看这篇文章<a href="https://juejin.cn/post/7246219936594821180" target="_blank" title="https://juejin.cn/post/7246219936594821180">：# webpack tree-shaking解析</a></p>
-<p><code>tree shaking</code>在<strong>生产模式下已经默认开启了</strong></p>
-<p>只是需要注意下面几点：</p>
-<ol>
-<li>只对<code>ESM</code>生效</li>
-<li>只能是静态声明和引用的&nbsp;<code>ES6</code>&nbsp;模块，不能是动态引入和声明的。</li>
-<li>只能处理模块级别，不能处理函数级别的冗余。</li>
-<li>只能处理&nbsp;<code>JS</code>&nbsp;相关冗余代码，不能处理&nbsp;<code>CSS</code>&nbsp;冗余代码。</li>
-</ol>
-<p>而可能样式文件里面有些代码我们也没有使用，我们可以通过<code>purgecss-webpack-plugin</code> 插件来对 css 进行 tree shaking</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">"path"</span>);
-<span class="hljs-keyword">const</span> <span class="hljs-title class_">PurgecssPlugin</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">"purgecss-webpack-plugin"</span>);
-<span class="hljs-keyword">const</span> glob = <span class="hljs-built_in">require</span>(<span class="hljs-string">"glob"</span>); <span class="hljs-comment">// 文件匹配模式</span>
-
-<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-comment">//...</span>
-  <span class="hljs-attr">plugins</span>: [
-    ...
-    <span class="hljs-keyword">new</span> <span class="hljs-title class_">PurgeCSSPlugin</span>({
-      <span class="hljs-attr">paths</span>: glob.<span class="hljs-title function_">sync</span>(<span class="hljs-string">`<span class="hljs-subst">${PATH.src}</span>/**/*`</span>, { <span class="hljs-attr">nodir</span>: <span class="hljs-literal">true</span> }),
-    })
-
-    <span class="hljs-comment">// Add your plugins here</span>
-    <span class="hljs-comment">// Learn more about plugins from https://webpack.js.org/configuration/plugins/</span>
-  ],
-};
-</code></pre>
-<h2 data-id="heading-18">gzip</h2>
-<p>前端除了在打包的时候将无用的代码或者&nbsp;<code>console</code>、注释剔除之外。我们还可以使用&nbsp;<code>Gzip</code>&nbsp;对资源进行进一步压缩。那么浏览器和服务端是如何通信来支持&nbsp;<code>Gzip</code>&nbsp;呢？</p>
-<ol>
-<li>当用户访问 web 站点的时候，会在&nbsp;<code>request header</code>&nbsp;中设置&nbsp;<code>accept-encoding:gzip</code>，表明浏览器是否支持&nbsp;<code>Gzip</code>。</li>
-<li>服务器在收到请求后，判断如果需要返回&nbsp;<code>Gzip</code>&nbsp;压缩后的文件那么服务器就会先将我们的&nbsp;<code>JS\CSS</code>&nbsp;等其他资源文件进行&nbsp;<code>Gzip</code>&nbsp;压缩后再传输到客户端，同时将&nbsp;<code>response headers</code>&nbsp;设置&nbsp;<code>content-encoding:gzip</code>。反之，则返回源文件。</li>
-<li>浏览器在接收到服务器返回的文件后，判断服务端返回的内容是否为压缩过的内容，是的话则进行解压操作。</li>
-</ol>
-<p>一般情况下我们并不会让服务器实时 <code>Gzip</code>&nbsp;压缩，而是利用<code>webpack</code>提前将静态资源进行<code>Gzip</code>&nbsp;压缩，然后将<code>Gzip</code>&nbsp;资源放到服务器，当请求需要的时候直接将<code>Gzip</code>&nbsp;资源发送给客户端。</p>
-<p>我们只需要安装 <code>compression-webpack-plugin</code> 并在<code>plugins</code>配置就可以了</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">CompressionWebpackPlugin</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">"compression-webpack-plugin"</span>); <span class="hljs-comment">// 需要安装</span>
-
-<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-attr">plugins</span>: [
-    <span class="hljs-keyword">new</span> <span class="hljs-title class_">CompressionWebpackPlugin</span>()
-  ]
-}
-</code></pre>
-<h2 data-id="heading-19">作用域提升</h2>
-<p><code>Scope Hoisting</code>&nbsp;可以让&nbsp;<code>webpack</code>&nbsp;打包出来的代码文件体积更小，运行更快。</p>
-<p>在开启 <code>Scope Hoisting</code>后，<strong>构建后的代码会按照引入顺序放到一个函数作用域里，通过适当重命名某些变量以防止变量名冲突</strong>，从而减少函数声明和内存花销。</p>
-<p>需要注意：<code>Scope Hoisting</code>&nbsp;需要分析模块之间的依赖关系，所以源码必须采用 ES6 模块化语法</p>
-<p><code>Scope Hoisting</code>&nbsp;是 webpack&nbsp;内置功能，只需要在<code>plugins</code>里面使用即可，或者直接开启生产环境也可以让作用域提升生效。</p>
-<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-comment">//方式1</span>
-  <span class="hljs-attr">mode</span>: <span class="hljs-string">'production'</span>,
-
-  <span class="hljs-comment">//方式2</span>
-  <span class="hljs-attr">plugins</span>: [
-    <span class="hljs-comment">// 开启 Scope Hoisting 功能</span>
-    <span class="hljs-keyword">new</span> webpack.<span class="hljs-property">optimize</span>.<span class="hljs-title class_">ModuleConcatenationPlugin</span>()
-  ]
-}
-</code></pre>
-<h1 data-id="heading-20">最后</h1>
-<p>maybe 还会改或者新增内容</p>
+<style>.markdown-body{word-break:break-word;line-height:1.8;font-weight:400;font-size:16px;word-spacing:2px;letter-spacing:2px;overflow-x:hidden;color:#3e3e3e;background-image:linear-gradient(90deg,rgba(50,0,0,.05) 3%,transparent 0),linear-gradient(1turn,rgba(50,0,0,.05) 3%,transparent 0);background-size:20px 20px;background-position:50%}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:30px;margin-bottom:5px}.markdown-body h2{padding-bottom:12px;font-size:24px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:18px;padding-bottom:0}.markdown-body h4{font-size:1.2em;border-bottom:2px solid #ef7060;word-spacing:0!important;letter-spacing:0!important;font-size:inherit;line-height:inherit;display:block;font-weight:400;background:#ef7060;color:#fff;padding:10px;border-top-right-radius:3px;border-top-left-radius:3px;margin-right:3px}.markdown-body h5{font-size:15px}.markdown-body h6{margin-top:5px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="monokai">.markdown-body pre,.markdown-body pre>code.hljs{background:#272822;color:#ddd}.hljs-keyword,.hljs-literal,.hljs-name,.hljs-selector-tag,.hljs-strong,.hljs-tag{color:#f92672}.hljs-code{color:#66d9ef}.hljs-class .hljs-title{color:#fff}.hljs-attribute,.hljs-link,.hljs-regexp,.hljs-symbol{color:#bf79db}.hljs-addition,.hljs-built_in,.hljs-builtin-name,.hljs-bullet,.hljs-emphasis,.hljs-section,.hljs-selector-attr,.hljs-selector-pseudo,.hljs-string,.hljs-subst,.hljs-template-tag,.hljs-template-variable,.hljs-title,.hljs-type,.hljs-variable{color:#a6e22e}.hljs-comment,.hljs-deletion,.hljs-meta,.hljs-quote{color:#75715e}.hljs-doctag,.hljs-keyword,.hljs-literal,.hljs-section,.hljs-selector-id,.hljs-selector-tag,.hljs-title,.hljs-type{font-weight:700}</style><h2 data-id="heading-0"><strong>构建速度</strong>:</h2>
+<ul>
+<li><strong>Webpack</strong>: Webpack的构建速度相对较慢，尤其在大型项目中，因为它需要分析整个依赖图，进行多次文件扫描和转译。</li>
+<li><strong>Vite</strong>: Vite以开发模式下的极速构建著称。它利用ES模块的特性，只构建正在编辑的文件，而不是整个项目。这使得它在开发环境下几乎是即时的。</li>
+</ul>
+<h2 data-id="heading-1"><strong>开发模式</strong>:</h2>
+<ul>
+<li><strong>Webpack</strong>: Webpack通常使用热模块替换（HMR）来实现快速开发模式，但配置相对复杂。</li>
+<li><strong>Vite</strong>: Vite的开发模式非常轻量且快速，支持HMR，但无需额外配置，因为它默认支持。</li>
+</ul>
+<h2 data-id="heading-2"><strong>配置复杂度</strong>:</h2>
+<ul>
+<li><strong>Webpack</strong>: Webpack的配置相对复杂，特别是在处理不同类型的资源和加载器时。</li>
+<li><strong>Vite</strong>: Vite鼓励零配置，使得项目起步非常简单，但同时也支持自定义配置，使其适用于复杂项目。</li>
+</ul>
+<h2 data-id="heading-3"><strong>插件生态</strong>:</h2>
+<ul>
+<li><strong>Webpack</strong>: Webpack拥有庞大的插件生态系统，适用于各种不同的需求。</li>
+<li><strong>Vite</strong>: Vite也有相当数量的插件，但相对较小，因为它的开发模式和构建方式减少了对一些传统插件的需求。</li>
+</ul>
+<h2 data-id="heading-4"><strong>编译方式</strong>:</h2>
+<ul>
+<li><strong>Webpack</strong>: Webpack使用了多种加载器和插件来处理不同类型的资源，如JavaScript、CSS、图片等。</li>
+<li><strong>Vite</strong>: Vite利用ES模块原生支持，使用原生浏览器导入来处理模块，不需要大规模的编译和打包。</li>
+</ul>
+<h2 data-id="heading-5"><strong>应用场景</strong>:</h2>
+<ul>
+<li><strong>Webpack</strong>: 适用于复杂的大型项目，特别是需要大量自定义配置和复杂构建管道的项目。</li>
+<li><strong>Vite</strong>: 更适用于小到中型项目，或者需要快速开发原型和小型应用的场景。</li>
+</ul>
+<h2 data-id="heading-6"><strong>打包原理</strong>:</h2>
+<ul>
+<li><strong>Webpack</strong>: Webpack的打包原理是将所有资源打包成一个或多个bundle文件，通常是一个JavaScript文件。</li>
+<li><strong>Vite</strong>: Vite的打包原理是保持开发时的模块化结构，使用浏览器原生的导入机制，在生产环境中进行代码分割和优化。</li>
+</ul>
+<h2 data-id="heading-7"><strong>优缺点</strong>:</h2>
+<ul>
+<li>
+<p><strong>Webpack</strong>:</p>
+<ul>
+<li>优点：灵活、强大、适用于复杂场景、庞大的插件生态。</li>
+<li>缺点：构建速度较慢、配置复杂、开发体验不如Vite流畅。</li>
+</ul>
+</li>
+<li>
+<p><strong>Vite</strong>:</p>
+<ul>
+<li>优点：极快的开发构建速度、零配置启动、原生ES模块支持、适用于小型项目和快速原型开发。</li>
+<li>缺点：插件生态相对较小、不太适用于复杂大型项目。</li>
+</ul>
+</li>
+</ul>

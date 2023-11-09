@@ -9,14 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "对 babel 的理解？",
+  title: "[Webpack] Webpack vs Vite的核心差异",
   key_world: [
-    "babel 作用",
-    "为何要使用 babel",
+    "Webpack vs Vite 差异",
   ],
   labels: [
     labels.engineering,
-    company.alibaba,
+    company.tencent,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

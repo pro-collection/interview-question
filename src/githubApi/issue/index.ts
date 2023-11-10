@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 类组件的生命周期， 映射的 hooks 哪些 api ?",
+  title: "[低代码] 代码平台一般架构设计如何",
   key_world: [
-    "生命周期映射 hooks",
+    "代码平台",
   ],
   labels: [
-    labels.frameWork,
-    company.tencent,
+    labels.engineering,
+    company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.master,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 
@@ -27,7 +27,7 @@ const main = async () => {
   if (remote.key_world.length) {
     let count = await search(remote.key_world);
 
-    console.log("yanle - logger: 获取热度结果: ", typeof count);
+    console.log("yanle - logger: 获取热度结果: ", count);
 
     const isConfirm = await confirm({ message: `获取到热度为：${count}, 请确认。(为「no」则可以重新修改热度, 为 「yes」则无需修改热度)` });
 

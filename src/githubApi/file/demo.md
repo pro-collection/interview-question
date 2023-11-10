@@ -1,33 +1,28 @@
-**关键词**：生命周期映射 hooks
+**关键词**：代码平台
 
-下面是 React 类组件的生命周期方法和对应的 Hooks API：
+代码平台 - 架构综述
 
-1. `constructor`：`useState` 可以在函数组件中模拟类组件的 `constructor`。在函数组件内部使用 `useState` 声明状态变量，并设置初始值。
+**分层架构描述**
 
-2. `componentDidMount`：`useEffect` 用于模拟 `componentDidMount`。通过在 `useEffect` 的回调函数中返回一个清理函数，可以模拟 `componentWillUnmount`。
+![01](https://img.alicdn.com/imgextra/i4/O1CN016l8gDo1z7zlRlW1P0_!!6000000006668-2-tps-1920-1080.png)
 
-3. `componentDidUpdate`：`useEffect` 可以在函数组件中模拟 `componentDidUpdate`。通过使用 `useEffect` 的第二个参数，可以指定依赖项的数组，当依赖项发生变化时，`useEffect` 的回调函数会被调用。
+自下而上分别是协议 - 引擎 - 生态 - 平台。
 
-4. `componentWillUnmount`：`useEffect` 的清理函数可以模拟 `componentWillUnmount`。在 `useEffect` 的回调函数中返回一个清理函数，它会在组件销毁时执行。
+- 底层协议栈定义的是标准，标准的统一让上层产物的互通成为可能。
+- 引擎是对协议的实现，同时通过能力的输出，向上支撑生态开放体系，提供各种生态扩展能力。
+- 生态就好理解了，是基于引擎核心能力上扩展出来的，比如物料、设置器、插件等，还有工具链支撑开发体系。
+- 最后，各个平台基于引擎内核以及生态中的产品组合、衔接形成满足其需求的低代码平台。
 
-5. `shouldComponentUpdate`：`React.memo` 可以用于函数组件的性能优化，类似于 `shouldComponentUpdate` 的功能。`React.memo` 可以包裹一个组件，并只在组件的 props 发生变化时重新渲染。
+**引擎内核简述**
 
-6. `getDerivedStateFromProps`：`useState` 可以通过提供 setter 函数，将 props 的值作为 state 的初始值。在组件重新渲染时，`useState` 不会重置 state 的值。
+![02](https://img.alicdn.com/imgextra/i1/O1CN01QUUVu21LjTXqY6H8I_!!6000000001335-2-tps-1920-1080.png)
 
-并不是每一个生命周期方法都有与之对应的 Hooks API。
-Hooks 是为了解决函数式组件的状态管理和副作用问题而引入的新特性，因此 Hooks 在某种程度上替换了类组件的生命周期方法。
+**引擎生态简述**
+![03](https://img.alicdn.com/imgextra/i2/O1CN01LkRseZ23W31l8DPzS_!!6000000007262-2-tps-1920-1080.png)
 
-下面是一个使用表格方式对比 React 类组件的生命周期方法和对应的 Hooks API：
-
-| 生命周期方法       | Hooks API                                      |
-|-------------------|-----------------------------------------------|
-| constructor       | useState                                      |
-| componentDidMount | useEffect（第二个参数为空数组）                  |
-| componentDidUpdate | useEffect（包含依赖项的数组）                     |
-| componentWillUnmount | useEffect 的清理函数                          |
-| shouldComponentUpdate | React.memo                                   |
-| getDerivedStateFromProps | useState（通过提供 setter 函数）                |
-
-  
+![04](https://img.alicdn.com/imgextra/i4/O1CN01PYBVfZ1hL82XPrXzX_!!6000000004260-2-tps-1920-1080.png)
 
 
+**参考**
+
+https://lowcode-engine.cn/site/docs/guide/design/summary

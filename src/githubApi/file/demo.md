@@ -1,54 +1,33 @@
 **关键词**：生命周期映射 hooks
 
-**关键词**：Webpack vs Vite 差异
+下面是 React 类组件的生命周期方法和对应的 Hooks API：
 
-#### **构建速度**:
+1. `constructor`：`useState` 可以在函数组件中模拟类组件的 `constructor`。在函数组件内部使用 `useState` 声明状态变量，并设置初始值。
 
-* **Webpack**: Webpack的构建速度相对较慢，尤其在大型项目中，因为它需要分析整个依赖图，进行多次文件扫描和转译。
-* **Vite**: Vite以开发模式下的极速构建著称。它利用ES模块的特性，只构建正在编辑的文件，而不是整个项目。这使得它在开发环境下几乎是即时的。
+2. `componentDidMount`：`useEffect` 用于模拟 `componentDidMount`。通过在 `useEffect` 的回调函数中返回一个清理函数，可以模拟 `componentWillUnmount`。
 
-#### **开发模式**:
+3. `componentDidUpdate`：`useEffect` 可以在函数组件中模拟 `componentDidUpdate`。通过使用 `useEffect` 的第二个参数，可以指定依赖项的数组，当依赖项发生变化时，`useEffect` 的回调函数会被调用。
 
-* **Webpack**: Webpack通常使用热模块替换（HMR）来实现快速开发模式，但配置相对复杂。
-* **Vite**: Vite的开发模式非常轻量且快速，支持HMR，但无需额外配置，因为它默认支持。
+4. `componentWillUnmount`：`useEffect` 的清理函数可以模拟 `componentWillUnmount`。在 `useEffect` 的回调函数中返回一个清理函数，它会在组件销毁时执行。
 
-#### **配置复杂度**:
+5. `shouldComponentUpdate`：`React.memo` 可以用于函数组件的性能优化，类似于 `shouldComponentUpdate` 的功能。`React.memo` 可以包裹一个组件，并只在组件的 props 发生变化时重新渲染。
 
-* **Webpack**: Webpack的配置相对复杂，特别是在处理不同类型的资源和加载器时。
-* **Vite**: Vite鼓励零配置，使得项目起步非常简单，但同时也支持自定义配置，使其适用于复杂项目。
+6. `getDerivedStateFromProps`：`useState` 可以通过提供 setter 函数，将 props 的值作为 state 的初始值。在组件重新渲染时，`useState` 不会重置 state 的值。
 
-#### **插件生态**:
+并不是每一个生命周期方法都有与之对应的 Hooks API。
+Hooks 是为了解决函数式组件的状态管理和副作用问题而引入的新特性，因此 Hooks 在某种程度上替换了类组件的生命周期方法。
 
-* **Webpack**: Webpack拥有庞大的插件生态系统，适用于各种不同的需求。
-* **Vite**: Vite也有相当数量的插件，但相对较小，因为它的开发模式和构建方式减少了对一些传统插件的需求。
+下面是一个使用表格方式对比 React 类组件的生命周期方法和对应的 Hooks API：
 
-#### **编译方式**:
+| 生命周期方法       | Hooks API                                      |
+|-------------------|-----------------------------------------------|
+| constructor       | useState                                      |
+| componentDidMount | useEffect（第二个参数为空数组）                  |
+| componentDidUpdate | useEffect（包含依赖项的数组）                     |
+| componentWillUnmount | useEffect 的清理函数                          |
+| shouldComponentUpdate | React.memo                                   |
+| getDerivedStateFromProps | useState（通过提供 setter 函数）                |
 
-* **Webpack**: Webpack使用了多种加载器和插件来处理不同类型的资源，如JavaScript、CSS、图片等。
-* **Vite**: Vite利用ES模块原生支持，使用原生浏览器导入来处理模块，不需要大规模的编译和打包。
-
-#### **应用场景**:
-
-* **Webpack**: 适用于复杂的大型项目，特别是需要大量自定义配置和复杂构建管道的项目。
-* **Vite**: 更适用于小到中型项目，或者需要快速开发原型和小型应用的场景。
-
-#### **打包原理**:
-
-* **Webpack**: Webpack的打包原理是将所有资源打包成一个或多个bundle文件，通常是一个JavaScript文件。
-* **Vite**: Vite的打包原理是保持开发时的模块化结构，使用浏览器原生的导入机制，在生产环境中进行代码分割和优化。
-
-#### **优缺点**:
-
-* **Webpack**:
-
-    * 优点：灵活、强大、适用于复杂场景、庞大的插件生态。
-    * 缺点：构建速度较慢、配置复杂、开发体验不如Vite流畅。
-
-* **Vite**:
-
-    * 优点：极快的开发构建速度、零配置启动、原生ES模块支持、适用于小型项目和快速原型开发。
-    * 缺点：插件生态相对较小、不太适用于复杂大型项目。
+  
 
 
-#### 参考文档
-- https://juejin.cn/post/7273427487588843581

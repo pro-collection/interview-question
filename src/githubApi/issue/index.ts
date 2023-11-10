@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] Webpack vs Vite的核心差异",
+  title: "[React] 类组件的生命周期， 映射的 hooks 哪些 api ?",
   key_world: [
-    "Webpack vs Vite 差异",
+    "生命周期映射 hooks",
   ],
   labels: [
-    labels.engineering,
+    labels.frameWork,
     company.tencent,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

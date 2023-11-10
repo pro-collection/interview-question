@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[低代码] 代码平台一般架构设计如何",
+  title: "[低代码] 代码平台一般底层协议是怎么设计的",
   key_world: [
-    "代码平台",
+    "代码平台协议设计",
   ],
   labels: [
     labels.engineering,

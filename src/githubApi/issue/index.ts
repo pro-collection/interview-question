@@ -9,13 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "在前端应用如何进行权限设计？",
+  title: "token 进行身份验证了解多少？",
   key_world: [
-    "权限设计",
+    "身份验证",
+    "token 验证",
   ],
   labels: [
     labels.application,
-    company.alibaba,
+    company.netEase,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

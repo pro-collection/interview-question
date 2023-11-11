@@ -12,6 +12,7 @@ export const labels = {
   optimization: "性能优化",
   okr: "OKR",
   node: "NodeJS",
+  application: "应用类",
 };
 
 

@@ -9,14 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端日志埋点 SDK 设计思路",
+  title: "对比一下 pnpm、npm、yarn 特性",
   key_world: [
-    "前端埋点监控",
-    "埋点 SDK 设计",
+    "pnpm、npm、yarn 特性对比",
   ],
   labels: [
-    labels.application,
-    company.alibaba,
+    labels.engineering,
+    company.netEase,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

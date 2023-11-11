@@ -17,12 +17,12 @@ const update = (options: UpdateIssueOptions) => octokit.request(apiUrl.updateIss
 });
 
 const remote = {
-  title: "JS数组42个方法汇总",
+  title: "前端日志埋点 SDK 设计思路",
   labels: [
-    labels.js,
+    labels.application,
   ],
   body: () => fs.readFileSync(
-    "/Users/yanle/code/self/node-index/books/专题知识库/02、ECMAScript最新语法/3、字符串的扩展/JS数组42个方法汇总.md",
+    "/Users/yanle/code/self/interview-question/src/githubApi/file/demo.md",
     { encoding: "utf8" },
   ),
 };

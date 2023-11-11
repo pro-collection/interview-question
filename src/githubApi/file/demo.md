@@ -1,65 +1,253 @@
 **关键词**：前端埋点监控、埋点 SDK 设计
 
-**关键词**：身份验证、token 验证
+### 前端日志埋点 SDK 设计思路
 
-### token 概念和作用
+既然涉及到了日志和埋点，分析一下需求是啥：
 
-Token是一种用于身份验证和授权的令牌。在Web应用程序中，当用户进行登录或授权时，服务器会生成一个Token并将其发送给客户端。客户端在后续的请求中将Token作为身份凭证携带，以证明自己的身份。
+- 自动化上报 页面 PV、UV。 如果能自动化上报页面性能， 用户点击路径行为，就更好了。
+- 自动上报页面异常。
+- 发送埋点信息的时候， 不影响性能， 不阻碍页面主流程加载和请求发送。
+- 能够自定义日志发送， 日志 scope、key、value。
 
-Token可以是一个字符串，通常是经过加密和签名的，以确保其安全性和完整性。服务器收到Token后，会对其进行解析和验证，以验证用户的身份并授权对特定资源的访问权限。
+### SDK 设计
 
-Token的使用具有以下特点：
+sdk 的设计主要围绕以下几个话题来进行：
 
-- 无状态：服务器不需要在数据库中存储会话信息，所有必要的信息都包含在Token中。
-- 可扩展性：Token可以存储更多的用户信息，甚至可以包含自定义的数据。
-- 安全性：Token可以使用加密算法进行签名，以确保数据的完整性和安全性。
-- 跨域支持：Token可以在跨域请求中通过在请求头中添加Authorization字段进行传递。
+- SDK 初始化
+- 数据发送
+- 自定义错误上报
+- 初始化错误监控
+- 自定义日志上报
 
-Token在前后端分离的架构中广泛应用，特别是在RESTful API的身份验证中常见。它比传统的基于Cookie的会话管理更灵活，并且适用于各种不同的客户端，例如Web、移动应用和第三方接入等。
+**最基本使用**
+
+```js
+import StatisticSDK from 'StatisticSDK';
+// 全局初始化一次
+window.insSDK = new StatisticSDK('uuid-12345');
 
 
-### token 一般在客户端存在哪儿
+<button onClick={() => {
+  window.insSDK.event('click', 'confirm');
+...// 其他业务代码
+}}>确认</button>
+```
 
-Token一般在客户端存在以下几个地方：
+### 数据发送
 
-- Cookie：Token可以存储在客户端的Cookie中。服务器在响应请求时，可以将Token作为一个Cookie发送给客户端，客户端在后续的请求中会自动将Token包含在请求的Cookie中发送给服务器。
+数据发送是一个最基础的api，后面的功能都要基于此进行。这里介绍使用 `navigator.sendBeacon` 来发送请求；具体原因如下
 
-- Local Storage/Session Storage：Token也可以存储在客户端的Local Storage或Session Storage中。这些是HTML5提供的客户端存储机制，可以在浏览器中长期保存数据。
+使用 `navigator.sendBeacon()` 方法有以下优势：
 
-- Web Storage API：除了Local Storage和Session Storage，Token也可以使用Web Storage API中的其他存储机制，比如IndexedDB、WebSQL等。
+1. 异步操作：`navigator.sendBeacon()` 方法会在后台异步地发送数据，不会阻塞页面的其他操作。这意味着即使页面正在卸载或关闭，该方法也可以继续发送数据，确保数据的可靠性。
 
-- 请求头：Token也可以包含在客户端发送的请求头中，一般是在Authorization头中携带Token。
+2. 高可靠性：`navigator.sendBeacon()` 方法会尽可能地保证数据的传输成功。它使用浏览器内部机制进行发送，具有更高的可靠性和稳定性。即使在网络连接不稳定或断开的情况下，该方法也会尝试发送数据，确保数据的完整性。
 
-需要注意的是，无论将Token存储在哪个地方，都需要采取相应的安全措施，如HTTPS传输、加密存储等，以保护Token的安全性。
+3. 自动化处理：`navigator.sendBeacon()` 方法会自动处理数据的发送细节，无需手动设置请求头、响应处理等。它会将数据封装成 POST 请求，并自动设置请求头和数据编码，使开发者能够更专注于业务逻辑的处理。
 
-### 存放在 cookie 就安全了吗？
+4. 跨域支持：`navigator.sendBeacon()` 方法支持跨域发送数据。在一些情况下，例如使用第三方统计服务等，可能需要将数据发送到其他域名下的服务器，此时使用 `navigator.sendBeacon()`
+   方法可以避免跨域问题。
 
-存放在Cookie中相对来说是比较常见的做法，但是并不是最安全的方式。存放在Cookie中的Token可能存在以下安全风险：
+需要注意的是，`navigator.sendBeacon()` 方法发送的数据是以 POST 请求的形式发送到服务器，通常会将数据以表单数据或 JSON 格式进行封装。因此，后端服务器需要正确处理这些数据，并进行相应的解析和处理。
 
-- **跨站脚本攻击（XSS）**：如果网站存在XSS漏洞，攻击者可以通过注入恶意脚本来获取用户的Cookie信息，包括Token。攻击者可以利用Token冒充用户进行恶意操作。
+**简单介绍一下 `navigator.sendBeacon` 用法**
 
-- **跨站请求伪造（CSRF）**：攻击者可以利用CSRF漏洞，诱使用户在已经登录的情况下访问恶意网站，该网站可能利用用户的Token发起伪造的请求，从而执行未经授权的操作。
+语法：
 
-- **不可控的访问权限**：将Token存放在Cookie中，意味着浏览器在每次请求中都会自动携带该Token。如果用户在使用公共计算机或共享设备时忘记退出登录，那么其他人可以通过使用同一个浏览器来访问用户的账户。
+```js
+navigator.sendBeacon(url);
+navigator.sendBeacon(url, data);
+```
 
-为了增加Token的安全性，可以采取以下措施：
+参数
 
-- **使用HttpOnly标识**：将Cookie设置为HttpOnly，可以防止XSS攻击者通过脚本访问Cookie。
+- url
+    - url 参数表明 data 将要被发送到的网络地址。
 
-- **使用Secure标识**：将Cookie设置为Secure，只能在通过HTTPS协议传输时发送给服务器，避免明文传输。
+- data 可选
+    - data 参数是将要发送的 `ArrayBuffer、ArrayBufferView、Blob、DOMString、FormData 或 URLSearchParams` 类型的数据。
 
-- **设置Token的过期时间**：可以设置Token的过期时间，使得Token在一定时间后失效，减少被滥用的风险。
+**发送代码实现如下**
 
-- **使用其他存储方式**：考虑将Token存储在其他地方，如Local Storage或Session Storage，并采取加密等额外的安全措施保护Token的安全性。
+```js
+class StatisticSDK {
+  constructor(productID, baseURL) {
+    this.productID = productID;
+    this.baseURL = baseURL;
+  }
 
-### cookie 和 token 的关系
+  send(query = {}) {
+    query.productID = this.productID;
 
-Cookie和Token是两种不同的概念，但它们在身份验证和授权方面可以有关联。
+    let data = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)) {
+      data.append(key, value);
+    }
+    navigator.sendBeacon(this.baseURL, data);
+  }
+}
+```
 
-Cookie是服务器在HTTP响应中通过Set-Cookie标头发送给客户端的一小段数据。客户端浏览器将Cookie保存在本地，然后在每次对该服务器的后续请求中将Cookie作为HTTP请求的一部分发送回服务器。Cookie通常用于在客户端和服务器之间维护会话状态，以及存储用户相关的信息。
+### 用户行为与日志上报
 
-Token是一种用于身份验证和授权的令牌。它是一个包含用户身份信息的字符串，通常是服务器生成并返回给客户端。客户端在后续的请求中将Token作为身份凭证发送给服务器，服务器通过验证Token的有效性来确认用户的身份和权限。
+用户行为主要涉及到的是事件上报和 pv 曝光， 借助 send 实现即可。
 
-Cookie和Token可以结合使用来实现身份验证和授权机制。服务器可以将Token存储在Cookie中，然后发送给客户端保存。客户端在后续的请求中将Token作为Cookie发送给服务器。服务器通过验证Token的有效性来判断用户的身份和权限。这种方式称为基于Cookie的身份验证。另外，也可以将Token直接存储在请求的标头中，而不是在Cookie中进行传输，这种方式称为基于Token的身份验证。
+```js
+class StatisticSDK {
+  constructor(productID, baseURL) {
+    this.productID = productID;
+    this.baseURL = baseURL;
+  }
 
-需要注意的是，Token相对于Cookie来说更加灵活和安全，可以实现跨域身份验证，以及客户端和服务器的完全分离。而Cookie则受到一些限制，如跨域访问限制，以及容易受到XSS和CSRF攻击等。因此，在实现身份验证和授权机制时，可以选择使用Token替代或辅助Cookie。
+  send(query = {}) {
+    query.productID = this.productID;
+
+    let data = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)) {
+      data.append(key, value);
+    }
+    navigator.sendBeacon(this.baseURL, data);
+  }
+
+  event(key, value = {}) {
+    this.send({ event: key, ...value })
+  }
+
+  pv() {
+    this.event('pv')
+  }
+}
+```
+
+### 性能上报
+
+性能主要涉及的 api 为 performance.timing 里面的时间内容；
+
+```js
+class StatisticSDK {
+  constructor(productID, baseURL) {
+    this.productID = productID;
+    this.baseURL = baseURL;
+  }
+
+  send(query = {}) {
+    query.productID = this.productID;
+
+    let data = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)) {
+      data.append(key, value);
+    }
+    navigator.sendBeacon(this.baseURL, data);
+  }
+
+  // ....
+  initPerformance() {
+    this.send({ event: 'performance', ...performance.timing })
+  }
+}
+```
+
+### 错误上报
+
+错误上报分两类：
+
+一个是 dom 操作错误与 JS 错误报警， 也是常说的运行时报错。 该类报错直接可以通过 `addEventListener('error')` 监控即可；
+
+另一个是Promise内部抛出的错误是无法被error捕获到的，这时需要用`unhandledrejection`事件。
+
+```js
+class StatisticSDK {
+  constructor(productID, baseURL) {
+    this.productID = productID;
+    this.baseURL = baseURL;
+  }
+
+  send(query = {}) {
+    query.productID = this.productID;
+
+    let data = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)) {
+      data.append(key, value);
+    }
+    navigator.sendBeacon(this.baseURL, data);
+  }
+
+  // ....
+  error(err, errInfo = {}) {
+    const { message, stack } = err;
+    this.send({ event: 'error', message, stack, ...errInfo })
+  }
+
+  initErrorListenner() {
+    window.addEventListener('error', event => {
+      this.error(error);
+    })
+    window.addEventListener('unhandledrejection', event => {
+      this.error(new Error(event.reason), { type: 'unhandledrejection' })
+    })
+  }
+}
+```
+
+### React 和 vue 错误边界
+
+错误边界是希望当应用内部发生渲染错误时，不会整个页面崩溃。我们提前给它设置一个兜底组件，并且可以细化粒度，只有发生错误的部分被替换成这个「兜底组件」，不至于整个页面都不能正常工作。
+
+**React**
+
+可以使用类组件错误边界来进行处理， 涉及到的生命周期为：`getDerivedStateFromError` 和 `componentDidCatch`；
+
+```js
+// 定义错误边界
+class ErrorBoundary extends React.Component {
+  state = { error: null }
+  static getDerivedStateFromError(error) {
+    return { error }
+  }
+  componentDidCatch(error, errorInfo) {
+    // 调用我们实现的SDK实例
+    insSDK.error(error, errorInfo)
+  }
+  render() {
+    if (this.state.error) {
+      return <h2>Something went wrong.</h2>
+    }
+    return this.props.children
+  }
+}
+...
+<ErrorBoundary>
+  <BuggyCounter />
+</ErrorBoundary>
+```
+
+**Vue**
+
+vue也有一个类似的生命周期来做这件事：`errorCaptured`
+
+```js
+Vue.component('ErrorBoundary', {
+  data: () => ({ error: null }),
+  errorCaptured (err, vm, info) {
+    this.error = `${err.stack}\n\nfound in ${info} of component`
+    // 调用我们的SDK，上报错误信息
+    insSDK.error(err,info)
+    return false
+  },
+  render (h) {
+    if (this.error) {
+      return h('pre', { style: { color: 'red' }}, this.error)
+    }
+    return this.$slots.default[0]
+  }
+})
+...
+<error-boundary>
+  <buggy-counter />
+</error-boundary>
+```
+
+
+### 参考文档
+
+https://juejin.cn/post/7085679511290773534

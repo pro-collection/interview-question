@@ -9,9 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "对比一下 pnpm、npm、yarn 特性",
+  title: "页面加载速度提升（性能优化）应该从哪些反向来思考？",
   key_world: [
-    "pnpm、npm、yarn 特性对比",
+    "性能提升",
+    "加载优化",
   ],
   labels: [
     labels.engineering,

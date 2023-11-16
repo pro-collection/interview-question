@@ -9,14 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "页面加载速度提升（性能优化）应该从哪些反向来思考？",
+  title: "你认为组件封装的一些基本准则是什么？",
   key_world: [
-    "性能提升",
-    "加载优化",
+    "组件封装原则",
   ],
   labels: [
-    labels.engineering,
-    company.netEase,
+    labels.application,
+    company.shopee,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

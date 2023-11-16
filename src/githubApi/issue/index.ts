@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "后端一次性返回树形结构数据，数据量非常大, 前端该如何处理？",
+  title: "nodejs 如何充分利用多核 CPU?",
   key_world: [
-    "大数据处理",
+    "nodejs 多CPU使用",
   ],
   labels: [
-    labels.application,
-    company.mi,
+    labels.node,
+    company.alibaba,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.master,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

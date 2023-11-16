@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "你认为组件封装的一些基本准则是什么？",
+  title: "后端一次性返回树形结构数据，数据量非常大, 前端该如何处理？",
   key_world: [
-    "组件封装原则",
+    "大数据处理",
   ],
   labels: [
     labels.application,
-    company.shopee,
+    company.mi,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

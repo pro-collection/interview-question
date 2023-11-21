@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "nodejs 如何充分利用多核 CPU?",
+  title: "前端如何设置请求超时时间 timeout",
   key_world: [
-    "nodejs 多CPU使用",
+    "请求超时时间",
   ],
   labels: [
-    labels.node,
-    company.alibaba,
+    labels.network,
+    company.netEase,
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

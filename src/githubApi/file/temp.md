@@ -1,75 +1,86 @@
-### 页面加载优化
+**1. axios全局设置网络超时**
 
-「页面加载链路+流程优化+协作方」的多级分类思考
+`axios.defaults.timeout = 10 * 1000; // 10s`
 
-- 页面启动
-  - service worker 缓存重要的静态资源
-  - 页面保活
-- 资源加载
-  - 网络连接
-    - NDS
-      - 减少 NDS 解析
-      - NDA 预解析
-    - HTTP
-      - 开启 HTTP2 多路复用
-      - 优化核心请求链路
-  - HTML 加载
-    - 内容优化
-      - 代码压缩
-      - 代码精简(tailwindcss)
-      - 服务端渲染 SSG
-    - 流程优化
-      - 服务端渲染 SSR
-      - 流式渲染
-      - 预渲染
-  - 静态资源加载
-    - 内容优化
-      - JS、CSS 代码压缩
-      - 均衡资源包体积：复用代码抽离为一份资源打包、同时开启
-      - 精简代码
-      - 雪碧图
-      - 动态图片降质量
-      - 动态 polyfill (根据浏览器的支持情况，动态加载需要的 polyfill（填充）脚本)
-      - 不常变的资源单独打包
-      - 根据浏览器版本打包， 高版本浏览器， 直接使用 es6 作为输出文件
-    - 流程优化
-      - 配置前端缓存: 资源、请求
-      - 使用 CDN
-      - CDN 优化
-      - 协调资源加载优先级
-      - 动态资源转静态 CDN 链接加载(例如大图片等)
-      - 静态资源使用 service worker 离线存储
-      - 非首屏资源懒加载
-      - 资源和业务请求预加载
-      - 微前端加载应用
-      - 微组件加载核心模块资源
-- 代码执行
-  - 减少执行
-    - 减少重复渲染
-    - 大体量计算场景， 尽量使用缓存函数
-    - 使用防抖节流
-  - 速度提升
-    - 使用 worker 多线程加速
-    - 充分利用异步请求的线下之间来进行核心代码的加载或者执行
-    - wasm 处理大量计算场景
-    - 渲染高耗时场景， 迁移到 canvas 、虚拟 dom 等
-    - 动态渲染：动态渲染可视区内容， 例如图片懒加载等；
-  - 流程优化
-    - 非首屏模块， 延迟加载与渲染
-    - longtask 任务拆分执行
-    - 利用请求闲暇时间， 请求后续页面资源
-- 数据获取
-  - 内容优化
-    - 减少请求、合并请求、BFF
-    - 首屏数据使用模板注入到前端应用
-  - 流程优化
-    - 数据预请求
-    - 常量数据缓存
-    - 非首屏请求，延迟到首屏加载完成之后请求
-    - 请求并行
-- 渲染相关
-  - 虚拟列表
-  - 延迟渲染
-  - 减少重绘重排
-  - 图片预加载到内存
-    
+**2. 单独对某个请求设置网络超时**
+
+`axios.post(url, params, {timeout: 1000}) .then(res => { console.log(res); }) .catch(err=> { console.log(err); }) })`
+
+**3.webpack的dev的proxyTable的超时时间设置**
+
+```csharp
+dev: {     
+    // Paths
+    assetsSubDirectory: 'static', // 静态资源文件夹
+    assetsPublicPath: '/', // 发布路径
+    // 代理配置表，在这里可以配置特定的请求代理到对应的API接口
+    // 使用方法：https://vuejs-templates.github.io/webpack/proxy.html
+    proxyTable: {
+      '/api': {
+        timeout: 30000, // 请求超时时间
+        target: 'http://127.0.0.1:3006', // 目标接口域名
+        changeOrigin: true, // 是否跨域
+        pathRewrite: {
+          '^/api': '' // 重写接口
+        }
+      },
+    // Various Dev Server settings
+    host: 'localhost', // can be overwritten by process.env.HOST
+    port: 4200, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+  }
+```
+
+**4.axios请求超时自动重新请求**
+
+有时候因项目需求，要在接口请求超时或者获取数据失败时，重新请求1次，或者更多次。具体的配置步骤和方法如下：
+
+因为是要在请求超时或者获取数据失败时，进行重新请求设置，那么我们肯定是要在请求返回拦截器里面设置
+
+```javascript
+import axios from "axios";
+
+const Axios = axios.create({ 
+  // 下面两个属性，用来设置，请求失败或者超时，自动重新请求的次数和间隙时间
+  retry: 2, // 请求次数
+  retryInterval: 1000 // 求期间隙
+  ......
+});
+//请求前拦截
+Axios.interceptors.request.use(config => {
+  	return config
+  },
+  function(error) {
+  	return Promise.reject(error)
+  }
+);
+//请求后返回数据拦截
+Axios.interceptors.response.use(res => {
+     return res
+  },
+  function axiosRetryInterceptor(res) {
+      var config = res.config;
+      //如果配置不存在或重试属性未设置，抛出promise错误
+      if (!config || !config.retry) return Promise.reject(res);
+      //设置一个变量记录重新请求的次数
+      config.retryCount = config.retryCount || 0;
+      // 检查重新请求的次数是否超过我们设定的请求次数
+      if (config.retryCount >= config.retry) {
+          return Promise.reject(res);
+      }
+      //重新请求的次数自增
+      config.retryCount += 1;
+      // 创建新的Promise来处理重新请求的间隙
+      var back = new Promise(function(resolve) {
+          console.log("接口"+config.url+"请求超时，重新请求")
+          setTimeout(function() {
+              resolve();
+          }, config.retryInterval|| 1);
+      });
+      //返回axios的实体，重试请求
+      return back.then(function() {
+          return Axios(config);
+      });
+  }
+);
+export default Axios
+```

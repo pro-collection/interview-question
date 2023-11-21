@@ -1,38 +1,88 @@
-**关键词**：nodejs 多CPU使用
+**关键词**：请求超时时间
 
-总所周知， NodeJS 是单线程执行任务， 不同于 浏览器还可以使用 web worker 等手段多线程执行任务。那么 NodeJS 中， 是如何充分利用物理机的多核 CPU 呢？
+**1. axios全局设置网络超时**
 
-### 有三种方式
+`axios.defaults.timeout = 10 * 1000; // 10s`
 
-在 Node.js 中，JS 也是单线程的，只有一个主线程用于执行任务。但是，在 Node.js 中可以使用多进程来利用多核机器，以充分利用系统资源。
+**2. 单独对某个请求设置网络超时**
 
-- **Node.js 提供了 `cluster` 模块**，可以轻松创建子进程来处理任务。通过将任务分配给不同的子进程，每个子进程可以在自己的线程上执行任务，从而实现多核机器的利用。
+`axios.post(url, params, {timeout: 1000}) .then(res => { console.log(res); }) .catch(err=> { console.log(err); }) })`
 
-- **Node.js 也提供了 `worker_threads` 模块**，可以创建真正的多线程应用程序。这个模块允许开发者创建和管理多个工作线程，每个线程都可以独立地执行任务。
+**3.webpack的dev的proxyTable的超时时间设置**
 
-- **利用的是 Node.js 的事件循环机制和异步非阻塞的 I/O 操作**。Node.js 使用事件驱动的模型来处理请求，当有请求到达时，Node.js 将其放入事件队列中，然后通过事件循环来处理这些请求。在等待 I/O 操作的过程中，Node.js 不会阻塞其他请求的处理，而是继续处理其他请求。这样，即使 JavaScript 是单线程的，但在实际运行中，多个请求可以同时处理，充分利用了多核系统的能力。
+```csharp
+dev: {     
+    // Paths
+    assetsSubDirectory: 'static', // 静态资源文件夹
+    assetsPublicPath: '/', // 发布路径
+    // 代理配置表，在这里可以配置特定的请求代理到对应的API接口
+    // 使用方法：https://vuejs-templates.github.io/webpack/proxy.html
+    proxyTable: {
+      '/api': {
+        timeout: 30000, // 请求超时时间
+        target: 'http://127.0.0.1:3006', // 目标接口域名
+        changeOrigin: true, // 是否跨域
+        pathRewrite: {
+          '^/api': '' // 重写接口
+        }
+      },
+    // Various Dev Server settings
+    host: 'localhost', // can be overwritten by process.env.HOST
+    port: 4200, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+  }
+```
 
-### 如果 Nodejs 只写同步代码， 是否意味着无法充分利用多核优势？
+**4.axios请求超时自动重新请求**
 
-如果在 Node.js 的开发过程中只使用同步代码而不使用异步代码或集群模块，**那么意味着无法充分利用机器多核优势**。
+有时候因项目需求，要在接口请求超时或者获取数据失败时，重新请求1次，或者更多次。具体的配置步骤和方法如下：
 
-Node.js的事件驱动和异步非阻塞的特性使得它在处理大量并发请求时非常高效。当你使用异步代码时，可以在等待 I/O 操作的过程中继续处理其他请求，从而提高系统的吞吐量和响应速度。而同步代码会阻塞事件循环，使得只能按顺序处理请求，无法同时处理多个请求，无法充分利用多核系统的能力。
+因为是要在请求超时或者获取数据失败时，进行重新请求设置，那么我们肯定是要在请求返回拦截器里面设置
 
-另外，如果你不使用集群模块，那么只有一个 Node.js 进程在运行，无法充分利用多核系统的资源。使用集群模块可以创建多个子进程，每个子进程在一个核心上运行，从而并行处理请求，提高系统的并发能力。
+```javascript
+import axios from "axios";
 
-### 为何 nodejs 异步代码就可以充分利用多核优势了？
-
-Node.js的异步代码可以充分利用多核优势，主要有两个原因：
-
-1. 事件驱动和非阻塞 I/O：Node.js采用事件驱动的模型，通过使用异步非阻塞 I/O 操作，可以在等待 I/O 操作完成的同时继续处理其他请求。这意味着在一个请求等待 I/O 的过程中，Node.js 可以同时处理其他请求，充分利用了 CPU 的多核能力。每个核心可以处理一个请求，从而提高系统的并发能力和吞吐量。
-
-2. 事件循环机制：Node.js的事件循环机制使得异步代码可以高效地处理大量并发请求。事件循环机制通过将请求注册为事件监听器，并在合适的时候触发事件处理函数，从而实现异步处理。这样一来，即使有大量并发请求，也能够通过事件循环机制避免线程切换的开销，提高系统的性能。
-
-需要注意的是，虽然 Node.js 的事件驱动和异步非阻塞的特性使得它能够充分利用多核优势，但是在处理 CPU 密集型任务时，仍然可能受限于单线程的性能。在这种情况下，可以通过使用集群模块来创建多个子进程，在每个核心上运行独立的 Node.js 进程，从而实现并行处理，提高系统的性能。
-
-### 异步就能充分利用 CPU 原理是啥？
-
-当Node.js使用异步代码时，服务器的其他CPU核心是在工作的。
-这是因为Node.js的事件驱动模型和非阻塞I/O使得在等待I/O操作完成时，可以同时处理其他请求。
-当一个请求在等待I/O操作时，CPU核心可以被用于处理其他请求，而不是空闲等待。
-这种方式可以充分利用服务器上的多个CPU核心，提高系统的并发能力和吞吐量。通过同时处理多个请求，可以更有效地利用服务器的资源，提高系统的性能。
+const Axios = axios.create({ 
+  // 下面两个属性，用来设置，请求失败或者超时，自动重新请求的次数和间隙时间
+  retry: 2, // 请求次数
+  retryInterval: 1000 // 求期间隙
+  ......
+});
+//请求前拦截
+Axios.interceptors.request.use(config => {
+  	return config
+  },
+  function(error) {
+  	return Promise.reject(error)
+  }
+);
+//请求后返回数据拦截
+Axios.interceptors.response.use(res => {
+     return res
+  },
+  function axiosRetryInterceptor(res) {
+      var config = res.config;
+      //如果配置不存在或重试属性未设置，抛出promise错误
+      if (!config || !config.retry) return Promise.reject(res);
+      //设置一个变量记录重新请求的次数
+      config.retryCount = config.retryCount || 0;
+      // 检查重新请求的次数是否超过我们设定的请求次数
+      if (config.retryCount >= config.retry) {
+          return Promise.reject(res);
+      }
+      //重新请求的次数自增
+      config.retryCount += 1;
+      // 创建新的Promise来处理重新请求的间隙
+      var back = new Promise(function(resolve) {
+          console.log("接口"+config.url+"请求超时，重新请求")
+          setTimeout(function() {
+              resolve();
+          }, config.retryInterval|| 1);
+      });
+      //返回axios的实体，重试请求
+      return back.then(function() {
+          return Axios(config);
+      });
+  }
+);
+export default Axios
+```

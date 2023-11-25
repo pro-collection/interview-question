@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端如何设置请求超时时间 timeout",
+  title: "http code 中 301 和 302 有啥区别？",
   key_world: [
-    "请求超时时间",
+    "http code 码",
   ],
   labels: [
     labels.network,

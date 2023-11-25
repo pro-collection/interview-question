@@ -1,88 +1,19 @@
-**关键词**：请求超时时间
+**关键词**：http code 码
 
-**1. axios全局设置网络超时**
+在 HTTP 协议中，301和302是两种重定向状态码。它们的区别如下：
 
-`axios.defaults.timeout = 10 * 1000; // 10s`
+1. 301 Moved Permanently (永久重定向)：当服务器返回301状态码时，表示所请求的资源已经被永久移动到了一个新的位置。浏览器在接收到301响应后，会自动将请求的 URL 地址更新为新的位置，并且将响应缓存起来。以后的请求将会直接访问新的位置。这意味着搜索引擎会将原始 URL 的权重转移到新的位置，且用户访问的 URL 也会发生更改。
 
-**2. 单独对某个请求设置网络超时**
+2. 302 Found (临时重定向)：当服务器返回302状态码时，表示所请求的资源暂时被移动到了一个新的位置。与301不同的是，浏览器在接收到302响应后，不会自动更新请求的 URL 地址，而是会保持原始 URL 地址不变。对于搜索引擎而言，会将权重保留在原始 URL 上，而不会转移到新的位置。通常情况下，浏览器会跳转到新的位置，用户会看到新的 URL 地址。
 
-`axios.post(url, params, {timeout: 1000}) .then(res => { console.log(res); }) .catch(err=> { console.log(err); }) })`
 
-**3.webpack的dev的proxyTable的超时时间设置**
+**以下是301和302状态码的比较表格**：
 
-```csharp
-dev: {     
-    // Paths
-    assetsSubDirectory: 'static', // 静态资源文件夹
-    assetsPublicPath: '/', // 发布路径
-    // 代理配置表，在这里可以配置特定的请求代理到对应的API接口
-    // 使用方法：https://vuejs-templates.github.io/webpack/proxy.html
-    proxyTable: {
-      '/api': {
-        timeout: 30000, // 请求超时时间
-        target: 'http://127.0.0.1:3006', // 目标接口域名
-        changeOrigin: true, // 是否跨域
-        pathRewrite: {
-          '^/api': '' // 重写接口
-        }
-      },
-    // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
-    port: 4200, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-  }
-```
-
-**4.axios请求超时自动重新请求**
-
-有时候因项目需求，要在接口请求超时或者获取数据失败时，重新请求1次，或者更多次。具体的配置步骤和方法如下：
-
-因为是要在请求超时或者获取数据失败时，进行重新请求设置，那么我们肯定是要在请求返回拦截器里面设置
-
-```javascript
-import axios from "axios";
-
-const Axios = axios.create({ 
-  // 下面两个属性，用来设置，请求失败或者超时，自动重新请求的次数和间隙时间
-  retry: 2, // 请求次数
-  retryInterval: 1000 // 求期间隙
-  ......
-});
-//请求前拦截
-Axios.interceptors.request.use(config => {
-  	return config
-  },
-  function(error) {
-  	return Promise.reject(error)
-  }
-);
-//请求后返回数据拦截
-Axios.interceptors.response.use(res => {
-     return res
-  },
-  function axiosRetryInterceptor(res) {
-      var config = res.config;
-      //如果配置不存在或重试属性未设置，抛出promise错误
-      if (!config || !config.retry) return Promise.reject(res);
-      //设置一个变量记录重新请求的次数
-      config.retryCount = config.retryCount || 0;
-      // 检查重新请求的次数是否超过我们设定的请求次数
-      if (config.retryCount >= config.retry) {
-          return Promise.reject(res);
-      }
-      //重新请求的次数自增
-      config.retryCount += 1;
-      // 创建新的Promise来处理重新请求的间隙
-      var back = new Promise(function(resolve) {
-          console.log("接口"+config.url+"请求超时，重新请求")
-          setTimeout(function() {
-              resolve();
-          }, config.retryInterval|| 1);
-      });
-      //返回axios的实体，重试请求
-      return back.then(function() {
-          return Axios(config);
-      });
-  }
-);
-export default Axios
-```
+| 特征 | 301 Moved Permanently | 302 Found |
+|---|---|---|
+| 持久性 | 是 | 否 |
+| 重定向类型 | 永久重定向 | 临时重定向 |
+| URL 更新 | 是，浏览器会自动更新 | 否，浏览器保持原始 URL 不变 |
+| 响应缓存 | 是，浏览器会缓存响应 | 否，每次请求都会访问原始 URL |
+| 搜索引擎权重转移 | 是，权重会转移到新位置 | 否，权重保留在原始 URL 上 |
+| 用户可见性 | 可能会看到新的 URL 地址 | 可能会看到新的 URL 地址 |

@@ -17,12 +17,12 @@ const update = (options: UpdateIssueOptions) => octokit.request(apiUrl.updateIss
 });
 
 const remote = {
-  title: "前端日志埋点 SDK 设计思路",
+  title: "git 常用命令汇总",
   labels: [
-    labels.application,
+    labels.linuxDevops,
   ],
   body: () => fs.readFileSync(
-    "/Users/yanle/code/self/interview-question/src/githubApi/file/demo.md",
+    "/Users/yanle/code/self/node-index/books/知识库/02、技术生态圈/01、git常用命令汇总/README.md",
     { encoding: "utf8" },
   ),
 };

@@ -13,6 +13,7 @@ export const labels = {
   okr: "OKR",
   node: "NodeJS",
   application: "应用类",
+  test: "单元测试",
 };
 
 

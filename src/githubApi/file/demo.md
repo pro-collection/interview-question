@@ -1,19 +1,123 @@
-**关键词**：http code 码
+**关键词**：请求重试
 
-在 HTTP 协议中，301和302是两种重定向状态码。它们的区别如下：
+看过很多请求超时重试的样例， 很多都是基于 axios interceptors 实现的。 但是有没有牛逼的原生方式实现呢？
 
-1. 301 Moved Permanently (永久重定向)：当服务器返回301状态码时，表示所请求的资源已经被永久移动到了一个新的位置。浏览器在接收到301响应后，会自动将请求的 URL 地址更新为新的位置，并且将响应缓存起来。以后的请求将会直接访问新的位置。这意味着搜索引擎会将原始 URL 的权重转移到新的位置，且用户访问的 URL 也会发生更改。
+最近在看 fbjs 库里面的代码， 发现里面有一个超时重试的代码， 只有一百多行代码， 封装的极其牛逼。
 
-2. 302 Found (临时重定向)：当服务器返回302状态码时，表示所请求的资源暂时被移动到了一个新的位置。与301不同的是，浏览器在接收到302响应后，不会自动更新请求的 URL 地址，而是会保持原始 URL 地址不变。对于搜索引擎而言，会将权重保留在原始 URL 上，而不会转移到新的位置。通常情况下，浏览器会跳转到新的位置，用户会看到新的 URL 地址。
+不过这里的代码是 Flow 类型检测的代码， 而且有一些外部小依赖， 之后要翻译成 ts 代码。
 
+**这里简单介绍一下 fbjs 这个库**
 
-**以下是301和302状态码的比较表格**：
+> fbjs（Facebook JavaScript）是一个由 Facebook 开发和维护的 JavaScript 工具库。它提供了一组通用的 JavaScript 功能和实用工具，用于辅助开发大型、高性能的 JavaScript 应用程序。
 
-| 特征 | 301 Moved Permanently | 302 Found |
-|---|---|---|
-| 持久性 | 是 | 否 |
-| 重定向类型 | 永久重定向 | 临时重定向 |
-| URL 更新 | 是，浏览器会自动更新 | 否，浏览器保持原始 URL 不变 |
-| 响应缓存 | 是，浏览器会缓存响应 | 否，每次请求都会访问原始 URL |
-| 搜索引擎权重转移 | 是，权重会转移到新位置 | 否，权重保留在原始 URL 上 |
-| 用户可见性 | 可能会看到新的 URL 地址 | 可能会看到新的 URL 地址 |
+说到这儿了， 直接上完整代码
+
+```ts
+interface InitWithRetries extends RequestInit {
+  fetchTimeout?: number | null;
+  retryDelays?: number[] | null;
+}
+
+const DEFAULT_TIMEOUT = 1000 * 1.5;
+const DEFAULT_RETRIES = [0, 0];
+
+const fetchWithRetries = (url: string, initWithRetries?: InitWithRetries): Promise<any> => {
+  // fetchTimeout 请求超时时间
+  // 请求
+  const { fetchTimeout, retryDelays, ...init } = initWithRetries || {};
+
+  // 超时时间
+  const _fetchTimeout = fetchTimeout != null ? fetchTimeout : DEFAULT_TIMEOUT;
+
+  // 重复时间数组
+  const _retryDelays = retryDelays != null ? retryDelays : DEFAULT_RETRIES;
+
+  // 开始时间
+  let requestStartTime = 0;
+
+  // 重试请求索引
+  let requestsAttempted = 0;
+
+  return new Promise((resolve, reject) => {
+    // 申明发送请求方法
+    const sendTimedRequest = (): void => {
+      // 自增索引与请求次数
+      requestsAttempted++;
+
+      // 发起请求时间
+      requestStartTime = Date.now();
+
+      // 是否需要处理后续请求
+      let isRequestAlive = true;
+
+      // 发起请求
+      const request = fetch(url, init);
+
+      // 请求超时情况
+      const requestTimeout = setTimeout(() => {
+        // 需要阻断正常的请求返回
+        isRequestAlive = false;
+
+        // 需要重新发起请求
+        if (shouldRetry(requestsAttempted)) {
+          console.warn("fetchWithRetries: HTTP timeout, retrying.");
+          retryRequest();
+        } else {
+          reject(new Error(
+            `fetchWithRetries(): Failed to get response from server, tried ${requestsAttempted} times.`,
+          ));
+        }
+      }, _fetchTimeout);
+
+      // 正常请求发起
+      request.then(response => {
+        // 正常请求返回的场景， 清空定时器
+        clearTimeout(requestTimeout);
+
+        // 如果进入了超时流程， 那么正常返回的逻辑， 就直接阻断
+        if (isRequestAlive) {
+          if (response.status >= 200 && response.status < 300) {
+            resolve(response);
+          } else if (shouldRetry(requestsAttempted)) {
+            console.warn("fetchWithRetries: HTTP error, retrying.");
+            retryRequest();
+          } else {
+            const error: any = new Error(`response error.`);
+            error.response = response;
+            reject(error);
+          }
+        }
+      }).catch(error => {
+        clearTimeout(requestTimeout);
+        if (shouldRetry(requestsAttempted)) {
+          retryRequest();
+        } else {
+          reject(error);
+        }
+      });
+    };
+
+    // 发起重复请求
+    const retryRequest = (): void => {
+      // 重复请求 delay 时间
+      const retryDelay = _retryDelays[requestsAttempted - 1];
+
+      // 重复请求开始时间
+      const retryStartTime = requestStartTime + retryDelay;
+
+      // 延迟时间
+      const timeout = retryStartTime - Date.now() > 0 ? retryStartTime - Date.now() : 0;
+
+      // 重复请求
+      setTimeout(sendTimedRequest, timeout);
+    };
+
+    // 是否可以发起重复请求
+    const shouldRetry = (attempt: number): boolean => attempt <= _retryDelays.length;
+
+    sendTimedRequest();
+  });
+};
+
+fetchWithRetries("http://127.0.0.1:3000/user/")
+```

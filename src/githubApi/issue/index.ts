@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http code 中 301 和 302 有啥区别？",
+  title: "封装一个请求超时， 发起重试的代码",
   key_world: [
-    "http code 码",
+    "请求重试",
   ],
   labels: [
-    labels.network,
-    company.netEase,
+    labels.code,
+    company.shopee,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

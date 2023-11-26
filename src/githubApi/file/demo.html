@@ -1,76 +1,247 @@
-<style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#252933}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;line-height:38px;margin-bottom:5px}.markdown-body h2{font-size:22px;line-height:34px;padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:20px;line-height:28px}.markdown-body h4{font-size:18px;line-height:26px}.markdown-body h5{font-size:17px;line-height:24px}.markdown-body h6{font-size:16px;line-height:24px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="juejin">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><h2 data-id="heading-0">1. axios全局设置网络超时</h2>
-<p><code> axios.defaults.timeout = 10 * 1000; // 10s</code></p>
-<h2 data-id="heading-1">2. 单独对某个请求设置网络超时</h2>
-<p><code>axios.post(url, params, {timeout: 1000})   .then(res =&gt; {     console.log(res);   })   .catch(err=&gt; {     console.log(err);   }) })</code></p>
-<h2 data-id="heading-2">3.webpack的dev的proxyTable的超时时间设置</h2>
-<pre><code class="hljs language-csharp" lang="csharp">dev: {     
-    <span class="hljs-comment">// Paths</span>
-    assetsSubDirectory: <span class="hljs-string">'static'</span>, <span class="hljs-comment">// 静态资源文件夹</span>
-    assetsPublicPath: <span class="hljs-string">'/'</span>, <span class="hljs-comment">// 发布路径</span>
-    <span class="hljs-comment">// 代理配置表，在这里可以配置特定的请求代理到对应的API接口</span>
-    <span class="hljs-comment">// 使用方法：https://vuejs-templates.github.io/webpack/proxy.html</span>
-    proxyTable: {
-      <span class="hljs-string">'/api'</span>: {
-        timeout: <span class="hljs-number">30000</span>, <span class="hljs-comment">// 请求超时时间</span>
-        target: <span class="hljs-string">'http://127.0.0.1:3006'</span>, <span class="hljs-comment">// 目标接口域名</span>
-        changeOrigin: <span class="hljs-literal">true</span>, <span class="hljs-comment">// 是否跨域</span>
-        pathRewrite: {
-          <span class="hljs-string">'^/api'</span>: <span class="hljs-string">''</span> <span class="hljs-comment">// 重写接口</span>
-        }
-      },
-    <span class="hljs-comment">// Various Dev Server settings</span>
-    host: <span class="hljs-string">'localhost'</span>, <span class="hljs-comment">// can be overwritten by process.env.HOST</span>
-    port: <span class="hljs-number">4200</span>, <span class="hljs-comment">// can be overwritten by process.env.PORT, if port is in use, a free one will be determined</span>
-  }
-</code></pre>
-<h2 data-id="heading-3">4.axios请求超时自动重新请求</h2>
-<p>有时候因项目需求，要在接口请求超时或者获取数据失败时，重新请求1次，或者更多次。具体的配置步骤和方法如下：</p>
-<p>因为是要在请求超时或者获取数据失败时，进行重新请求设置，那么我们肯定是要在请求返回拦截器里面设置</p>
-<pre><code class="hljs language-javascript" lang="javascript"><span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">"axios"</span>;
+<style>.markdown-body{color:#383838;font-size:15px;line-height:30px;letter-spacing:2px;word-break:break-word;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif;scroll-behavior:smooth;background-image:linear-gradient(0deg,transparent 24%,rgba(201,195,195,.329) 25%,hsla(0,8%,80.4%,.05) 26%,transparent 27%,transparent 74%,hsla(0,5.2%,81%,.185) 75%,rgba(180,176,176,.05) 76%,transparent 77%,transparent),linear-gradient(90deg,transparent 24%,rgba(204,196,196,.226) 25%,hsla(0,4%,66.1%,.05) 26%,transparent 27%,transparent 74%,hsla(0,5.2%,81%,.185) 75%,rgba(180,176,176,.05) 76%,transparent 77%,transparent);background-color:#fff;background-size:50px 50px;padding-bottom:60px}.markdown-body ::selection{color:#fff;background-color:#a862ea}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{margin:24px 0 12px;color:#a862ea}.markdown-body h1{line-height:2;font-size:1.4em}.markdown-body h1~p:first-of-type:first-letter{color:#a862ea;float:left;font-size:2em;margin-right:.4em;font-weight:bolder}.markdown-body h2{font-size:1.2em}.markdown-body h3{font-size:1.1em}.markdown-body ol,.markdown-body ul{padding-left:2em}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;padding-left:.2em}.markdown-body ol li::marker,.markdown-body ul li::marker{color:#a862ea}.markdown-body ol li.task-list-item,.markdown-body ul li.task-list-item{list-style:none}.markdown-body ol li.task-list-item ol,.markdown-body ol li.task-list-item ul,.markdown-body ul li.task-list-item ol,.markdown-body ul li.task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:10px}.markdown-body a,.markdown-body code,.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6,.markdown-body li,.markdown-body p{opacity:.85;vertical-align:baseline;transition:all .1s ease}.markdown-body a:hover,.markdown-body code:hover,.markdown-body h1:hover,.markdown-body h2:hover,.markdown-body h3:hover,.markdown-body h4:hover,.markdown-body h5:hover,.markdown-body h6:hover,.markdown-body li:hover,.markdown-body p:hover{opacity:1}.markdown-body a{display:inline-block;color:#a862ea;cursor:pointer;text-decoration:none;position:relative}.markdown-body a:after{content:"";position:absolute;width:98%;height:1px;bottom:0;left:0;transform:scaleX(0);background-color:#a862ea;transform-origin:bottom right;transition:transform .3s ease-in-out}.markdown-body a:hover:after{transform:scaleX(1);transform-origin:bottom left}.markdown-body a:active,.markdown-body a:link{color:#a862ea}.markdown-body img{max-width:100%;user-select:none;margin:1em 0;transition:transform .2s ease 0s;background-color:#f8f5ff;box-shadow:0 0 10px #e7daff}.markdown-body img:hover{opacity:1;box-shadow:0 0 20px #e7daff;transform:translateY(-1px)}.markdown-body blockquote{padding:.5em 1em;margin:12px 0;border-top-left-radius:2px;border-bottom-left-radius:2px;border-left:3px solid #a862ea;background-color:#f8f5ff}.markdown-body blockquote>p{margin:0}.markdown-body .math{font-style:italic;margin:12px 0;padding:.5em 1em;background-color:#f8f5ff}.markdown-body .math>p{margin:0}.markdown-body code{padding:2px .4em;overflow-x:auto;color:#a862ea;font-weight:700;word-break:break-word;font-family:Operator Mono,Consolas,Monaco,Menlo,monospace;background-color:#f8f5ff}.markdown-body pre{margin:2em 0}.markdown-body pre>code{display:block;padding:1.5em;word-break:normal;font-size:.9em;font-style:normal;font-weight:400;font-family:Operator Mono,Consolas,Monaco,Menlo,monospace;line-height:18px;color:#383838;border-radius:2px;scroll-behavior:smooth;box-shadow:0 0 10px #e7daff}.markdown-body pre>code:hover{box-shadow:0 0 20px #e7daff}.markdown-body pre>code::-webkit-scrollbar{height:6px;background-color:#f8f5ff}.markdown-body pre>code::-webkit-scrollbar-thumb{background-color:#e7daff;border-bottom-left-radius:3px;border-bottom-right-radius:3px}.markdown-body hr{margin:2em 0;border-top:1px solid #a862ea}.markdown-body table{width:100%;font-size:12px;max-width:100%;overflow:auto;border-collapse:collapse}.markdown-body thead{color:#a862ea;background:#f8f5ff}.markdown-body td,.markdown-body th{padding:.5em;border:1px solid #e7daff}.markdown-body tr{background-color:#f8f5ff}@media (max-width:720px){.markdown-body{font-size:12px}}</style><style data-highlight="">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><p>看过很多请求超时重试的样例， 很多都是基于 axios interceptors 实现的。 但是有没有牛逼的原生方式实现呢？</p>
+<p>最近在看 fbjs 库里面的代码， 发现里面有一个超时重试的代码， 只有一百多行代码， 封装的极其牛逼。 直接贴代码地址：<a href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Ffacebook%2Ffbjs%2Fblob%2Fmain%2Fpackages%2Ffbjs%2Fsrc%2Ffetch%2FfetchWithRetries.js" target="_blank" title="https://github.com/facebook/fbjs/blob/main/packages/fbjs/src/fetch/fetchWithRetries.js" ref="nofollow noopener noreferrer">github.com/facebook/fb…</a></p>
+<p>不过这里的代码是 Flow 类型检测的代码， 而且有一些外部小依赖， 接下来， 咱们解除依赖， 然后一步一步来实现一下这部分逻辑。</p>
+<p><strong>这里简单介绍一下 fbjs 这个库</strong></p>
+<blockquote>
+<p>fbjs（Facebook JavaScript）是一个由 Facebook 开发和维护的 JavaScript 工具库。它提供了一组通用的 JavaScript 功能和实用工具，用于辅助开发大型、高性能的 JavaScript 应用程序。</p>
+</blockquote>
+<h3 data-id="heading-0">1.先封装一个正常的请求</h3>
+<p>我们先用 fetch 封装一个非常正常的请求， 这个没有什么好说的， 直接上代码：</p>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-comment">// 发起请求</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">sendTimedRequest</span> = (<span class="hljs-params">url: <span class="hljs-built_in">string</span>, fetchConfig: RequestInit</span>) =&gt; {
+  <span class="hljs-keyword">const</span> request = <span class="hljs-title function_">fetch</span>(url, fetchConfig);
 
-<span class="hljs-keyword">const</span> <span class="hljs-title class_">Axios</span> = axios.<span class="hljs-title function_">create</span>({ 
-  <span class="hljs-comment">// 下面两个属性，用来设置，请求失败或者超时，自动重新请求的次数和间隙时间</span>
-  <span class="hljs-attr">retry</span>: <span class="hljs-number">2</span>, <span class="hljs-comment">// 请求次数</span>
-  <span class="hljs-attr">retryInterval</span>: <span class="hljs-number">1000</span> <span class="hljs-comment">// 求期间隙</span>
-  ......
-});
-<span class="hljs-comment">//请求前拦截</span>
-<span class="hljs-title class_">Axios</span>.<span class="hljs-property">interceptors</span>.<span class="hljs-property">request</span>.<span class="hljs-title function_">use</span>(<span class="hljs-function"><span class="hljs-params">config</span> =&gt;</span> {
-  	<span class="hljs-keyword">return</span> config
-  },
-  <span class="hljs-keyword">function</span>(<span class="hljs-params">error</span>) {
-  	<span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(error)
-  }
-);
-<span class="hljs-comment">//请求后返回数据拦截</span>
-<span class="hljs-title class_">Axios</span>.<span class="hljs-property">interceptors</span>.<span class="hljs-property">response</span>.<span class="hljs-title function_">use</span>(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
-     <span class="hljs-keyword">return</span> res
-  },
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">axiosRetryInterceptor</span>(<span class="hljs-params">res</span>) {
-      <span class="hljs-keyword">var</span> config = res.<span class="hljs-property">config</span>;
-      <span class="hljs-comment">//如果配置不存在或重试属性未设置，抛出promise错误</span>
-      <span class="hljs-keyword">if</span> (!config || !config.<span class="hljs-property">retry</span>) <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(res);
-      <span class="hljs-comment">//设置一个变量记录重新请求的次数</span>
-      config.<span class="hljs-property">retryCount</span> = config.<span class="hljs-property">retryCount</span> || <span class="hljs-number">0</span>;
-      <span class="hljs-comment">// 检查重新请求的次数是否超过我们设定的请求次数</span>
-      <span class="hljs-keyword">if</span> (config.<span class="hljs-property">retryCount</span> &gt;= config.<span class="hljs-property">retry</span>) {
-          <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(res);
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    request.<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {
+      <span class="hljs-keyword">if</span> (response.<span class="hljs-property">status</span> &gt;= <span class="hljs-number">200</span> &amp;&amp; response.<span class="hljs-property">status</span> &lt; <span class="hljs-number">300</span>) {
+        <span class="hljs-title function_">resolve</span>(response);
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">const</span> <span class="hljs-attr">error</span>: <span class="hljs-built_in">any</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`response error.`</span>);
+        error.<span class="hljs-property">response</span> = response;
+        <span class="hljs-title function_">reject</span>(error);
       }
-      <span class="hljs-comment">//重新请求的次数自增</span>
-      config.<span class="hljs-property">retryCount</span> += <span class="hljs-number">1</span>;
-      <span class="hljs-comment">// 创建新的Promise来处理重新请求的间隙</span>
-      <span class="hljs-keyword">var</span> back = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">resolve</span>) {
-          <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">"接口"</span>+config.<span class="hljs-property">url</span>+<span class="hljs-string">"请求超时，重新请求"</span>)
-          <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
-              <span class="hljs-title function_">resolve</span>();
-          }, config.<span class="hljs-property">retryInterval</span>|| <span class="hljs-number">1</span>);
-      });
-      <span class="hljs-comment">//返回axios的实体，重试请求</span>
-      <span class="hljs-keyword">return</span> back.<span class="hljs-title function_">then</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
-          <span class="hljs-keyword">return</span> <span class="hljs-title class_">Axios</span>(config);
-      });
-  }
-);
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Axios</span>
+    }).<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+      <span class="hljs-title function_">reject</span>(error);
+    });
+  });
+};
 </code></pre>
-<h3 data-id="heading-4">以上内容非原创，为网上摘抄笔记</h3>
+<h3 data-id="heading-1">2.请求超时判定</h3>
+<p>需要再次封装一个 参数 <code>fetchTimeout</code>， 这个参数的作用就是指明超时时间。 计算超时时间是从请求发起的时候开始计算， 如果超过 <code>fetchTimeout</code> 证明请求就超时了， 那么直接阻断该请求的；</p>
+<p>要实现超时时间和阻断请求， 使用的原理也很简单， 就是 <strong>闭包 + setTimeout + flag</strong></p>
+<p>所以因为引入了闭包， 我们需要将上面的 <code>sendTimedRequest</code> 放置在一个闭包函数里面， 直接上代码：</p>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">InitWithRetries</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">RequestInit</span> {
+  fetchTimeout?: <span class="hljs-built_in">number</span> | <span class="hljs-literal">null</span>;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">DEFAULT_TIMEOUT</span> = <span class="hljs-number">1000</span> * <span class="hljs-number">1.5</span>;
+
+
+<span class="hljs-keyword">const</span> fetchWithRetries = (<span class="hljs-attr">url</span>: <span class="hljs-built_in">string</span>, initWithRetries?: <span class="hljs-title class_">InitWithRetries</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">any</span>&gt; =&gt; {
+  <span class="hljs-comment">// fetchTimeout 请求超时时间</span>
+  <span class="hljs-comment">// 请求</span>
+  <span class="hljs-keyword">const</span> { fetchTimeout, ...init } = initWithRetries || {};
+
+  <span class="hljs-comment">// 超时时间</span>
+  <span class="hljs-keyword">const</span> _fetchTimeout = fetchTimeout != <span class="hljs-literal">null</span> ? fetchTimeout : <span class="hljs-variable constant_">DEFAULT_TIMEOUT</span>;
+
+  <span class="hljs-comment">// 开始时间</span>
+  <span class="hljs-keyword">let</span> requestStartTime = <span class="hljs-number">0</span>;
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-comment">// 申明发送请求方法</span>
+    <span class="hljs-keyword">const</span> sendTimedRequest = (): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> {
+      <span class="hljs-comment">// 发起请求时间</span>
+      requestStartTime = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>();
+
+      <span class="hljs-comment">// 是否需要处理后续请求</span>
+      <span class="hljs-keyword">let</span> isRequestAlive = <span class="hljs-literal">true</span>;
+
+      <span class="hljs-comment">// 发起请求</span>
+      <span class="hljs-keyword">const</span> request = <span class="hljs-title function_">fetch</span>(url, init);
+
+      <span class="hljs-comment">// 请求超时情况</span>
+      <span class="hljs-keyword">const</span> requestTimeout = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-comment">// 需要阻断正常的请求返回</span>
+        isRequestAlive = <span class="hljs-literal">false</span>;
+
+        <span class="hljs-comment">// 需要重新发起请求</span>
+        <span class="hljs-title function_">sendTimedRequest</span>();
+      }, _fetchTimeout);
+
+      <span class="hljs-comment">// 正常请求发起</span>
+      request.<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {
+        <span class="hljs-comment">// 正常请求返回的场景， 清空定时器</span>
+        <span class="hljs-built_in">clearTimeout</span>(requestTimeout);
+
+        <span class="hljs-comment">// 如果进入了超时流程， 那么正常返回的逻辑， 就直接阻断</span>
+        <span class="hljs-keyword">if</span> (isRequestAlive) {
+          <span class="hljs-keyword">if</span> (response.<span class="hljs-property">status</span> &gt;= <span class="hljs-number">200</span> &amp;&amp; response.<span class="hljs-property">status</span> &lt; <span class="hljs-number">300</span>) {
+            <span class="hljs-title function_">resolve</span>(response);
+          } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">const</span> <span class="hljs-attr">error</span>: <span class="hljs-built_in">any</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`response error.`</span>);
+            error.<span class="hljs-property">response</span> = response;
+            <span class="hljs-title function_">reject</span>(error);
+          }
+        }
+      }).<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+        <span class="hljs-title function_">reject</span>(error);
+      });
+    };
+
+    <span class="hljs-title function_">sendTimedRequest</span>();
+  });
+};
+</code></pre>
+<h3 data-id="heading-2">3.上面代码存在问题</h3>
+<p>上面的代码其实是存在问题的；我们设置的超时时间是 1.5s ， 那么如果接口时间过长， 会存在的情况是啥？ <strong>无限重复请求</strong></p>
+<p>就像下面这样子：</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/554279a30e1048dbb31f4fad2708a1cb~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=2938&amp;h=332&amp;s=89984&amp;e=png&amp;b=fdfdfd" alt="image.png" loading="lazy"></p>
+<p>那么接下来要解决的问题就是， 重复请求次数问题， 我们需要把重复发起请求的次数限定在一个可控范围内；那么就需要加入重复请求次数的概念。</p>
+<p>重复请求次数的概念， fbjs 里面的设计就非常巧妙了。因为他是一个数组，每个元素都是数字，每个数字对应的就是延迟重复请求的时间。</p>
+<p>比如：</p>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">DEFAULT_RETRIES</span> = [<span class="hljs-number">1000</span>, <span class="hljs-number">3000</span>];
+</code></pre>
+<p>上面的设置中， 表示首次请求超时之后， 会再次发起两次重复请求， 第一次重复请求延迟时间为 1000 ms 的时候发起， 第二次重复请求延迟时间为 3000ms 的时候发起。如果两次重复请求均失败， 那么最后再把最终失败结果作为 promise.reject 返回。</p>
+<p>再例如， 如果设置时间为：</p>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">DEFAULT_RETRIES</span> = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>];
+</code></pre>
+<p>那么会重复请求 2 次， 不会进行延迟请求， 第一次请求如果超时时间为 1.5 秒之后， 接口没有返回， 那么会立马进行第一次重试请求， 第一次重试请求 1.5秒 之后， 接口还是没有返回， 就进行第二次重试请求。</p>
+<p>同时还需要一个概念就是， 如何判定是否需要再次请求， 即 <code>shouldRetry</code> 函数， 判定需要是否发起重复请求；</p>
+<p>说到这儿了， 直接上完整代码</p>
+<pre><code class="hljs language-ts" lang="ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">InitWithRetries</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">RequestInit</span> {
+  fetchTimeout?: <span class="hljs-built_in">number</span> | <span class="hljs-literal">null</span>;
+  retryDelays?: <span class="hljs-built_in">number</span>[] | <span class="hljs-literal">null</span>;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">DEFAULT_TIMEOUT</span> = <span class="hljs-number">1000</span> * <span class="hljs-number">1.5</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">DEFAULT_RETRIES</span> = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>];
+
+<span class="hljs-keyword">const</span> fetchWithRetries = (<span class="hljs-attr">url</span>: <span class="hljs-built_in">string</span>, initWithRetries?: <span class="hljs-title class_">InitWithRetries</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">any</span>&gt; =&gt; {
+  <span class="hljs-comment">// fetchTimeout 请求超时时间</span>
+  <span class="hljs-comment">// 请求</span>
+  <span class="hljs-keyword">const</span> { fetchTimeout, retryDelays, ...init } = initWithRetries || {};
+
+  <span class="hljs-comment">// 超时时间</span>
+  <span class="hljs-keyword">const</span> _fetchTimeout = fetchTimeout != <span class="hljs-literal">null</span> ? fetchTimeout : <span class="hljs-variable constant_">DEFAULT_TIMEOUT</span>;
+
+  <span class="hljs-comment">// 重复时间数组</span>
+  <span class="hljs-keyword">const</span> _retryDelays = retryDelays != <span class="hljs-literal">null</span> ? retryDelays : <span class="hljs-variable constant_">DEFAULT_RETRIES</span>;
+
+  <span class="hljs-comment">// 开始时间</span>
+  <span class="hljs-keyword">let</span> requestStartTime = <span class="hljs-number">0</span>;
+
+  <span class="hljs-comment">// 重试请求索引</span>
+  <span class="hljs-keyword">let</span> requestsAttempted = <span class="hljs-number">0</span>;
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-comment">// 申明发送请求方法</span>
+    <span class="hljs-keyword">const</span> sendTimedRequest = (): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> {
+      <span class="hljs-comment">// 自增索引与请求次数</span>
+      requestsAttempted++;
+
+      <span class="hljs-comment">// 发起请求时间</span>
+      requestStartTime = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>();
+
+      <span class="hljs-comment">// 是否需要处理后续请求</span>
+      <span class="hljs-keyword">let</span> isRequestAlive = <span class="hljs-literal">true</span>;
+
+      <span class="hljs-comment">// 发起请求</span>
+      <span class="hljs-keyword">const</span> request = <span class="hljs-title function_">fetch</span>(url, init);
+
+      <span class="hljs-comment">// 请求超时情况</span>
+      <span class="hljs-keyword">const</span> requestTimeout = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-comment">// 需要阻断正常的请求返回</span>
+        isRequestAlive = <span class="hljs-literal">false</span>;
+
+        <span class="hljs-comment">// 需要重新发起请求</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-title function_">shouldRetry</span>(requestsAttempted)) {
+          <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">"fetchWithRetries: HTTP timeout, retrying."</span>);
+          <span class="hljs-title function_">retryRequest</span>();
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(
+            <span class="hljs-string">`fetchWithRetries(): Failed to get response from server, tried <span class="hljs-subst">${requestsAttempted}</span> times.`</span>,
+          ));
+        }
+      }, _fetchTimeout);
+
+      <span class="hljs-comment">// 正常请求发起</span>
+      request.<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {
+        <span class="hljs-comment">// 正常请求返回的场景， 清空定时器</span>
+        <span class="hljs-built_in">clearTimeout</span>(requestTimeout);
+
+        <span class="hljs-comment">// 如果进入了超时流程， 那么正常返回的逻辑， 就直接阻断</span>
+        <span class="hljs-keyword">if</span> (isRequestAlive) {
+          <span class="hljs-keyword">if</span> (response.<span class="hljs-property">status</span> &gt;= <span class="hljs-number">200</span> &amp;&amp; response.<span class="hljs-property">status</span> &lt; <span class="hljs-number">300</span>) {
+            <span class="hljs-title function_">resolve</span>(response);
+          } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-title function_">shouldRetry</span>(requestsAttempted)) {
+            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">"fetchWithRetries: HTTP error, retrying."</span>);
+            <span class="hljs-title function_">retryRequest</span>();
+          } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">const</span> <span class="hljs-attr">error</span>: <span class="hljs-built_in">any</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`response error.`</span>);
+            error.<span class="hljs-property">response</span> = response;
+            <span class="hljs-title function_">reject</span>(error);
+          }
+        }
+      }).<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+        <span class="hljs-built_in">clearTimeout</span>(requestTimeout);
+        <span class="hljs-keyword">if</span> (<span class="hljs-title function_">shouldRetry</span>(requestsAttempted)) {
+          <span class="hljs-title function_">retryRequest</span>();
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-title function_">reject</span>(error);
+        }
+      });
+    };
+
+    <span class="hljs-comment">// 发起重复请求</span>
+    <span class="hljs-keyword">const</span> retryRequest = (): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> {
+      <span class="hljs-comment">// 重复请求 delay 时间</span>
+      <span class="hljs-keyword">const</span> retryDelay = _retryDelays[requestsAttempted - <span class="hljs-number">1</span>];
+
+      <span class="hljs-comment">// 重复请求开始时间</span>
+      <span class="hljs-keyword">const</span> retryStartTime = requestStartTime + retryDelay;
+
+      <span class="hljs-comment">// 延迟时间</span>
+      <span class="hljs-keyword">const</span> timeout = retryStartTime - <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() &gt; <span class="hljs-number">0</span> ? retryStartTime - <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() : <span class="hljs-number">0</span>;
+
+      <span class="hljs-comment">// 重复请求</span>
+      <span class="hljs-built_in">setTimeout</span>(sendTimedRequest, timeout);
+    };
+
+    <span class="hljs-comment">// 是否可以发起重复请求</span>
+    <span class="hljs-keyword">const</span> shouldRetry = (<span class="hljs-attr">attempt</span>: <span class="hljs-built_in">number</span>): <span class="hljs-function"><span class="hljs-params">boolean</span> =&gt;</span> attempt &lt;= _retryDelays.<span class="hljs-property">length</span>;
+
+    <span class="hljs-title function_">sendTimedRequest</span>();
+  });
+};
+
+<span class="hljs-title function_">fetchWithRetries</span>(<span class="hljs-string">"http://127.0.0.1:3000/user/"</span>)
+</code></pre>
+<h3 data-id="heading-3">4.测试</h3>
+<p>测试代码就是上面的完整代码， 如果我们有一个接口， 1s 左右返回， 因为超时时间为 1.5 s 那么， 请求会直接成功， 只会请求一次即可：</p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/495e3bbdc24c464ebc7d604a2b2bbe63~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1930&amp;h=748&amp;s=154321&amp;e=png&amp;b=faf9f9" alt="image.png" loading="lazy"></p>
+<p>那么， 如果接口时间改为 2 s 时间返回：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3b00cdc0768842b89c4a31b6817aa90c~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1928&amp;h=564&amp;s=113164&amp;e=png&amp;b=fcfcfc" alt="image.png" loading="lazy"></p>
+<h3 data-id="heading-4">5.彩蛋</h3>
+<p>上面使用到了一个 mock 接口， 这里推荐一个非常非常非常好用的  mock 工具， 使用简单又好使： <strong>webpro/dyson</strong></p>
+<p>比如 mock 上面的 user 请求， 那么只需要下面代码就可以了:
+文件 <code>/src/index.js</code>, 代码如下</p>
+<pre><code class="hljs language-js" lang="js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">path</span>: <span class="hljs-string">'/user/'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'GET'</span>,
+  <span class="hljs-attr">delay</span>: <span class="hljs-number">2000</span>,
+  <span class="hljs-attr">cache</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">template</span>: <span class="hljs-function">(<span class="hljs-params">params, query, body, cookies, headers</span>) =&gt;</span> {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">message</span>: <span class="hljs-string">'success'</span>,
+      <span class="hljs-attr">status</span>: <span class="hljs-number">200</span>,
+    }
+  }
+}
+</code></pre>
+<p>直接启动命令行即可：</p>
+<pre><code class="hljs language-bash" lang="bash">dyson ./src 3000
+</code></pre>
+<p>更多使用文档可以访问 github 官方文档</p>
+<h3 data-id="heading-5">源码链接</h3>
+<p>直接丢链接： <a href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fyanlele%2Fnode-index%2Ftree%2Fmaster%2Fbooks%2F%25E7%259F%25A5%25E8%25AF%2586%25E5%25BA%2593%2F01%25E3%2580%2581%25E5%2589%258D%25E7%25AB%25AF%25E6%258A%2580%25E6%259C%25AF%25E7%259F%25A5%25E8%25AF%2586%2F27.%25E8%25AF%25B7%25E6%25B1%2582%25E8%25B6%2585%25E6%2597%25B6%25E9%2587%258D%25E8%25AF%2595" target="_blank" title="https://github.com/yanlele/node-index/tree/master/books/%E7%9F%A5%E8%AF%86%E5%BA%93/01%E3%80%81%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF%E7%9F%A5%E8%AF%86/27.%E8%AF%B7%E6%B1%82%E8%B6%85%E6%97%B6%E9%87%8D%E8%AF%95" ref="nofollow noopener noreferrer">github.com/yanlele/nod…</a></p>

@@ -9,12 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "css加载会造成阻塞吗",
+  title: "复杂判断的优雅写法（降低圈复杂度）",
   key_world: [
-    "css 加载阻塞渲染",
+    "复杂判断写法",
+    "降低圈复杂度",
   ],
   labels: [
-    labels.css,
+    labels.code,
     company.other,
   ],
   milestone: MileStone.senior,

@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "封装一个请求超时， 发起重试的代码",
+  title: "css加载会造成阻塞吗",
   key_world: [
-    "请求重试",
+    "css 加载阻塞渲染",
   ],
   labels: [
-    labels.code,
-    company.shopee,
+    labels.css,
+    company.other,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

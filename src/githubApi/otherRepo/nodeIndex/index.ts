@@ -17,12 +17,12 @@ const update = (options: UpdateIssueOptions) => octokit.request(apiUrl.updateIss
 });
 
 const remote = {
-  title: "git 常用命令汇总",
+  title: "性能分析",
   labels: [
-    labels.linuxDevops,
+    labels.optimization,
   ],
   body: () => fs.readFileSync(
-    "/Users/yanle/code/self/node-index/books/知识库/02、技术生态圈/01、git常用命令汇总/README.md",
+    "/Users/yanle/code/self/node-index/books/专题知识库/19、性能分析与性能优化/readme.md",
     { encoding: "utf8" },
   ),
 };
@@ -38,7 +38,7 @@ const createIssue = async () => {
     body: remote.body(),
   });
 
-  // 写入 github
+  // 写入 github 完成
   console.log(`yanle - logger: 写入 github - ${remote.title}`, res?.status);
 };
 

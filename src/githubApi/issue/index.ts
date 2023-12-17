@@ -9,13 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "复杂判断的优雅写法（降低圈复杂度）",
+  title: "vite 涉及到了哪些底层原理？",
   key_world: [
-    "复杂判断写法",
-    "降低圈复杂度",
+    "vite 原理",
   ],
   labels: [
-    labels.code,
+    labels.engineering,
     company.other,
   ],
   milestone: MileStone.senior,

@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "vite 涉及到了哪些底层原理？",
+  title: "vite 编译器的组成部分",
   key_world: [
-    "vite 原理",
+    "vite 编译器组成部分",
   ],
   labels: [
     labels.engineering,

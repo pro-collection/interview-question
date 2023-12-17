@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "vite 编译器的组成部分",
+  title: "vite 编译器有啥特点？",
   key_world: [
-    "vite 编译器组成部分",
+    "vite 编译器特点",
   ],
   labels: [
     labels.engineering,

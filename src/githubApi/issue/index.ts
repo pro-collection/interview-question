@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "vite 编译器有啥特点？",
+  title: "esbuild 和 rollup 都是 vite 的基础依赖， 那么他们有啥不同？",
   key_world: [
-    "vite 编译器特点",
+    "esbuild 和 rollup 区别",
   ],
   labels: [
     labels.engineering,

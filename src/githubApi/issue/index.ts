@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "esbuild 和 rollup 都是 vite 的基础依赖， 那么他们有啥不同？",
+  title: "vite 和  webpack 在热更新上有啥区别？",
   key_world: [
-    "esbuild 和 rollup 区别",
+    "热更新区别",
   ],
   labels: [
     labels.engineering,
-    company.other,
+    company.netEase,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

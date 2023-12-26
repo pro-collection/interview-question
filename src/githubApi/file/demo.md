@@ -1,53 +1,88 @@
-**关键词**：单点登录实现、单点登录流程
+**关键词**：OAuth2.0 登录实现、OAuth2.0 鉴权
 
-### 单点登录
+OAuth2.0并不是一种特定的登录方式，而是一种授权框架，用于授权第三方应用访问用户的资源。它被广泛应用于身份验证和授权的场景中。
 
-单点登录：Single Sign On，简称SSO。用户只要登录一次，就可以访问所有相关信任应用的资源。企业里面用的会比较多，有很多内网平台，但是只要在一个系统登录就可以。
+OAuth2.0通过引入授权服务器、资源服务器和客户端等角色，实现了用户授权和资源访问的分离。具体流程如下：
 
-#### 实现方案
+1. 用户向客户端发起请求，请求访问某个资源。
+2. 客户端将用户重定向到授权服务器，并携带自己的身份凭证（客户端ID）。
+3. 用户在授权服务器登录，并授权客户端访问特定的资源。
+4. 授权服务器验证用户身份，并生成访问令牌（Access Token）。
+5. 授权服务器将访问令牌发送给客户端。
+6. 客户端使用访问令牌向资源服务器请求访问资源。
+7. 资源服务器验证访问令牌的有效性，并根据权限决定是否允许访问资源。
+8. 资源服务器向客户端返回请求的资源。
 
-* 单一域名：可以把 cookie 种在根域名下实现单点登录
-* 多域名：常用 CAS来解决，新增一个认证中心的服务。CAS（Central Authentication Service）是实现SSO单点登录的框架
+在这个过程中，OAuth2.0通过访问令牌实现了用户和资源服务器之间的身份授权和资源访问分离。客户端无需知道或存储用户的凭证（如用户名和密码），而是使用访问令牌代表用户向资源服务器请求资源，提供了更安全和便捷的授权方式。
 
-#### CAS实现单点登录的流程：
+**以下是使用Fetch API来发起请求的示例代码**：
+```javascript
+// 1. 客户端应用程序发起授权请求，重定向用户到授权服务器的登录页面
 
-1. 用户访问系统A，判断未登录，则直接跳到认证中心页面
-2. 在认证中心页面输入账号，密码，生成令牌，重定向到 系统A
-3. 在系统A拿到令牌到认证中心去认证，认证通过，则建立对话
-4. 用户访问系统B，发现没有有效会话，则重定向到认证中心
-5. 认证中心发现有全局会话，新建令牌，重定向到系统B
-6. 在系统B使用令牌去认证中心验证，验证成功后，建议系统B的局部会话。
+const authorizationEndpoint = 'https://example.com/oauth2/auth';
+const clientId = 'your_client_id';
+const redirectUri = 'https://yourapp.com/callback';
+const scope = 'read write';
+const state = 'random_state_value';
 
+const authorizationUrl = `${authorizationEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`;
 
-- 参考流程图：
-![image](https://github.com/pro-collection/interview-question/assets/22188674/c258b9f1-e6b3-48a4-aa39-01b68b47bbde)
+// 重定向用户到授权页面
+window.location.href = authorizationUrl;
 
+// 2. 在回调URL中获取授权码
 
-#### 关键点
+const callbackUrl = window.location.href;
+const urlParams = new URLSearchParams(callbackUrl.split('?')[1]);
+const authorizationCode = urlParams.get('code');
 
-下面是举例来详细说明CAS实现单点登录的流程：
+// 3. 客户端应用程序使用授权码向授权服务器请求访问令牌
 
-一、第一次访问系统A
+const tokenEndpoint = 'https://example.com/oauth2/token';
+const clientSecret = 'your_client_secret';
 
-1. 用户访问系统A  (www.app1.com)， 跳转认证中心 client(www.sso.com)， 然后输入用户名，密码登录，然后认证中心 serverSSO 把  cookieSSO  种在认证中心的域名下 (www.sso.com)， 重定向到系统A，并且带上生成的 ticket 参数 (www.app1.com?ticket =xxx)
+const tokenData = {
+  grant_type: 'authorization_code',
+  code: authorizationCode,
+  redirect_uri: redirectUri,
+  client_id: clientId,
+  client_secret: clientSecret
+};
 
-2. 系统A (www.app1.com?ticket =xxx)请求系统A的后端 serverA ，serverA 去 serverSSO 验证，通过后，将cookieA种在 www.app1.com下
+// 使用Fetch API请求访问令牌
+fetch(tokenEndpoint, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: new URLSearchParams(tokenData)
+})
+  .then(response => response.json())
+  .then(data => {
+    const accessToken = data.access_token;
 
-二、第二次访问系统A 直接携带 cookieA 去访问后端，验证通过后，即登录成功。
+    // 4. 客户端应用程序使用访问令牌向资源服务器请求受保护的资源
+    const resourceEndpoint = 'https://example.com/api/resource';
 
-三、第三次访问系统B
+    // 使用Fetch API请求受保护的资源
+    fetch(resourceEndpoint, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+      .then(response => response.json())
+      .then(resourceData => {
+        // 处理返回的资源数据
+        console.log(resourceData);
+      })
+      .catch(error => {
+        console.error('Failed to retrieve resource:', error);
+      });
+  })
+  .catch(error => {
+    console.error('Failed to retrieve access token:', error);
+  });
+```
 
-1. 访问系统B (www.app2.com)， 跳转到认证中心 client(www.sso.com)， 这个时候会把认证中心的cookieSSO也携带上，发现用户已登录过，则直接重定向到系统B（www.app2.com）， 并且带上生成的ticket参数（www.app2.com?ticket =xxx）
-   
-2. 系统B (www.app2.com?ticket =xxx)请求系统B的后端 serverB，serverB 去 serverSSO 验证，通过后，将cookieB种在www.app2.com下
-
-注意cookie生成时机及种的位置。
-
-* cookieSSO，SSO域名下的cookie
-* cookieA，系统A域名下的cookie
-* cookieB，系统B域名下的cookie
-
-
-### 参考文档
-https://juejin.cn/post/7195588906809032764
-https://juejin.cn/post/7044328327762411534
+请注意，上述代码使用了Fetch API来发送HTTP请求。它使用了`fetch`函数来发送POST请求以获取访问令牌，并使用了`Authorization`头部来发送访问令牌获取受保护的资源。确保你的浏览器支持Fetch API，或者在旧版浏览器中使用polyfill库来兼容。与之前的代码示例一样，你需要根据你的情况替换URL和参数值。

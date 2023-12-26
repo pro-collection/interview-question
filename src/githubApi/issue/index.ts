@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "单点登录是如何实现的？",
+  title: "OAuth2.0 是什么登录方式",
   key_world: [
-    "单点登录实现",
-    "单点登录流程",
+    "OAuth2.0 登录实现",
+    "OAuth2.0 鉴权",
   ],
   labels: [
     labels.application,

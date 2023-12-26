@@ -9,9 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "常见的登录鉴权方式有哪些？",
+  title: "单点登录是如何实现的？",
   key_world: [
-    "登录鉴权方式",
+    "单点登录实现",
+    "单点登录流程",
   ],
   labels: [
     labels.application,

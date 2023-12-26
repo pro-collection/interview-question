@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] webpack-dev-server 为何不适用于线上环境？",
+  title: "常见的登录鉴权方式有哪些？",
   key_world: [
-    "webpack-dev-server 作用",
+    "登录鉴权方式",
   ],
   labels: [
-    labels.engineering,
+    labels.application,
     company.other,
   ],
   milestone: MileStone.senior,

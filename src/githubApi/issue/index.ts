@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] webpack-dev-server 作用是啥？",
+  title: "[webpack] webpack-dev-server 为何不适用于线上环境？",
   key_world: [
     "webpack-dev-server 作用",
   ],
   labels: [
     labels.engineering,
-    company.pdd,
+    company.other,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

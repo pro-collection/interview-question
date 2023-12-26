@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "需要在跨域请求中携带另外一个域名下的 Cookie 该如何操作？",
+  title: "[webpack] webpack-dev-server 作用是啥？",
   key_world: [
-    "跨域 cookie",
+    "webpack-dev-server 作用",
   ],
   labels: [
-    labels.network,
-    company.shopee,
+    labels.engineering,
+    company.pdd,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

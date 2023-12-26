@@ -1,21 +1,42 @@
-**关键词**：热更新区别
+**关键词**：跨域 cookie
 
-Vite 和 Webpack 在热更新上有一些区别：
+在跨域请求中携带另外一个域名下的 Cookie，需要通过设置响应头部的Access-Control-Allow-Credentials字段为true，并且请求头部中添加withCredentials字段为true。
 
-1. 模块级别的热更新：Vite 使用浏览器原生的 ES 模块系统，可以实现模块级别的热更新，即只更新修改的模块，而不需要刷新整个页面。这样可以提供更快的开发迭代速度。而在 Webpack 中，热更新是基于文件级别的，需要重新构建并刷新整个页面。
+在服务端需要设置响应头部的Access-Control-Allow-Origin字段为指定的域名，表示允许指定域名的跨域请求携带Cookie。
 
-2. 开发环境下的无构建：Vite 在开发环境下不会对代码进行打包构建，而是直接利用浏览器原生的模块导入功能，通过 HTTP 服务器提供模块的即时响应。这样可以避免了构建和重新编译的时间，更快地反映出代码的修改。而在 Webpack 中，每次修改代码都需要重新构建和编译，耗费一定的时间。
+下面是一个示例代码（Node.js）：
+```javascript
+const express = require('express');
+const app = express();
 
-3. 构建环境下的优化：尽管 Vite 在开发环境下不进行打包构建，但在生产环境下，它会通过预构建的方式生成高性能的静态资源，以提高页面加载速度。而 Webpack 则通过将所有模块打包成 bundle 文件，进行代码压缩和优化，以及使用各种插件和配置来优化构建结果。
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://example.com');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
-总的来说，Vite 在热更新上比 Webpack 更加快速和精细化，能够在开发过程中提供更好的开发体验和更快的反馈速度。但是，Webpack 在构建环境下有更多的优化和功能，适用于更复杂的项目需求。
+app.get('/api/data', (req, res) => {
+  // 处理请求
+  res.send('Response Data');
+});
 
-**以下是 Vite 和 Webpack 在热更新方面的对比表格**：
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+```
 
-| 特点 | Vite | Webpack |
-|------|------|---------|
-| 实时热更新 | 支持模块级别的热更新，即只更新修改的模块，无需刷新整个页面 | 支持文件级别的热更新，修改任何文件都会触发整个应用的重新构建和刷新 |
-| 构建速度 | 在开发环境下，利用浏览器原生的模块导入功能，不需要进行打包构建，启动速度更快 | 需要进行打包构建，每次修改代码都需要重新构建和编译，相对较慢 |
-| 开发体验 | 提供更好的开发体验，修改代码后快速反馈，无需等待全量构建 | 反馈速度较慢，需要等待每次构建和编译完成 |
-| 适用场景 | 适用于中小型项目，追求开发效率的前端项目 | 适用于大型项目，有复杂需求和更多构建优化的前端项目 |
+在客户端发起跨域请求时，需要设置请求头部的withCredentials字段为true，示例代码（JavaScript）：
+```javascript
+fetch('http://example.com/api/data', {
+  credentials: 'include',
+})
+  .then(response => response.text())
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+```
 
+以上代码中，Access-Control-Allow-Origin设置为'http://example.com'，表示允许该域名的跨域请求携带Cookie。fetch请求的参数中，credentials设置为'include'表示请求中携带Cookie。

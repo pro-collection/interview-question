@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "vite 和  webpack 在热更新上有啥区别？",
+  title: "需要在跨域请求中携带另外一个域名下的 Cookie 该如何操作？",
   key_world: [
-    "热更新区别",
+    "跨域 cookie",
   ],
   labels: [
-    labels.engineering,
-    company.netEase,
+    labels.network,
+    company.shopee,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

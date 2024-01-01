@@ -9,16 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "OAuth2.0 是什么登录方式",
+  title: "请求 Header 的 Content-Type 常见的有哪几种?",
   key_world: [
-    "OAuth2.0 登录实现",
-    "OAuth2.0 鉴权",
+    "请求 header Content-Type",
+    "header Content-Type 参数类型",
   ],
   labels: [
-    labels.application,
+    labels.network,
     company.other,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

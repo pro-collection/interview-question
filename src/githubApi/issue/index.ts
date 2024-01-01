@@ -9,16 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "请求 Header 的 Content-Type 常见的有哪几种?",
+  title: "web 系统里面， 如何对图片进行优化？",
   key_world: [
-    "请求 header Content-Type",
-    "header Content-Type 参数类型",
+    "图片优化",
   ],
   labels: [
-    labels.network,
+    labels.engineering,
     company.other,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

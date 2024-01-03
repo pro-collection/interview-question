@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "web 系统里面， 如何对图片进行优化？",
+  title: "如何禁止别人调试自己的前端页面代码?",
   key_world: [
-    "图片优化",
+    "禁止别人调试自己的前端代码",
   ],
   labels: [
-    labels.engineering,
+    labels.application,
     company.other,
   ],
   milestone: MileStone.senior,

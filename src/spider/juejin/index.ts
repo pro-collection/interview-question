@@ -4,7 +4,7 @@ import fs from "fs";
 import { writeToTemp } from "@src/githubApi/issue/helper";
 import { htmlPath, tempFilePath } from "@src/githubApi/file/consts";
 
-const url = "https://juejin.cn/post/7195588906809032764?searchId=202312262329209E1F01C6BFBE418CC4C2";
+const url = "https://juejin.cn/post/7262175454714626108?searchId=20240103231728D1229CF4DA6D7526E586";
 
 const main = async () => {
   console.log("yanle - logger: 获取文章, 链接：", url);

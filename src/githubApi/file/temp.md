@@ -1,48 +1,105 @@
-### 单点登录
+**无限 debugger**
 
-单点登录：Single Sign On，简称SSO。用户只要登录一次，就可以访问所有相关信任应用的资源。企业里面用的会比较多，有很多内网平台，但是只要在一个系统登录就可以。
+* 前端页面防止调试的方法主要是通过不断 `debugger` 来疯狂输出断点，因为 `debugger` 在控制台被打开的时候就会执行
+* 由于程序被 `debugger` 阻止，所以无法进行断点调试，所以网页的请求也是看不到的
+* 基础代码如下：
 
-#### 实现方案
+```javascript
+/**
+* 基础禁止调试代码
+*/
+(() => {
+	function ban() {
+	  setInterval(() => {
+	    debugger;
+	  }, 50);
+	}
+	try {
+	  ban();
+	} catch (err) { }
+})();
+```
 
-* 单一域名：可以把 cookie 种在根域名下实现单点登录
-* 多域名：常用 CAS来解决，新增一个认证中心的服务。CAS（Central Authentication Service）是实现SSO单点登录的框架
+**无限 debugger 的对策**
 
-#### CAS实现单点登录的流程：
-
-1. 用户访问系统A，判断未登录，则直接跳到认证中心页面
-2. 在认证中心页面输入账号，密码，生成令牌，重定向到 系统A
-3. 在系统A拿到令牌到认证中心去认证，认证通过，则建立对话
-4. 用户访问系统B，发现没有有效会话，则重定向到认证中心
-5. 认证中心发现有全局会话，新建令牌，重定向到系统B
-6. 在系统B使用令牌去认证中心验证，验证成功后，建议系统B的局部会话。
-
-具体的可以下面的文章，讲解的很详细
-
-* [CAS实现单点登录SSO执行原理探究(终于明白了)](https://link.juejin.cn?target=https%3A%2F%2Fblog.csdn.net%2Fjavaloveiphone%2Farticle%2Fdetails%2F52439613 "https://blog.csdn.net/javaloveiphone/article/details/52439613")
-* [一张图看明白CAS单点登录原理](https://link.juejin.cn?target=https%3A%2F%2Fblog.csdn.net%2Fqq_21251983%2Farticle%2Fdetails%2F52695206 "https://blog.csdn.net/qq_21251983/article/details/52695206")
-
-#### 关键点
-
-下面是举例来详细说明CAS实现单点登录的流程：
-
-一、第一次访问系统A
-
-1. 用户访问系统A ([www.app1.com)，](https://link.juejin.cn?target=http%3A%2F%2Fwww.app1.com)%25EF%25BC%258C "http://www.app1.com)%EF%BC%8C") 跳转认证中心 client([www.sso.com)，](https://link.juejin.cn?target=http%3A%2F%2Fwww.sso.com)%25EF%25BC%258C "http://www.sso.com)%EF%BC%8C") 然后输入用户名，密码登录，然后认证中心 serverSSO 把 **cookieSSO** 种在认证中心的域名下 ([www.sso.com)，](https://link.juejin.cn?target=http%3A%2F%2Fwww.sso.com)%25EF%25BC%258C "http://www.sso.com)%EF%BC%8C") 重定向到系统A，并且带上生成的 ticket 参数 ([www.app1.com?ticket](https://link.juejin.cn?target=http%3A%2F%2Fwww.app1.com%3Fticket "http://www.app1.com?ticket") =xxx)
-2. 系统A ([www.app1.com?ticket](https://link.juejin.cn?target=http%3A%2F%2Fwww.app1.com%3Fticket "http://www.app1.com?ticket") =xxx)请求系统A的后端 serverA ，serverA 去 serverSSO 验证，通过后，将**cookieA**种在 [www.app1.com下](https://link.juejin.cn?target=http%3A%2F%2Fwww.app1.com%25E4%25B8%258B "http://www.app1.com%E4%B8%8B")
-
-二、第二次访问系统A 直接携带 cookieA 去访问后端，验证通过后，即登录成功。
-
-三、第三次访问系统B
-
-1. 访问系统B ([www.app2.com)，](https://link.juejin.cn?target=http%3A%2F%2Fwww.app2.com)%25EF%25BC%258C "http://www.app2.com)%EF%BC%8C") 跳转到认证中心 client([www.sso.com)，](https://link.juejin.cn?target=http%3A%2F%2Fwww.sso.com)%25EF%25BC%258C "http://www.sso.com)%EF%BC%8C") 这个时候会把认证中心的**cookieSSO**也携带上，发现用户已登录过，则直接重定向到系统B（[www.app2.com），](https://link.juejin.cn?target=http%3A%2F%2Fwww.app2.com%25EF%25BC%2589%25EF%25BC%258C "http://www.app2.com%EF%BC%89%EF%BC%8C") 并且带上生成的ticket参数（[www.app2.com?ticket](https://link.juejin.cn?target=http%3A%2F%2Fwww.app2.com%3Fticket "http://www.app2.com?ticket") =xxx）
-2. 系统B ([www.app2.com?ticket](https://link.juejin.cn?target=http%3A%2F%2Fwww.app2.com%3Fticket "http://www.app2.com?ticket") =xxx)请求系统B的后端 serverB，serverB 去 serverSSO 验证，通过后，将**cookieB**种在www.app2.com下
-
-注意cookie生成时机及种的位置。
-
-* cookieSSO，SSO域名下的cookie
-* cookieA，系统A域名下的cookie
-* cookieB，系统B域名下的cookie
+* 如果仅仅是加上面那么简单的代码，对于一些技术人员而言作用不大
+* 可以通过控制台中的 `Deactivate breakpoints` 按钮或者使用快捷键 `Ctrl + F8` 关闭无限 `debugger`
+* 这种方式虽然能去掉碍眼的 `debugger`，但是无法通过左侧的行号添加 `breakpoint`
 
 
-### 参考文档
-https://juejin.cn/post/7195588906809032764
+**禁止断点的对策**
+
+* 如果将 `setInterval` 中的代码写在一行，就能禁止用户断点，即使添加 `logpoint` 为 `false` 也无用
+* 当然即使有些人想到用左下角的格式化代码，将其变成多行也是没用的
+
+```javascript
+(() => {
+  function ban() {
+    setInterval(() => { debugger; }, 50);
+  }
+  try {
+    ban();
+  } catch (err) { }
+})();
+```
+
+**忽略执行的代码**
+
+* 通过添加 `add script ignore list` 需要忽略执行代码行或文件
+* 也可以达到禁止无限 `debugger`
+
+
+**忽略执行代码的对策**
+
+* 那如何针对上面操作的恶意用户呢
+* 可以通过将 `debugger`改写成 `Function("debugger")();` 的形式来应对
+* `Function` 构造器生成的 `debugger` 会在每一次执行时开启一个临时 `js` 文件
+* 当然使用的时候，为了更加的安全，最好使用加密后的脚本
+
+```javascript
+// 加密前
+(() => {
+  function ban() {
+    setInterval(() => {
+      Function('debugger')();
+    }, 50);
+  }
+  try {
+    ban();
+  } catch (err) { }
+})();
+
+// 加密后
+eval(function(c,g,a,b,d,e){d=String;if(!"".replace(/^/,String)){for(;a--;)e[a]=b[a]||a;b=[function(f){return e[f]}];d=function(){return"\w+"};a=1}for(;a--;)b[a]&&(c=c.replace(new RegExp("\b"+d(a)+"\b","g"),b[a]));return c}('(()=>{1 0(){2(()=>{3("4")()},5)}6{0()}7(8){}})();',9,9,"block function setInterval Function debugger 50 try catch err".split(" "),0,{}));
+```
+
+
+**终极增强防调试代码**
+
+* 为了让自己写出来的代码更加的晦涩难懂，需要对上面的代码再优化一下
+* 将 `Function('debugger').call()`改成 `(function(){return false;})['constructor']('debugger')['call']();`
+* 并且添加条件，当窗口外部宽高和内部宽高的差值大于一定的值 ，我把 `body` 里的内容换成指定内容
+* 当然使用的时候，为了更加的安全，最好加密后再使用
+
+```javascript
+(() => {
+  function block() {
+    if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+      document.body.innerHTML = "检测到非法调试,请关闭后刷新重试!";
+    }
+    setInterval(() => {
+      (function () {
+        return false;
+      }
+      ['constructor']('debugger')
+      ['call']());
+    }, 50);
+  }
+  try {
+    block();
+  } catch (err) { }
+})();
+```
+
+**参考文档**
+- https://juejin.cn/post/7262175454714626108

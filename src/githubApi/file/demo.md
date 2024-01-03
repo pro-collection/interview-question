@@ -1,107 +1,51 @@
-**关键词**：禁止别人调试自己的前端代码
+**关键词**：递归和尾递归
 
-**无限 debugger**
+递归和尾递归都是指在函数内部调用自身的方式，但它们有一些关键的区别。
 
-* 前端页面防止调试的方法主要是通过不断 `debugger` 来疯狂输出断点，因为 `debugger` 在控制台被打开的时候就会执行
-* 由于程序被 `debugger` 阻止，所以无法进行断点调试，所以网页的请求也是看不到的
-* 基础代码如下：
+**概念**
 
-```javascript
-/**
-* 基础禁止调试代码
-*/
-(() => {
-	function ban() {
-	  setInterval(() => {
-	    debugger;
-	  }, 50);
-	}
-	try {
-	  ban();
-	} catch (err) { }
-})();
-```
+递归是一种函数调用自身的方式。在递归中，函数会不断地调用自身，直到满足某个终止条件才停止递归。递归通常使用在解决可以通过重复拆分为更小的子问题来解决的问题上。但是，递归可能会导致函数调用的层级过深，消耗大量的内存，因为每次递归调用都会在内存中创建一个新的函数调用帧。如果没有正确的终止条件，递归可能会导致无限循环。
 
-**无限 debugger 的对策**
+尾递归是一种特殊的递归形式，在尾递归中，递归调用是函数的最后一个操作，并且递归调用的结果直接返回，没有进行任何额外的操作。因此，尾递归不会导致函数调用栈的增长，每次递归调用都会覆盖当前的函数帧。尾递归可以避免函数调用栈溢出的问题，因为它在递归调用时不会导致函数调用栈的增长。尾递归通常使用在需要迭代大量数据的情况下，可以有效地优化性能。
 
-* 如果仅仅是加上面那么简单的代码，对于一些技术人员而言作用不大
-* 可以通过控制台中的 `Deactivate breakpoints` 按钮或者使用快捷键 `Ctrl + F8` 关闭无限 `debugger`
-* 这种方式虽然能去掉碍眼的 `debugger`，但是无法通过左侧的行号添加 `breakpoint`
+要注意，不是所有的递归都可以被优化为尾递归，只有当递归调用是函数的最后一个操作时，才可以进行尾递归优化。在一些编程语言中，编译器或解释器可以自动进行尾递归优化，将尾递归转换为迭代循环，从而提高性能。但在一些语言中，需要显示地使用尾递归优化的技巧，如使用尾递归函数的辅助参数来保存中间结果。
 
+**示例**
 
-**禁止断点的对策**
-
-* 如果将 `setInterval` 中的代码写在一行，就能禁止用户断点，即使添加 `logpoint` 为 `false` 也无用
-* 当然即使有些人想到用左下角的格式化代码，将其变成多行也是没用的
+下面是一个递归函数的例子，用于计算一个正整数的阶乘：
 
 ```javascript
-(() => {
-  function ban() {
-    setInterval(() => { debugger; }, 50);
+function factorial(n) {
+  if (n === 0) { // 终止条件
+    return 1;
+  } else {
+    return n * factorial(n - 1); // 递归调用
   }
-  try {
-    ban();
-  } catch (err) { }
-})();
+}
+
+console.log(factorial(5)); // 输出 120
 ```
 
-**忽略执行的代码**
-
-* 通过添加 `add script ignore list` 需要忽略执行代码行或文件
-* 也可以达到禁止无限 `debugger`
-
-
-**忽略执行代码的对策**
-
-* 那如何针对上面操作的恶意用户呢
-* 可以通过将 `debugger`改写成 `Function("debugger")();` 的形式来应对
-* `Function` 构造器生成的 `debugger` 会在每一次执行时开启一个临时 `js` 文件
-* 当然使用的时候，为了更加的安全，最好使用加密后的脚本
+现在，我们将对上述递归函数进行尾递归优化。在这个例子中，我们使用一个辅助参数`result`来保存每次递归调用的结果，并将其作为参数传递给下一次递归调用。这样，递归调用不会导致函数调用栈的增长。
 
 ```javascript
-// 加密前
-(() => {
-  function ban() {
-    setInterval(() => {
-      Function('debugger')();
-    }, 50);
+function factorialTail(n, result = 1) {
+  if (n === 0) { // 终止条件
+    return result;
+  } else {
+    return factorialTail(n - 1, n * result); // 尾递归调用
   }
-  try {
-    ban();
-  } catch (err) { }
-})();
+}
 
-// 加密后
-eval(function(c,g,a,b,d,e){d=String;if(!"".replace(/^/,String)){for(;a--;)e[a]=b[a]||a;b=[function(f){return e[f]}];d=function(){return"\w+"};a=1}for(;a--;)b[a]&&(c=c.replace(new RegExp("\b"+d(a)+"\b","g"),b[a]));return c}('(()=>{1 0(){2(()=>{3("4")()},5)}6{0()}7(8){}})();',9,9,"block function setInterval Function debugger 50 try catch err".split(" "),0,{}));
+console.log(factorialTail(5)); // 输出 120
 ```
 
+通过使用尾递归优化，我们可以避免函数调用栈的溢出，并提高函数的性能。
 
-**终极增强防调试代码**
+**如何理解：只有当递归调用是函数的最后一个操作时，才可以进行尾递归优化**
 
-* 为了让自己写出来的代码更加的晦涩难懂，需要对上面的代码再优化一下
-* 将 `Function('debugger').call()`改成 `(function(){return false;})['constructor']('debugger')['call']();`
-* 并且添加条件，当窗口外部宽高和内部宽高的差值大于一定的值 ，我把 `body` 里的内容换成指定内容
-* 当然使用的时候，为了更加的安全，最好加密后再使用
+在一个函数中，如果递归调用之后还有其他的操作或表达式需要执行，那么这个递归调用就不是尾递归。在这种情况下，函数需要等待递归调用的返回值，然后才能进行下一步操作。
 
-```javascript
-(() => {
-  function block() {
-    if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-      document.body.innerHTML = "检测到非法调试,请关闭后刷新重试!";
-    }
-    setInterval(() => {
-      (function () {
-        return false;
-      }
-      ['constructor']('debugger')
-      ['call']());
-    }, 50);
-  }
-  try {
-    block();
-  } catch (err) { }
-})();
-```
+而尾递归是指在函数的最后一步操作中进行的递归调用。这意味着函数在调用自身之后没有其他操作或表达式需要执行，直接返回递归调用的结果。这种情况下，函数可以被优化为尾递归形式，避免函数调用栈的溢出和性能问题。
 
-**参考文档**
-- https://juejin.cn/post/7262175454714626108
+在尾递归优化的代码示例中，递归调用factorialTail(n - 1, n * result)是函数factorialTail的最后一步操作，它的返回值直接作为函数的返回值，没有其他操作需要执行。因此，这个递归调用是尾递归，可以进行尾递归优化。

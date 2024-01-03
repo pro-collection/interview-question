@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何禁止别人调试自己的前端页面代码?",
+  title: "递归和尾递归是什么概念?",
   key_world: [
-    "禁止别人调试自己的前端代码",
+    "递归和尾递归",
   ],
   labels: [
-    labels.application,
+    labels.js,
     company.other,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -17,12 +17,12 @@ const update = (options: UpdateIssueOptions) => octokit.request(apiUrl.updateIss
 });
 
 const remote = {
-  title: "性能分析",
+  title: "TypeScript 内置的类型方法和工具类型",
   labels: [
-    labels.optimization,
+    labels.application,
   ],
   body: () => fs.readFileSync(
-    "/Users/yanle/code/self/node-index/books/专题知识库/19、性能分析与性能优化/readme.md",
+    "/Users/yanle/code/self/interview-question/src/githubApi/file/demo.md",
     { encoding: "utf8" },
   ),
 };

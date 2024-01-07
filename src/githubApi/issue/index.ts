@@ -9,15 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "递归和尾递归是什么概念?",
+  title: "TypeScript 内置的类型方法和工具类型",
   key_world: [
-    "递归和尾递归",
+    "ts 内置类型方法",
+    "ts 内置工具类型",
   ],
   labels: [
-    labels.js,
+    labels.ts,
     company.other,
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

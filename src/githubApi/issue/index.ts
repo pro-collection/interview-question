@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "git 仓库迁移应该怎么操作",
+  title: "Protobuf 相关知识",
   key_world: [
-    "git 仓库迁移",
+    "Protobuf 基本概念",
   ],
   labels: [
-    labels.application,
-    company.mi,
+    labels.network,
+    company.alibaba,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

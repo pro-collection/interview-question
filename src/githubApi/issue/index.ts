@@ -9,14 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "TypeScript 内置的类型方法和工具类型",
+  title: "git 仓库迁移应该怎么操作",
   key_world: [
-    "ts 内置类型方法",
-    "ts 内置工具类型",
+    "git 仓库迁移",
   ],
   labels: [
-    labels.ts,
-    company.other,
+    labels.application,
+    company.mi,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

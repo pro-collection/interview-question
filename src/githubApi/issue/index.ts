@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "权限管理模型相关概念",
+  title: "常见网络协议有哪些",
   key_world: [
-    "权限管理模型",
+    "网络协议",
   ],
   labels: [
     labels.network,
     company.other,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

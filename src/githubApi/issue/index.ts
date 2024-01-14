@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Protobuf 相关知识",
+  title: "权限管理模型相关概念",
   key_world: [
-    "Protobuf 基本概念",
+    "权限管理模型",
   ],
   labels: [
     labels.network,
-    company.alibaba,
+    company.other,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

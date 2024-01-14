@@ -43,6 +43,17 @@ const main = async () => {
     const oldFile = fs.readFileSync(filePath, { encoding: "utf8" });
     fs.writeFileSync(filePath, keyWordContent + oldFile);
     console.log("yanle - logger: 关键词写入文档完成");
+  } else {
+    const isConfirm = await confirm({ message: `是否自定义热度, 请确认。(为「no」则可以重新修改热度, 为 「yes」则无需修改热度)` });
+
+    if (isConfirm) {
+      const answer = await input({ message: "请输入复写热度评分: " });
+      const count = !!toNumber(answer) ? toNumber(answer) : 0;
+
+      if (count) {
+        remote.title = count && remote.key_world ? `${remote.title}【热度: ${count?.toLocaleString() || count}】` : remote.title;
+      }
+    }
   }
 
   // 输出 title

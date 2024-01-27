@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "grpc 和 protobuf 是什么关系？",
+  title: "JS 执行 100 万个任务， 如何保证浏览器不卡顿？",
   key_world: [
-    // "网络协议",
+    "大批量执行任务不卡顿",
   ],
   labels: [
-    labels.network,
+    labels.application,
     company.other,
   ],
   milestone: MileStone.senior,

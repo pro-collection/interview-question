@@ -17,12 +17,12 @@ const update = (options: UpdateIssueOptions) => octokit.request(apiUrl.updateIss
 });
 
 const remote = {
-  title: "TypeScript 内置的类型方法和工具类型",
+  title: "100万个函数执行保证浏览器不卡",
   labels: [
-    labels.application,
+    labels.chrome,
   ],
   body: () => fs.readFileSync(
-    "/Users/yanle/code/self/interview-question/src/githubApi/file/demo.md",
+    "/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/29.100万个函数执行保证浏览器不卡/readme.md",
     { encoding: "utf8" },
   ),
 };

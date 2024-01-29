@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 执行 100 万个任务， 如何保证浏览器不卡顿？",
+  title: "http 中 CSP 是什么",
   key_world: [
-    "大批量执行任务不卡顿",
+    "http CSP",
   ],
   labels: [
-    labels.application,
-    company.other,
+    labels.network,
+    company.alibaba,
   ],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),

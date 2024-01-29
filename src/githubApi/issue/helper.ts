@@ -45,7 +45,7 @@ export const commitPush = async (title: string) => {
   // 提交 git commit
   const commandList = [
     `git commit -am "${title}"`,
-    "git push",
+    // "git push",
   ];
 
   // 遍历执行

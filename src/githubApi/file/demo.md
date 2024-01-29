@@ -1,124 +1,62 @@
-**关键词**：大批量执行任务不卡顿
+**关键词**：http CSP
 
-**Web Workers**
+在 HTTP 协议中，CSP 指的是 "Content Security Policy"（内容安全策略）。CSP 是一种用于增强网站安全性的安全策略机制，通过指定浏览器只能加载指定来源的资源，以减少恶意攻击的风险。
 
-要确保浏览器在执行100万个任务时不会卡顿，你可以考虑使用Web Workers来将这些任务从主线程中分离出来。Web Workers允许在后台线程中运行脚本，从而避免阻塞主线程，保持页面的响应性。
+CSP 的主要目标是防止和减缓特定类型的攻击，例如跨站脚本攻击 (XSS) 和数据注入攻击。通过配置 CSP，网站管理员可以告诉浏览器哪些资源是被信任的，从而减少恶意代码的执行。
 
-以下是一个使用Web Workers的简单示例：
+CSP 的一些常见配置项包括：
 
-```javascript
-// 主线程代码
-const worker = new Worker('worker.js'); // 创建一个新的Web Worker
+1. **default-src：** 指定默认情况下可以从哪些来源加载资源。
+2. **script-src：** 指定允许加载脚本的来源。
+3. **style-src：** 指定允许加载样式表的来源。
+4. **img-src：** 指定允许加载图片的来源。
+5. **font-src：** 指定允许加载字体的来源。
+6. **connect-src：** 指定允许进行网络请求的来源（例如 Ajax 请求）。
+7. **frame-src：** 指定允许加载框架的来源。
+8. **media-src：** 指定允许加载媒体资源的来源。
 
-worker.postMessage({ start: 0, end: 1000000 }); // 向Web Worker发送消息
+等等。
 
-worker.onmessage = function(event) {
-  const result = event.data;
-  console.log('任务完成：', result);
-};
+以下是一个简单的 CSP 示例：
 
-// worker.js - Web Worker代码
-onmessage = function(event) {
-  const start = event.data.start;
-  const end = event.data.end;
-  let sum = 0;
-  for (let i = start; i <= end; i++) {
-    sum += i;
-  }
-  postMessage(sum); // 向主线程发送消息
-};
+```http
+Content-Security-Policy: default-src 'self'; script-src 'self' example.com; img-src 'self' data:;
 ```
 
-在这个示例中，主线程创建了一个新的Web Worker，并向其发送了一个包含任务范围的消息。Web Worker在后台线程中执行任务，并将结果发送回主线程。
+上述 CSP 规则的含义是：
 
-**requestAnimationFrame 来实现任务分割**
+- `default-src 'self'`: 允许从同一站点加载默认来源的资源。
+- `script-src 'self' example.com`: 允许从同一站点和 example.com 加载脚本。
+- `img-src 'self' data:`: 允许从同一站点和 data: 协议加载图片。
 
-使用`requestAnimationFrame`来实现任务分割是一种常见的方式，它可以确保任务在浏览器的每一帧之间执行，从而避免卡顿。以下是一个使用`requestAnimationFrame`来分割任务的简单例子：
+CSP 可以通过 HTTP 头部来设置，也可以通过 `<meta>` 标签嵌入在 HTML 页面中。使用 CSP 可以帮助网站减少受到恶意攻击的风险，提高网站的安全性。
 
-```javascript
-// 假设有一个包含大量元素的数组
-const bigArray = Array.from({ length: 1000000 }, (_, i) => i + 1);
+**如何通过 meta 标签设置 CSP**
 
-// 定义一个处理函数，例如对数组中的每个元素进行平方操作
-function processChunk(chunk) {
-  return chunk.map(num => num * num);
-}
+通过 `<meta>` 标签设置 Content Security Policy (CSP) 的方式如下：
 
-// 分割任务并使用requestAnimationFrame
-const chunkSize = 1000; // 每个小块的大小
-let index = 0;
-
-function processArrayWithRAF() {
-  function processChunkWithRAF() {
-    const chunk = bigArray.slice(index, index + chunkSize); // 从大数组中取出一个小块
-    const result = processChunk(chunk); // 处理小块任务
-    console.log('处理完成：', result);
-    index += chunkSize;
-
-    if (index < bigArray.length) {
-      requestAnimationFrame(processChunkWithRAF); // 继续处理下一个小块
-    }
-  }
-
-  requestAnimationFrame(processChunkWithRAF); // 开始处理大数组
-}
-
-processArrayWithRAF();
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="directives">
+    <title>Your Page Title</title>
+</head>
+<body>
+    <!-- Your content goes here -->
+</body>
+</html>
 ```
 
-在这个例子中，我们使用`requestAnimationFrame`来循环执行处理小块任务的函数`processChunkWithRAF`，从而实现对大数组的任务分割。这样可以确保任务在每一帧之间执行，避免卡顿。
+在上面的代码中，`<meta>` 标签的 `http-equiv` 属性被设置为 "Content-Security-Policy"，而 `content` 属性中则包含了 CSP 指令（directives）。你需要将 "directives" 替换为你实际想要设置的 CSP 规则。
 
-**针对上面的改进一下**
+以下是一个具体的例子：
 
-`const chunkSize = 1000; // 每个小块的大小` 是不能保证不卡的， 那么久需要动态调整 `chunkSize` 的大小， 代码可以参考下面的示范：
-
-```javascript
-  const $result = document.getElementById("result");
-
-// 假设有一个包含大量元素的数组
-const bigArray = Array.from({ length: 1000000 }, (_, i) => i + 1);
-
-// 定义一个处理函数，对数组中的每个元素执行一次
-function processChunk(chunk) {
-  return `chunk: ${chunk}`;
-}
-
-// 动态调整 chunkSize 的优化方式
-let chunkSize = 1000; // 初始的 chunkSize
-let index = 0;
-
-function processArrayWithDynamicChunkSize() {
-  function processChunkWithRAF() {
-    let startTime = performance.now(); // 记录结束时间
-    for (let i = 0; i < chunkSize; i++) {
-      if (index < bigArray.length) {
-        const result = processChunk(bigArray[index]); // 对每个元素执行处理函数
-        $result.innerText = result;
-        index++;
-      }
-    }
-    let endTime = performance.now();
-    let timeTaken = endTime - startTime; // 计算处理时间
-
-    // 根据处理时间动态调整 chunkSize
-    if (timeTaken > 16) { // 如果处理时间超过一帧的时间（16毫秒），则减小 chunkSize
-      chunkSize = Math.floor(chunkSize * 0.9); // 减小10%
-    } else if (timeTaken < 16) { // 如果处理时间远小于一帧的时间（8毫秒），则增加 chunkSize
-      chunkSize = Math.floor(chunkSize * 1.1); // 增加10%
-    }
-
-    if (index < bigArray.length) {
-      requestAnimationFrame(processChunkWithRAF); // 继续处理下一个小块
-    }
-  }
-
-  requestAnimationFrame(processChunkWithRAF); // 开始处理大数组
-}
-
-processArrayWithDynamicChunkSize();
+```html
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' example.com; img-src 'self' data:;">
 ```
 
-在这个例子中，我们动态调整`chunkSize`的大小，根据处理时间来优化任务分割。根据处理时间的表现，动态调整`chunkSize`的大小，以确保在处理大量任务时，浏览器能够保持流畅，避免卡顿。
+在这个例子中，CSP 规则指定了默认来源是同一站点，允许加载同一站点和 example.com 的脚本，允许加载同一站点和 data: 协议的图片。
 
-
-参考文档： [100万个函数执行保证浏览器不卡](https://github.com/yanlele/node-index/tree/master/books/%E7%9F%A5%E8%AF%86%E5%BA%93/01%E3%80%81%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF%E7%9F%A5%E8%AF%86/29.100%E4%B8%87%E4%B8%AA%E5%87%BD%E6%95%B0%E6%89%A7%E8%A1%8C%E4%BF%9D%E8%AF%81%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%8D%E5%8D%A1)
+注意：通过 `<meta>` 标签设置的 CSP 规则只对当前页面生效，而通过 HTTP 头部设置的 CSP 规则对整个站点生效。因此，如果你希望 CSP 规则对整个站点生效，最好在服务器端通过 HTTP 头部设置 CSP。

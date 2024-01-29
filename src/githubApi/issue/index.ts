@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http 中 CSP 是什么",
+  title: "http 中 HSTS 是什么",
   key_world: [
-    "http CSP",
+    "http HSTS",
   ],
   labels: [
     labels.network,

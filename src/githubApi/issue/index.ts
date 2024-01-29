@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http 中 HSTS 是什么",
+  title: "CORS 请求中，是如何触发预检请求",
   key_world: [
-    "http HSTS",
+    "CORS 预检请求条件",
   ],
   labels: [
     labels.network,

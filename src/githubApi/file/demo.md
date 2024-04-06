@@ -1,28 +1,64 @@
-**关键词**：CORS 预检请求条件
+**关键词**：翻页场景竞态问题
 
-其动机是，`HTML 4.0` 中的 `<form>` 元素（早于跨站 `XMLHttpRequest 和 fetch`）可以向任何来源提交简单请求，所以任何编写服务器的人一定已经在保护跨站请求伪造攻击`（CSRF）`。 在这个假设下，服务器不必选择加入（通过响应预检请求）来接收任何看起来像表单提交的请求，因为 CSRF 的威胁并不比表单提交的威胁差。然而，服务器仍然必须提供 `Access-Control-Allow-Origin`的选择，以便与脚本共享响应。
+**关键词**：翻页场景竞态问题
 
-若请求满足所有下述条件，则该请求可视为简单请求：
+**列表分页， 快速翻页下的竞态问题**
 
-- 使用下列方法之一：
-    - `GET`
-    - `HEAD`
-    - `POST`
+> 问题描述：比如在前端分页请求的时候， 因为翻页很快， 所以请求还没有来得及回来的时候， 就发起了下一次请求， 且请求返回的时间也是不固定的。 
+> 如何保证最后一次请求结果和其请求页码是对应上的。
 
-- 除了被用户代理自动设置的标头字段（例如 Connection、User-Agent 或其他在 Fetch 规范中定义为禁用标头名称的标头），允许人为设置的字段为 Fetch 规范定义的对 CORS 安全的标头字段集合。该集合为：
-    - `Accept`
-    - `Accept-Language`
-    - `Content-Language`
-    - `Content-Type（需要注意额外的限制）`
-    - `Range（只允许简单的范围标头值 如 bytes=256- 或 bytes=127-255）`
+在处理这种情况时，一种常见的方法是使用请求标记或唯一标识符来确保请求和结果之间的对应关系。
 
-- Content-Type 标头所指定的媒体类型的值仅限于下列三者之一：
-    - `text/plain`
-    - `multipart/form-data`
-    - `application/x-www-form-urlencoded`
+以下是一个示例代码片段，展示了一种可能的解决方案：
 
-- 如果请求是使用 `XMLHttpRequest` 对象发出的，在返回的 `XMLHttpRequest.upload` 对象属性上没有注册任何事件监听器；也就是说，给定一个 `XMLHttpRequest` 实例 `xhr`，没有调用 `xhr.upload.addEventListener()`，以监听该上传请求。
+```javascript
+// 存储请求的标记
+let requestId = 0;
 
-- 请求中没有使用 `ReadableStream` 对象。
+// 发起请求的函数
+function sendRequest(page) {
+  requestId++;
 
-比如说，假如站点 https://foo.example 的网页应用想要访问 https://bar.other 的资源。foo.example 的网页中可能包含类似于下面的 JavaScript 代码：
+  // 将请求标记与页码一起发送
+  fetch(`/api?requestId=${requestId}&page=${page}`)
+
+   .then(response => response.json())
+
+   .then(data => {
+      // 根据请求标记处理返回的数据
+      handleResponseData(requestId, data);
+    });
+}
+
+// 处理返回数据的函数
+function handleResponseData(requestId, data) {
+  if (requestId === currentRequestId) {
+    // 在这里处理数据并更新页面
+  }
+}
+
+// 在翻页时调用 sendRequest 函数
+```
+
+在这个示例中，每次发起请求时都会增加请求标记 `requestId`，并将其与页码一起发送到服务器。在处理返回的数据时，根据请求标记来确保与当前的请求对应。
+
+另外，还可以考虑以下几点：
+- 对快速翻页进行限制或优化，避免过于频繁的请求。
+- 在服务器端处理请求时，可以根据请求标记来保证返回的数据与特定的请求相关联。
+- 可以使用缓存来存储部分数据，减少不必要的请求。
+
+**保证唯一性**
+
+保证请求标记的唯一性可以通过以下几种方式：
+1. 使用递增的数字：就像上面示例中的 `requestId` 一样，每次增加 1。
+2. 使用随机数：生成一个随机的数字作为请求标记。
+3. 使用时间戳：结合当前时间生成唯一的标记。
+4. 组合多种因素：例如，将数字、时间戳或其他相关信息组合起来创建唯一标记。
+
+例如，使用时间戳作为请求标记的示例代码如下：
+
+```javascript
+let requestId = Date.now();
+```
+这样每次请求时，`requestId` 都会是一个唯一的时间戳值。
+

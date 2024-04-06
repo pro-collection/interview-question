@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "CORS 请求中，是如何触发预检请求",
+  title: "列表分页， 快速翻页下的竞态问题",
   key_world: [
-    "CORS 预检请求条件",
+    "翻页场景竞态问题",
   ],
   labels: [
     labels.network,
     company.alibaba,
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

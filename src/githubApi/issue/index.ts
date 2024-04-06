@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "列表分页， 快速翻页下的竞态问题",
+  title: "JS 放在 head 里和放在 body 里有什么区别？",
   key_world: [
-    "翻页场景竞态问题",
+    // "翻页场景竞态问题",
   ],
   labels: [
     labels.network,

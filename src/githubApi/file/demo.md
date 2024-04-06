@@ -1,64 +1,27 @@
-**关键词**：翻页场景竞态问题
+将 JavaScript 代码放在 `<head>` 标签内部和放在 `<body>` 标签内部有一些区别：
+1. **加载顺序**：放在 `<head>` 里会在页面加载之前执行 JavaScript 代码，而放在 `<body>` 里会在页面加载后执行。
+2. **页面渲染**：如果 JavaScript 代码影响了页面的布局或样式，放在 `<head>` 里可能会导致页面渲染延迟，而放在 `<body>` 里可以减少这种影响。
+3. **代码依赖**：如果 JavaScript 代码依赖其他元素，放在 `<body>` 里可以确保这些元素已经加载。
+4. **全局变量和函数**：放在 `<head>` 里的 JavaScript 代码中的全局变量和函数在整个页面生命周期内都可用。
 
-**关键词**：翻页场景竞态问题
+以下是一个简单的示例代码，展示了如何在 `<head>` 和 `<body>` 中放置 JavaScript 代码：
 
-**列表分页， 快速翻页下的竞态问题**
+```html
+<!DOCTYPE html>
+<html>
 
-> 问题描述：比如在前端分页请求的时候， 因为翻页很快， 所以请求还没有来得及回来的时候， 就发起了下一次请求， 且请求返回的时间也是不固定的。 
-> 如何保证最后一次请求结果和其请求页码是对应上的。
+<head>
+  <script>
+    console.log("这是在 head 中执行的 JavaScript 代码。");
+  </script>
+</head>
 
-在处理这种情况时，一种常见的方法是使用请求标记或唯一标识符来确保请求和结果之间的对应关系。
+<body>
+  <script>
+    console.log("这是在 body 中执行的 JavaScript 代码。");
+  </script>
+</body>
 
-以下是一个示例代码片段，展示了一种可能的解决方案：
-
-```javascript
-// 存储请求的标记
-let requestId = 0;
-
-// 发起请求的函数
-function sendRequest(page) {
-  requestId++;
-
-  // 将请求标记与页码一起发送
-  fetch(`/api?requestId=${requestId}&page=${page}`)
-
-   .then(response => response.json())
-
-   .then(data => {
-      // 根据请求标记处理返回的数据
-      handleResponseData(requestId, data);
-    });
-}
-
-// 处理返回数据的函数
-function handleResponseData(requestId, data) {
-  if (requestId === currentRequestId) {
-    // 在这里处理数据并更新页面
-  }
-}
-
-// 在翻页时调用 sendRequest 函数
+</html>
 ```
-
-在这个示例中，每次发起请求时都会增加请求标记 `requestId`，并将其与页码一起发送到服务器。在处理返回的数据时，根据请求标记来确保与当前的请求对应。
-
-另外，还可以考虑以下几点：
-- 对快速翻页进行限制或优化，避免过于频繁的请求。
-- 在服务器端处理请求时，可以根据请求标记来保证返回的数据与特定的请求相关联。
-- 可以使用缓存来存储部分数据，减少不必要的请求。
-
-**保证唯一性**
-
-保证请求标记的唯一性可以通过以下几种方式：
-1. 使用递增的数字：就像上面示例中的 `requestId` 一样，每次增加 1。
-2. 使用随机数：生成一个随机的数字作为请求标记。
-3. 使用时间戳：结合当前时间生成唯一的标记。
-4. 组合多种因素：例如，将数字、时间戳或其他相关信息组合起来创建唯一标记。
-
-例如，使用时间戳作为请求标记的示例代码如下：
-
-```javascript
-let requestId = Date.now();
-```
-这样每次请求时，`requestId` 都会是一个唯一的时间戳值。
-
+在这个示例中，分别在 `<head>` 和 `<body>` 中放置了简单的 JavaScript 代码，用于在控制台输出信息，以便观察执行顺序。

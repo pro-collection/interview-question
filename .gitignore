@@ -20,6 +20,7 @@ coverage/
 .env.production.local
 .idea
 .idea/
+.vscode/
 
 
 npm-debug.log*

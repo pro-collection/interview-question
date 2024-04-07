@@ -1,105 +1,53 @@
-**无限 debugger**
+#### 1、开发模式的差异
 
-* 前端页面防止调试的方法主要是通过不断 `debugger` 来疯狂输出断点，因为 `debugger` 在控制台被打开的时候就会执行
-* 由于程序被 `debugger` 阻止，所以无法进行断点调试，所以网页的请求也是看不到的
-* 基础代码如下：
+在开发环境中，`Webpack` 是先打包再启动开发服务器，而 `Vite` 则是直接启动，然后再按需编译依赖文件。（大家可以启动项目后检查源码 `Sources` 那里看到）
 
-```javascript
-/**
-* 基础禁止调试代码
-*/
-(() => {
-	function ban() {
-	  setInterval(() => {
-	    debugger;
-	  }, 50);
-	}
-	try {
-	  ban();
-	} catch (err) { }
-})();
-```
+这意味着，当使用 `Webpack` 时，所有的模块都需要在开发前进行打包，这会增加启动时间和构建时间。
 
-**无限 debugger 的对策**
+而 `Vite` 则采用了不同的策略，它会在请求模块时再进行实时编译，这种按需动态编译的模式极大地缩短了编译时间，特别是在大型项目中，文件数量众多，`Vite` 的优势更为明显。
 
-* 如果仅仅是加上面那么简单的代码，对于一些技术人员而言作用不大
-* 可以通过控制台中的 `Deactivate breakpoints` 按钮或者使用快捷键 `Ctrl + F8` 关闭无限 `debugger`
-* 这种方式虽然能去掉碍眼的 `debugger`，但是无法通过左侧的行号添加 `breakpoint`
+**Webpack启动**
 
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/31fa5a46d4e74c5db56928f1bb2087c4~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1029&h=552&s=47251&e=png&b=fcfcfc)
 
-**禁止断点的对策**
+**Vite启动**
 
-* 如果将 `setInterval` 中的代码写在一行，就能禁止用户断点，即使添加 `logpoint` 为 `false` 也无用
-* 当然即使有些人想到用左下角的格式化代码，将其变成多行也是没用的
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dfa5c4618b75419d8b3a9139425972e5~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=892&h=838&s=50064&e=png&b=ffffff)
 
-```javascript
-(() => {
-  function ban() {
-    setInterval(() => { debugger; }, 50);
-  }
-  try {
-    ban();
-  } catch (err) { }
-})();
-```
+#### 2、对ES Modules的支持
 
-**忽略执行的代码**
+现代浏览器本身就支持 `ES Modules`，会`主动发起`请求去获取所需文件。Vite充分利用了这一点，将开发环境下的模块文件直接作为浏览器要执行的文件，而不是像 Webpack 那样`先打包`，再交给浏览器执行。这种方式减少了中间环节，提高了效率。
 
-* 通过添加 `add script ignore list` 需要忽略执行代码行或文件
-* 也可以达到禁止无限 `debugger`
+**什么是ES Modules？**
+
+通过使用 `export` 和 `import` 语句，ES Modules 允许在浏览器端导入和导出模块。
+
+当使用 ES Modules 进行开发时，开发者实际上是在构建一个`依赖关系图`，不同依赖项之间通过导入语句进行关联。
+
+主流浏览器（除IE外）均支持ES Modules，并且可以通过在 script 标签中设置 `type="module"`来加载模块。默认情况下，模块会延迟加载，执行时机在文档解析之后，触发DOMContentLoaded事件前。
+
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b03dbc4400c745c8bca371a9ab63f52b~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=2059&h=823&s=194009&e=png&b=f0e6d2)
+
+#### 3、底层语言的差异
+
+Webpack 是基于 `Node.js` 构建的，而 Vite 则是基于 `esbuild` 进行预构建依赖。esbuild 是采用 `Go` 语言编写的，Go 语言是`纳秒`级别的，而 Node.js 是`毫秒`级别的。因此，Vite 在打包速度上相比Webpack 有 `10-100` 倍的提升。
+
+**什么是预构建依赖？**
+
+预构建依赖通常指的是在项目`启动或构建`之前，对项目中所需的依赖项进行预先的`处理或构建`。这样做的好处在于，当项目实际运行时，可以`直接使用`这些已经预构建好的依赖，而无需再进行实时的编译或构建，从而提高了应用程序的运行速度和效率。
+
+#### 4、热更新的处理
+
+在 Webpack 中，当一个模块或其依赖的模块内容改变时，需要`重新编译`这些模块。
+
+而在 Vite 中，当某个模块内容改变时，只需要让浏览器`重新请求`该模块即可，这大大减少了热更新的时间。
+
+#### 总结
+
+总的来说，Vite 之所以比 Webpack 快，主要是因为它采用了`不同的开发模式`、`充分利用了现代浏览器的 ES Modules 支持`、`使用了更高效的底层语言`，`并优化了热更新的处理`。这些特点使得 Vite在大型项目中具有显著的优势，能够快速启动和构建，提高开发效率。
 
 
-**忽略执行代码的对策**
+#### 参考文档：
+https://juejin.cn/post/7344916114204049445
 
-* 那如何针对上面操作的恶意用户呢
-* 可以通过将 `debugger`改写成 `Function("debugger")();` 的形式来应对
-* `Function` 构造器生成的 `debugger` 会在每一次执行时开启一个临时 `js` 文件
-* 当然使用的时候，为了更加的安全，最好使用加密后的脚本
-
-```javascript
-// 加密前
-(() => {
-  function ban() {
-    setInterval(() => {
-      Function('debugger')();
-    }, 50);
-  }
-  try {
-    ban();
-  } catch (err) { }
-})();
-
-// 加密后
-eval(function(c,g,a,b,d,e){d=String;if(!"".replace(/^/,String)){for(;a--;)e[a]=b[a]||a;b=[function(f){return e[f]}];d=function(){return"\w+"};a=1}for(;a--;)b[a]&&(c=c.replace(new RegExp("\b"+d(a)+"\b","g"),b[a]));return c}('(()=>{1 0(){2(()=>{3("4")()},5)}6{0()}7(8){}})();',9,9,"block function setInterval Function debugger 50 try catch err".split(" "),0,{}));
-```
-
-
-**终极增强防调试代码**
-
-* 为了让自己写出来的代码更加的晦涩难懂，需要对上面的代码再优化一下
-* 将 `Function('debugger').call()`改成 `(function(){return false;})['constructor']('debugger')['call']();`
-* 并且添加条件，当窗口外部宽高和内部宽高的差值大于一定的值 ，我把 `body` 里的内容换成指定内容
-* 当然使用的时候，为了更加的安全，最好加密后再使用
-
-```javascript
-(() => {
-  function block() {
-    if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-      document.body.innerHTML = "检测到非法调试,请关闭后刷新重试!";
-    }
-    setInterval(() => {
-      (function () {
-        return false;
-      }
-      ['constructor']('debugger')
-      ['call']());
-    }, 50);
-  }
-  try {
-    block();
-  } catch (err) { }
-})();
-```
-
-**参考文档**
-- https://juejin.cn/post/7262175454714626108
+​

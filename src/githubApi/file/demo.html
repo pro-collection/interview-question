@@ -1,104 +1,28 @@
-<style>.markdown-body{color:#383838;font-size:15px;line-height:30px;letter-spacing:2px;word-break:break-word;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif;scroll-behavior:smooth;background-image:linear-gradient(0deg,transparent 24%,rgba(201,195,195,.329) 25%,hsla(0,8%,80.4%,.05) 26%,transparent 27%,transparent 74%,hsla(0,5.2%,81%,.185) 75%,rgba(180,176,176,.05) 76%,transparent 77%,transparent),linear-gradient(90deg,transparent 24%,rgba(204,196,196,.226) 25%,hsla(0,4%,66.1%,.05) 26%,transparent 27%,transparent 74%,hsla(0,5.2%,81%,.185) 75%,rgba(180,176,176,.05) 76%,transparent 77%,transparent);background-color:#fff;background-size:50px 50px;padding-bottom:60px}.markdown-body ::selection{color:#fff;background-color:#a862ea}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{margin:24px 0 12px;color:#a862ea}.markdown-body h1{line-height:2;font-size:1.4em}.markdown-body h1~p:first-of-type:first-letter{color:#a862ea;float:left;font-size:2em;margin-right:.4em;font-weight:bolder}.markdown-body h2{font-size:1.2em}.markdown-body h3{font-size:1.1em}.markdown-body ol,.markdown-body ul{padding-left:2em}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;padding-left:.2em}.markdown-body ol li::marker,.markdown-body ul li::marker{color:#a862ea}.markdown-body ol li.task-list-item,.markdown-body ul li.task-list-item{list-style:none}.markdown-body ol li.task-list-item ol,.markdown-body ol li.task-list-item ul,.markdown-body ul li.task-list-item ol,.markdown-body ul li.task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:10px}.markdown-body a,.markdown-body code,.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6,.markdown-body li,.markdown-body p{opacity:.85;vertical-align:baseline;transition:all .1s ease}.markdown-body a:hover,.markdown-body code:hover,.markdown-body h1:hover,.markdown-body h2:hover,.markdown-body h3:hover,.markdown-body h4:hover,.markdown-body h5:hover,.markdown-body h6:hover,.markdown-body li:hover,.markdown-body p:hover{opacity:1}.markdown-body a{display:inline-block;color:#a862ea;cursor:pointer;text-decoration:none;position:relative}.markdown-body a:after{content:"";position:absolute;width:98%;height:1px;bottom:0;left:0;transform:scaleX(0);background-color:#a862ea;transform-origin:bottom right;transition:transform .3s ease-in-out}.markdown-body a:hover:after{transform:scaleX(1);transform-origin:bottom left}.markdown-body a:active,.markdown-body a:link{color:#a862ea}.markdown-body img{max-width:100%;user-select:none;margin:1em 0;transition:transform .2s ease 0s;background-color:#f8f5ff;box-shadow:0 0 10px #e7daff}.markdown-body img:hover{opacity:1;box-shadow:0 0 20px #e7daff;transform:translateY(-1px)}.markdown-body blockquote{padding:.5em 1em;margin:12px 0;border-top-left-radius:2px;border-bottom-left-radius:2px;border-left:3px solid #a862ea;background-color:#f8f5ff}.markdown-body blockquote>p{margin:0}.markdown-body .math{font-style:italic;margin:12px 0;padding:.5em 1em;background-color:#f8f5ff}.markdown-body .math>p{margin:0}.markdown-body code{padding:2px .4em;overflow-x:auto;color:#a862ea;font-weight:700;word-break:break-word;font-family:Operator Mono,Consolas,Monaco,Menlo,monospace;background-color:#f8f5ff}.markdown-body pre{margin:2em 0}.markdown-body pre>code{display:block;padding:1.5em;word-break:normal;font-size:.9em;font-style:normal;font-weight:400;font-family:Operator Mono,Consolas,Monaco,Menlo,monospace;line-height:18px;color:#383838;border-radius:2px;scroll-behavior:smooth;box-shadow:0 0 10px #e7daff}.markdown-body pre>code:hover{box-shadow:0 0 20px #e7daff}.markdown-body pre>code::-webkit-scrollbar{height:6px;background-color:#f8f5ff}.markdown-body pre>code::-webkit-scrollbar-thumb{background-color:#e7daff;border-bottom-left-radius:3px;border-bottom-right-radius:3px}.markdown-body hr{margin:2em 0;border-top:1px solid #a862ea}.markdown-body table{width:100%;font-size:12px;max-width:100%;overflow:auto;border-collapse:collapse}.markdown-body thead{color:#a862ea;background:#f8f5ff}.markdown-body td,.markdown-body th{padding:.5em;border:1px solid #e7daff}.markdown-body tr{background-color:#f8f5ff}@media (max-width:720px){.markdown-body{font-size:12px}}</style><style data-highlight="">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><h2 data-id="heading-0">🎈 为啥要禁止？</h2>
-<ul>
-<li>由于前端页面会调用很多接口，有些接口会被别人爬虫分析，<strong>破解后获取数据</strong></li>
-<li>为了 <strong>杜绝</strong> 这种情况，最简单的方法就是禁止人家调试自己的前端代码</li>
-</ul>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ebd22983a8c44131955461c8e0f86729~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="禁止调试" loading="lazy"></p>
-<h2 data-id="heading-1">🎈 无限 debugger</h2>
-<ul>
-<li>前端页面防止调试的方法主要是通过不断 <code>debugger</code> 来疯狂输出断点，因为 <code>debugger</code> 在控制台被打开的时候就会执行</li>
-<li>由于程序被 <code>debugger</code> 阻止，所以无法进行断点调试，所以网页的请求也是看不到的</li>
-<li>基础代码如下：</li>
-</ul>
-<pre><code class="hljs language-javascript" lang="javascript"><span class="hljs-comment">/**
-* 基础禁止调试代码
-*/</span>
-(<span class="hljs-function">() =&gt;</span> {
-	<span class="hljs-keyword">function</span> <span class="hljs-title function_">ban</span>(<span class="hljs-params"></span>) {
-	  <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
-	    <span class="hljs-keyword">debugger</span>;
-	  }, <span class="hljs-number">50</span>);
-	}
-	<span class="hljs-keyword">try</span> {
-	  <span class="hljs-title function_">ban</span>();
-	} <span class="hljs-keyword">catch</span> (err) { }
-})();
-</code></pre>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/710fb22afe4e4bdf9d2d40bb63b7faf3~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="基础禁止调试" loading="lazy"></p>
-<h2 data-id="heading-2">🎈 无限 debugger 的对策</h2>
-<ul>
-<li>如果仅仅是加上面那么简单的代码，对于一些技术人员而言作用不大</li>
-<li>可以通过控制台中的 <code>Deactivate breakpoints</code> 按钮或者使用快捷键 <code>Ctrl + F8</code> 关闭无限 <code>debugger</code></li>
-<li>这种方式虽然能去掉碍眼的 <code>debugger</code>，但是无法通过左侧的行号添加 <code>breakpoint</code></li>
-</ul>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/be16a53291984280bcf25e034fa11b59~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="取消禁止对策" loading="lazy"></p>
-<h2 data-id="heading-3">🎈 禁止断点的对策</h2>
-<ul>
-<li>如果将 <code>setInterval</code> 中的代码写在一行，就能禁止用户断点，即使添加 <code>logpoint</code> 为 <code>false</code> 也无用</li>
-<li>当然即使有些人想到用左下角的格式化代码，将其变成多行也是没用的</li>
-</ul>
-<pre><code class="hljs language-javascript" lang="javascript">(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">ban</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> { <span class="hljs-keyword">debugger</span>; }, <span class="hljs-number">50</span>);
-  }
-  <span class="hljs-keyword">try</span> {
-    <span class="hljs-title function_">ban</span>();
-  } <span class="hljs-keyword">catch</span> (err) { }
-})();
-</code></pre>
-<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3a74781d02564fea9ab7747c57e3e777~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="禁止断点" loading="lazy"></p>
-<h2 data-id="heading-4">🎈 忽略执行的代码</h2>
-<ul>
-<li>通过添加 <code>add script ignore list</code> 需要忽略执行代码行或文件</li>
-<li>也可以达到禁止无限 <code>debugger</code></li>
-</ul>
-<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/29036b57da0c4a149841d084ffba4a7f~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="忽略执行的代码" loading="lazy"></p>
-<h2 data-id="heading-5">🎈 忽略执行代码的对策</h2>
-<ul>
-<li>那如何针对上面操作的恶意用户呢</li>
-<li>可以通过将 <code>debugger </code>改写成 <code>Function("debugger")();</code> 的形式来应对</li>
-<li><code>Function</code> 构造器生成的 <code>debugger</code> 会在每一次执行时开启一个临时 <code>js</code> 文件</li>
-<li>当然使用的时候，为了更加的安全，最好使用加密后的脚本</li>
-</ul>
-<pre><code class="hljs language-javascript" lang="javascript"><span class="hljs-comment">// 加密前</span>
-(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">ban</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
-      <span class="hljs-title class_">Function</span>(<span class="hljs-string">'debugger'</span>)();
-    }, <span class="hljs-number">50</span>);
-  }
-  <span class="hljs-keyword">try</span> {
-    <span class="hljs-title function_">ban</span>();
-  } <span class="hljs-keyword">catch</span> (err) { }
-})();
-
-<span class="hljs-comment">// 加密后</span>
-<span class="hljs-built_in">eval</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">c,g,a,b,d,e</span>){d=<span class="hljs-title class_">String</span>;<span class="hljs-keyword">if</span>(!<span class="hljs-string">""</span>.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/^/</span>,<span class="hljs-title class_">String</span>)){<span class="hljs-keyword">for</span>(;a--;)e[a]=b[a]||a;b=[<span class="hljs-keyword">function</span>(<span class="hljs-params">f</span>){<span class="hljs-keyword">return</span> e[f]}];d=<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>){<span class="hljs-keyword">return</span><span class="hljs-string">"\w+"</span>};a=<span class="hljs-number">1</span>}<span class="hljs-keyword">for</span>(;a--;)b[a]&amp;&amp;(c=c.<span class="hljs-title function_">replace</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">"\b"</span>+<span class="hljs-title function_">d</span>(a)+<span class="hljs-string">"\b"</span>,<span class="hljs-string">"g"</span>),b[a]));<span class="hljs-keyword">return</span> c}(<span class="hljs-string">'(()=&gt;{1 0(){2(()=&gt;{3("4")()},5)}6{0()}7(8){}})();'</span>,<span class="hljs-number">9</span>,<span class="hljs-number">9</span>,<span class="hljs-string">"block function setInterval Function debugger 50 try catch err"</span>.<span class="hljs-title function_">split</span>(<span class="hljs-string">" "</span>),<span class="hljs-number">0</span>,{}));
-</code></pre>
-<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f40081b7f70e4f2792c8da28304e7c21~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="解决对策" loading="lazy"></p>
-<h2 data-id="heading-6">🎈 终极增强防调试代码</h2>
-<ul>
-<li>为了让自己写出来的代码更加的晦涩难懂，需要对上面的代码再优化一下</li>
-<li>将 <code>Function('debugger').call() </code>改成 <code>(function(){return false;})['constructor']('debugger')['call']();</code></li>
-<li>并且添加条件，当窗口外部宽高和内部宽高的差值大于一定的值 ，我把 <code>body</code> 里的内容换成指定内容</li>
-<li>当然使用的时候，为了更加的安全，最好加密后再使用</li>
-</ul>
-<pre><code class="hljs language-javascript" lang="javascript">(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">block</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">window</span>.<span class="hljs-property">outerHeight</span> - <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerHeight</span> &gt; <span class="hljs-number">200</span> || <span class="hljs-variable language_">window</span>.<span class="hljs-property">outerWidth</span> - <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerWidth</span> &gt; <span class="hljs-number">200</span>) {
-      <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">"检测到非法调试,请关闭后刷新重试!"</span>;
-    }
-    <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
-      (<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-      }
-      [<span class="hljs-string">'constructor'</span>](<span class="hljs-string">'debugger'</span>)
-      [<span class="hljs-string">'call'</span>]());
-    }, <span class="hljs-number">50</span>);
-  }
-  <span class="hljs-keyword">try</span> {
-    <span class="hljs-title function_">block</span>();
-  } <span class="hljs-keyword">catch</span> (err) { }
-})();
-</code></pre>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a687b0ade91740e6a1759c279e2c32f9~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="终极增强防调试" loading="lazy"></p>
+<style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#252933}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;line-height:38px;margin-bottom:5px}.markdown-body h2{font-size:22px;line-height:34px;padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:20px;line-height:28px}.markdown-body h4{font-size:18px;line-height:26px}.markdown-body h5{font-size:17px;line-height:24px}.markdown-body h6{font-size:16px;line-height:24px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="juejin">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><h1 data-id="heading-0">&nbsp;前言</h1>
+<p>最近作者在学习 <code>webpack</code> 相关的知识，之前一直对这个问题不是特别了解，甚至讲不出个123....，这个问题在面试中也是常见的，作者在学习的过程当中总结了以下几点，在这里分享给大家看一下，当然最重要的是要理解，这样回答的时候就不用死记硬背了。</p>
+<h1 data-id="heading-1">原因</h1>
+<h2 data-id="heading-2">1、开发模式的差异</h2>
+<p>在开发环境中，<code>Webpack</code> 是先打包再启动开发服务器，而 <code>Vite</code> 则是直接启动，然后再按需编译依赖文件。（大家可以启动项目后检查源码 <code>Sources</code> 那里看到）</p>
+<p>这意味着，当使用 <code>Webpack</code> 时，所有的模块都需要在开发前进行打包，这会增加启动时间和构建时间。</p>
+<p>而 <code>Vite</code> 则采用了不同的策略，它会在请求模块时再进行实时编译，这种按需动态编译的模式极大地缩短了编译时间，特别是在大型项目中，文件数量众多，<code>Vite</code> 的优势更为明显。</p>
+<p><strong>Webpack启动</strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/31fa5a46d4e74c5db56928f1bb2087c4~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1029&amp;h=552&amp;s=47251&amp;e=png&amp;b=fcfcfc" alt="" loading="lazy"></p>
+<p><strong>Vite启动</strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dfa5c4618b75419d8b3a9139425972e5~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=892&amp;h=838&amp;s=50064&amp;e=png&amp;b=ffffff" alt="" loading="lazy"></p>
+<h2 data-id="heading-3">2、对ES Modules的支持</h2>
+<p>现代浏览器本身就支持 <code>ES Modules</code>，会<code>主动发起</code>请求去获取所需文件。Vite充分利用了这一点，将开发环境下的模块文件直接作为浏览器要执行的文件，而不是像 Webpack 那样<code>先打包</code>，再交给浏览器执行。这种方式减少了中间环节，提高了效率。</p>
+<h3 data-id="heading-4">什么是ES Modules？</h3>
+<p>通过使用 <code>export</code> 和 <code>import</code> 语句，ES Modules 允许在浏览器端导入和导出模块。</p>
+<p>当使用 ES Modules 进行开发时，开发者实际上是在构建一个<code>依赖关系图</code>，不同依赖项之间通过导入语句进行关联。</p>
+<p>主流浏览器（除IE外）均支持ES Modules，并且可以通过在 script 标签中设置 <code>type="module"</code>来加载模块。默认情况下，模块会延迟加载，执行时机在文档解析之后，触发DOMContentLoaded事件前。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b03dbc4400c745c8bca371a9ab63f52b~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=2059&amp;h=823&amp;s=194009&amp;e=png&amp;b=f0e6d2" alt="" loading="lazy"></p>
+<h2 data-id="heading-5">3、底层语言的差异</h2>
+<p>Webpack 是基于 <code>Node.js</code> 构建的，而 Vite 则是基于 <code>esbuild</code> 进行预构建依赖。esbuild 是采用 <code>Go</code> 语言编写的，Go 语言是<code>纳秒</code>级别的，而 Node.js 是<code>毫秒</code>级别的。因此，Vite 在打包速度上相比Webpack 有 <code>10-100</code> 倍的提升。</p>
+<h3 data-id="heading-6">什么是预构建依赖？</h3>
+<p>预构建依赖通常指的是在项目<code>启动或构建</code>之前，对项目中所需的依赖项进行预先的<code>处理或构建</code>。这样做的好处在于，当项目实际运行时，可以<code>直接使用</code>这些已经预构建好的依赖，而无需再进行实时的编译或构建，从而提高了应用程序的运行速度和效率。</p>
+<h2 data-id="heading-7">4、热更新的处理</h2>
+<p>在 Webpack 中，当一个模块或其依赖的模块内容改变时，需要<code>重新编译</code>这些模块。</p>
+<p>而在 Vite 中，当某个模块内容改变时，只需要让浏览器<code>重新请求</code>该模块即可，这大大减少了热更新的时间。</p>
+<h1 data-id="heading-8">总结</h1>
+<p>总的来说，Vite 之所以比 Webpack 快，主要是因为它采用了<code>不同的开发模式</code>、<code>充分利用了现代浏览器的 ES Modules 支持</code>、<code>使用了更高效的底层语言</code>，<code>并优化了热更新的处理</code>。这些特点使得 Vite在大型项目中具有显著的优势，能够快速启动和构建，提高开发效率。</p>
+<p>​</p>

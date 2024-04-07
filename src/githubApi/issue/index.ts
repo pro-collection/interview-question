@@ -9,12 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 放在 head 里和放在 body 里有什么区别？",
+  title: "为什么 Vite 速度比 Webpack 快？",
   key_world: [
-    // "翻页场景竞态问题",
+    "vite 编译速度",
+    "vite 速度 与 webpack 速度",
   ],
-  labels: [labels.network, company.alibaba],
-  milestone: MileStone.inProgress,
+  labels: [labels.engineering, company.tencent],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

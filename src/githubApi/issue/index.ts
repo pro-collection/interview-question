@@ -9,12 +9,11 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "为什么 Vite 速度比 Webpack 快？",
+  title: "如何检测网页空闲状态(一定时间内无操作)",
   key_world: [
-    "vite 编译速度",
-    "vite 速度 与 webpack 速度",
+    "检测网页空闲状态", 
   ],
-  labels: [labels.engineering, company.tencent],
+  labels: [labels.application, company.baidu],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

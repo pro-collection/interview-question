@@ -13,10 +13,7 @@ const remote = {
   key_world: [
     // "翻页场景竞态问题",
   ],
-  labels: [
-    labels.network,
-    company.alibaba,
-  ],
+  labels: [labels.network, company.alibaba],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
@@ -29,14 +26,17 @@ const main = async () => {
 
     console.log("yanle - logger: 获取热度结果: ", count);
 
-    const isConfirm = await confirm({ message: `获取到热度为：${count}, 请确认。(为「no」则可以重新修改热度, 为 「yes」则无需修改热度)` });
+    const isConfirm = await confirm({
+      message: `获取到热度为：${count}, 请确认。(为「no」则可以重新修改热度, 为 「yes」则无需修改热度)`,
+    });
 
     if (!isConfirm) {
       const answer = await input({ message: "请输入复写热度评分: " });
       count = !!toNumber(answer) ? toNumber(answer) : count;
     }
 
-    remote.title = count && remote.key_world ? `${remote.title}【热度: ${count?.toLocaleString() || count}】` : remote.title;
+    remote.title =
+      count && remote.key_world ? `${remote.title}【热度: ${count?.toLocaleString() || count}】` : remote.title;
 
     // 关键词
     const keyWordContent = `**关键词**：${remote.key_world.join("、")}\n\n`;
@@ -44,14 +44,17 @@ const main = async () => {
     fs.writeFileSync(filePath, keyWordContent + oldFile);
     console.log("yanle - logger: 关键词写入文档完成");
   } else {
-    const isConfirm = await confirm({ message: `是否自定义热度, 请确认。(为「yes」需要自定义热度, 为「no」则无需自定义热度)` });
+    const isConfirm = await confirm({
+      message: `是否自定义热度, 请确认。(为「yes」需要自定义热度, 为「no」则无需自定义热度)`,
+    });
 
     if (isConfirm) {
       const answer = await input({ message: "请输入复写热度评分: " });
       const count = !!toNumber(answer) ? toNumber(answer) : 0;
 
       if (count) {
-        remote.title = count && remote.key_world ? `${remote.title}【热度: ${count?.toLocaleString() || count}】` : remote.title;
+        remote.title =
+          count && remote.key_world ? `${remote.title}【热度: ${count?.toLocaleString() || count}】` : remote.title;
       }
     }
   }

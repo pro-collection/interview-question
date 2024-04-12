@@ -9,12 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何检测网页空闲状态(一定时间内无操作)",
-  key_world: [
-    "检测网页空闲状态", 
-  ],
-  labels: [labels.application, company.baidu],
-  milestone: MileStone.senior,
+  title: "HTTP是一个无状态的协议，那么Web应用要怎么保持用户的登录态呢？",
+  key_world: ["登录状态问题"],
+  labels: [labels.network, company.other],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

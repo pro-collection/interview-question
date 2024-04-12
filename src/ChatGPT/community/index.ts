@@ -10,10 +10,11 @@ const main = async () => {
     debug: true,
   });
 
-  api.sendMessage("JS 实现 Promise", {
-    timeoutMs: 6 * 60 * 1000,
-    debug: true,
-  })
+  api
+    .sendMessage("JS 实现 Promise", {
+      timeoutMs: 6 * 60 * 1000,
+      debug: true,
+    })
     .then((res: any) => {
       console.log(res.text);
     });
@@ -22,4 +23,3 @@ const main = async () => {
 main();
 
 export {};
-

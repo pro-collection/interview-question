@@ -9,15 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "void 和 never 区别",
+  title: "Eslint 代码检查的过程是啥？",
   key_world: [
-    "typescript void",
-    "typescript never",
-    "void 和 never 区别",
+    "eslint 代码检测",
+    "eslint 代码检测 执行过程",
     //
   ],
-  labels: [labels.ts, company.alibaba],
-  milestone: MileStone.inProgress,
+  labels: [labels.application, company.alibaba],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

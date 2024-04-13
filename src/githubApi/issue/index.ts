@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 严格模式作用是啥？",
+  title: "JS 严格模式为什么会禁用 with 语句？",
   key_world: [
     // "JS 严格模式作用",
     //
   ],
-  labels: [labels.js, company.tencent],
-  milestone: MileStone.inProgress,
+  labels: [labels.js, company.other],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Eslint 代码检查的过程是啥？",
+  title: "应用上线后， 怎么通知用户刷新当前页面？",
   key_world: [
-    "eslint 代码检测",
-    "eslint 代码检测 执行过程",
+    "静态资源更新",
+    "页面版本更新",
     //
   ],
-  labels: [labels.application, company.alibaba],
+  labels: [labels.application, company.mt],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

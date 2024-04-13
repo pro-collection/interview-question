@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Webpack 项目中通过 script 标签引入资源，在项目中如何处理?",
+  title: "在Babel里，stage0、stage1、stage2 和 stage3 分别代表什么含义？",
   key_world: [
     // "JS 严格模式作用",
     //

@@ -1,58 +1,21 @@
-> 也是作者无意中看到的一个有意思的问题。  
-> 虽然有意思， 但是没有任何价值， 如果说在项目中遇到过的， 而且处理过的同学， 肯定知道怎么回答。  
-> 但是压根没有碰到过得， 就算是你工作十年的老油条也是干望着。 所有没有任何面试价值。  
-> 故此， 可以当做科普来看看就行。
+> 无意中看到别人一个面试问题， 个人感觉问这个问题的面试官， 不是蠢就是坏。  
+> 没有任何面试价值， 无法考察候选人水平。  
+> 仅仅作为科普类型参考 - 热度为 0
 
-在使用 Webpack 打包的项目中，通常资源（如 JavaScript、CSS、图片等）会被 Webpack 处理，因为 Webpack 的设计初衷就是将所有资源视为模块，并进行有效的管理和打包。但有时候可能需要通过`<script>`标签直接引入资源，这通常有两种情况：
+Babel 是一个流行的 JavaScript 编译器，它允许开发者使用新的语言特性，然后将它们编译成可以在当前和低版本的浏览器或环境中运行的代码。
 
-1. **在 HTML 文件中直接引入：**
-   可以在项目的 HTML 文件中直接使用`<script>`标签来引入外部资源：
+在 Babel 里，stage0、stage1、stage2 和 stage3 这些术语指的是 ECMAScript 提案的不同阶段。ECMAScript 是 JavaScript 语言的标准化规范，新的特性进入标准之前会通过几个阶段的提案。
 
-   ```html
-   <!-- 若要使用 CDN 上托管的库 -->
-   <script src="https://cdn.example.com/library.js"></script>
-   ```
+这些阶段表示了一个特性在正式成为 ECMAScript 标准的一部分之前的成熟度。这个过程有一个官方的 5 个阶段流程，即从 Stage 0（strawman）到 Stage 4（finished）。下面是这些阶段的含义：
 
-   这种方法简单直接，但要记住，由于这些资源不会被 Webpack 处理，它们不会被包含在 Webpack 的依赖图中，并且也不会享受到 Webpack 的各种优化。
+- **Stage 0 - Strawman（稻草人阶段）:** 初始阶段，任何尚未被 TC39（ECMAScript 的标准化组织）官方审议的提案都属于这里。这些都是某个委员或者社区成员提交的想法，还不算是正式的提案。
 
-2. **使用 Webpack 管理：**
-   如果想要 Webpack 来处理这些通过`<script>`引入的资源，可以使用几种插件和加载器：
+- **Stage 1 - Proposal（提案阶段）:** 这个阶段的特性是值得进一步探讨的。它们需要有一个形式化的提案和一个负责人。在这个阶段，主要是确定问题和解决方案，以及进行初步探讨。
 
-   - `html-webpack-plugin`可以帮助你生成一个 HTML 文件，并在文件中自动引入 Webpack 打包后的 bundles。
-   - `externals`配置允许你将一些依赖排除在 Webpack 打包之外，但还是可以通过`require`或`import`引用它们。
-   - `script-loader`可以将第三方全局变量注入的库当作模块来加载使用。
+- **Stage 2 - Draft（草案阶段）:** 一旦一个提案到达这个阶段，它就被认为是初步规格的草案。特性的描述应该足够具体和详细，并且有初步的实现。这个阶段通常需要提案的规格文本和至少一种实验性实现。
 
-   例如，使用`html-webpack-plugin`和`externals`，你可以将一个库配置为 external，然后通过`html-webpack-plugin`将其引入：
+- **Stage 3 - Candidate（候选阶段）:** 在候选阶段，提案的规格已经基本完成，并且需要更多的用户反馈来发现潜在问题。通常在这个阶段，实现者和开发者开始在生产环境中尝试使用这些特性，发现问题并提出改善建议。
 
-   ```javascript
-   // webpack.config.js 文件
-   const HtmlWebpackPlugin = require("html-webpack-plugin");
+- **Stage 4 - Finished（完成阶段）:** 当一个提案达到这个阶段，它已经准备好被集成到下一个版本的 ECMAScript 标准中了。这意味着它已经获得了多个独立环境的实现，通过了综合的可行性和稳定性测试，并且已经被 TC39 委员会接受。
 
-   module.exports = {
-     // ...
-     externals: {
-       libraryName: "LibraryGlobalVariable",
-     },
-     plugins: [
-       new HtmlWebpackPlugin({
-         template: "src/index.html",
-         scriptLoading: "blocking", // 或者 'defer'
-       }),
-     ],
-   };
-   ```
-
-   然后，在你的`index.html`模板文件中可以这样引入资源：
-
-   ```html
-   <script src="https://cdn.example.com/library.js"></script>
-   ```
-
-   使用`externals`的方法能让你在 Webpack 打包的模块代码中用正常的`import`或`require`语句来引用那个全局变量：
-
-   ```javascript
-   // 你的 JavaScript 代码文件中
-   import Library from "libraryName"; // 虽然定义了external，Webpack依然会处理这个import
-   ```
-
-应根据项目需求和现有的架构来决定使用哪种方法。上述两种方法中，第二种可以更好地利用 Webpack 的功能，第一种则更加简单直接。
+开发者们可以根据特性的稳定性和自己的需求，选择使用 Babel 的哪个阶段的预设。然而，请注意，使用较低阶段的提案特性在生产环境中是有风险的，因为它们还没有被完全确定并可能会在将来发生变更。

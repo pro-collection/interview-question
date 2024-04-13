@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 TS 中的泛型",
+  title: "TS 中 any 和 unknow 的区别",
   key_world: [
-    "TS 泛型",
+    // "TS any 和 unknow",
     //
   ],
   labels: [labels.ts, company.other],

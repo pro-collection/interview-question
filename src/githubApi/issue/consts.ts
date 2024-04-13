@@ -30,5 +30,6 @@ export const company = {
   shopee: "Shopee",
   quic: "快手",
   dd: "滴滴",
+  xiaohongshu: "小红书",
   other: "TOP100互联网",
 };

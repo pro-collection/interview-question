@@ -9,13 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "浏览器对队头阻塞有什么优化？",
+  title: "JS 的加载会阻塞浏览器渲染吗？",
   key_world: [
-    "队头阻塞优化",
+    "浏览器渲染阻塞",
+    "JS 阻塞浏览器渲染",
     //
   ],
-  labels: [labels.network, labels.chrome, company.dd],
-  milestone: MileStone.senior,
+  labels: [labels.chrome, company.other],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

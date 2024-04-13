@@ -6,25 +6,26 @@ import repoConfig from "@utils/repoConfig";
 import { labels } from "@src/githubApi/otherRepo/nodeIndex/consts";
 
 // 写入 github
-const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue, {
-  ...options,
-  ...repoConfig.nodeIndex,
-});
+const write = (options: WriteIssueOptions) =>
+  octokit.request(apiUrl.writeIssue, {
+    ...options,
+    ...repoConfig.nodeIndex,
+  });
 
-const update = (options: UpdateIssueOptions) => octokit.request(apiUrl.updateIssue, {
-  ...options,
-  ...repoConfig.nodeIndex,
-});
+const update = (options: UpdateIssueOptions) =>
+  octokit.request(apiUrl.updateIssue, {
+    ...options,
+    ...repoConfig.nodeIndex,
+  });
 
 const remote = {
-  title: "100万个函数执行保证浏览器不卡",
-  labels: [
-    labels.chrome,
-  ],
-  body: () => fs.readFileSync(
-    "/Users/yanle/code/self/node-index/books/知识库/01、前端技术知识/29.100万个函数执行保证浏览器不卡/readme.md",
-    { encoding: "utf8" },
-  ),
+  title: "自由职业程序员（独立开发者）应该具备的技能与软硬综合能力",
+  labels: [labels.recommend],
+  body: () =>
+    fs.readFileSync(
+      "books/发展与OKR/06、自我管理/03、思考/03、自由职业程序员（独立开发者）应该具备的技能与软硬综合能力/index.md",
+      { encoding: "utf8" }
+    ),
 };
 
 // 创建 issue

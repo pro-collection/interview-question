@@ -9,12 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "CSS 属性值计算 - calc",
+  title: "void 和 never 区别",
   key_world: [
-    // "css display 属性",
+    "typescript void",
+    "typescript never",
+    "void 和 never 区别",
     //
   ],
-  labels: [labels.css, company.other],
+  labels: [labels.ts, company.alibaba],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

@@ -1,55 +1,39 @@
-是的，CSS 支持计算值，这可以通过 `calc()` 函数实现。`calc()` 允许你进行数学运算，计算 CSS 属性值。这个功能非常有力，因为它可以混合使用不同的单位，并且可以用在几乎任何需要数值的地方。
+**关键词**：typescript void、typescript never、void 和 never 区别
 
-以下是 `calc()` 函数的一些应用示例：
+在 TypeScript 中，`void`和`never`类型都代表没有值，但用途和含义却有所不同。以下是它们之间的主要区别：
 
-1. **基本运算**：可以执行加 (`+`)、减 (`-`)、乘 (`*`) 和除 (`/`) 四种基本运算。
+1. **void**：
 
-   ```css
-   .element {
-     width: calc(100% - 80px);
+   `void`类型用于标记函数没有任何返回值。这意呑着函数可能执行了一些操作但是没有返回任何内容。这不同于返回`undefined`或`null`，尽管在没有明确返回值时，JavaScript 函数默认返回`undefined`。
+
+   如果一个函数的返回类型是`void`，它可能有一个`return`语句，但`return`语句不能返回任何值（或者根本就没有`return`语句）。
+
+   例子：
+
+   ```typescript
+   function greet(): void {
+     console.log("Hello, World!");
    }
    ```
 
-2. **混合单位**：`calc()` 函数可以混合使用像素、百分比、em、rem 等单位。
+   这个函数打印一个字符串到控制台，但不返回任何值。
 
-   ```css
-   .element {
-     margin-top: calc(50vh - 50px);
+2. **never**：
+
+   `never`类型表示永远不会返回任何值。它通常用于两种情况：函数总是抛出一个错误，这样就不会有返回值；或者函数有一个无法达到的终点，比如无限循环。
+
+   例子：
+
+   ```typescript
+   function throwError(errorMsg: string): never {
+     throw new Error(errorMsg);
+   }
+
+   function infiniteLoop(): never {
+     while (true) {}
    }
    ```
 
-3. **嵌套**：你可以在 `calc()` 里面嵌套另一个 `calc()`。
+   这两个函数都不会正常结束：`throwError`函数会抛出异常，而`infiniteLoop`函数会永远循环。在这两种情况中，返回类型`never`正确地表明函数不会有任何返回执行路径。
 
-   ```css
-   .element {
-     width: calc(100% - calc(50px + 2em));
-   }
-   ```
-
-4. **环境变量**：结合 CSS 变量 (Custom Properties) 使用。
-
-   ```css
-   :root {
-     --main-padding: 10px;
-   }
-
-   .element {
-     padding: calc(var(--main-padding) * 2);
-   }
-   ```
-
-5. **动态值调整**：用于某些动态大小的调整。
-   ```css
-   .element {
-     position: absolute;
-     bottom: calc(50% - 20px);
-   }
-   ```
-
-当使用 `calc()` 时有一些规则需要注意，例如:
-
-- 运算符之间需要有空格。`calc(50% -50px)` 是无效的，而 `calc(50% - 50px)` 是有效的。
-- 不能进行 0 除运算，也就是说分母不能为 0。
-- 在进行乘法和除法时，至少有一个值必须是数值（即不带单元的数字）。
-
-总的来说，`calc()` 是一个强大的 CSS 工具，可以在响应式设计和复杂布局管理中提供极大的帮助。
+总结来说，`void`用于没有返回值的函数，这意味着函数的执行结束后不会给调用者任何值；而`never`表示函数永远不会有一个正常的结束，因此不会给调用者任何机会获得它的返回值。它们在类型系统中表达了不同的概念和意图。

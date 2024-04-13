@@ -13,6 +13,7 @@ const remote = {
   key_world: [
     "静态资源更新",
     "页面版本更新",
+    "服务端推送",
     //
   ],
   labels: [labels.application, company.mt],

@@ -28,7 +28,7 @@ const main = async () => {
 
   console.log("yanle - logger: 写入 html 成功， 文件路径： ", htmlPath);
 
-  // html 转 markdown --> 输出文档为 temp file
+  // 读取 html 转 markdown --> 输出文档为 temp file
   await writeToTemp(tempFilePath, htmlPath);
 
   console.log("yanle - logger: 写入 temp 成功， 文件路径： ", tempFilePath);

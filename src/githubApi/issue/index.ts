@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 严格模式为什么会禁用 with 语句？",
+  title: "ES6 中的 Set 对象该如何遍历",
   key_world: [
     // "JS 严格模式作用",
     //
   ],
   labels: [labels.js, company.other],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 
@@ -67,7 +67,7 @@ const main = async () => {
   writeIssue(omit(remote, "key_world"));
 };
 
-// 写入本地 temp.md
+// 将 demo.html 写入本地 temp.md
 // writeToTemp();
 
 // html 写入远端

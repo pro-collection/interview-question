@@ -15,21 +15,21 @@ export const writeToTemp = async (path = "./temp.md", htmlPath = "./demo.html") 
 
   // 写入文件
   markdown = flow(
-    value => value.replace(/javascriptCopy code/gi, ""),
-    value => value.replace(/htmlCopy code/gi, ""),
-    value => value.replace(/cssCopy code/gi, ""),
-    value => value.replace(/jsCopy code/gi, ""),
-    value => value.replace(/jsonCopy code/gi, ""),
-    value => value.replace(/shellCopy code/gi, ""),
-    value => value.replace(/jsxCopy code/gi, ""),
-    value => value.replace(/```js\njs/gi, "```js\n"),
-    value => value.replace(/```javascript\njs/gi, "```javascript\n"),
-    value => value.replace(/```typescript\ntypescript/gi, "```typescript\n"),
-    value => value.replace(/\\. /gi, ". "),
-    value => value.replace(/\\- /gi, "- "),
-    value => value.replace(/复制代码/gi, ""),
+    (value) => value.replace(/javascriptCopy code/gi, ""),
+    (value) => value.replace(/htmlCopy code/gi, ""),
+    (value) => value.replace(/cssCopy code/gi, ""),
+    (value) => value.replace(/jsCopy code/gi, ""),
+    (value) => value.replace(/jsonCopy code/gi, ""),
+    (value) => value.replace(/shellCopy code/gi, ""),
+    (value) => value.replace(/jsxCopy code/gi, ""),
+    (value) => value.replace(/```js\njs/gi, "```js\n"),
+    (value) => value.replace(/```javascript\njs/gi, "```javascript\n"),
+    (value) => value.replace(/```typescript\ntypescript/gi, "```typescript\n"),
+    (value) => value.replace(/\\. /gi, ". "),
+    (value) => value.replace(/\\- /gi, "- "),
+    (value) => value.replace(/复制代码/gi, ""),
     // value => value.replace(/\n### /gi, "\n#### "),
-    value => value.replace(/\n## /gi, "\n### "),
+    (value) => value.replace(/\n## /gi, "\n### ")
   )(markdown);
 
   if (markdown) fs.writeFileSync(path, markdown, { encoding: "utf-8" });
@@ -59,14 +59,13 @@ export const commitPush = async (title: string) => {
 };
 
 export const getIssueByUrlWriteLocal = async (url: string) => {
-  axios.request({
-    url,
-    method: "get",
-  })
+  axios
+    .request({
+      url,
+      method: "get",
+    })
     .then((res: any) => {
       const body = res?.data?.body;
       fs.writeFileSync(path.resolve(__dirname, "./temp.md"), body, { encoding: "utf-8" });
     });
 };
-
-

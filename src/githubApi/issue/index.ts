@@ -9,15 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "应用上线后， 怎么通知用户刷新当前页面？",
+  title: "JS 严格模式作用是啥？",
   key_world: [
-    "静态资源更新",
-    "页面版本更新",
-    "服务端推送",
+    // "JS 严格模式作用",
     //
   ],
-  labels: [labels.application, company.mt],
-  milestone: MileStone.senior,
+  labels: [labels.js, company.tencent],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

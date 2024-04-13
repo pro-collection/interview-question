@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "ES6 中的 Set 对象该如何遍历",
+  title: "ES6 中的 Map 对象该如何遍历",
   key_world: [
     // "JS 严格模式作用",
     //

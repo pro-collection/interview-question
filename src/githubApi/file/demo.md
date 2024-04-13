@@ -1,69 +1,75 @@
-### Set 遍历
+### Map 遍历
 
-在 JavaScript 中，`Set` 对象表示值的集合，在这个集合中每个值只出现一次。`Set` 对象是可迭代的，因此你可以使用多种方法来遍历它：
+在 JavaScript 中，`Map`对象当然可以被遍历。`Map` 对象持有键值对，任何值(对象或者原始值) 都可以作为一个键或一个值。你可以使用 `Map` 对象的几种方法遍历其中的键值对。
 
-1. **for...of 循环**:
+以下是几种遍历 Map 对象的方法：
 
-可以使用 `for...of` 循环来遍历 `Set`。
+1. **使用 `forEach()` 方法**：
 
-```javascript
-let mySet = new Set([1, 2, 3, 4, 5]);
-
-for (let value of mySet) {
-  console.log(value); // 输出: 1, 2, 3, 4, 5
-}
-```
-
-2. **forEach 方法**:
-
-`Set` 对象有一个 `forEach` 方法，就像 `Array` 一样。你可以提供一个回调函数，该函数将对 `Set` 中的每个元素执行。
+`Map` 对象有一个 `forEach` 方法，你可以像遍历数组一样使用它来遍历 `Map`。`forEach` 方法会按照插入顺序遍历 Map 对象。
 
 ```javascript
-mySet.forEach((value) => {
-  console.log(value); // 输出: 1, 2, 3, 4, 5
+let myMap = new Map();
+myMap.set("a", "alpha");
+myMap.set("b", "beta");
+myMap.set("g", "gamma");
+
+myMap.forEach((value, key) => {
+  console.log(key + " = " + value);
 });
 ```
 
-3. **扩展运算符 (...)**:
+1. **使用 `for...of` 循环**：
 
-扩展运算符可以将 `Set` 对象转换为数组。
+你可以使用 `for...of` 循环来遍历 `Map` 对象的键值对(`entries`)，键(`keys`)或值(`values`)。
+
+- 遍历 `Map` 的键值对:
 
 ```javascript
-let array = [...mySet];
-// 现在可以使用数组的遍历方法
-for (let i = 0; i < array.length; i++) {
-  console.log(array[i]); // 输出: 1, 2, 3, 4, 5
+for (let [key, value] of myMap) {
+  console.log(key + " = " + value);
 }
 ```
 
-4. **Array.from 方法**:
-
-`Array.from` 方法可以将 `Set` 对象转化为数组。
+- 遍历 `Map` 的键:
 
 ```javascript
-let array = Array.from(mySet);
-// 现在可以使用数组的遍历方法
-array.forEach((value) => {
-  console.log(value); // 输出: 1, 2, 3, 4, 5
-});
-```
-
-5. **keys(), values(), entries() 方法**:
-
-尽管 `Set` 对象没有键名只有键值，`keys()` 和 `values()` 方法的行为事实上是一样的，它们都会返回一个新的可迭代对象。`entries()` 方法也存在于 `Set` 上，但由于 `Set` 没有键名，它返回的迭代器将会为每个值提供一个[value, value]形式的数组。
-
-```javascript
-for (let value of mySet.keys()) {
-  console.log(value); // 输出: 1, 2, 3, 4, 5
-}
-
-for (let value of mySet.values()) {
-  console.log(value); // 输出: 1, 2, 3, 4, 5
-}
-
-for (let entry of mySet.entries()) {
-  console.log(entry); // 输出: [1, 1], [2, 2], [3, 3], [4, 4], [5, 5]
+for (let key of myMap.keys()) {
+  console.log(key);
 }
 ```
 
-使用哪种方法取决于你的个人喜好和具体的场景。但最常用的可能是 `for...of` 循环和 `forEach` 方法。
+- 遍历 `Map` 的值:
+
+```javascript
+for (let value of myMap.values()) {
+  console.log(value);
+}
+```
+
+1. **使用扩展运算符**：
+
+你还可以使用扩展运算符来将 `Map` 对象的键值对、键或值转换为数组。
+
+- 键值对数组:
+
+```javascript
+let keyValueArray = [...myMap];
+console.log(keyValueArray);
+```
+
+- 键数组:
+
+```javascript
+let keysArray = [...myMap.keys()];
+console.log(keysArray);
+```
+
+- 值数组:
+
+```javascript
+let valuesArray = [...myMap.values()];
+console.log(valuesArray);
+```
+
+每种方法的使用取决于你的具体需求。通常，`for...of` 和 `forEach()` 会用得更多，因为它们可以直接操作键和值。

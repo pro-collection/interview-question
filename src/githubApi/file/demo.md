@@ -1,43 +1,59 @@
-在 TypeScript 中，`any`和`unknown`都代表可以赋予任何类型的值，但它们在使用上有明显的不同。
+`Proxy` 和 `Reflect` 是 ES6 (ECMAScript 2015) 中引入的两个不同的构造函数，它们密切相关，通常在某些操作中一起使用。
 
-### any 类型
+1. **Proxy**：
+   `Proxy` 对象用于定义基本操作的自定义行为，例如属性查找、赋值、枚举、函数调用等。当你对一个`Proxy`对象执行这些操作时，你可以拦截并重新定义这些操作的行为。
 
-1. **最不安全的类型**：`any`类型是 TypeScript 类型系统的逃逸舱口，使用`any`可以让任何表达式绕过类型检查，转而采用 JavaScript 动态类型的行为。
-2. **类型放弃**：当你把一个值声明为`any`类型，你本质上在告诉 TypeScript 编译器：“信任我，我知道我在做什么。”编译器不会对`any`类型的值进行类型检查，这意味着你可以对它执行任何操作，无论它的实际类型。
+   下面是一些你可以使用`Proxy`拦截的操作:
 
-```typescript
-let notSure: any = 4;
-notSure = "maybe a string instead";
-notSure = false; // okay, definitely a boolean
+   - `get`：读取属性值
+   - `set`：设置属性值
+   - `has`：`in`操作符
+   - `deleteProperty`：`delete`操作符
+   - `apply`：调用一个函数
+   - 诸如此类的其他捕获器（handlers）
 
-notSure.ifItExists(); // okay, toExist might exist at runtime
+2. **Reflect**：
+   `Reflect`对象与`Proxy`捕获器（handlers）的方法一一对应。其目的是提供默认行为，对相应的对象操作进行默认的行为操作。在很多情况下，`Reflect`的方法与对应的直接对象操作是相同的。
+
+   这里是一些`Reflect`提供的方法的例子：
+
+   - `Reflect.get()`：获取对象属性的值，类似于`obj[prop]`
+   - `Reflect.set()`：设置对象属性的值，类似于`obj[prop] = value`
+   - `Reflect.has()`：类似于`prop in obj`
+   - `Reflect.deleteProperty()`：类似于`delete obj[prop]`
+   - `Reflect.apply()`：调用一个函数
+   - 其他与`Proxy`捕获器相对应的方法
+
+**两者的关系**：
+`Proxy`和`Reflect`的关系体现在它们共同协作时。在`Proxy`的捕获器函数中，开发者可以调用对应的`Reflect`方法，以实现默认的行为，同时加入自己的操纵和侧面逻辑。`Reflect`方法提供了一种方便的方式来保持默认行为，而不需要手动编写这些语义。
+
+例如，当在`Proxy`捕获器中捕获属性的读取行为时，使用`Reflect.get()`可以非常容易地调用相应对象的默认读取行为：
+
+```javascript
+let obj = {
+  a: 1,
+  b: 2,
+  c: 3,
+};
+
+let p = new Proxy(obj, {
+  get(target, prop, receiver) {
+    console.log(`读取了属性 ${prop}`);
+    return Reflect.get(target, prop, receiver); // 调用默认操作
+  },
+  set(target, prop, value, receiver) {
+    console.log(`将属性 ${prop} 设置为 ${value}`);
+    return Reflect.set(target, prop, value, receiver); // 调用默认操作
+  },
+});
+
+console.log(p.a); // 读取了属性 a，返回 1
+p.b = 4; // 将属性 b 设置为 4
 ```
 
-上述代码没有错误，因为`notSure`被声明为`any`类型。
+上面的例子中，通过`Reflect`对象的方法，我们不仅可以保持默认的`get`和`set`行为，还可以在这个过程之前或之后添加自己的逻辑。这样的设计使得代理行为的实现既安全又易于管理。
 
-### unknown 类型
+总而言之，`Proxy`和`Reflect`共同提供了一种强大的机制来拦截和定义基本的 JavaScript 操作，`Reflect`能提供操纵对象的默认方法，而`Proxy`则允许我们根据需要来定义这些操作的新行为。
 
-1. **类型安全的 any**：与`any`相比，`unknown`类型是类型安全的。它标志着一个值可以是任何类型，但与`any`不同的是，当值被声明为`unknown`时，你无法对该值执行任意的操作。
-
-2. **需要断言或类型细化**：在对`unknown`类型的值执行大部分操作之前，你需要使用类型断言或类型守卫来细化类型。这迫使开发者更积极地处理`unknown`类型的值，因此可以防止潜在的错误。
-
-```typescript
-let unsure: unknown = 4;
-unsure = "maybe a string instead";
-unsure = false; // okay, still uncertain
-
-// unsure.ifItExists(); // Error: Object is of type 'unknown'.
-// 下面是对unknown类型进行类型断言的示例
-(unsure as string).length; // okay, we have asserted that unsure is a string
-
-// 或者使用类型守卫
-if (typeof unsure === "string") {
-  console.log(unsure.length); // okay, we have checked it's a string
-}
-```
-
-如你所见，你不能像处理`any`类型那样直接调用 unknown 类型的方法或属性，必须先进行类型检查。
-
-### 总结
-
-`unknown`类型是`any`类型的类型安全对应物。当不确定一个值的类型时应首选使用`unknown`。这样，你会被迫在对该值执行操作之前进行适当的类型检查。这增加了一层类型安全性，可以帮助避免错误。相比之下，`any`类型则完全放弃了类型检查，通常应该尽量避免。
+> 以前对两者进行过对比， 但是没有讨论起关联关系。
+> 以前对比的文章：https://github.com/pro-collection/interview-question/issues/8

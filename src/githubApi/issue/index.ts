@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "TS 中 any 和 unknow 的区别",
+  title: "Proxy 和 Reflect 有什么关系？",
   key_world: [
     // "TS any 和 unknow",
     //
   ],
-  labels: [labels.ts, company.other],
+  labels: [labels.js, company.dd],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

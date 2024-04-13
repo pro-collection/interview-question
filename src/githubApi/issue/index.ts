@@ -9,9 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "HTTP是一个无状态的协议，那么Web应用要怎么保持用户的登录态呢？",
-  key_world: ["登录状态问题"],
-  labels: [labels.network, company.other],
+  title: "CSS 属性值计算 - calc",
+  key_world: [
+    // "css display 属性",
+    //
+  ],
+  labels: [labels.css, company.other],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

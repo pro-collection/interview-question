@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "在Babel里，stage0、stage1、stage2 和 stage3 分别代表什么含义？",
+  title: "介绍一下 TS 中的泛型",
   key_world: [
-    // "JS 严格模式作用",
+    "TS 泛型",
     //
   ],
-  labels: [labels.engineering, company.other],
-  milestone: MileStone.senior,
+  labels: [labels.ts, company.other],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

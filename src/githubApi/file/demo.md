@@ -1,21 +1,119 @@
-> 无意中看到别人一个面试问题， 个人感觉问这个问题的面试官， 不是蠢就是坏。  
-> 没有任何面试价值， 无法考察候选人水平。  
-> 仅仅作为科普类型参考 - 热度为 0
+**关键词**：TS 泛型
 
-Babel 是一个流行的 JavaScript 编译器，它允许开发者使用新的语言特性，然后将它们编译成可以在当前和低版本的浏览器或环境中运行的代码。
+TypeScript 的泛型是一种工具，它能够使代码更加灵活，能够适配多种类型而非单一的类型。泛型可以创建可重用的组件，这些组件可以支持多种类型的数据，而不失去类型检查时的安全性。
 
-在 Babel 里，stage0、stage1、stage2 和 stage3 这些术语指的是 ECMAScript 提案的不同阶段。ECMAScript 是 JavaScript 语言的标准化规范，新的特性进入标准之前会通过几个阶段的提案。
+### 泛型的基本概念
 
-这些阶段表示了一个特性在正式成为 ECMAScript 标准的一部分之前的成熟度。这个过程有一个官方的 5 个阶段流程，即从 Stage 0（strawman）到 Stage 4（finished）。下面是这些阶段的含义：
+在 TypeScript 中, 泛型使用一个类型变量，常见的类型变量有 `T`,`U`,`V` 等。通过类型变量，你可以创建一个可以适应任何类型的组件（比如函数、接口或类）。类型变量像是函数或类的一个特殊参数，但这个参数是类型而非具体的值。
 
-- **Stage 0 - Strawman（稻草人阶段）:** 初始阶段，任何尚未被 TC39（ECMAScript 的标准化组织）官方审议的提案都属于这里。这些都是某个委员或者社区成员提交的想法，还不算是正式的提案。
+### 泛型的使用场景
 
-- **Stage 1 - Proposal（提案阶段）:** 这个阶段的特性是值得进一步探讨的。它们需要有一个形式化的提案和一个负责人。在这个阶段，主要是确定问题和解决方案，以及进行初步探讨。
+1. **函数**：你可以创建一个泛型函数，该函数可以接受任意类型的参数，同时保证输入参数和返回参数类型相同：
 
-- **Stage 2 - Draft（草案阶段）:** 一旦一个提案到达这个阶段，它就被认为是初步规格的草案。特性的描述应该足够具体和详细，并且有初步的实现。这个阶段通常需要提案的规格文本和至少一种实验性实现。
+```typescript
+function identity<T>(arg: T): T {
+  return arg;
+}
+```
 
-- **Stage 3 - Candidate（候选阶段）:** 在候选阶段，提案的规格已经基本完成，并且需要更多的用户反馈来发现潜在问题。通常在这个阶段，实现者和开发者开始在生产环境中尝试使用这些特性，发现问题并提出改善建议。
+这里 `T` 用作类型变量，可以捕获用户提供的类型（比如 `number`），然后这个类型将被用于函数的参数和返回类型。
 
-- **Stage 4 - Finished（完成阶段）:** 当一个提案达到这个阶段，它已经准备好被集成到下一个版本的 ECMAScript 标准中了。这意味着它已经获得了多个独立环境的实现，通过了综合的可行性和稳定性测试，并且已经被 TC39 委员会接受。
+2. **接口**：使用泛型定义接口可以创建可用于多种类型的接口。
 
-开发者们可以根据特性的稳定性和自己的需求，选择使用 Babel 的哪个阶段的预设。然而，请注意，使用较低阶段的提案特性在生产环境中是有风险的，因为它们还没有被完全确定并可能会在将来发生变更。
+```typescript
+interface GenericIdentityFn<T> {
+  (arg: T): T;
+}
+
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+let myIdentity: GenericIdentityFn<number> = identity;
+```
+
+这里 `GenericIdentityFn` 接口定义了一个属性，它是一个接收 `T` 类型参数并返回 `T` 类型的函数。
+
+3. **type**：`type` 关键字可以用来创建类型别名，它确实支持泛型。你可以为类型别名定义泛型参数，然后在使用该类型别名时指定具体的类型。
+
+下面是使用泛型的类型别名的例子：
+
+```typescript
+// 这里定义了一个带有泛型参数 T 的类型别名
+type Container<T> = {
+  value: T;
+};
+
+// 可以这样使用类型别名
+let numberContainer: Container<number> = { value: 1 };
+let stringContainer: Container<string> = { value: "Hello" };
+
+// 使用类型别名定义函数类型
+type ReturnFunction<T> = () => T;
+
+// 这个函数返回一个数字
+let myFunction: ReturnFunction<number> = () => 42;
+
+// 使用带有两个参数的泛型
+type KeyValue<K, V> = {
+  key: K;
+  value: V;
+};
+
+let keyValue: KeyValue<string, number> = { key: "testKey", value: 123 };
+```
+
+通过使用泛型，`type` 可以定义灵活的类型别名，使得别名能够用于各种不同的数据类型，同时保持类型的安全性。这使得你可以在类型别名中使用泛型来捕获传递给别名的类型信息。
+
+4. **类**：泛型也可以用于类定义中，使得类可以灵活地与多种类型协作。
+
+```typescript
+class GenericNumber<T> {
+  zeroValue: T;
+  add: (x: T, y: T) => T;
+}
+
+let myGenericNumber = new GenericNumber<number>();
+myGenericNumber.zeroValue = 0;
+myGenericNumber.add = function (x, y) {
+  return x + y;
+};
+```
+
+这里，`GenericNumber<T>` 类具有一个类型为 `T` 的属性 `zeroValue` 和一个用两个 `T` 类型参数返回 `T` 类型的方法 `add`。
+
+### 泛型约束
+
+有时你可能希望对泛型进行限制，只允许使用满足特定接口的类型。这称为泛型约束。
+
+```typescript
+interface Lengthwise {
+  length: number;
+}
+
+function loggingIdentity<T extends Lengthwise>(arg: T): T {
+  console.log(arg.length); // Now we know it has a .length property, so no more error
+  return arg;
+}
+```
+
+在这里，我们约束了类型 `T` 必须遵从 `Lengthwise` 接口，确保传入的类型具有 `length` 属性。
+
+### 泛型中使用类型参数
+
+你还可以在泛型中使用类型参数本身。
+
+```typescript
+function getProperty<T, K extends keyof T>(obj: T, key: K) {
+  return obj[key];
+}
+
+let x = { a: 1, b: 2, c: 3 };
+
+getProperty(x, "a"); // Okay
+getProperty(x, "m"); // Error: Argument of type '"m"' isn't assignable to '"a" | "b" | "c"'
+```
+
+在这个示例中，`getProperty` 函数有两个参数：`obj` 和 `key`，`obj` 是对象 `T`，`key` 是 `T` 中键的集合 `keyof T` 的成员。
+
+通过泛型，TypeScript 允许你在保持类型安全的同时创建灵活，可适用于多种类型的组件。这样你就能够写出更加通用且易于复用的代码。

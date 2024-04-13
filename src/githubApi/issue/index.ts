@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "ES6 中的 Map 对象该如何遍历",
+  title: "Webpack 项目中通过 script 标签引入资源，在项目中如何处理?",
   key_world: [
     // "JS 严格模式作用",
     //
   ],
-  labels: [labels.js, company.other],
-  milestone: MileStone.inProgress,
+  labels: [labels.engineering, company.other],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

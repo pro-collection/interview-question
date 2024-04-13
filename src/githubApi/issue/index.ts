@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Proxy 和 Reflect 有什么关系？",
+  title: "浏览器对队头阻塞有什么优化？",
   key_world: [
-    // "TS any 和 unknow",
+    "队头阻塞优化",
     //
   ],
-  labels: [labels.js, company.dd],
-  milestone: MileStone.inProgress,
+  labels: [labels.network, labels.chrome, company.dd],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

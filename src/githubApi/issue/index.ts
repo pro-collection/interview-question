@@ -9,13 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 的加载会阻塞浏览器渲染吗？",
+  title: "开发过程中为什么会选择使用 ts , 相比于 JS 开发， 有哪些优点？",
   key_world: [
-    "浏览器渲染阻塞",
-    "JS 阻塞浏览器渲染",
+    "TS 开发优势",
     //
   ],
-  labels: [labels.chrome, company.other],
+  labels: [labels.ts, company.alibaba],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

@@ -14,7 +14,7 @@ const remote = {
     "babel 编译 react",
     //
   ],
-  labels: [labels.engineering, labels.frameWork, company.xiaohongshu],
+  labels: [labels.engineering, company.xiaohongshu],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

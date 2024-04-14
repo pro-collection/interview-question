@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "你在开发过程中， 使用过哪些 TS 的特性或者能力？",
+  title: "babel 核心库有哪些？",
   key_world: [
-    "TS 特性和能力",
+    "babel 核心库",
     //
   ],
-  labels: [labels.ts, company.alibaba],
+  labels: [labels.engineering, company.xiaohongshu],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

@@ -1,39 +1,23 @@
-**关键词**：TS 特性和能力
+**关键词**：babel 核心库
 
-> 这个为何被作者列为了高阶范围的问题  
-> 原因如下：大多数纯写业务的同学， 可能就用到了 `interface` 和 `type` 最多加上 `enum` 和 `泛型`；  
-> TS 很多牛掰的特性， 是伴随做复杂的工具库， 或者处理复杂业务场景来的。
+Babel 是一个 JavaScript 编译器，主要用于将 ES6 及以上版本的代码转换为向后兼容的 JavaScript 语法，以便在当前和旧版浏览器或环境中执行。核心的 Babel 库主要包括：
 
-这里直接上干货：
+1. **@babel/core**:
+   这是 Babel 编译器的核心包，提供了 Babel 的主要转换引擎。它包含了解析、转换和生成代码的主要功能。几乎所有的 Babel 操作都需要这个模块作为基础。
 
-1. **Utility Types（工具类型）**：
+2. **@babel/cli**:
+   这是 Babel 的命令行接口，通过它可以在终端或命令提示符中运行 Babel。它允许你执行转编译操作，如将 ES6 代码转换为 ES5。
 
-   - **Partial\<T>**: 将类型 T 的所有属性变为可选。
-   - **Required\<T>**: 将类型 T 的所有属性变为必选。
-   - **Readonly\<T>**: 将类型 T 的所有属性变为只读。
-   - **Record\<K, T>**: 创建一个具有指定键类型 K 和值类型 T 的新对象类型。
-   - **Pick\<T, K>**: 从类型 T 中选择指定属性 K 形成新类型。
-   - **Omit\<T, K>**: 从类型 T 中排除指定属性 K 形成新类型。
-   - **Exclude\<T, U>**: 从类型 T 中排除可以赋值给类型 U 的类型。
-   - **Extract\<T, U>**: 从类型 T 中提取可以赋值给类型 U 的类型。
-   - **NonNullable\<T>**: 从类型 T 中排除 null 和 undefined 类型。
-   - **ReturnType\<T>**: 获取函数类型 T 的返回类型。
-   - **Parameters\<T>**: 获取函数类型 T 的参数类型组成的元组类型。
+3. **@babel/preset-env**:
+   这是一个智能预设，允许你使用最新的 JavaScript，而不必管理语法转换。`@babel/preset-env`会根据你的目标环境（比如特定版本的浏览器或 Node.js），自动决定使用哪些 Babel 插件和 polyfills。
 
-2. **条件判定类型**：
+4. **@babel/polyfill** (现在已经被废弃，推荐使用 `core-js` 和 `regenerator-runtime`):
+   早期 Babel 版本中用于模拟完整的 ES2015+环境的包。它的目的是在全局范围内添加填充以模拟较新的环境。从 Babel 7.4.0 开始，建议直接包括 `core-js` 和 `regenerator-runtime`，因为这提供了更好的模块化和按需加载功能。
 
-   - **Conditional Types（条件类型）**: 根据类型关系进行条件判断生成不同的类型。
-   - **Distribute Conditional Types（分布式条件类型）**: 分发条件类型，允许条件类型在联合类型上进行分发。
+5. **babel-loader**:
+   这是 Babel 的一个 webpack 插件，可以将 Babel 集成到 webpack 构建过程中，使得你可以使用 webpack 来处理和打包使用了新版 JavaScript 语法的文件。
 
-3. **Mapped Types（映射类型）**：根据已有类型创建新类型，通过映射类型可以生成新的类型结构。
+6. **@babel/plugin-transform-runtime**:
+   这个插件用于复用 Babel 注入的辅助代码，以节省代码大小，并能够在不污染全局环境的情况下使用新语言特性的 polyfills。
 
-4. **Template Literal Types（模板文字类型）**：使用字符串模板创建新类型。
-
-5. **类型推断关键字**：
-   - **keyof 关键字**：关键字允许在泛型条件类型中推断类型变量。
-   - **instanceof**：运算符用于检查对象是否是特定类的实例。
-   - **in**：用于检查对象是否具有特定属性。
-   - **type guards**：类型守卫是自定义的函数或条件语句，用于在代码块内缩小变量的类型范围。
-   - **as**：用于类型断言，允许将一个变量断言为特定的类型。
-
-详细内容请参考这个文档： https://github.com/yanlele/node-index/issues/75
+除了这些核心库外，还有许多可用的 Babel 插件，以支持各种 JavaScript 语法和特性（比如装饰器、类属性等）。这些插件可以按需引入，配置在 Babel 的配置文件（通常是`.babelrc`或`babel.config.js`）中。这些插件的命名通常遵循 `@babel/plugin-` 的格式。

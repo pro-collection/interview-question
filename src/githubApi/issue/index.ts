@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "开发过程中为什么会选择使用 ts , 相比于 JS 开发， 有哪些优点？",
+  title: "你在开发过程中， 使用过哪些 TS 的特性或者能力？",
   key_world: [
-    "TS 开发优势",
+    "TS 特性和能力",
     //
   ],
   labels: [labels.ts, company.alibaba],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

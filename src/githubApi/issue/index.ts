@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "babel 核心库有哪些？",
+  title: "[React] 为什么 react 组件， 都必须要申明一个 `import React from 'react';`",
   key_world: [
-    "babel 核心库",
+    "babel 编译 react",
     //
   ],
-  labels: [labels.engineering, company.xiaohongshu],
+  labels: [labels.engineering, labels.frameWork, company.xiaohongshu],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

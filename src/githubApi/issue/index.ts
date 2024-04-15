@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 为什么 react 组件， 都必须要申明一个 `import React from 'react';`",
+  title: "如何从 0 到 1 搭建前端基建",
   key_world: [
-    "babel 编译 react",
+    "前端基建",
     //
   ],
-  labels: [labels.engineering, company.xiaohongshu],
-  milestone: MileStone.senior,
+  labels: [labels.engineering, company.other],
+  milestone: MileStone.master,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

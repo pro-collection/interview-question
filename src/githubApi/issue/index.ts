@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何从 0 到 1 搭建前端基建",
+  title: "[webpack] 打包时 hash 码是如何生成的",
   key_world: [
-    "前端基建",
+    "webpack hash 码的生成",
     //
   ],
   labels: [labels.engineering, company.other],

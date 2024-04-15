@@ -1,53 +1,27 @@
-**关键词**：前端基建
+**关键词**：webpack hash 码的生成
 
-如何从 0 到 1 搭建前端基建
+Webpack 在打包过程中生成 hash 码主要用于缓存和版本管理。主要有三种类型的 hash 码：
 
-有一个非常经典的文章， 直接参考即可： [非大厂的我们，要如何去搞前端基建?](https://juejin.cn/post/7144881028661723167)
+1. hash：是和整个项目的构建相关，只要项目文件有修改，整个项目构建的 hash 值就会更改。这意味着任何一个文件的改动都会影响到整体的 hash 值。
 
-这里简单总结一下文章里面的要点
+2. chunkhash：与 webpack 打包的 chunk 有关，不同的 entry 会生成不同的 chunkhash 值。例如，如果你的配置生成了多个 chunk（例如使用了 code splitting），每个 chunk 的更新只会影响到它自身的 chunkhash。
 
-1.什么是基建？
+3. contenthash：根据文件内容来定义 hash，内容不变，则 contenthash 不变。这在使用诸如 CSS 提取到单独文件的插件时特别有用，因此只有当文件的内容实际改变时，浏览器才会重新下载文件。
 
-![01](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1a1bf7ac7a6040c1b8cabb5e2c72ff65~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+生成方式：
 
-2.为什么要做前端基建？
+- hash 和 chunkhash 主要是通过某种 hash 算法（默认 MD5）来对文件名或者 chunk 数据进行编码。
+- contenthash 是通过构建时的 webpack 插件（如 mini-css-extract-plugin）来处理的，它会对文件内容进行 hash。
 
-业务复用；
-提升研发效率；
-规范研发流程；
-团队技术提升；
-团队的技术影响力；
-开源建设；
+Hash 码的生成可以被 webpack 配置的 hashFunction，hashDigest，hashDigestLength 等选项影响。例如，你可以选择不同的算法如 SHA256 或者 MD5，以及可以决定 hash 值的长度。
 
-3.前端基建如何推动落地？
+在 webpack 的配置文件中，可以通过如下方式设定 hash:
 
-- 要合适的同学（资源）
-- 要解决的问题（问题）
-- 要解决问题方案计划书（方案）
-- 要具体执行的步骤（执行）
+```javascript
+output: {
+  filename: '[name].[chunkhash].js',
+  path: __dirname + '/dist'
+}
+```
 
-**技术基建四大特性（切记）**
-
-- 技术的健全性
-- 基建的稳定性
-- 研发的效率性
-- 业务的体验性
-
-  4.前端基建都有什么？
-
-- 前端规范（Standard）
-- 前端文档（Document）
-- 前端项目模板管理（Templates）
-- 前端脚手架（CLI）
-- 前端组件库（UI Design）
-- 前端响应式设计 or 自适应设计
-- 前端工具库（类 Hooks / Utils）
-- 前端工具自动化（Tools）
-- 接口数据聚合（BFF）
-- 前端 SSR 推进
-- 前端自动化构建部署（CI/CD）
-- 全链路前端监控/数据埋点系统
-- 前端可视化平台
-- 前端性能优化
-- 前端低代码平台搭建
-- 微前端（Micro App）
+这会将输出的文件名设置为入口名称加上基于每个 chunk 内容的 hash。在使用 `webpack-dev-server` 或者 `webpack --watch` 时，不会生成实际的文件，所以这些 hash 值是在内存中计算并关联的。

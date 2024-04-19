@@ -1,65 +1,71 @@
-**关键词**：交叉观察器 API、IntersectionObserver 详解
+**关键词**：滚动到页面视口、IntersectionObserver 详解
 
-`IntersectionObserver` API 是现代浏览器提供的一个强大的 API，用于性能友好地跟踪元素是否进入、离开或穿过另一个元素（通常是视口）的边界。这个 API 特别适用于执行懒加载、实现无限滚动、检测广告展示等功能，因为它避免了使用传统的滚动事件监听，后者可能会因频繁的计算和 DOM 操作导致性能问题。
+### 基本原理
 
-### 如何使用 `IntersectionObserver`：
+页面是用户与程序进行交互的界面，在对应表单校验场景中，通常会因为有填写错误需要用户进行修改。为了提高用户体验，可以将页面滚动至对应表单报错的位置，使得用户立即可见错误并进行修改。这通常可以通过 JavaScript 编程实现。
 
-1. **创建一个`IntersectionObserver`实例**:
-   创建一个`IntersectionObserver`的新实例，你需要提供一个回调函数，该函数会在目标元素与其祖先或视口交叉状态变化时被调用。此外，你还可以提供一个选项对象来定义观察的具体条件。
+要注意的是，实现滚动至错误表单，一般需要几个步骤：
 
-2. **观察元素**:
-   使用`observe`方法来指定一直观察的目标 DOM 元素。代表当这个 DOM 元素的显示与否达到某个条件时，你的回调函数将会被执行。
+1. **记录表单元素的位置**：在表单提交前的适当时间里记录所有表单元素的错误位置。
+2. **滚动到特定错误**：错误发生时，滚动到第一个错误的表单元素位置。
+3. **优化**：可为同一元素多次错误滚动优化，避免不必要的用户干扰。
 
-3. **处理交叉事件**:
-   当观察的元素进入或离开另一个元素时，为创建`IntersectionObserver`实例时指定的回调函数将会被调用。
+### 以下是这些步骤的代码示例
 
-4. **停止观察**:
-   使用`unobserve`方法可以停止观察特定元素。如果你已完成观察任务，使用`disconnect`方法将停止所有观察，释放资源。
+### HTML:
 
-### 示例代码：
-
-以下是如何使用`IntersectionObserver`的示例：
-
-```javascript
-// 创建一个回调函数，当观察的元素交叉进入或离开另一个元素时，该函数会被触发
-const callback = (entries, observer) => {
-  entries.forEach((entry) => {
-    // 检查entry.isIntersecting属性
-    if (entry.isIntersecting) {
-      // 元素已进入视口
-      console.log("Element is in the viewport!");
-    } else {
-      // 元素已离开视口
-      console.log("Element is out of the viewport!");
-    }
-  });
-};
-
-// 创建IntersectionObserver实例
-const options = {
-  root: null, // 使用浏览器视口作为根
-  rootMargin: "0px", // 根的外边距，类似于CSS的margin
-  threshold: 1.0, // 目标完全可见时触发回调
-};
-
-const observer = new IntersectionObserver(callback, options);
-
-// 开始观察目标元素
-const target = document.getElementById("yourTargetElementId");
-observer.observe(target);
-
-// 停止观察目标元素
-// observer.unobserve(target);
+```html
+<form id="myForm" onsubmit="return false;">
+  <input type="text" id="name" name="name" />
+  <input type="text" id="age" name="age" />
+  <!-- ... 其他表单元素 ... -->
+  <button type="submit" onclick="handleValidation()">Submit</button>
+</form>
 ```
 
-在这个示例中，当目标元素（`id`为`yourTargetElementId`的元素）完全进入视口时，回调函数将被触发。`root`设为`null`意味着默认使用视口作为参照根元素。`rootMargin`设为`0px`表示根和目标的边界框触碰时回调就会被触发。`threshold`为`1.0`，表示目标完全可见时回调会被触发。
+### JavaScript:
 
-### 注意事项
+```javascript
+// 一个假设的表单验证函数
+function validateInput(inputId) {
+  // 调用此处的校验逻辑，返回是否存在错误
+  // 这里以ID "inputId"来获取对应的DOM对象
+  var el = document.getElementById(inputId);
+  // 此处只是示例, 实际上应根据具体的校验逻辑返回一个布尔类型
+  return el.value === "预期值";
+}
 
-- `IntersectionObserver`在性能上比传统的滚动事件检测方式有显著优势，因为它不依赖于`JavaScript`在主线程上的事件循环。
-- 使用时应当注意浏览器兼容性问题，对于不支持该 API 的旧浏览器，可能需要添加 polyfill 以保证功能的实现。
+function handleValidation() {
+  var valid = true;
 
-### 参考文档
+  ["name", "age"].forEach((key) => {
+    // 进行校验判断
+    if (!validateInput(key)) {
+      console.error(`Validation failed for: ${key}`);
 
-- https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API
-- https://juejin.cn/post/7296058491289501696
+      // 标记校验失败
+      valid = false;
+
+      // 滚动到出现问题的元素位置
+      var element = document.getElementById(key);
+      element.scrollIntoView({ block: "center", behavior: "smooth" });
+
+      // 增加一些提示效果, 比如错误边框, 可按需实现
+      // element.classList.add('error-highlight');
+    }
+  });
+
+  // 检查是否验证失败，如果失败则不提交表单
+  return valid;
+}
+
+// 处理表单提交事件，与HTML中的onclick绑定
+document.getElementById("myForm").addEventListener("submit", (e) => {
+  e.preventDefault(); // 阻止表单默认提交行为
+  handleValidation();
+});
+```
+
+### 补充知识点 scrollIntoView
+
+参考文档： https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollIntoView

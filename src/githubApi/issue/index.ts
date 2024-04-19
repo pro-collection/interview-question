@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] 打包时 hash 码是如何生成的",
+  title: "如何一次性渲染十万条数据还能保证页面不卡顿",
   key_world: [
-    "webpack hash 码的生成",
+    "渲染性能问题",
     //
   ],
-  labels: [labels.engineering, company.other],
-  milestone: MileStone.master,
+  labels: [labels.application, company.other],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

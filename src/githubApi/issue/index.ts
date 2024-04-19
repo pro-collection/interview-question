@@ -9,12 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何一次性渲染十万条数据还能保证页面不卡顿",
+  title: "虚拟混动加载原理是什么， 用 JS 代码简单实现一个虚拟滚动加加载。",
   key_world: [
-    "渲染性能问题",
+    "虚拟滚动",
+    "虚拟加载",
     //
   ],
-  labels: [labels.application, company.other],
+  labels: [labels.application, company.xiaohongshu],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

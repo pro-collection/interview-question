@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "在表单校验场景中， 如何实现页面视口滚动到报错的位置",
+  title: "介绍一下 scrollIntoView api",
   key_world: [
-    "滚动到页面视口",
-    "IntersectionObserver 详解",
+    "scrollIntoView api",
+    // "IntersectionObserver 详解",
     //
   ],
-  labels: [labels.application, company.xiaohongshu],
+  labels: [labels.application, company.other],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

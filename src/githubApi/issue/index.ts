@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "虚拟混动加载原理是什么， 用 JS 代码简单实现一个虚拟滚动加加载。",
+  title: "交叉观察器 API IntersectionObserver 详解",
   key_world: [
-    "虚拟滚动",
-    "虚拟加载",
+    "交叉观察器 API",
+    "IntersectionObserver 详解",
     //
   ],
   labels: [labels.application, company.xiaohongshu],

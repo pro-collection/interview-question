@@ -1,0 +1,453 @@
+<style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#252933}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;line-height:38px;margin-bottom:5px}.markdown-body h2{font-size:22px;line-height:34px;padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:20px;line-height:28px}.markdown-body h4{font-size:18px;line-height:26px}.markdown-body h5{font-size:17px;line-height:24px}.markdown-body h6{font-size:16px;line-height:24px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style><style data-highlight="" data-highlight-key="juejin">.markdown-body pre,.markdown-body pre>code.hljs{color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style><h1 data-id="heading-0">前言</h1>
+<p>后端一次性返回过多数据时，我们前端应该如何渲染，本文提供了两种比较适合方案供大家参考</p>
+<h1 data-id="heading-1">直接渲染</h1>
+<p>先看下直接渲染会有什么问题吧</p>
+<p>先模拟下这个数据过多时的情景，我生成十万条<code>li</code>，然后每个<code>li</code>都是随机生成数，生成一个<code>append</code>挂载一下</p>
+<pre><code class="hljs language-xml" lang="xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"en"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"viewport"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"width=device-width, initial-scale=1.0"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Document<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"container"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+        <span class="hljs-keyword">const</span> total = <span class="hljs-number">100000</span>
+        <span class="hljs-keyword">let</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">'container'</span>)
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; total; i++) {
+            <span class="hljs-keyword">let</span> li = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">'li'</span>)
+            li.<span class="hljs-property">innerHTML</span> = ~~(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * total)
+            ul.<span class="hljs-title function_">appendChild</span>(li)
+        }
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/009903b1ef3740d2bb0b2527121d3aa4~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=982&amp;h=659&amp;s=208534&amp;e=gif&amp;f=40&amp;b=1d1d1d" alt="1.gif" loading="lazy"></p>
+<p>这加载起来有点慢啊~</p>
+<p>不防看下耗时多少，写个时间放进去</p>
+<pre><code class="hljs language-xml" lang="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">let</span> prevTime = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>()
+    <span class="hljs-keyword">const</span> total = <span class="hljs-number">100000</span>
+    <span class="hljs-keyword">let</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">'container'</span>)
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; total; i++) {
+        <span class="hljs-keyword">let</span> li = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">'li'</span>)
+        li.<span class="hljs-property">innerHTML</span> = ~~(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * total)
+        ul.<span class="hljs-title function_">appendChild</span>(li)
+    }
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'v8执行代码的时间：'</span>, <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() - prevTime); 
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'渲染页面的时间：'</span>, <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() - prevTime);
+    }, <span class="hljs-number">0</span>)
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>代码从上往下执行，因此执行完代码就是 v8 的时间</p>
+<p>为何这里写个定时器就能代表渲染页面的时间，大家可能都知道<code>event-loop</code>中，同步、微任务结束之后就是宏任务，殊不知，这中间还有个页面渲染的过程，定时器前面的代码都是同步代码，定时器是个宏任务，但是浏览器执行宏任务之前会判断是否有需要渲染页面的任务，如果有就会先去渲染页面，因此这里写个定时器的打印就能代表页面渲染了多久时间</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/155c58bcf72f44af9c7c7e23028b6a70~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=237&amp;h=53&amp;s=2276&amp;e=png&amp;b=212225" alt="1.png" loading="lazy"></p>
+<p>诺~，v8 执行下代码只需要<code>0.4秒</code>，而页面渲染需要<code>3.3秒</code></p>
+<p>因此这么写，问题出现在页面渲染上，而非代码的执行，v8 性能是很高的</p>
+<h2 data-id="heading-2">缺点</h2>
+<ul>
+<li>页面渲染很久</li>
+<li>十万次的回流</li>
+</ul>
+<h1 data-id="heading-3">定时器</h1>
+<p>这十万条数据，用户的屏幕又不能一次性全部展现出来，何苦一次性加载，那我就用个定时器，一次定时器加载一点</p>
+<pre><code class="hljs language-xml" lang="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">const</span> total = <span class="hljs-number">100000</span>
+    <span class="hljs-keyword">let</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">'container'</span>)
+    <span class="hljs-keyword">let</span> once = <span class="hljs-number">20</span>
+    <span class="hljs-keyword">let</span> page = total / once
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">loop</span>(<span class="hljs-params">curTotal</span>) {
+        <span class="hljs-keyword">if</span> (curTotal &lt;= <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> 
+
+        <span class="hljs-keyword">let</span> pageCount = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(curTotal, once) <span class="hljs-comment">// 最后一次渲染一定少于20条，因此取最小</span>
+
+        <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; pageCount; i++) {
+                <span class="hljs-keyword">let</span> li = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">'li'</span>)
+                li.<span class="hljs-property">innerHTML</span> = ~~(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * total)
+                ul.<span class="hljs-title function_">appendChild</span>(li)
+            }
+            <span class="hljs-title function_">loop</span>(curTotal - pageCount)
+        }, <span class="hljs-number">0</span>)
+    }
+
+    <span class="hljs-title function_">loop</span>(total)
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>像这样，每次调用<code>loop</code>都只会加载20个<code>li</code>，这样一来，用户打开界面就比之前流畅了</p>
+<p>但其实这样是有个问题的，上拉或者下拉会有个留白</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8097893d247946e580030cd86919bf45~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=185&amp;h=556&amp;s=61530&amp;e=gif&amp;f=27&amp;b=f7f5f5" alt="2.gif" loading="lazy"></p>
+<h2 data-id="heading-4">为何闪屏</h2>
+<p>这跟电脑的刷新率和定时器回调的执行有关</p>
+<p>电脑的刷新率一般都是 60Hz ， 60Hz 就代表着 1s 内电脑连续播放 60 张图片，或者说刷新 60 次，这么设计的原因就是我们人眼的视觉反应时间就是 16.7ms ，1000ms 内刷新 60 次就是 16.7ms 刷新一次，这样人眼就感受不到电脑的卡顿了</p>
+<p>然而，浏览器的定时器执行不受我们人为严格控制的。浏览器有个主线程用于处理更新界面等操作，执行完主线程才会执行其他线程，而定时器专门有个定时器线程，因此定时器里面回调的执行一般就会比你设置的时间晚一点，哪怕你设定的时间是 0ms</p>
+<p>我们回到上面的代码，第一次执行的时候创建 20 个<code>li</code>，此时浏览器的任务队列是干干净净的，因此去执行<code>appendChild</code>，将 20 个<code>li</code>去渲染到页面上去，渲染页面的过程一定是耗时的，等到你第二次执行递归的时候，又要去创建一个定时器，定时器里面的回调是创建 20 个<code>li</code>，刚才说了，浏览器执行定时器的回调需要等前面的渲染执行完毕，因此第二次创建<code>li</code>的时候，并不是我们预期的 0ms 创建 20 个<code>li</code>，这中间有个时差，这才导致了闪屏问题</p>
+<blockquote>
+<p>一句话解释：定时器的执行需要等待前面的渲染队列执行完毕，而定时器的执行又恰好是创建li，这才导致一个非预期时间产生li导致的闪屏问题</p>
+</blockquote>
+<p>其实还有个原因也导致了这个闪屏：定时器在 0ms 时走回调去创建 20 个<code>li</code>，但是浏览器的视图刷新需要等到 16.7ms 之后， 0ms 和 16.7ms 之间的时差就导致了闪屏，也就是说定时器的时间和屏幕的刷新率不一致</p>
+<h2 data-id="heading-5">总结</h2>
+<p><strong>优点</strong></p>
+<p>打开页面的时候不需要一次性渲染所有数据，打开首页很快</p>
+<p><strong>缺点</strong></p>
+<p>定时器的执行和屏幕的刷新时间不一致产生一个闪屏的问题，并且需要回流十万次</p>
+<h1 data-id="heading-6">requestAnimationFrame + fragment（时间分片）</h1>
+<p>既然定时器的执行时间和浏览器的刷新率不一致，那么我就可以用<code>requestAnimationFrame</code>来解决</p>
+<p><code>requestAnimationFrame</code>也是个定时器，不同于<code>setTimeout</code>，它的时间不需要我们人为指定，这个时间取决于当前电脑的刷新率，如果是 60Hz ，那么就是 16.7ms 执行一次，如果是 120Hz 那就是 8.3ms 执行一次</p>
+<blockquote>
+<p>因此<code>requestAnimationFrame</code>也是个宏任务，前阵子面试就被问到过这个</p>
+</blockquote>
+<p>这么一来，每次电脑屏幕 16.7ms 后刷新一下，定时器就会产生 20 个<code>li</code>，<code>dom</code>结构的出现和屏幕的刷新保持了一致</p>
+<pre><code class="hljs language-ini" lang="ini">&lt;script&gt;
+    const <span class="hljs-attr">total</span> = <span class="hljs-number">100000</span>
+    let <span class="hljs-attr">ul</span> = document.getElementById(<span class="hljs-string">'container'</span>)
+    let <span class="hljs-attr">once</span> = <span class="hljs-number">20</span>
+    let <span class="hljs-attr">page</span> = total / <span class="hljs-literal">on</span>ce
+
+    function loop(curTotal) {
+        if (curTotal &lt;= 0) return 
+
+        let <span class="hljs-attr">pageCount</span> = Math.min(curTotal, <span class="hljs-literal">on</span>ce) 
+
+        window.requestAnimationFrame(() =&gt; {
+            for (let <span class="hljs-attr">i</span> = <span class="hljs-number">0</span><span class="hljs-comment">; i &lt; pageCount; i++) {</span>
+                let <span class="hljs-attr">li</span> = document.createElement(<span class="hljs-string">'li'</span>)
+                <span class="hljs-attr">li.innerHTML</span> = ~~(Math.random() * total)
+                ul.appendChild(li)
+            }
+            loop(curTotal - pageCount)
+        })
+    }
+
+    loop(total)
+&lt;/script&gt;
+</code></pre>
+<p>其实目前这个代码还可以优化一下，每一次<code>appendChild</code>都是新增一个新的<code>li</code>，也就意味着需要回流一次，总共十万条数据就需要回流十万次</p>
+<p>此前讲回流的时候提出过虚拟片段<code>fragment</code>来解决这个问题</p>
+<blockquote>
+<p><a href="https://juejin.cn/post/7320288265034006538" target="_blank" title="https://juejin.cn/post/7320288265034006538">输入url到页面渲染后半段：回流，重绘，优化【一次性带你搞明白】 - 掘金 (juejin.cn)</a></p>
+</blockquote>
+<p><code>fragment</code>是虚拟文档碎片，我们一次<code>for</code>循环产生 20 个<code>li</code>的过程中可以全部把真实<code>dom</code>挂载到<code>fragment</code>上，然后再把<code>fragment</code>挂载到真实<code>dom</code>上，这样原来需要回流十万次，现在只需要回流<code>100000 / 20</code>次</p>
+<pre><code class="hljs language-xml" lang="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">const</span> total = <span class="hljs-number">100000</span>
+    <span class="hljs-keyword">let</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">'container'</span>)
+    <span class="hljs-keyword">let</span> once = <span class="hljs-number">20</span>
+    <span class="hljs-keyword">let</span> page = total / once
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">loop</span>(<span class="hljs-params">curTotal</span>) {
+        <span class="hljs-keyword">if</span> (curTotal &lt;= <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> 
+
+        <span class="hljs-keyword">let</span> pageCount = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(curTotal, once) 
+
+        <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">requestAnimationFrame</span>(<span class="hljs-function">() =&gt;</span> {
+            <span class="hljs-keyword">let</span> fragment = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createDocumentFragment</span>() <span class="hljs-comment">// 创建一个虚拟文档碎片</span>
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; pageCount; i++) {
+                <span class="hljs-keyword">let</span> li = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">'li'</span>)
+                li.<span class="hljs-property">innerHTML</span> = ~~(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * total)
+                fragment.<span class="hljs-title function_">appendChild</span>(li) <span class="hljs-comment">// 挂到fragment上</span>
+            }
+            ul.<span class="hljs-title function_">appendChild</span>(fragment) <span class="hljs-comment">// 现在才回流</span>
+            <span class="hljs-title function_">loop</span>(curTotal - pageCount)
+        })
+    }
+
+    <span class="hljs-title function_">loop</span>(total)
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>现在的实现方案还算可以</p>
+<h2 data-id="heading-7">总结</h2>
+<p>这个方案被称之为时间分片</p>
+<p><strong>优点</strong></p>
+<p>解决了定时器执行时机与屏幕刷新刷新不匹配的问题，并且用<code>fragment</code>优化了回流次数过多问题</p>
+<p><strong>缺点</strong></p>
+<p>同样会有闪屏，这个闪屏是下拉太快导致的，无法规避</p>
+<h1 data-id="heading-8">虚拟列表</h1>
+<p>核心思想：在可视窗口维护一个列表，可视窗口上下都会有个缓存区域，真实dom只会在可视窗口和上下缓存区存在</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9094751ead3347cc8e708c6c9a9fd84c~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=403&amp;h=516&amp;s=173982&amp;e=png&amp;b=ffffff" alt="2.png" loading="lazy"></p>
+<p>考虑到js代码会比较多，这里cdn引入vue来实现</p>
+<blockquote>
+<p>这里vue源码引入需要在前面引入，否则加载v-for中的item时会直接显示{{item}}一会儿</p>
+</blockquote>
+<pre><code class="hljs language-xml" lang="xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"en"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"viewport"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"width=device-width, initial-scale=1.0"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Document<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://unpkg.com/vue@3/dist/vue.global.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+        *{
+            <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
+            <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;
+        }
+        <span class="hljs-selector-class">.v-scroll</span>{
+            <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;
+            <span class="hljs-attribute">height</span>: <span class="hljs-number">400px</span>;
+            <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#000</span>;
+            <span class="hljs-attribute">margin</span>: <span class="hljs-number">100px</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">100px</span>;
+            <span class="hljs-attribute">overflow-y</span>: scroll;
+        }
+        <span class="hljs-selector-tag">li</span>{
+            <span class="hljs-attribute">list-style</span>: none;
+            <span class="hljs-attribute">padding-left</span>: <span class="hljs-number">20px</span>;
+            <span class="hljs-attribute">height</span>: <span class="hljs-number">40px</span>;
+            <span class="hljs-attribute">line-height</span>: <span class="hljs-number">40px</span>;
+            <span class="hljs-attribute">box-sizing</span>: border-box;
+        }
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"app"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"v-scroll"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">v-for</span>=<span class="hljs-string">"(item, index) in currentList"</span>&gt;</span>{{index + 1}} -- {{item}}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+        <span class="hljs-keyword">const</span> { createApp, ref } = <span class="hljs-title class_">Vue</span>
+        
+        <span class="hljs-title function_">createApp</span>({
+            <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+                <span class="hljs-keyword">const</span> allList = <span class="hljs-title function_">ref</span>([]) <span class="hljs-comment">// 所有数据</span>
+                <span class="hljs-keyword">const</span> currentList = <span class="hljs-title function_">ref</span>([]) <span class="hljs-comment">// 可视区域要渲染的数据</span>
+
+                <span class="hljs-keyword">return</span> {
+                    allList,
+                    currentList
+                }
+            }
+        })
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<p>接下来模拟一个接口请求，拿到数据后<code>push</code>到<code>allList</code>中去</p>
+<p>这个接口请求我直接写在<code>setup</code>全局内，按道理接口请求写在生命周期中，其实vue3的<code>setup</code>也是个生命周期，它顶替掉了vue2的<code>beforeCreated</code>和<code>Created</code></p>
+<pre><code class="hljs language-javascript" lang="javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">getAllList</span> = (<span class="hljs-params">count</span>) =&gt; { <span class="hljs-comment">// 接口请求</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; count; i++) {
+        allList.<span class="hljs-property">value</span>.<span class="hljs-title function_">push</span>(<span class="hljs-string">`我是列表<span class="hljs-subst">${allList.value.length + <span class="hljs-number">1</span>}</span>项`</span>)
+    }
+}
+<span class="hljs-title function_">getAllList</span>(<span class="hljs-number">400</span>) 
+</code></pre>
+<p>另外需要拿到包裹<code>ul</code>的滚动容器，vue拿到dom是通过打<code>ref</code>标记实现的，并且想要拿到dom需要放到生命周期<code>onMounted</code>中</p>
+<p>拿到一个dom的高度可以用<code>offSetHeight</code>，还有个<code>clientHeight</code>，前者加上了边框，这里必然选择后者</p>
+<pre><code class="hljs language-scss" lang="scss"><span class="hljs-built_in">onMounted</span>(() =&gt; { <span class="hljs-comment">// 挂载后才能拿到dom</span>
+    boxHeight<span class="hljs-selector-class">.value</span> = scrollBox<span class="hljs-selector-class">.value</span><span class="hljs-selector-class">.clientHeight</span> <span class="hljs-comment">// clientHeight只包含内容，不含边框</span>
+    <span class="hljs-comment">// console.log(scrollBox.value.offsetHeight);</span>
+})
+</code></pre>
+<p>然后需要清楚可视区要放下多少个<code>li</code>，这里<code>向下取整 + 2</code>是因为，最上面和最下面可能都会露出一点<code>li</code>，因此需要加两个，用计算属性实现</p>
+<pre><code class="hljs language-javascript" lang="javascript"><span class="hljs-keyword">const</span> itemNum = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> { <span class="hljs-comment">// 可视区放下多少个li</span>
+    <span class="hljs-keyword">return</span> ~~(boxHeight.<span class="hljs-property">value</span> / itemHeight.<span class="hljs-property">value</span>) + <span class="hljs-number">2</span>
+})
+</code></pre>
+<p>再记录一个列表开始的索引，然后监听页面的滚动事件，监听的时候需要更新好列表开始的索引</p>
+<pre><code class="hljs language-csharp" lang="csharp"><span class="hljs-keyword">const</span> startIndex = <span class="hljs-keyword">ref</span>(<span class="hljs-number">0</span>) <span class="hljs-comment">// 索引</span>
+
+<span class="hljs-comment">// 页面滚动</span>
+<span class="hljs-keyword">const</span> doScroll = () =&gt; { <span class="hljs-comment">// div内部滚动距离 / 每项的高度 = 滚了多少项</span>
+    <span class="hljs-keyword">const</span> index = ~~(scrollBox.<span class="hljs-keyword">value</span>.scrollTop / itemHeight.<span class="hljs-keyword">value</span>)
+    <span class="hljs-keyword">if</span> (index === startIndex.<span class="hljs-keyword">value</span>) <span class="hljs-keyword">return</span> <span class="hljs-comment">// 滚到最开始的位置</span>
+    startIndex.<span class="hljs-keyword">value</span> = index <span class="hljs-comment">// 可视区的第一条数据下标</span>
+}
+</code></pre>
+<p>然后记录好最后的索引，这个索引一定是在下缓存区的最后一个<code>index</code>，这里写下缓存区的长度等同于可视区，因此<code>乘以2</code></p>
+<pre><code class="hljs language-ini" lang="ini">const <span class="hljs-attr">endIndex</span> = computed(() =&gt; { // 可视区最后一个下标
+    let <span class="hljs-attr">index</span> = startIndex.value + itemNum.value * <span class="hljs-number">2</span> // 考虑用户体验，准备可视区一倍的li
+    if (!allList.value<span class="hljs-section">[index]</span>) { // 已经滚超了，回来一个位置
+        <span class="hljs-attr">index</span> = allList.value.length - <span class="hljs-number">1</span>
+    } 
+    return index
+})
+</code></pre>
+<p>重写下<code>currentList</code>，拿到初始下标和最后的下标进行截取</p>
+<pre><code class="hljs language-ini" lang="ini">const <span class="hljs-attr">currentList</span> = computed(() =&gt; {
+    let <span class="hljs-attr">index</span> = <span class="hljs-number">0</span>
+    if (startIndex.value &lt;= itemNum.value) { // <span class="hljs-section">[0, 21]</span> <span class="hljs-section">[0, 22]</span> …… <span class="hljs-section">[0, 30]</span> <span class="hljs-section">[1, 31]</span>
+        <span class="hljs-attr">index</span> = <span class="hljs-number">0</span>
+    } else {
+        <span class="hljs-attr">index</span> = startIndex.value - itemNum.value
+    }
+    return allList.value.slice(index, endIndex.value + 1)
+})
+</code></pre>
+<p>再写入一个<code>blankStyle</code>动态样式确保滚动的平滑性，这个样式返回的<code>paddingTop</code>和<code>paddingBottom</code>的值根据当前可见区域之前和之后的空白区域高度来动态计算</p>
+<pre><code class="hljs language-ini" lang="ini">const <span class="hljs-attr">blankStyle</span> = computed(() =&gt; {
+    let <span class="hljs-attr">index</span> = <span class="hljs-number">0</span><span class="hljs-comment">;</span>
+    if (startIndex.value &lt;= itemNum.value) {
+        <span class="hljs-attr">index</span> = <span class="hljs-number">0</span><span class="hljs-comment">;</span>
+    } else {
+        <span class="hljs-attr">index</span> = startIndex.value - itemNum.value<span class="hljs-comment">;</span>
+    }
+    return {
+        paddingTop: index * itemHiehgt.value + "px",
+
+        paddingBottom: (allList.value.length - endIndex.value - 1) * itemHiehgt.value + "px"           
+    }<span class="hljs-comment">;</span>
+})<span class="hljs-comment">;</span>
+</code></pre>
+<p>我再引入下<code>lodash</code>的节流进行优化<code>doScroll</code>函数</p>
+<p>最终代码如下，大家可以拿到代码自行运行下，效果很棒~</p>
+<pre><code class="hljs language-ini" lang="ini">&lt;!DOCTYPE html&gt;
+&lt;html <span class="hljs-attr">lang</span>=<span class="hljs-string">"en"</span>&gt;
+
+&lt;head&gt;
+    &lt;meta <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span>&gt;
+    &lt;meta <span class="hljs-attr">name</span>=<span class="hljs-string">"viewport"</span> content=<span class="hljs-string">"width=device-width, initial-scale=1.0"</span>&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+    &lt;script <span class="hljs-attr">src</span>=<span class="hljs-string">"https://unpkg.com/vue@3/dist/vue.global.js"</span>&gt;&lt;/script&gt;
+    &lt;script <span class="hljs-attr">src</span>=<span class="hljs-string">"https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"</span>&gt;&lt;/script&gt;
+    &lt;style&gt;
+        * {
+            margin: 0<span class="hljs-comment">;</span>
+            padding: 0<span class="hljs-comment">;</span>
+        }
+
+        .v-scroll {
+            width: 300px<span class="hljs-comment">;</span>
+            height: 400px<span class="hljs-comment">;</span>
+            border: 1px solid black<span class="hljs-comment">;</span>
+            overflow-y: scroll<span class="hljs-comment">;</span>
+            margin: 100px 0 0 100px<span class="hljs-comment">;</span>
+        }
+
+        li {
+            list-style: none<span class="hljs-comment">;</span>
+            padding-left: 20px<span class="hljs-comment">;</span>
+            line-height: 40px<span class="hljs-comment">;</span>
+            height: 40px<span class="hljs-comment">;</span>
+            box-sizing: border-box<span class="hljs-comment">;</span>
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div <span class="hljs-attr">id</span>=<span class="hljs-string">"app"</span>&gt;
+        &lt;div <span class="hljs-attr">class</span>=<span class="hljs-string">"v-scroll"</span> @scroll=<span class="hljs-string">"doScroll"</span> ref=<span class="hljs-string">"scrollBox"</span>&gt;
+            &lt;ul :<span class="hljs-attr">style</span>=<span class="hljs-string">"blankStyle"</span> style=<span class="hljs-string">"height: 100%"</span>&gt;
+                &lt;li <span class="hljs-attr">v-for</span>=<span class="hljs-string">"item in currentList"</span> :key=<span class="hljs-string">"item.id"</span>&gt;
+                    {{ item }}
+                &lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+
+    &lt;script&gt;
+        const { createApp, ref, onMounted, computed } = Vue
+
+        createApp({
+            setup() {
+                const <span class="hljs-attr">allList</span> = ref([])<span class="hljs-comment">;</span>
+
+                getAllList(300)<span class="hljs-comment">; </span>
+
+                function getAllList(count) {
+                    const <span class="hljs-attr">length</span> = allList.value.length<span class="hljs-comment">;</span>
+                    for (let <span class="hljs-attr">i</span> = <span class="hljs-number">0</span><span class="hljs-comment">; i &lt; count; i++) {</span>
+                        allList.value.push(`我是列表${length + i + 1}项`)
+                    }
+                }
+
+                const <span class="hljs-attr">scrollBox</span> = ref(null)<span class="hljs-comment">;</span>
+
+                const <span class="hljs-attr">boxHeight</span> = ref(<span class="hljs-number">0</span>)<span class="hljs-comment">;</span>
+
+                function getScrollBoxHeight() {
+                    <span class="hljs-attr">boxHeight.value</span> = scrollBox.value.clientHeight<span class="hljs-comment">;</span>
+                }
+
+                onMounted(() =&gt; {
+                    getScrollBoxHeight()<span class="hljs-comment">;</span>
+                    <span class="hljs-attr">window.onresize</span> = getScrollBoxHeight<span class="hljs-comment">;</span>
+                    <span class="hljs-attr">window.onorientationchange</span> = getScrollBoxHeight<span class="hljs-comment">;</span>
+                })
+
+                const <span class="hljs-attr">itemHiehgt</span> = ref(<span class="hljs-number">40</span>)<span class="hljs-comment">;</span>
+
+                const <span class="hljs-attr">itemNum</span> = computed(() =&gt; {
+                    return ~~(boxHeight.value / itemHiehgt.value) + 2<span class="hljs-comment">;</span>
+                })<span class="hljs-comment">;</span>
+
+                const <span class="hljs-attr">startIndex</span> = ref(<span class="hljs-number">0</span>)<span class="hljs-comment">;</span>
+
+                const <span class="hljs-attr">doScroll</span> = _.throttle(() =&gt; {
+                    const <span class="hljs-attr">index</span> = ~~(scrollBox.value.scrollTop / itemHiehgt.value)<span class="hljs-comment">;</span>
+                    if (<span class="hljs-attr">index</span> === startIndex.value) return<span class="hljs-comment">;</span>
+                    <span class="hljs-attr">startIndex.value</span> = index<span class="hljs-comment">;</span>
+                }, 200)
+
+                const <span class="hljs-attr">endIndex</span> = computed(() =&gt; {
+                    let <span class="hljs-attr">index</span> = startIndex.value + itemNum.value * <span class="hljs-number">2</span><span class="hljs-comment">;</span>
+                    if (!allList.value<span class="hljs-section">[index]</span>) {
+                        <span class="hljs-attr">index</span> = allList.value.length - <span class="hljs-number">1</span><span class="hljs-comment">;</span>
+                    }
+                    return index<span class="hljs-comment">;</span>
+                })<span class="hljs-comment">;</span>
+
+                const <span class="hljs-attr">currentList</span> = computed(() =&gt; {
+                    let <span class="hljs-attr">index</span> = <span class="hljs-number">0</span><span class="hljs-comment">;</span>
+                    if (startIndex.value &lt;= itemNum.value) {
+                        <span class="hljs-attr">index</span> = <span class="hljs-number">0</span><span class="hljs-comment">;</span>
+                    } else {
+                        <span class="hljs-attr">index</span> = startIndex.value - itemNum.value<span class="hljs-comment">;</span>
+                    }
+                    return allList.value.slice(index, endIndex.value + 1)<span class="hljs-comment">;</span>
+                })<span class="hljs-comment">;</span>
+
+                const <span class="hljs-attr">blankStyle</span> = computed(() =&gt; {
+                    let <span class="hljs-attr">index</span> = <span class="hljs-number">0</span><span class="hljs-comment">;</span>
+                    if (startIndex.value &lt;= itemNum.value) {
+                        <span class="hljs-attr">index</span> = <span class="hljs-number">0</span><span class="hljs-comment">;</span>
+                    } else {
+                        <span class="hljs-attr">index</span> = startIndex.value - itemNum.value<span class="hljs-comment">;</span>
+                    }
+                    return {
+                        paddingTop: index * itemHiehgt.value + "px",
+
+                        paddingBottom: (allList.value.length - endIndex.value - 1) * itemHiehgt.value + "px"           
+                    }<span class="hljs-comment">;</span>
+                })<span class="hljs-comment">;</span>
+
+                return {
+                    allList,
+                    currentList,
+                    boxHeight,
+                    itemHiehgt,
+                    scrollBox,
+                    doScroll,
+                    blankStyle
+                }
+            }
+        }).mount('<span class="hljs-comment">#app')</span>
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>效果如下</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/01562cb7c5264cdc98a9d37f61924681~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1168&amp;h=919&amp;s=1894442&amp;e=gif&amp;f=79&amp;b=1f2125" alt="3.gif" loading="lazy"></p>
+<h2 data-id="heading-9">总结</h2>
+<p><strong>实现</strong></p>
+<ol>
+<li>拿到所有数据</li>
+<li>获取可视区域的高度</li>
+<li>滚动页面的过程中实时计算可视区域可以展示数据的<code>起始下标</code>和<code>结束下标</code>，去原数组截取要展示的数据</li>
+</ol>
+<p><strong>优点</strong></p>
+<p>无论数据多少都不会卡顿</p>
+<h1 data-id="heading-10">最后</h1>
+<p>其实关于前端渲染大量数据的问题是个非常经典的面试题，本文实现了两种可行方案，一种是通过<code>requestAnimationFrame + Fragment</code>时间分片，还有一种就是虚拟列表，时间分片写起来很简单，虚拟列表写起来复杂点，但是实现起来非常优雅，不会产生任何卡顿</p>
+<blockquote>
+<p>如果你对春招感兴趣，可以加我的个人微信：<code>Dolphin_Fung</code>，我和我的小伙伴们有个面试群，可以进群讨论你面试过程中遇到的问题，我们一起解决</p>
+</blockquote>
+<p>另外有不懂之处欢迎在评论区留言，如果觉得文章对你学习有所帮助，还请”点赞+评论+收藏“一键三连，感谢支持！</p>

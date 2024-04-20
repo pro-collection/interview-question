@@ -9,13 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "扁平数据通过 parent 关联, 实现扁平结构转嵌套 tree 结构",
+  title: "husky 作用是啥， 有哪些重要配置",
   key_world: [
-    "扁平结构转嵌套结构",
+    "husky 作用",
+    "husky 配置",
     //
   ],
-  labels: [labels.code, company.baidu],
-  milestone: MileStone.inProgress,
+  labels: [labels.engineering, company.tencent],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

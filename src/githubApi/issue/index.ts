@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 requestIdleCallback api",
+  title: "[Vue] Vue2 中双向绑定是通过 Object.defineProperty() 实现的， 那么它是如何监控数组的？",
   key_world: [
-    "requestIdleCallback api",
-    "requestIdleCallback 使用场景",
+    "Vue2 中双向绑",
+    "Vue2 中双向绑监控数组",
     //
   ],
   labels: [labels.frameWork, company.alibaba],

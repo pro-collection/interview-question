@@ -1,56 +1,35 @@
-**关键词**：requestIdleCallback api、requestIdleCallback 使用场景
+**关键词**：Vue2 中双向绑、Vue2 中双向绑监控数组
 
-`requestIdleCallback` 是一个 Web API，它允许开发者请求浏览器在主线程空闲时执行一些低优先级的后台任务，这对于执行如分析、整理状态和数据等不紧急的任务是理想的。这种方法可以提高用户的响应性和页面的整体性能。
+在 Vue 2 中，双向数据绑定的核心是 `Object.defineProperty()`，它允许 Vue 对每个属性进行 getter 和 setter 的拦截，从而实现响应式系统。对于普通的响应式属性来说，这一切都很简单，因为属性的 getter 和 setter 可以很容易地更改并通知 Vue 更新视图。
 
-以下是 `requestIdleCallback` API 的一些关键特点：
+但是，由于 JavaScript 的限制，使用 `Object.defineProperty()` 注册响应式属性时并不能完美地跟踪数组索引的变化。而 Vue 需要能够捕捉对数组元素的修改，因此它采用了一种特殊的策略来实现对数组的响应式处理。
 
-### 何时使用 requestIdleCallback
+### Vue 是如何监控数组的？
 
-`requestIdleCallback` 特别适合那些不直接关联用户交互及响应的任务，这些任务可以延后执行而不会明显影响用户体验。例如：
+1. **拦截数组的变异方法**：Vue 使用一个数组的代理隔着来拦截七个变异数组方法（`push`、`pop`、`shift`、`unshift`、`splice`）和 `sort` 方法以及 `reverse` 方法。对这些方法的调用会被重新定义，以保证当它们被调用时，视图会重新渲染。
 
-- 清理工作：如标记的 DOM 节点删除、数据的本地存储同步等。
-- 非关键的解析：如解析大量数据。
-- 状态更新：如发送不紧急的状态变更。
+2. **Vue.set 和 Vue.delete**：Vue 提供了两个全局函数 `Vue.set` 和 `Vue.delete`，这些函数确保任何对数组进行的直接设置或删除操作都能够触发视图更新。
 
-### 如何使用 requestIdleCallback
+3. **不直接使用索引赋值**：直接进行索引赋值操作（如 `vm.items[indexOfItem] = newValue`）不会触发视图更新，因为这是一种不能被 `Object.defineProperty` 拦截的操作。为了避免这个陷阱，你应该使用 `Vue.set` 代替索引赋值。
 
-使用 `requestIdleCallback`，你需要传递一个回调函数给它，此函数会在浏览器的空闲时间调用。你可以指定一个超时参数，它定义了浏览器在“空闲期”最多可以花费的时间来执行你的回调。
+4. **附加属性**：Vue 会为每个项目的数组添加一些附加属性，这些属性可以触发一些视图渲染。
 
-```javascript
-requestIdleCallback(myNonCriticalFunction, { timeout: 5000 });
-```
+### 使用例子
 
-- **myNonCriticalFunction**: 这是你想要浏览器在空闲时间执行的函数。
-- **timeout**: 一个可选的参数，表示回调执行时间的上限（以毫秒为单位）。如果超时，浏览器可能在下次空闲机会进行执行。
-
-### 回调函数参数
-
-你的回调函数会接收到一个 `IdleDeadline` 对象作为参数，通常命名为 `deadline`。这个对象包含两个属性：
-
-- **didTimeout** - 一个布尔值，如果超时已经被触发为 `true`。
-- **timeRemaining** - 返回当前空闲阶段剩余时间的函数，单位是毫秒。
+以下是两个响应式数组操作的示例：
 
 ```javascript
-function myNonCriticalFunction(deadline) {
-  while ((deadline.timeRemaining() > 0 || deadline.didTimeout) && someCondition()) {
-    // 执行工作直到时间用完或下次更新不是必要的
-  }
+// 展示Vue.set的使用
+Vue.set(vm.items, indexOfItem, newValue);
 
-  // 如果还有未完成的工作，可以请求下一次空闲周期
-  if (someCondition()) {
-    requestIdleCallback(myNonCriticalFunction);
-  }
-}
+// 展示Vue.delete的使用
+Vue.delete(vm.items, indexOfItem);
 ```
+
+使用这些方法可以确保 Vue 的观察者模式能够检测到数组的变化，这点对于在循环中使用的内联数组是非常有用的。
 
 ### 注意事项
 
-- `requestIdleCallback` 不保证你的回调会在一个特定的时刻被调用，它只在浏览器需要的时候调用。
-- 执行低优先级任务时，不应该太过频繁或执行时间太长，以免影响页面性能。
-- 这个 API 为了最大化性能优化，会强制性地结束你的任务，在不迟于指定的超时时长执行结束。
+尽管 Vue 2 通过重新定义数组的变异方法和提供 `Vue.set` 和 `Vue.delete` 方法来实现对数组的响应式更新，但刀片开发人员在操作数组时还是需要谨慎以避免那些一开始就不会被 Vue 捕获的数组操作。
 
-### Cross-Browser Compatibility (跨浏览器兼容性)
-
-你可能需要 polyfills（垫片库）来确保 `requestIdleCallback` 的兼容性，因为它并不是在所有浏览器中都有原生支持。
-
-使用 `requestIdleCallback`，开发者可以更好地利用浏览器的空闲序列来执行不紧急的任务，同时保持用户交互的流畅度。
+总结来说，Vue 对数组的响应式更新比对象要复杂，因为数组需要通过一种特殊的机制来捕获变异操作而不是普通的属性赋值。这是 Vue 响应式系统比较高级的部分，也是为什么在 Vue 2 中推荐使用 Vue 提供的方法来操作数组的核心原因。

@@ -1,18 +1,68 @@
-**关键词**：行内元素、块级元素
+**关键词**：设置渐变色
 
-HTML 中的行内元素（Inline elements）和块级元素（Block-level elements）在布局行为、外观以及如何参与文档流方面有所不同。以下是它们的主要区别：
+在 CSS 中，设置渐变色可以使用`background`属性和相应的渐变函数。CSS 提供两种类型的渐变：线性渐变（`linear-gradient`）和径向渐变（`radial-gradient`）。以下是如何分别设置这两种渐变色的示例。
 
-| 特性                | 块级元素(Block-level elements)         | 行内元素(Inline elements)                       |
-| ------------------- | -------------------------------------- | ----------------------------------------------- |
-| **布局**            | 通常开始于新的一行                     | 在同一行内水平排列                              |
-| **宽度**            | 默认填满父容器宽度                     | 宽度由内容决定                                  |
-| **高度**            | 可以设置高度                           | 高度通常由内容决定                              |
-| **外边距(margin)**  | 可以设置上下左右的外边距               | 只能设置左右外边距                              |
-| **内边距(padding)** | 可以设置上下左右的内边距               | 只能设置左右内边距                              |
-| **内容**            | 可以包含其他块级或行内元素             | 通常包含文本或数据                              |
-| **堆叠方式**        | 垂直堆叠                               | 水平方堆放齐                                    |
-| **盒模型**          | 表现为完整的盒子模型                   | 只表现部分盒子模型                              |
-| **换行**            | 前后有换行空间                         | 默认没有前后换行空间                            |
-| **常见标签**        | `<div>`, `<p>`, `<section>`, `<h1>` 等 | `<span>`, `<a>`, `<strong>`, `<em>`, `<img>` 等 |
+### 线性渐变（Linear Gradient）
 
-即使块级元素和行内元素默认特征不同，你还是可以通过 **CSS 的`display`属性来更改它们的行为**。例如，`display: inline;`会让块级元素表现得像行内元素，并且它们将在其父容器的同一行内显示。另一方面，`display: block;`会让行内元素表现得像块级元素。
+线性渐变是从一个点到另一个点的颜色过渡。它可以通过以下方式设置：
+
+```css
+.element {
+  background: linear-gradient(direction, color-stop1, color-stop2, ...);
+}
+```
+
+- `direction`：定义渐变的方向，可以是角度（如`45deg`）或预定义的关键词（如`to bottom`, `to top`, `to right`, `to left`）。
+- `color-stop1`，`color-stop2`，...：渐变中颜色停止点，至少需要两个。
+
+**示例**：
+
+```css
+.box {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(to right, blue, red);
+}
+```
+
+这个例子创建了一个从蓝色到红色的水平渐变。
+
+### 径向渐变（Radial Gradient）
+
+径向渐变是从一个中心点向外的颜色过渡。它可以通过以下方式设置：
+
+```css
+.element {
+  background: radial-gradient(shape size, color-stop1, color-stop2, ...);
+}
+```
+
+- `shape`：定义渐变的形状，可以是`circle`或`ellipse`。
+- `size`：定义渐变的大小，可以是`closest-corner`, `farthest-corner`, `closest-side`, `farthest-side`，或者具体的长度值。
+- `color-stop1`，`color-stop2`，...：同样表示渐变中的颜色停止点。
+
+**示例**：
+
+```css
+.circle {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, white, yellow, red);
+}
+```
+
+这个例子创建了一个圆形的径向渐变，从白色到黄色再到红色。
+
+### 重复渐变（Repeating Gradients）
+
+另外，CSS 中的渐变还可以设置为重复渐变，只需在渐变函数后面添加关键词`repeating`：
+
+```css
+.gradient {
+  background: repeating-linear-gradient(to bottom, blue, white 20px, white 40px);
+}
+```
+
+这个例子创建了一个向下的线性渐变，颜色从蓝色开始，在 20px 处变化为白色，并在 40px 处结束，然后重复该模式。
+
+**注意**：各种渐变效果在不同的浏览器中可能需要添加特定的浏览器前缀

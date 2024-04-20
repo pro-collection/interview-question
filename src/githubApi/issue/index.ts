@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "html的行内元素和块级元素的区别",
+  title: "[css] 如何设置渐变色？",
   key_world: [
-    "行内元素",
-    "块级元素",
+    "设置渐变色",
+    // "块级元素",
     //
   ],
-  labels: [labels.application, company.other],
+  labels: [labels.css, company.other],
   milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "对象深拷贝的原理和代码实现",
+  title: "[React] 为何要自己实现调度器， 而不是直接使用 requestIdleCallback ？",
   key_world: [
-    "对象什拷贝原理",
-    "避免循环引用和栈溢出",
+    "react 调度器 Scheduler",
+    "requestIdleCallback 使用场景",
     //
   ],
-  labels: [labels.js, company.other],
-  milestone: MileStone.inProgress,
+  labels: [labels.frameWork, company.alibaba],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

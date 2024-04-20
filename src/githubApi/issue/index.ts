@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "树结构查找， 实现一个函数， 通过 id 来查找 tree 数据结构对应的节点",
+  title: "扁平数据通过 parent 关联, 实现扁平结构转嵌套 tree 结构",
   key_world: [
-    "树结构查找",
+    "扁平结构转嵌套结构",
     //
   ],
   labels: [labels.code, company.baidu],

@@ -1,90 +1,89 @@
-**关键词**：树结构查找
+**关键词**：扁平结构转嵌套结构
 
-树结构查找， 实现一个函数， 通过 id 来查找 tree 数据结构对应的节点
+**题目**
 
-**题目如下**
+```
+数据输入：
+[
+  { "name": "数据1", "parent": null, "id": 1 },
+  { "name": "数据2", "id": 2, "parent": 1 },
+  { "name": "数据3", "parent": 2, "id": 3 },
+  { "name": "数据4", "parent": 3, "id": 4 },
+  { "name": "数据5", "parent": 4, "id": 5 },
+  { "name": "数据6", "parent": 2, "id": 6 }
+]
 
-```js
-// 数据如下：
-const tree = [
+数据输出：
+[
   {
-    name: "数据1",
-    id: 1,
-    children: [
+    "name": "数据1",
+    "parent": null,
+    "id": 1,
+    "children": [
       {
-        name: "数据2",
-        id: 2,
-        children: [
+        "name": "数据2",
+        "id": 2,
+        "parent": 1,
+        "children": [
           {
-            name: "数据3",
-            id: 3,
-            children:
+            "name": "数据3",
+            "parent": 2,
+            "id": 3,
+            "children": [
               {
-                name: "数据4",
-                id: 4,
-                children: [],
-              },
-            ],
+                "name": "数据4",
+                "parent": 3,
+                "id": 4,
+                "children": [
+                  {
+                    "name": "数据5",
+                    "parent": 4,
+                    "id": 5,
+                    "children": []
+                  }
+                ]
+              }
+            ]
           },
-        ],
-      },
-    ],
-  },
-];
-
-function findNodeById(tree, id) {
-  // ....
-}
-
-const res = findNodeById(tree, 3);
-// res 的结果为
-//           {
-//             name: "数据3",
-//             id: 3,
-//             children: [
-//               {
-//                 name: "数据4",
-//                 id: 4,
-//                 children: [],
-//               },
-//             ],
-//           }
+          {
+            "name": "数据6",
+            "parent": 2,
+            "id": 6,
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]
 ```
 
-**实现**
+**解**
+
+解法非常有意思， 自己好好体会
 
 ```js
-function findNodeById(tree, id) {
-  if (!tree.length) return null; // 如果树是空的，则返回 null
+function listToTree(list) {
+  const map = {},
+    roots = [];
 
-  const search = (node) => {
-    if (node.id === id) {
-      // 如果找到一个匹配的节点，返回它
-      return node;
-    } else if (node.children) {
-      // 否则，如果它有子节点，递归地搜索子节点
-      for (const child of node.children) {
-        const result = search(child);
-        if (result) {
-          return result; // 如果递归找到了一个匹配的节点，返回它
-        }
-      }
-    }
-    return null; // 如果什么都没找到，返回 null
-  };
+  // 首先将每个节点按照 id 存入 map
+  for (const item of list) {
+    map[item.id] = { ...item, children: [] };
+  }
 
-  for (const root of tree) {
-    const result = search(root);
-    if (result) {
-      return result; // 如果在根节点中找到了一个匹配的节点，返回它
+  for (const item of list) {
+    if (item.parent === null) {
+      // 顶级节点
+      roots.push(map[item.id]);
+    } else if (map[item.parent]) {
+      // 非顶级节点，找到父节点并添加到其 children 数组中
+      map[item.parent].children.push(map[item.id]);
     }
   }
 
-  // 如果循环遍历整个树完成后没有找到，返回 null
-  return null;
+  return roots;
 }
 
-// 使用
-const foundNode = findNodeById(tree, 3);
-console.log(foundNode); // 将打印出 id 为 3 的节点
+const tree = listToTree(list);
 ```

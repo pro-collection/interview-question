@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "husky 作用是啥， 有哪些重要配置",
+  title: "[React] 介绍一下 HOC",
   key_world: [
-    "husky 作用",
-    "husky 配置",
+    "React HOC",
+    // "husky 配置",
     //
   ],
-  labels: [labels.engineering, company.tencent],
-  milestone: MileStone.senior,
+  labels: [labels.frameWork, company.baidu],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

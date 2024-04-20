@@ -2,12 +2,10 @@
 
 > 05.08 待整理
 
-- https://juejin.cn/post/7215226343713620029
 - [React 语境下前端 DDD 的长年探索经验](https://juejin.cn/post/7187584683478089787)
 
 > 04.04 待整理
 
-- [2022 年我的面试万字总结（Node、webpack、性能优化）](https://juejin.cn/post/7161292246526984228)
 - [2022-2023 六年前端中大厂面试总结（仅题目，无答案）](https://juejin.cn/post/7207410405857017917)
 - [一文带你梳理 React 面试题（2023 年版本）](https://juejin.cn/post/7182382408807743548)
 - [「2022」TypeScript 最新高频面试题指南](https://juejin.cn/post/7162011064819777567)

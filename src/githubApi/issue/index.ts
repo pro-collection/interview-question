@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] Vue2 中双向绑定是通过 Object.defineProperty() 实现的， 那么它是如何监控数组的？",
+  title: "express 里面的 中间件 和 插件， 是一个意思吗？",
   key_world: [
-    "Vue2 中双向绑",
-    "Vue2 中双向绑监控数组",
+    "express 中间件",
+    "express 插件",
     //
   ],
-  labels: [labels.frameWork, company.alibaba],
-  milestone: MileStone.senior,
+  labels: [labels.node, company.alibaba],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

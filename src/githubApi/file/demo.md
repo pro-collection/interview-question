@@ -1,67 +1,34 @@
 **关键词**：react router 路由、浏览器原生路由能力
 
-> 作者备注  
-> 此问题实际上是在问：原生 路由 history api 和 react-router 的差距是啥， 或者说 react-router 做了啥
+React Router 和浏览器原生 history API 在路由管理上主要有以下几个区别：
 
-在 React 项目中，你完全可以不使用 `react-router` 而是使用浏览器原生的 `history` API 来手动管理路由。这通常会涉及以下几个步骤：
+1. **抽象级别**:
 
-1. 使用 `history.pushState()` 和 `history.replaceState()` 方法来添加和修改浏览器历史条目。
-2. 侦听 `popstate` 事件来响应浏览器历史的变化。
-3. 根据当前的 URL 状态，手动渲染对应的 React 组件。
+   - **React Router** 提供了更高层次的抽象，如 `<Router>`、`<Route>`、和 `<Link>` 等组件，这些都是专门为了在 React 中更方便地管理路由而设计的。它处理了底层 history API 的很多细节，把操作抽象成了 React 组件和 hooks。
+   - **原生 history API** 更底层，直接作用于浏览器的历史记录栈。使用原生 history API 需要开发者自己编写更多的代码来管理 history 栈和渲染相应的组件。
 
-例如，下面是一个简单的例子，演示了如何在没有 `react-router` 的情况下使用原生 `history` API 来管理路由。
+2. **便利性**:
 
-```javascript
-class App extends React.Component {
-  componentDidMount() {
-    // 当用户点击后退/前进按钮时触发路由变化
-    window.onpopstate = this.handlePopState;
-    // 初始页面加载时处理路由
-    this.route();
-  }
+   - **React Router** 提供了声明式导航和编程式导航的选项，并且有大量的社区支持和文档，易于使用和学习。
+   - **原生 history API** 需要开发者自己处理 URL 与组件之间的关系映射，以及页面渲染的逻辑。
 
-  handlePopState = () => {
-    // 处理路由变化
-    this.route();
-  };
+3. **功能**:
 
-  route() {
-    const path = window.location.pathname;
-    // 根据 path 渲染不同的组件
-    switch (path) {
-      case "/page1":
-        // 渲染 Page1 组件
-        break;
-      case "/page2":
-        // 渲染 Page2 组件
-        break;
-      // 其他路由分支...
-      default:
-        // 渲染默认组件或404页面
-        break;
-    }
-  }
+   - **React Router** 除了包含对原生 history API 的基本封装外，还提供了如路由守卫、路由懒加载、嵌套路由、重定向等高级功能。
+   - **原生 history API** 提供基本的历史记录管理功能，但是不包含上述 React Router 提供的高级应用路由需求。
 
-  navigate = (path) => {
-    // 更新历史记录并触发路由变化
-    window.history.pushState(null, "", path);
-    this.route();
-  };
+4. **集成**:
 
-  render() {
-    return (
-      <div>
-        <button onClick={() => this.navigate("/page1")}>Go to Page 1</button>
-        <button onClick={() => this.navigate("/page2")}>Go to Page 2</button>
-        {/* 这里根据路由渲染对应的组件 */}
-      </div>
-    );
-  }
-}
+   - **React Router** 是专为 React 设计的，与 React 的生命周期、状态管理等密切集成。
+   - **原生 history API** 与 React 没有直接关联，需要用户手动实现整合。
 
-// 实际的页面组件
-const Page1 = () => <div>Page 1</div>;
-const Page2 = () => <div>Page 2</div>;
-```
+5. **状态管理**:
 
-尽管手动管理路由是可能的，但使用 `react-router` 这类专门设计的库通常会大大简化路由管理的工作。它为路径匹配、路由嵌套、重定向等提供了便利的抽象，并且和 React 的声明式方式很好地集成在一起。如果不是为了特别的原因，通常推荐使用现成的路由库来管理 React 应用的路由，以避免重新发明轮子。
+   - **React Router** 可以将路由状态管理与应用的状态管理（如使用 Redux）结合起来，使路由状态可预测和可管理。
+   - **原生 history API** 通常需要额外的状态管理逻辑来同步 UI 和 URL。
+
+6. **服务器渲染**:
+   - **React Router** 可以与服务器渲染一起使用，支持同构应用程序，即客户端和服务器都可以进行路由渲染。
+   - **原生 history API** 主要是针对客户端的，因此在服务器端渲染中需要额外的处理来模拟 routing 行为。
+
+在考虑是否使用 React Router 或者原生 history API 时，通常需要考虑项目的复杂性、团队的熟悉度以及项目对路由的特定需求。对于大多数 React 项目而言，React Router 的便利性和其附加的高级特性通常使得它成为首选的路由解决方案。

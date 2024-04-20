@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 在 react 项目开发过程中， 是否可以不用 react-router， 使用浏览器原生 history 路由来组织页面路由？",
+  title: "[React] react-router 和 原生路由区别",
   key_world: [
     "react router 路由",
     "浏览器原生路由能力",

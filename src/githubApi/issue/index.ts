@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[css] 如何设置渐变色？",
+  title: "不同标签页或窗口间的 【主动推送消息机制】 的方式有哪些？（不借助服务端）",
   key_world: [
-    "设置渐变色",
+    "不同页签信息主动推送",
     // "块级元素",
     //
   ],
-  labels: [labels.css, company.other],
-  milestone: MileStone.base,
+  labels: [labels.application, company.shopee],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

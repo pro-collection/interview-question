@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "不同标签页或窗口间的 【主动推送消息机制】 的方式有哪些？（不借助服务端）",
+  title: "普通数据类型存储在哪里？堆还是栈",
   key_world: [
-    "不同页签信息主动推送",
+    // "不同页签信息主动推送",
     // "块级元素",
     //
   ],
-  labels: [labels.application, company.shopee],
-  milestone: MileStone.senior,
+  labels: [labels.js, company.other],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

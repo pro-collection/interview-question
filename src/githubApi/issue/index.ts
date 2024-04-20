@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 scrollIntoView api",
+  title: "Husky 和 lint-staged 有什么区别？",
   key_world: [
-    "scrollIntoView api",
-    // "IntersectionObserver 详解",
+    "Husky 和 lint-staged",
+    "git hooks",
     //
   ],
-  labels: [labels.application, company.other],
+  labels: [labels.engineering, company.baidu],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

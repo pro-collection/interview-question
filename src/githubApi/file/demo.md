@@ -1,45 +1,15 @@
-**关键词**：scrollIntoView api
+**关键词**：Husky 和 lint-staged、git hooks
 
-`scrollIntoView` 是一个 Web API，允许网页开发者控制元素如何被滚动到浏览器的可视区域。这个方法可以对任何 `Element` 使用，以改变窗口的滚动位置，以便最终元素位于屏幕可见范围内。它对于某些需要用户立即看到的表单错误、警告，或者在执行完某些操作后需要用户注意的元素比如通知提示尤为有用。
+Husky 和 lint-staged 都是与 Git 钩子 (hooks) 配合使用的 Node.js 库，但它们的用途和工作方式有所不同：
 
-### 基本用法
+1. **Husky**：
 
-```javascript
-element.scrollIntoView(smoothScrollingOptions);
-```
+   - Husky 是一个 Git 钩子管理器，它允许你触发自定义脚本在 git 事件发生时运行，如 `pre-commit`, `pre-push`, `post-merge` 等。
+   - 它的主要目的是自动化你的版本控制工作流程，例如在提交 (commit) 前运行代码检查、格式化代码或执行测试，以确保代码库的质量和一致性。
 
-### 参数说明
+2. **lint-staged**：
+   - lint-staged 是一个运行在 Husky 钩子之上的工具，它专门用于对暂存区 (staged) 文件的检查。
+   - 当你运行 `git commit` 并且 Husky 触发 `pre-commit` 钩子时，lint-staged 会检查你即将提交的代码（即 `git add` 后的文件列表），并运行你配置好的检查脚本，如代码格式化程序、linter 或其他工具。
+   - 它的目的是确保在提交之前，只有没有检查错误的代码会被提交。
 
-`smoothScrollingOptions` 是一个可选对象。当设定为 `false`、`undefined` 或一个计算值为 `false` 的值（比如 `0`）的时候，滚动操作将以最简单的方式立即执行，而不会平滑过渡。
-
-当为 `true` 或者一个与滚动行为不冲突的对象时，浏览器会执行一个平滑的滚动动作，逐渐将元素滚动到视野内。
-
-### 选项
-
-该方法接受一个可选的 `ScrollIntoViewOptions` 对象，它包含以下属性：
-
-1. **block**: 描述元素应当在其块级方向上的对齐方式。可以是 `"start"`、`"center"`、`"end"` 或 `"nearest"` 中的一个。
-
-   - `start` — 元素顶部与包含块的顶部对齐，只有块级元素会被滚动到这个位置。
-   - `center` — 元素将尽可能被居中对齐地显示。
-   - `end` — 元素底部将与包含块的底部对齐。
-   - `nearest` — 元素将滚动到最近的边缘。
-
-2. **inline**: 描述在元素行进方向的对齐方式。同样可以是 `"start"`、`"center"`、`"end"` 或 `"nearest"` 中的一个。
-
-3. **behavior**: 描述滚动行为。设置为 `"auto"` 时将使用默认滚动，设置为 `"smooth"` 时将平滑滚动。
-
-### 例子
-
-```javascript
-document.getElementById("myElement").scrollIntoView({
-  behavior: "smooth", // 平滑滚动
-  block: "start", // 元素顶部与包含块顶部对齐
-});
-```
-
-请注意，`scrollIntoView` 只能够使元素完全可见，但仍需留意元素灵感中其他内容可能超出视口之外。此外，滚动的方式也可能会受到 Web 浏览器和平台的不同而有所不同，例如一些浏览器可能有最高滚动速度的限制。
-
-**参考文档**
-
-- https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollIntoView
+简而言之，Husky 是一个可以触发多种钩子事件的工具，而 lint-staged 是一种专门用于检查 Git 暂存区文件的工具。它们通常是配合使用的，因为 lint-staged 需要通过 Husky 来触发钩子。在你初始化项目并配置 CI/CD 流程时，通常会同时用到它们。

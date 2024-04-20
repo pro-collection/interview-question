@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 为何要自己实现调度器， 而不是直接使用 requestIdleCallback ？",
+  title: "介绍一下 requestIdleCallback api",
   key_world: [
-    "react 调度器 Scheduler",
+    "requestIdleCallback api",
     "requestIdleCallback 使用场景",
     //
   ],

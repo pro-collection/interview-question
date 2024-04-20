@@ -9,13 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "documentFragment api 是什么， 有哪些使用场景？",
+  title: "树结构查找， 实现一个函数， 通过 id 来查找 tree 数据结构对应的节点",
   key_world: [
-    "documentFragment 概念",
-    "documentFragment 使用场景",
+    "树结构查找",
     //
   ],
-  labels: [labels.application, company.tencent],
+  labels: [labels.code, company.baidu],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

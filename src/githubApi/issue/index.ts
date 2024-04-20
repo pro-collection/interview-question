@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "普通数据类型存储在哪里？堆还是栈",
+  title: "对象深拷贝的原理和代码实现",
   key_world: [
-    // "不同页签信息主动推送",
-    // "块级元素",
+    "对象什拷贝原理",
+    "避免循环引用和栈溢出",
     //
   ],
   labels: [labels.js, company.other],

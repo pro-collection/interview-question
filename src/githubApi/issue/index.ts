@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端渲染和后端渲染各有啥优缺点， 为何现在技术大方向又逐渐往【后端渲染】方向靠了呢？",
+  title: "documentFragment api 是什么， 有哪些使用场景？",
   key_world: [
-    "前端渲染优缺点",
-    "后端渲染优缺点",
+    "documentFragment 概念",
+    "documentFragment 使用场景",
     //
   ],
-  labels: [labels.node, company.alibaba],
+  labels: [labels.application, company.tencent],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "express 里面的 中间件 和 插件， 是一个意思吗？",
+  title: "前端渲染和后端渲染各有啥优缺点， 为何现在技术大方向又逐渐往【后端渲染】方向靠了呢？",
   key_world: [
-    "express 中间件",
-    "express 插件",
+    "前端渲染优缺点",
+    "后端渲染优缺点",
     //
   ],
   labels: [labels.node, company.alibaba],

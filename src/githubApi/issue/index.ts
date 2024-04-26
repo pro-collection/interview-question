@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 介绍一下 HOC",
+  title: "[React] 介绍一下 MutationObserver",
   key_world: [
-    "React HOC",
+    "MutationObserver api",
     // "husky 配置",
     //
   ],
-  labels: [labels.frameWork, company.baidu],
+  labels: [labels.chrome, company.alibaba],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

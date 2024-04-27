@@ -19,11 +19,11 @@ const update = (options: UpdateIssueOptions) =>
   });
 
 const remote = {
-  title: "【学习】【02】谷歌浏览器插件 - 向三方网站里面注入自己的脚本",
+  title: "【学习】【03】谷歌浏览器插件 - 动态注入脚本",
   labels: [labels.chromeExtensions],
   body: () =>
     fs.readFileSync(
-      "/Users/yanle/code/self/node-index/books/专题知识库/22、chorme extensions/【学习】【02】谷歌浏览器插件 - 向三方网站里面注入自己的脚本.md",
+      "/Users/yanle/code/self/node-index/books/专题知识库/22、chorme extensions/【学习】【03】谷歌浏览器插件 - 掘金深度阅读模式.md",
       { encoding: "utf8" }
     ),
 };

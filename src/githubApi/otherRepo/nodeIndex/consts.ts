@@ -14,6 +14,5 @@ export const labels = {
   node: "NodeJS",
   application: "应用类",
   test: "单元测试",
+  chromeExtensions: "谷歌浏览器扩展程序",
 };
-
-

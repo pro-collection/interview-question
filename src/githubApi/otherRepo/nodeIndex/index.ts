@@ -19,11 +19,11 @@ const update = (options: UpdateIssueOptions) =>
   });
 
 const remote = {
-  title: "自由职业程序员（独立开发者）应该具备的技能与软硬综合能力",
-  labels: [labels.recommend],
+  title: "【学习】【02】谷歌浏览器插件 - 向三方网站里面注入自己的脚本",
+  labels: [labels.chromeExtensions],
   body: () =>
     fs.readFileSync(
-      "books/发展与OKR/06、自我管理/03、思考/03、自由职业程序员（独立开发者）应该具备的技能与软硬综合能力/index.md",
+      "/Users/yanle/code/self/node-index/books/专题知识库/22、chorme extensions/【学习】【02】谷歌浏览器插件 - 向三方网站里面注入自己的脚本.md",
       { encoding: "utf8" }
     ),
 };

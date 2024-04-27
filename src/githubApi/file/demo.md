@@ -1,65 +1,44 @@
-**关键词**：MutationObserver api
+**关键词**：ts 类型配置
 
-`MutationObserver` 是一种能够响应 DOM 树变动的 Web API，它可以监听几乎所有类型的 DOM 变动，比如元素被添加、删除或修改。你可以通过它执行 callback 来应对这些变化。
+**关键点在 `types` 属性配置**
 
-下面是 `MutationObserver` 的基本用法：
+在 TypeScript 项目中导入 `node_modules` 中定义的全局包，并在你的 `src` 目录下使用它，通常遵循以下步骤：
 
-### 创建 `MutationObserver` 实例
+1. 安装包：
+   使用包管理器如 npm 或 yarn 来安装你需要的全局包。
 
-```javascript
-var observer = new MutationObserver(callback);
-```
+   ```sh
+   npm install <package-name>
+   # 或者
+   yarn add <package-name>
+   ```
 
-### 配置观察者
+2. 类型声明：
+   确保该全局包具有类型声明。如果该全局包包含自己的类型声明，则 TypeScript 应该能够自动找到它们。如果不包含，则可能需要安装对应的 DefinitelyTyped 声明文件。
 
-你可以指定要观察的 DOM 变动的类型和具体的目标节点：
+   ```sh
+   npm install @types/<package-name>
+   # 或者，如果它是一个流行的库，一些库可能已经带有自己的类型定义。
+   ```
 
-```javascript
-var config = {
-  attributes: true, // 观察属性变动
-  childList: true, // 观察子列表变动
-  subtree: true, // 观察后代节点
-};
+3. 导入包：
+   在 TypeScript 文件中，使用 `import` 语句导入全局包。
 
-observer.observe(targetNode, config);
-```
+   ```typescript
+   import * as PackageName from "<package-name>";
+   // 或者
+   import PackageName from "<package-name>";
+   ```
 
-这里的 `callback` 是一个在观察到变动时执行的函数，它有两个参数：`mutationsList` 是一个变动列表，`observer` 是观察者实例。
+4. tsconfig.json 配置：
+   确保你的 `tsconfig.json` 文件配置得当，以便 TypeScript 能够找到 `node_modules` 中的声明文件。
 
-### 回调函数
+   - 如果包是模块形式的，确保 `"moduleResolution"` 设置为 `"node"`。
+   - 确保 `compilerOptions` 中的 `"types"` 和 `"typeRoots"` 属性没有配置错误。
 
-`MutationCallback` 函数会被调用，它有两个参数：
+5. 使用全局包：
+   现在你可以在你的 `src` 目录中的任何文件里使用这个全局包。
 
-1. `mutationsList`：一个 `MutationRecord` 对象的数组，每个对象都描述了一个变动。
-2. `observer`：触发通知的 `MutationObserver` 实例。
+记住，最好的做法是不要把包当成全局包来使用，即使它们是全局的。通过显式地导入所需的模块，可以有助于工具如 linters 和 bundlers 更好地追踪依赖关系，并可以在以后的代码分析和维护中发挥重要作用。
 
-```javascript
-function callback(mutationsList) {
-  for (var mutation of mutationsList) {
-    if (mutation.type === "childList") {
-      console.log("A child node has been added or removed.");
-    } else if (mutation.type === "attributes") {
-      console.log(`The ${mutation.attributeName} attribute was modified.`);
-    }
-  }
-}
-```
-
-### 停止观察
-
-你可以通过调用 `disconnect` 方法来停止观察：
-
-```javascript
-observer.disconnect();
-```
-
-这将停止观察并且清除之前的记录。
-
-### 注意
-
-- 使用 `MutationObserver` 应该谨慎，因为它可能对页面性能产生影响，尤其是在观察大型 DOM 树或频繁变动时。
-- 尽量不要过度使用 `MutationObserver` 或过度指定需要它观察的变动种类和节点。
-
-比如，如果你只想监听某个特定属性的变动，那么就不应该打开 `childList` 或者 `attributes`（如果不需要观察它们）。
-
-`MutationObserver` 非常适用于响应 DOM 的动态变动来执行特定的 JavaScript 代码，而且是现代前端开发中的一个重要工具。在使用它时，考虑使用最严格的选项来优化性能并减少不必要的性能损耗。
+此外，全局变量或全局模块通常指的是在项目的多个部分中无需导入就可以直接使用的变量或模块。如果你确实需要将某些模块定义为全局可用，并且无法通过导入来使用，你可能需要更新你的 TypeScript 配置文件（`tsconfig.json`）来包括这些全局声明。但这通常不是一个推荐的做法，因为它可能会导致命名冲突和代码可维护性问题。

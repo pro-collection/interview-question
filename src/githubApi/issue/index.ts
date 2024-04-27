@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 介绍一下 MutationObserver",
+  title: "ts 项目中，如何使用 node_modules 里面定义的全局类型包到自己项目 src 下面使用？",
   key_world: [
-    "MutationObserver api",
+    "ts 类型配置",
     // "husky 配置",
     //
   ],
-  labels: [labels.chrome, company.alibaba],
+  labels: [labels.ts, company.alibaba],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

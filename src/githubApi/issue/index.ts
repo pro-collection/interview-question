@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "ts 项目中，如何使用 node_modules 里面定义的全局类型包到自己项目 src 下面使用？",
+  title: "tsconfig 配置中 types 和 typeRoots 左右是什么， 有什么区别？",
   key_world: [
     "ts 类型配置",
     // "husky 配置",
     //
   ],
   labels: [labels.ts, company.alibaba],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

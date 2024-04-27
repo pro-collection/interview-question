@@ -1,44 +1,48 @@
 **关键词**：ts 类型配置
 
-**关键点在 `types` 属性配置**
+> 作者备注
+> 这个问题很冷门， 没有价值， 当做科普即可
 
-在 TypeScript 项目中导入 `node_modules` 中定义的全局包，并在你的 `src` 目录下使用它，通常遵循以下步骤：
+在 TypeScript 的 `tsconfig.json` 配置文件中，`types` 和 `typeRoots` 是两个与类型声明相关的选项，它们用于控制 TypeScript 编译器如何处理类型声明文件。这两个选项的主要区别在于它们控制的范围：
 
-1. 安装包：
-   使用包管理器如 npm 或 yarn 来安装你需要的全局包。
+### typeRoots
 
-   ```sh
-   npm install <package-name>
-   # 或者
-   yarn add <package-name>
-   ```
+`typeRoots` 选项指定了包含类型声明文件的目录列表。默认情况下，TypeScript 会查看所有以 `node_modules/@types` 结尾的目录。通过设置 `typeRoots`，你可以直接告诉 TypeScript 编译器去哪查找类型声明：
 
-2. 类型声明：
-   确保该全局包具有类型声明。如果该全局包包含自己的类型声明，则 TypeScript 应该能够自动找到它们。如果不包含，则可能需要安装对应的 DefinitelyTyped 声明文件。
+```json
+{
+  "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./typings"]
+  }
+}
+```
 
-   ```sh
-   npm install @types/<package-name>
-   # 或者，如果它是一个流行的库，一些库可能已经带有自己的类型定义。
-   ```
+在这个例子中，我们指定了两个 `typeRoots`：默认的 `node_modules/@types` 和另外一个自定义的类型声明目录 `./typings`。
 
-3. 导入包：
-   在 TypeScript 文件中，使用 `import` 语句导入全局包。
+### types
 
-   ```typescript
-   import * as PackageName from "<package-name>";
-   // 或者
-   import PackageName from "<package-name>";
-   ```
+`types` 选项允许你设置在项目中所使用到的类型声明文件列表。这个列表会限制编译器在 `typeRoots` 下查找的声明文件，意味着 `types` 中列出的类型声明会是项目中唯一可以引用的声明。如果没有设置 `types`，你可以使用存在于 `typeRoots` 下面的任何类型声明：
 
-4. tsconfig.json 配置：
-   确保你的 `tsconfig.json` 文件配置得当，以便 TypeScript 能够找到 `node_modules` 中的声明文件。
+```json
+{
+  "compilerOptions": {
+    "types": ["my-global-types"]
+  }
+}
+```
 
-   - 如果包是模块形式的，确保 `"moduleResolution"` 设置为 `"node"`。
-   - 确保 `compilerOptions` 中的 `"types"` 和 `"typeRoots"` 属性没有配置错误。
+在这个例子中，`types` 选项限制了项目只能使用名为 `my-global-types` 的类型声明。即使有其他的 `.d.ts` 文件在 `typeRoots` 指定的目录下，它们也无法在不修改这个列表的情况下被引用。
 
-5. 使用全局包：
-   现在你可以在你的 `src` 目录中的任何文件里使用这个全局包。
+### 使用场景区别
 
-记住，最好的做法是不要把包当成全局包来使用，即使它们是全局的。通过显式地导入所需的模块，可以有助于工具如 linters 和 bundlers 更好地追踪依赖关系，并可以在以后的代码分析和维护中发挥重要作用。
+- 当你有多个 `d.ts` 文件你想指定给 TypeScript 编译器，而不是每一个单独去处理时，使用 `typeRoots` 更为方便。
+- `types` 用于控制引用的类型声明集，如果你是在限制或精心策划的设定下工作，这会很有帮助。
 
-此外，全局变量或全局模块通常指的是在项目的多个部分中无需导入就可以直接使用的变量或模块。如果你确实需要将某些模块定义为全局可用，并且无法通过导入来使用，你可能需要更新你的 TypeScript 配置文件（`tsconfig.json`）来包括这些全局声明。但这通常不是一个推荐的做法，因为它可能会导致命名冲突和代码可维护性问题。
+### 结合使用
+
+在许多情况下，`typeRoots` 和 `types` 可以联合使用：
+
+1. `typeRoots` 列表包含了所有声明文件的位置。
+2. `types` 列表限制 TypeScript 可以引用特定集合的声明（其中未列出的声明则不可用）。
+
+通过合理的配置这两个选项，你可以精确控制在 TypeScript 项目中使用的类型声明，帮助你避免类型定义的混乱。

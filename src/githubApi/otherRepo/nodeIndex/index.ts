@@ -19,11 +19,11 @@ const update = (options: UpdateIssueOptions) =>
   });
 
 const remote = {
-  title: "【学习】【03】谷歌浏览器插件 - 动态注入脚本",
+  title: "【实践】【01】实现一键复制掘金文章为Markdown文档",
   labels: [labels.chromeExtensions],
   body: () =>
     fs.readFileSync(
-      "/Users/yanle/code/self/node-index/books/专题知识库/22、chorme extensions/【学习】【03】谷歌浏览器插件 - 掘金深度阅读模式.md",
+      "/Users/yanle/code/self/node-index/books/专题知识库/22、chorme extensions/【实践】【01】实现一键复制掘金文章为Markdown文档.md",
       { encoding: "utf8" }
     ),
 };

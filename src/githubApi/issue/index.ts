@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "jsBridge 是什么？原理是啥？",
+  title: "样式隔离方式有哪些",
   key_world: [
-    "jsBridge 原理",
+    "样式个例",
     // "husky 配置",
   ],
-  labels: [labels.js, company.mi],
-  milestone: MileStone.senior,
+  labels: [labels.css, company.mt],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

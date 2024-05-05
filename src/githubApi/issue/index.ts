@@ -9,12 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "vue 中 Scoped Styles 是如何实现样式隔离的， 原理是啥？",
+  title: "[React] forwardsRef 作用是啥， 有哪些使用场景？",
   key_world: [
-    "Scoped Styles 样式隔离",
+    "forwardsRef 作用",
+    "forwardsRef 使用场景",
     // "husky 配置",
   ],
-  labels: [labels.css, company.mt],
+  labels: [labels.frameWork, company.pdd],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

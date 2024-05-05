@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "样式隔离方式有哪些",
+  title: "vue 中 Scoped Styles 是如何实现样式隔离的， 原理是啥？",
   key_world: [
-    "样式个例",
+    "Scoped Styles 样式隔离",
     // "husky 配置",
   ],
   labels: [labels.css, company.mt],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

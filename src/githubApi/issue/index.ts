@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "什么是DNS劫持？",
+  title: "站点如何防止爬虫？",
   key_world: [
-    "DNS劫持",
+    "反爬虫",
     // "husky 配置",
   ],
-  labels: [labels.network, company.baidu],
+  labels: [labels.application, company.baidu],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

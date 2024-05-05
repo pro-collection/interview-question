@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "mouseEnter、mouseLeave、mouseOver、mouseOut 有什么区别？",
+  title: "[React] react 和 react-dom 是什么关系？",
   key_world: [
-    "mouseEnter、mouseLeave、mouseOver、mouseOut 区别",
+    "react 和 react-dom 关系",
     // "husky 配置",
     //
   ],
-  labels: [labels.js, company.alibaba],
-  milestone: MileStone.inProgress,
+  labels: [labels.frameWork, company.tencent],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

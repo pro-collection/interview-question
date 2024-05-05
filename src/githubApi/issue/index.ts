@@ -14,7 +14,7 @@ const remote = {
     "栈溢出问题",
     // "husky 配置",
   ],
-  labels: [labels.js, company.baidu],
+  labels: [labels.js, company.mi],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

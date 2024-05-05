@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "在 JS 中， 如何解决递归导致栈溢出问题？",
+  title: "jsBridge 是什么？原理是啥？",
   key_world: [
-    "栈溢出问题",
+    "jsBridge 原理",
     // "husky 配置",
   ],
   labels: [labels.js, company.mi],

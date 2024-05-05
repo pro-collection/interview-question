@@ -1,23 +1,33 @@
-**关键词**：react 和 react-dom 关系
+**关键词**：DNS劫持
 
-`react` 和 `react-dom` 是两个与 React 生态系统密切相关的 npm 包，它们在使用 React 构建用户界面时扮演不同的角色：
+DNS 劫持（DNS Hijacking），也称为 DNS 重定向，是一种通过篡改原本的 DNS 解析流程，使得用户在尝试访问特定网址时被非法重定向到其他（通常是恶意的、广告相关的或者钓鱼的）网站的行为。这种攻击可以发生在用户的个人电脑、网络设备、甚至是直接在 DNS 服务器上。
 
-### `react`
+DNS 劫持可以通过以下几种方式实现：
 
-- `react` 包含了构建 React 组件所必需的核心功能，例如创建组件类（如 `React.Component`），创建元素（如使用 `React.createElement`），还有新的 React 16+ 特性中的 Hooks（如 `useState` 和 `useEffect`）。
-- 它提供了组件生命周期管理、组件状态管理以及 React 元素（用于描述 UI 长相的对象）的创建。
-- `react` 实现了 React 的核心算法，包括对组件状态的更新以及虚拟 DOM 的概念。
-- 简而言之，`react` 包对于任何使用 React 的应用程序都是一个必需的依赖，无论该应用程序是运行在浏览器还是其他环境中。
+1. **恶意软件**：
 
-### `react-dom`
+   - 用户的计算机被感染了恶意软件，该软件修改了本地的 DNS 设置，例如更改本地的 `hosts` 文件或 DNS 配置，使得所有或特定域名的请求都会被发送到攻击者指定的服务器。
 
-- `react-dom` 提供了一些让 React 能够与 DOM 互动的方法。在浏览器中，它把 React 组件渲染到真实的 DOM 节点上，并且处理用户的交互（如点击、输入等事件）。
-- 主要的方法是 `ReactDOM.render()`，它将 React 组件或者元素渲染到指定的 DOM 容器中。在 React 18+ 中，这个角色由 `ReactDOM.createRoot().render()` 接手。
-- 如果你在使用服务端渲染（Server-Side Rendering, SSR），那么你会使用 `react-dom/server` 中的方法，如 `ReactDOMServer.renderToString()` 或 `ReactDOMServer.renderToStaticMarkup()`。这些方法允许你把 React 组件渲染成初始的 HTML 字符串。
-- 当 React 组件需要被集成到现有的非 React 应用中，或者需要执行如测试和服务端渲染等操作时，通常需要使用 `react-dom` 包。
+2. **篡改路由器设置**：
 
-### 它们之间的关系
+   - 攻击者通过各种手段（如默认密码、漏洞利用等）获取路由器的管理权限，并修改其上的 DNS 服务器设置，使得连接到该路由器的所有设备的 DNS 请求都会被重定向。
 
-React 使用了所谓的“适配器模式”（Adapter Pattern），`react` 包提供平台独立的解决方案，而像 `react-dom` 这样的包则提供针对特定平台的方法。这允许 React 的核心能够被跨平台使用，例如在浏览器（通过 `react-dom`）、移动设备（通过 React Native 的 `react-native`）、VR 设备（通过 `react-vr`）等。
+3. **DNS 服务器劫持**：
 
-当你在浏览器中构建 React 应用程序时，你通常会同时安装并使用这两个包。在引导你的应用程序时，你将使用 `react` 包来定义你的组件，然后用 `react-dom` 包将你的顶层组件渲染到页面中的 DOM 元素上。这样的分离也为服务器端渲染或在其他渲染目标上使用 React 打下了基础。
+   - 攻击者直接对 DNS 服务器进行攻击，将规范域名的正确解析地址更改为恶意地址。
+
+4. **中间人攻击（Man-in-the-Middle Attack, MiTM）**：
+
+   - 在用户与 DNS 服务器之间截获和修改 DNS 查询和响应，将用户请求重定向到另一个服务器。
+
+5. **网络服务提供商干预**：
+   - 部分网络服务商出于广告和监管的目的，可能会在 DNS 层面上进行重定向，将无效域名或特定关键字的域名请求导向他们自己的服务器。
+
+DNS 劫持对用户的主要威胁是隐私泄露和安全风险，用户有可能无意中访问到含有恶意软件的网页，导致个人信息泄露或者计算机安全受到威胁。为了防范 DNS 劫持，用户可以采取以下措施：
+
+- 使用可信赖的 DNS 服务，如 Google 的 8.8.8.8、Cloudflare 的 1.1.1.1 等。
+- 保持操作系统和防病毒软件都更新至最新状态， regularly scan for malware。
+- 对家用路由器设置复杂的登录密码，并定期进行固件更新。
+- 使用 VPN 服务，在密封的隧道中完成所有网络通信。
+- 对于重要的网站，最好使用书签直接访问，防止输入错误的 URL。
+- 启用 DNSSEC（Domain Name System Security Extensions），增加额外的验证步骤来保证 DNS 查询的安全。

@@ -9,13 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] react 和 react-dom 是什么关系？",
+  title: "什么是DNS劫持？",
   key_world: [
-    "react 和 react-dom 关系",
+    "DNS劫持",
     // "husky 配置",
-    //
   ],
-  labels: [labels.frameWork, company.tencent],
+  labels: [labels.network, company.baidu],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

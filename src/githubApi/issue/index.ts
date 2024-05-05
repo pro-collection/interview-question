@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "站点如何防止爬虫？",
+  title: "git pull 和 git fetch 有啥区别？",
   key_world: [
-    "反爬虫",
+    "git pull 和 git fetch",
     // "husky 配置",
   ],
   labels: [labels.application, company.baidu],

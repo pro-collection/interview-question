@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "tsconfig 配置中 types 和 typeRoots 左右是什么， 有什么区别？",
+  title: "mouseEnter、mouseLeave、mouseOver、mouseOut 有什么区别？",
   key_world: [
-    "ts 类型配置",
+    "mouseEnter、mouseLeave、mouseOver、mouseOut 区别",
     // "husky 配置",
     //
   ],
-  labels: [labels.ts, company.alibaba],
-  milestone: MileStone.senior,
+  labels: [labels.js, company.alibaba],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

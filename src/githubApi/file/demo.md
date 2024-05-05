@@ -1,48 +1,19 @@
-**关键词**：ts 类型配置
+**关键词**：mouseEnter、mouseLeave、mouseOver、mouseOut 区别
 
-> 作者备注
-> 这个问题很冷门， 没有价值， 当做科普即可
+这四个事件都与鼠标指针与元素的交互有关，不过它们之间有一些关键的差异：
 
-在 TypeScript 的 `tsconfig.json` 配置文件中，`types` 和 `typeRoots` 是两个与类型声明相关的选项，它们用于控制 TypeScript 编译器如何处理类型声明文件。这两个选项的主要区别在于它们控制的范围：
+1. **mouseEnter 和 mouseLeave**：
 
-### typeRoots
+   - `mouseEnter` 事件当鼠标指针进入元素时触发，但不冒泡，即只有指定的元素可以触发此事件，其子元素不能。
+   - `mouseLeave` 事件则是当鼠标指针离开元素时触发，同样也不冒泡。
 
-`typeRoots` 选项指定了包含类型声明文件的目录列表。默认情况下，TypeScript 会查看所有以 `node_modules/@types` 结尾的目录。通过设置 `typeRoots`，你可以直接告诉 TypeScript 编译器去哪查找类型声明：
+2. **mouseOver 和 mouseOut**：
+   - `mouseOver` 事件当鼠标指针移动到元素或其子元素上时触发，该事件会冒泡，即如果鼠标指针移动到其子元素上，也会触发该元素的`mouseOver`事件。
+   - `mouseOut` 事件则是当鼠标指针离开元素或其子元素时触发，也会冒泡。
 
-```json
-{
-  "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./typings"]
-  }
-}
-```
+总结一下它们的区别：
 
-在这个例子中，我们指定了两个 `typeRoots`：默认的 `node_modules/@types` 和另外一个自定义的类型声明目录 `./typings`。
+- **冒泡**: `mouseOver` 和 `mouseOut` 事件会冒泡（父元素也会响应这个事件），而 `mouseEnter` 和 `mouseLeave` 不会冒泡。
+- **对子元素的响应**：`mouseOver` 和 `mouseOut` 会在鼠标指针移动到子元素上时也被触发，而 `mouseEnter` 和 `mouseLeave` 在鼠标指针移动到子元素上时不会被触发。
 
-### types
-
-`types` 选项允许你设置在项目中所使用到的类型声明文件列表。这个列表会限制编译器在 `typeRoots` 下查找的声明文件，意味着 `types` 中列出的类型声明会是项目中唯一可以引用的声明。如果没有设置 `types`，你可以使用存在于 `typeRoots` 下面的任何类型声明：
-
-```json
-{
-  "compilerOptions": {
-    "types": ["my-global-types"]
-  }
-}
-```
-
-在这个例子中，`types` 选项限制了项目只能使用名为 `my-global-types` 的类型声明。即使有其他的 `.d.ts` 文件在 `typeRoots` 指定的目录下，它们也无法在不修改这个列表的情况下被引用。
-
-### 使用场景区别
-
-- 当你有多个 `d.ts` 文件你想指定给 TypeScript 编译器，而不是每一个单独去处理时，使用 `typeRoots` 更为方便。
-- `types` 用于控制引用的类型声明集，如果你是在限制或精心策划的设定下工作，这会很有帮助。
-
-### 结合使用
-
-在许多情况下，`typeRoots` 和 `types` 可以联合使用：
-
-1. `typeRoots` 列表包含了所有声明文件的位置。
-2. `types` 列表限制 TypeScript 可以引用特定集合的声明（其中未列出的声明则不可用）。
-
-通过合理的配置这两个选项，你可以精确控制在 TypeScript 项目中使用的类型声明，帮助你避免类型定义的混乱。
+在处理具有嵌套子元素的元素时，使用 `mouseEnter` 和 `mouseLeave` 可以避免多余的事件触发，因为它们不会在鼠标从父元素移动到子元素时触发事件。(即不会对内部子元素的进入和离开反应敏感)。而 `mouseOver` 和 `mouseOut` 更适合需要监测鼠标指针是否有移动到子元素上的情况。

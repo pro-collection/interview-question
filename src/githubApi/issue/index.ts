@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "git pull 和 git fetch 有啥区别？",
+  title: "在 JS 中， 如何解决递归导致栈溢出问题？",
   key_world: [
-    "git pull 和 git fetch",
+    "栈溢出问题",
     // "husky 配置",
   ],
-  labels: [labels.application, company.baidu],
+  labels: [labels.js, company.baidu],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

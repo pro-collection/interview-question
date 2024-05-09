@@ -9,14 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] forwardsRef 作用是啥， 有哪些使用场景？",
+  title: "单元测试中， TDD、BDD、DDD 分别指？",
   key_world: [
-    "forwardsRef 作用",
-    "forwardsRef 使用场景",
+    "TDD、BDD、DDD",
     // "husky 配置",
   ],
-  labels: [labels.frameWork, company.pdd],
-  milestone: MileStone.senior,
+  labels: [labels.engineering, company.jd],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

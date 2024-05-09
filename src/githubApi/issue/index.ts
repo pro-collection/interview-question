@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "单元测试中， TDD、BDD、DDD 分别指？",
+  title: "用 JS 写一个 cookies 解析函数， 输出结果为一个对象",
   key_world: [
-    "TDD、BDD、DDD",
+    "解析 cookies",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.jd],
+  labels: [labels.application, company.netEase],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

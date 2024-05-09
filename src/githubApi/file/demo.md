@@ -1,14 +1,47 @@
-**关键词**：TDD、BDD、DDD
+**关键词**：解析 cookies
 
-TDD、BDD 和 DDD 这三个缩写在软件开发中分别代表以下概念：
+当然可以，以下是一个简单的 JavaScript 函数，用于解析当前页面的 cookie 并将它们存储到一个对象中：
 
-1. **TDD（Test-Driven Development） - 测试驱动开发：**
-   TDD 是一种软件开发过程，其中开发人员首先编写一个小测试用例，然后编写足够的代码来使这个测试通过，最后重构新代码以满足所需的设计标准。这个过程就是一个循环，被成为“红-绿-重构”循环，其中测试先失败（红色），编写代码使其通过（绿色），然后优化代码（重构）。TDD 的焦点在于编写干净的代码和降低未来的缺陷。
+```javascript
+function parseCookies() {
+  // 创建一个空对象来存储解析后的 cookie
+  var cookiesObj = {};
 
-2. **BDD（Behavior-Driven Development） - 行为驱动开发：**
-   BDD 将 TDD 的基本思想和原则扩展到软件的整个开发生命周期，但其着重点在于软件的行为——即软件应如何表现，而不仅仅是它应该完成什么功能。BDD 强调的是与利益相关者的交流与协作，通过使用通俗易懂的语言来写测试，让非技术人员也能理解测试内容。BDD 鼓励团队成员之间更好地沟通，确保所有人都对软件应有的行为有共同的理解。
+  // 获取 cookie 字符串，然后分割每个键值对
+  var cookies = document.cookie.split(";");
 
-3. **DDD（Domain-Driven Design） - 领域驱动设计：**
-   DDD 与 TDD 和 BDD 并不是同一类型的概念。DDD 是一种软件设计哲学，强调了在软件项目的设计与开发中应以业务领域（Domain）为中心。它主张将业务领域的专业知识嵌入到软件的设计中，从而使软件能更好地解决业务问题。DDD 通常涉及到丰富的领域模型以及分层的架构设计，以确保业务逻辑清晰和维护性高。
+  // 遍历每个键值对
+  cookies.forEach(function (cookie) {
+    // 去除键值对前后的空格
+    var cleanCookie = cookie.trim();
+    // 找到键和值之间的等号位置
+    var separatorIndex = cleanCookie.indexOf("=");
 
-这三个概念在软件开发中都扮演着重要的角色。TDD 和 BDD 都与确保软件质量和满足用户需求有关，而 DDD 则是一种更宏观层面上对软件设计的方法论。
+    // 如果找不到等号，则不是有效的键值对，跳过当前循环
+    if (separatorIndex === -1) return;
+
+    // 获取键名
+    var key = cleanCookie.substring(0, separatorIndex);
+    // 获取值
+    var value = cleanCookie.substring(separatorIndex + 1);
+
+    // 解码因为 cookie 键和值是编码过的
+    key = decodeURIComponent(key);
+    value = decodeURIComponent(value);
+
+    // 将解析后的值存储到对象中
+    cookiesObj[key] = value;
+  });
+
+  // 返回解析后的 cookie 对象
+  return cookiesObj;
+}
+
+// 使用示例
+var cookies = parseCookies();
+console.log(cookies);
+```
+
+这个函数首先会以分号 `;` 分割 `document.cookie` 字符串来得到各个 cookie 键值对，然后移除键值对前后的任何空格。接着寻找每个键值对中的等号 `=` 位置，以此来分割键和值。最后，它会使用 `decodeURIComponent` 函数来解码键名和键值，因为通过 `document.cookie` 读取的键名和键值通常是编码过的。
+
+调用 `parseCookies` 函数将返回一个对象，其中包含了当前页面的所有 cookie，键名和值都已被解码。然后你可以像访问普通对象一样访问这些值，例如 `cookies['username']` 来获取 'username' 键对应的值。

@@ -1,79 +1,15 @@
-**关键词**：React useReducer
+**关键词**：React useEffect
 
-`useReducer`是 React Hooks 的一个部分，它为状态管理提供了一个更加灵活的方法。`useReducer`特别适合处理包含多个子值的复杂状态逻辑，或者当下一个状态依赖于之前的状态时。与`useState`相比，`useReducer`更适合于复杂的状态逻辑，它使组件的状态管理更加清晰和可预测。
+`useEffect` 钩子的工作原理涉及到 React 的渲染流程和副作用的调度机制。以下是其工作原理的详细说明：
 
-### 基础使用：
+- **调度副作用**：当你在组件内部调用 `useEffect` 时，你实际上是将一个副作用函数及其依赖项数组排队等待执行。这个函数并不会立即执行。
 
-```jsx
-const [state, dispatch] = useReducer(reducer, initialState);
-```
+- **提交阶段（Commit Phase）**：React 渲染组件并且执行了所有的纯函数组件或类组件的渲染方法后，会进入所谓的提交阶段。在这个阶段，React 将计算出的新视图（新的 DOM 节点）更新到屏幕上。一旦这个更新完成，React 就知道现在可以安全地执行副作用函数了，因为这不会影响到正在屏幕上显示的界面。
 
-- `state`：当前管理的状态。
-- `dispatch`：一个允许你分发动作(action)来更新状态的函数。
-- `reducer`：一个函数，接受当前的状态和一个动作对象作为参数，并返回一个新的状态。
-- `initialState`：初始状态值。
+- **副作用执行**：提交阶段完成后，React 会处理所有排队的副作用。如果组件是首次渲染，所有的副作用都会执行。如果组件是重新渲染，React 会首先对比副作用的依赖项数组：如果依赖项未变，副作用则不会执行；如果依赖项有变化，或者没有提供依赖项数组，副作用会再次执行。
 
-### Reducer 函数：
+- **清理机制**：如果副作用函数返回了一个函数，那么这个函数将被视为清理函数。在执行当前的副作用之前，以及组件卸载前，React 会先调用上一次渲染中的清理函数。这样确保了不会有内存泄漏，同时能撤销上一次副作用导致的改变。
 
-Reducer 函数的格式如下：
+- **延迟副作用**：尽管 `useEffect` 会在渲染之后执行，但它是异步执行的，不会阻塞浏览器更新屏幕。这意味着 React 会等待浏览器完成绘制之后，再执行你的副作用函数，以此来确保副作用处理不会导致用户可见的延迟。
 
-```javascript
-function reducer(state, action) {
-  switch (action.type) {
-    case "ACTION_TYPE": {
-      // 处理动作并返回新的状态
-      return newState;
-    }
-    // 更多的动作处理
-    default:
-      return state;
-  }
-}
-```
-
-### 动作（Action）：
-
-动作通常是一个包含`type`字段的对象。`type`用于在 reducer 函数中标识要执行的动作。动作对象也可以包含其他数据字段，用于传递动作所需的额外信息。
-
-### 示例：
-
-以下是一个使用`useReducer`的简单示例：
-
-```jsx
-import React, { useReducer } from "react";
-
-// 定义reducer函数
-function counterReducer(state, action) {
-  switch (action.type) {
-    case "increment":
-      return { count: state.count + 1 };
-    case "decrement":
-      return { count: state.count - 1 };
-    default:
-      return state;
-  }
-}
-
-function Counter() {
-  // 初始化状态和dispatch函数
-  const [state, dispatch] = useReducer(counterReducer, { count: 0 });
-
-  return (
-    <>
-      Count: {state.count}
-      <button onClick={() => dispatch({ type: "decrement" })}>-</button>
-      <button onClick={() => dispatch({ type: "increment" })}>+</button>
-    </>
-  );
-}
-```
-
-在上面的例子中，我们创建了一个简单的计数器。当用户点击按钮时，会分发一个包含`type`的动作到`useReducer`钩子。然后，`reducer`函数根据动作`type`来决定如何更新状态。
-
-### 使用场景：
-
-- 管理局部组件的状态。
-- 处理复杂的状态逻辑。
-- 当前状态依赖上一状态时，可以通过上一状态计算得到新状态。
-
-`useReducer`通常与`Context`一起使用可以实现不同组件间的状态共享，这在避免 prop drilling（长距离传递 prop）的同时使状态更新更为模块化。
+通过这种机制，`useEffect` 允许开发者以一种优化的方式来处理组件中可能存在的副作用，而不需要关心渲染的具体时机。退出清理功能确保了即使组件被多次快速创建和销毁，应用程序也能保持稳定和性能。

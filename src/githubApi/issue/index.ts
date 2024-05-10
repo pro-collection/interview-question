@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 介绍一下 useReducer",
+  title: "[React] useEffect 钩子的工作原理是什么",
   key_world: [
-    "React useReducer",
+    "React useEffect",
     // "husky 配置",
   ],
   labels: [labels.frameWork, company.dd],

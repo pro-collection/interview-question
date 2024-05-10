@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] optimize 配置有哪些作用",
+  title: "[webpack] optimize 配置中， 分割代码配置 splitChunks 怎么使用",
   key_world: [
-    "webpack optimize",
+    "webpack 分割代码",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.other],

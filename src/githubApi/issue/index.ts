@@ -9,13 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 是如何处理组件更新和渲染的？",
+  title: "[React] 介绍一下 useReducer",
   key_world: [
-    "React 组件更新",
-    "React 组件渲染",
+    "React useReducer",
     // "husky 配置",
   ],
-  labels: [labels.frameWork, company.quic],
+  labels: [labels.frameWork, company.dd],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

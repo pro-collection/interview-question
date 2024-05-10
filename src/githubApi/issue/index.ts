@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] optimize 配置中， 分割代码配置 splitChunks 怎么使用",
+  title: "CSS 在2023 迎来重大更新， 更新内容是什么",
   key_world: [
-    "webpack 分割代码",
+    "CSS 2023 年重大更新",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.other],
+  labels: [labels.css, company.other],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

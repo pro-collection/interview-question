@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "用 JS 写一个 cookies 解析函数， 输出结果为一个对象",
+  title: "V8 里面的 JIT 是什么？",
   key_world: [
-    "解析 cookies",
+    "V8 JIT",
     // "husky 配置",
   ],
-  labels: [labels.application, company.netEase],
-  milestone: MileStone.inProgress,
+  labels: [labels.engineering, company.shopee],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

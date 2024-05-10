@@ -1,47 +1,15 @@
-**关键词**：解析 cookies
+**关键词**：V8 JIT
 
-当然可以，以下是一个简单的 JavaScript 函数，用于解析当前页面的 cookie 并将它们存储到一个对象中：
+在计算机科学中，JIT 是“Just-In-Time”（即时编译）的缩写，它是一种提高代码执行性能的技术。具体来说，在 V8 引擎（Google Chrome 浏览器和 Node.js 的 JavaScript 引擎）中，JIT 编译器在 JavaScript 代码运行时，将其编译成机器语言，以提高执行速度。
 
-```javascript
-function parseCookies() {
-  // 创建一个空对象来存储解析后的 cookie
-  var cookiesObj = {};
+这里简要解释下 JIT 编译器的工作原理：
 
-  // 获取 cookie 字符串，然后分割每个键值对
-  var cookies = document.cookie.split(";");
+1. **解释执行**：V8 首先通过一个解释器（如 Ignition）来执行 JavaScript 代码。这个过程中，代码不会编译成机器语言，而是逐行解释执行。这样做的优点是启动快，但执行速度较慢。
 
-  // 遍历每个键值对
-  cookies.forEach(function (cookie) {
-    // 去除键值对前后的空格
-    var cleanCookie = cookie.trim();
-    // 找到键和值之间的等号位置
-    var separatorIndex = cleanCookie.indexOf("=");
+2. **即时编译**：当代码被多次执行时，V8 会认为这部分代码是“热点代码”（Hot Spot），此时 JIT 编译器（如 TurboFan）会介入，将这部分热点代码编译成机器语言。机器语言运行在 CPU 上比解释执行要快得多。
 
-    // 如果找不到等号，则不是有效的键值对，跳过当前循环
-    if (separatorIndex === -1) return;
+3. **优化与去优化**：JIT 编译器会对热点代码进行优化，但有时候它会基于错误的假设做出优化（例如认为某个变量总是某种类型）。如果后来的执行发现这些假设不成立，编译器需要去掉优化（Deoptimize），重新编译。
 
-    // 获取键名
-    var key = cleanCookie.substring(0, separatorIndex);
-    // 获取值
-    var value = cleanCookie.substring(separatorIndex + 1);
+JIT 编译器的一个关键优点是它能够在不牺牲启动速度的情况下，提供接近于或同等于编译语言的运行速度。这使得像 JavaScript 这样原本被认为执行效率较低的语言能够用于复杂的计算任务和高性能的应用场景。
 
-    // 解码因为 cookie 键和值是编码过的
-    key = decodeURIComponent(key);
-    value = decodeURIComponent(value);
-
-    // 将解析后的值存储到对象中
-    cookiesObj[key] = value;
-  });
-
-  // 返回解析后的 cookie 对象
-  return cookiesObj;
-}
-
-// 使用示例
-var cookies = parseCookies();
-console.log(cookies);
-```
-
-这个函数首先会以分号 `;` 分割 `document.cookie` 字符串来得到各个 cookie 键值对，然后移除键值对前后的任何空格。接着寻找每个键值对中的等号 `=` 位置，以此来分割键和值。最后，它会使用 `decodeURIComponent` 函数来解码键名和键值，因为通过 `document.cookie` 读取的键名和键值通常是编码过的。
-
-调用 `parseCookies` 函数将返回一个对象，其中包含了当前页面的所有 cookie，键名和值都已被解码。然后你可以像访问普通对象一样访问这些值，例如 `cookies['username']` 来获取 'username' 键对应的值。
+随着 V8 和其他现代 JavaScript 引擎的不断进步，JIT 编译技术也在持续优化，以提供更快的执行速度和更高的性能。

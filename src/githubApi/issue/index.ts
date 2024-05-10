@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "V8 里面的 JIT 是什么？",
+  title: "[webpack] mode 是做什么用？",
   key_world: [
-    "V8 JIT",
+    "webpack mode",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.shopee],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

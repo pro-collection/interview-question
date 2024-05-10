@@ -1,15 +1,44 @@
-**关键词**：V8 JIT
+**关键词**：webpack mode
 
-在计算机科学中，JIT 是“Just-In-Time”（即时编译）的缩写，它是一种提高代码执行性能的技术。具体来说，在 V8 引擎（Google Chrome 浏览器和 Node.js 的 JavaScript 引擎）中，JIT 编译器在 JavaScript 代码运行时，将其编译成机器语言，以提高执行速度。
+在 webpack 中，`mode` 属性用来指定当前的构建环境是：`development`、`production` 或者是 `none`。设置 `mode` 可以使用 webpack 内置的函数，默认值为 `production`。
 
-这里简要解释下 JIT 编译器的工作原理：
+`mode` 属性的主要作用是：根据当前的构建环境，启用 webpack 内置在该环境下推荐的优化。
 
-1. **解释执行**：V8 首先通过一个解释器（如 Ignition）来执行 JavaScript 代码。这个过程中，代码不会编译成机器语言，而是逐行解释执行。这样做的优点是启动快，但执行速度较慢。
+### mode 的具体作用包括：
 
-2. **即时编译**：当代码被多次执行时，V8 会认为这部分代码是“热点代码”（Hot Spot），此时 JIT 编译器（如 TurboFan）会介入，将这部分热点代码编译成机器语言。机器语言运行在 CPU 上比解释执行要快得多。
+1. **development**
 
-3. **优化与去优化**：JIT 编译器会对热点代码进行优化，但有时候它会基于错误的假设做出优化（例如认为某个变量总是某种类型）。如果后来的执行发现这些假设不成立，编译器需要去掉优化（Deoptimize），重新编译。
+   - 主要优化了增量构建速度和开发体验。
+   - `process.env.NODE_ENV` 的值设为 `development`。
+   - 启用热替换模块（Hot Module Replacement）。
+   - 启用开发工具（如调试源码的 source map）以更好地进行调试。
 
-JIT 编译器的一个关键优点是它能够在不牺牲启动速度的情况下，提供接近于或同等于编译语言的运行速度。这使得像 JavaScript 这样原本被认为执行效率较低的语言能够用于复杂的计算任务和高性能的应用场景。
+2. **production**
 
-随着 V8 和其他现代 JavaScript 引擎的不断进步，JIT 编译技术也在持续优化，以提供更快的执行速度和更高的性能。
+   - 一些处理优化，以提升应用在生产环境的性能。
+   - `process.env.NODE_ENV` 的值设为 `production`。
+   - 启用代码压缩（例如 TerserPlugin）。
+   - 删除 dead code（通过 Tree Shaking）。
+   - 作用域提升等各种性能优化措施。
+
+3. **none**
+   - `mode` 设置为 `none` 则不启用任何默认优化选项，`process.env.NODE_ENV` 也不会被设置，默认为 `production`。
+
+### 使用方法：
+
+在 webpack 配置文件中，可以直接设置 `mode` 的值：
+
+```javascript
+module.exports = {
+  mode: "development", // 'production' 或 'none'
+  // 其他配置...
+};
+```
+
+或者，在命令行中使用 `--mode` 参数：
+
+```bash
+webpack --mode=production
+```
+
+设置 mode 是告诉 webpack 使用其内部的优化策略，各个模式预定义了一些 webpack 的行为，开发者可以不需要进行详细的配置，也能快速启动一个针对特定环境优化过的构建过程。

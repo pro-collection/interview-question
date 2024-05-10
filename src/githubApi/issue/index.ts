@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] useEffect 钩子的工作原理是什么",
+  title: "[webpack] optimize 配置有哪些作用",
   key_world: [
-    "React useEffect",
+    "webpack optimize",
     // "husky 配置",
   ],
-  labels: [labels.frameWork, company.dd],
-  milestone: MileStone.inProgress,
+  labels: [labels.engineering, company.other],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

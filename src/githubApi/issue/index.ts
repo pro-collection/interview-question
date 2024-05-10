@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "CSS 在2023 迎来重大更新， 更新内容是什么",
+  title: "webpack 的主要配置项有哪些",
   key_world: [
-    "CSS 2023 年重大更新",
+    "webpack 主要配置项",
     // "husky 配置",
   ],
-  labels: [labels.css, company.other],
+  labels: [labels.engineering, company.other],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

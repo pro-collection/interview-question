@@ -9,12 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] mode 是做什么用？",
+  title: "[React] 是如何处理组件更新和渲染的？",
   key_world: [
-    "webpack mode",
+    "React 组件更新",
+    "React 组件渲染",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.shopee],
+  labels: [labels.frameWork, company.quic],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

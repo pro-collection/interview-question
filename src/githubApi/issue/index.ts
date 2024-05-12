@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "webpack 的主要配置项有哪些",
+  title: "[React] React 19 有哪些新特性？",
   key_world: [
-    "webpack 主要配置项",
+    "React 19 新特性",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.other],
+  labels: [labels.frameWork, company.other],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

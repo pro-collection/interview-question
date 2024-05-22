@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端视角 - 如何保证系统稳定性",
+  title: "前端如何做 页面主题色切换",
   key_world: [
-    "稳定性",
+    "主题色切换",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.other],
-  milestone: MileStone.master,
+  labels: [labels.application, company.other],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

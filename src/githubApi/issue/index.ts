@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "CSS 属性计算函数 Calc 介绍一下",
+  title: "如何统计长任务时间、长任务执行次数",
   key_world: [
-    "属性计算函数 calc",
+    "长任务统计",
     // "husky 配置",
   ],
-  labels: [labels.css, company.other],
-  milestone: MileStone.inProgress,
+  labels: [labels.application, company.other],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

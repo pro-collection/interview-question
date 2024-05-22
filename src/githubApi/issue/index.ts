@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 CSS 变量怎么声明和使用？",
+  title: "less 函数如何使用？",
   key_world: [
-    "CSS 变量",
+    "less 函数",
     // "husky 配置",
   ],
   labels: [labels.css, company.other],

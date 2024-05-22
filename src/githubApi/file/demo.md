@@ -1,68 +1,92 @@
-**关键词**：CSS 变量
+**关键词**：less 函数
 
-CSS 自定义属性，又称 CSS 变量，是一种在 CSS 样式表中声明可以使用任意值的方法，这样的值在同一份 CSS 代码中可以多次引用并调用来替代特定的内容。使用 CSS 变量可以提高样式表的可维护性和灵活性。以下是如何声明和使用 CSS 变量的步骤：
+LESS 是一种基于 JavaScript 的 CSS 预处理器，它扩展了 CSS 的功能，提供了变量、嵌套、混合（Mixins）、函数等功能。LESS 中的函数允许你执行计算、转换和操纵值的操作，使得你的样式表更加灵活和动态。
 
-### 声明 CSS 变量
+### 使用 LESS 函数的基本步骤：
 
-CSS 变量的声明总是以 `--` 开头，跟随变量名。你可以在 CSS 的任何范围内声明变量，包括 `:root`（相当于 HTML 的根），这样所有样式规则都可以访问到。
+1. **定义函数**：你可以定义一个 LESS 函数，它接受参数并执行代码块。
 
-**示例**：
-
-```css
-:root {
-  --main-color: #3498db;
-  --padding: 8px;
-  --transition-speed: 0.3s;
+```less
+.my-function(@arg) {
+  .result {
+    width: @arg;
+  }
 }
 ```
 
-### 使用 CSS 变量
+2. **调用函数**：使用 `@` 前缀后跟函数名和所需的参数列表来调用函数。
 
-在 CSS 中使用变量时，你需要使用 `var()` 函数，并在括号中提供变量名，可以包含在`--` 前缀之后。
+```less
+.my-class {
+  .my-function(200px);
+}
+```
 
-**示例**：
+3. **传递参数**：函数可以接收一个或多个参数。上面的例子只传递一个参数。
 
-```css
+### 示例：简单的 LESS 函数
+
+```less
+// 定义一个 LESS 函数
+.pi(@num) {
+  .pi-box {
+    width: @num * 3.14159;
+  }
+}
+
+// 调用这个函数
 body {
-  background-color: var(--main-color);
-  padding: var(--padding);
-  transition: all var(--transition-speed) ease-in-out;
+  .pi(5px);
 }
 ```
 
-### 默认值
+在该示例中，`pi` 是一个接受数字参数并返回其圆周长度的 LESS 函数。这个 `pi` 函数在 `body` 选择器内部被调用，并设置了宽度为 5 \* 3.14159 像素。
 
-有时候，你可能想为 CSS 变量提供一个默认值，以防它未被声明时使用。在 `var()` 函数中，你可以添加一个可选的第二个参数作为默认值。
+### LESS 内建函数
 
-**示例**：
+LESS 还包括多个内建函数，可以直接在 LESS 代码中使用。以下是一些常见的内建函数示例：
 
-```css
-body {
-  font-size: var(--font-size, 16px);
-}
-```
+- **`percentage()`**：将值转换成百分比。
+  ```less
+  margin: percentage(20px / 100px); // 输出 20%
+  ```
+- **`round()`**：四舍五入数字。
+  ```less
+  width: round(23.7px); // 输出 24px
+  ```
+- **`floor()`** 和 **`ceil()`**：向下取整和向上取整。
 
-在上面的例子中，如果 `--font-size` 变量没有在任何地方声明，`body` 的 `font-size`将默认使用 `16px`。
+  ```less
+  height: ceil(14.2px); // 输出 15px
+  ```
 
-### 作用域
+- **`unit()`** 和 **`convert()`**：分别用来获取值的单位和转换单位。
 
-变量的作用域是根据它们声明的地方确定的：
+  ```css
+  width: convert(10, ms); // 将 10 转换为毫秒
+  margin: unit(25, "%"); // 输出 默认单位为 px，这次你却要改成百分比
+  ```
 
-- 在 `:root` 选择器内声明的变量是全局变量，在任何地方都可以使用。
-- 在其他元素或伪类的 CSS 规则中声明的变量会在该元素或这些伪类中局部有效。
+- **`color-function()`**：用于操作颜色值的函数，例如 `lighten()`、`darken()`、`saturate()` 等。
 
-**示例**：
+  ```less
+  background: lighten(#800, 10%); // 将颜色 #800 变亮 10%
+  ```
 
-```css
-button {
-  --button-bg-color: #e74c3c;
-}
+- **`e()`**：允许你将 CSS 代码作为参数传递到 `&` 中，用于可扩展的类选择器。
+  ```less
+  .borderbox {
+    *,
+    *:before,
+    *:after {
+      .box-sizing(border-box);
+    }
+  }
+  ```
 
-.btn-primary {
-  background-color: var(--button-bg-color);
-}
-```
+### 注意事项：
 
-在上面的例子中，`--button-bg-color` 变量只在 `button` 元素中声明，因此它只在 `button` 下的所有样式规则中可用，`.btn-primary`则是基于这个变量设置的。
+- 函数可以返回任意值，包括颜色、数字、字符串和数组。
+- 如果想要执行的是一个操作而非函数定义，需要注意的是 LESS 并不像 JavaScript 一样需要用 `function` 关键字声明。
 
-CSS 变量是非常强大的工具，特别是当你需要在整个页面上保持一致性，或者是要实现主题应用时。它们有助于实现动态主题，使样式管理更系统化。
+合理使用函数可以极大增加 CSS 的动态性和灵活性，是构建维护性和复用性更强的 CSS 不可或缺的部分。

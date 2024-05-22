@@ -1,92 +1,76 @@
-**关键词**：less 函数
+**关键词**：属性计算函数 calc
 
-LESS 是一种基于 JavaScript 的 CSS 预处理器，它扩展了 CSS 的功能，提供了变量、嵌套、混合（Mixins）、函数等功能。LESS 中的函数允许你执行计算、转换和操纵值的操作，使得你的样式表更加灵活和动态。
+CSS 属性计算函数 `calc()` 是用来进行动态的尺寸计算以及数值混合运算的一种函数。它增强了纯 CSS 的灵活性，允许你在属性值的设置中直接执行基础的加（`+`）、减（`-`）、乘（`*`）、除（`/`）运算。
 
-### 使用 LESS 函数的基本步骤：
+###使用方式
 
-1. **定义函数**：你可以定义一个 LESS 函数，它接受参数并执行代码块。
+`calc()` 函数用于各种 CSS 属性，如 `width`、`height`、`margin`、`padding`、`top`、`right`、`bottom`、`left`、`font-size` 等。以下是 `calc()` 函数的基本语法：
 
-```less
-.my-function(@arg) {
-  .result {
-    width: @arg;
-  }
+```css
+property: calc(expression);
+```
+
+其中，`expression` 可以包括：
+
+- 其他 CSS 单位值
+- 数字常量
+- 括号来控制运算顺序
+
+### 基础示例
+
+```css
+.element {
+  width: calc(100% - 50px); // 宽度是容器宽度减50px
+  padding: calc(1em + 10px); // 上下内边距是当前字体尺寸的1em加上10px
+  margin: calc(10px / 2); // 外边距为5px
+  font-size: calc(12px + 2vw); // 根据视窗宽度改变字体大小
 }
 ```
 
-2. **调用函数**：使用 `@` 前缀后跟函数名和所需的参数列表来调用函数。
+### 高级用法
 
-```less
-.my-class {
-  .my-function(200px);
+使用 `calc()` 的同时可以嵌套使用 `min()` 和 `max()` 函数，这种组合对响应式设计非常有用。
+
+```css
+.element {
+  width: calc(min(100%, 500px)); // 宽度始终是容器的100%，但不超过500px
+  font-size: calc(max(12px, 1vw)); // 在某些实现中此用法可能不生效
 }
 ```
 
-3. **传递参数**：函数可以接收一个或多个参数。上面的例子只传递一个参数。
+### 括号
 
-### 示例：简单的 LESS 函数
+如果要进行优先级计算，你需要使用括号，比如在多重运算中：
 
-```less
-// 定义一个 LESS 函数
-.pi(@num) {
-  .pi-box {
-    width: @num * 3.14159;
-  }
-}
-
-// 调用这个函数
-body {
-  .pi(5px);
+```css
+.element {
+  width: calc(25% + (2em * (100vw - 200px) / 2));
 }
 ```
 
-在该示例中，`pi` 是一个接受数字参数并返回其圆周长度的 LESS 函数。这个 `pi` 函数在 `body` 选择器内部被调用，并设置了宽度为 5 \* 3.14159 像素。
+### 注意事项
 
-### LESS 内建函数
+- 在进行除法运算时，要注意除数不能为零。
+- CSS 变量可以在 `calc()` 中使用，使得你能够进行更灵活的样式控制。
+- `calc()` 必须确保表达式的两侧是兼容的单位，比如不能将像素（`px`）和百分比（`%`）相除。
+- 我很遗憾要指出一个小误导：`calc()` 并不是 CSS 的原生属性，尽管它是 CSS 核心语法的一部分，它的适用性非常广泛。
 
-LESS 还包括多个内建函数，可以直接在 LESS 代码中使用。以下是一些常见的内建函数示例：
+### 兼容性
 
-- **`percentage()`**：将值转换成百分比。
-  ```less
-  margin: percentage(20px / 100px); // 输出 20%
-  ```
-- **`round()`**：四舍五入数字。
-  ```less
-  width: round(23.7px); // 输出 24px
-  ```
-- **`floor()`** 和 **`ceil()`**：向下取整和向上取整。
+截至我的知识更新点（2023 年），`calc()` 得到了现代浏览器的广泛支持，包括 Chrome、Firefox、Safari、Edge 以及旧的 Internet Explorer 版本。唯一的例外是 Windows Phone 中的老版本浏览器。
 
-  ```less
-  height: ceil(14.2px); // 输出 15px
-  ```
+### 实际应用场景
 
-- **`unit()`** 和 **`convert()`**：分别用来获取值的单位和转换单位。
+`calc()` 的一个常见用途是在响应式设计中，你可以用 `calc()` 来设置一个固定宽度和视口宽度的融合：
 
-  ```css
-  width: convert(10, ms); // 将 10 转换为毫秒
-  margin: unit(25, "%"); // 输出 默认单位为 px，这次你却要改成百分比
-  ```
+```css
+.container {
+  width: calc(100% - 20px); /* 虚拟列不存在时，容器宽度为屏幕宽度减去20px */
+}
+.grid {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  /* 这部分代码创建一个栅格布局，其中每一格至少宽250px，每列最大填充至填满屏幕，如果没有空间填满则按最小宽度计算 */
+}
+```
 
-- **`color-function()`**：用于操作颜色值的函数，例如 `lighten()`、`darken()`、`saturate()` 等。
-
-  ```less
-  background: lighten(#800, 10%); // 将颜色 #800 变亮 10%
-  ```
-
-- **`e()`**：允许你将 CSS 代码作为参数传递到 `&` 中，用于可扩展的类选择器。
-  ```less
-  .borderbox {
-    *,
-    *:before,
-    *:after {
-      .box-sizing(border-box);
-    }
-  }
-  ```
-
-### 注意事项：
-
-- 函数可以返回任意值，包括颜色、数字、字符串和数组。
-- 如果想要执行的是一个操作而非函数定义，需要注意的是 LESS 并不像 JavaScript 一样需要用 `function` 关键字声明。
-
-合理使用函数可以极大增加 CSS 的动态性和灵活性，是构建维护性和复用性更强的 CSS 不可或缺的部分。
+通过 `calc()` 函数，开发人员可以设计出更加灵活和响应用户屏幕大小的界面布局。

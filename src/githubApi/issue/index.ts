@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "less 函数如何使用？",
+  title: "CSS 属性计算函数 Calc 介绍一下",
   key_world: [
-    "less 函数",
+    "属性计算函数 calc",
     // "husky 配置",
   ],
   labels: [labels.css, company.other],

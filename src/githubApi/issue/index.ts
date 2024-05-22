@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] React 19 有哪些新特性？",
+  title: "介绍一下 CSS 变量怎么声明和使用？",
   key_world: [
-    "React 19 新特性",
+    "CSS 变量",
     // "husky 配置",
   ],
-  labels: [labels.frameWork, company.other],
-  milestone: MileStone.senior,
+  labels: [labels.css, company.other],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

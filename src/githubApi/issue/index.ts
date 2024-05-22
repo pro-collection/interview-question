@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何统计长任务时间、长任务执行次数",
+  title: "前端视角 - 如何保证系统稳定性",
   key_world: [
-    "长任务统计",
+    "稳定性",
     // "husky 配置",
   ],
-  labels: [labels.application, company.other],
-  milestone: MileStone.senior,
+  labels: [labels.engineering, company.other],
+  milestone: MileStone.master,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

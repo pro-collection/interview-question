@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 内部执行原理",
+  title: "[Webpack] 如何使用 ts 来编写配置文件？",
   key_world: [
-    "webpack 执行原理",
+    "webpack ts 编写配置文件",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.other],

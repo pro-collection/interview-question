@@ -5,10 +5,11 @@ import * as child_process from "child_process";
 import util from "node:util";
 import axios from "axios";
 import * as path from "path";
+import { tempFilePath, htmlPath as htmlPathStatic } from "../file/consts";
 
 const execPromise = util.promisify(child_process.exec);
 
-export const writeToTemp = async (path = "./temp.md", htmlPath = "./demo.html") => {
+export const writeToTemp = async (path = tempFilePath, htmlPath = htmlPathStatic) => {
   const getHtml = fs.readFileSync(htmlPath, { encoding: "utf-8" });
 
   let markdown = h2m(getHtml);
@@ -43,10 +44,7 @@ export const writeToTemp = async (path = "./temp.md", htmlPath = "./demo.html") 
  */
 export const commitPush = async (title: string) => {
   // 提交 git commit
-  const commandList = [
-    `git commit -am "${title}"`,
-    // "git push",
-  ];
+  const commandList = [`git commit -am "${title}"`, "git push"];
 
   // 遍历执行
   for (let i = 0; i < commandList.length; i++) {

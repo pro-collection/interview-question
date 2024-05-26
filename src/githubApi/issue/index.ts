@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 如何针对 react hooks 写单测",
+  title: "[Webpack] 你用过哪些可以提高效率的插件？",
   key_world: [
-    "hooks 单测",
+    "webpack 效率提升",
     // "husky 配置",
   ],
-  labels: [labels.frameWork, company.other],
-  milestone: MileStone.inProgress,
+  labels: [labels.engineering, company.other],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

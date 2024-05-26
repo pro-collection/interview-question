@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 多入口打包共享模块",
+  title: "[Webpack] output 配置里面， chunkFilename 和 filename 区别是什么？",
   key_world: [
-    "webpack 多入口共享模块",
+    "chunkFilename 和 filename",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.other],

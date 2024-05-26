@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 为何不支持 CMD 模块化",
+  title: "[Webpack] 内部执行原理",
   key_world: [
-    "webpack 模块化支持",
+    "webpack 执行原理",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.other],

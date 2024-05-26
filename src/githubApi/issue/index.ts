@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "测试前端代码覆盖率一般有什么手段？",
+  title: "[Webpack] ts 编写的库， 在使用 webpack 构建的时候， 如何对外提供 d.ts",
   key_world: [
-    "覆盖率",
+    "对外提供 d.ts",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.alibaba],

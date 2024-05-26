@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "编写 npm 包的时候，可以办法自动生成 changlog 与自动更新 tag",
+  title: "如何做  commit lint",
   key_world: [
-    "自动化 changelog",
+    "commit 规范",
     // "husky 配置",
   ],
-  labels: [labels.frameWork, company.tencent],
+  labels: [labels.engineering, company.tencent],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

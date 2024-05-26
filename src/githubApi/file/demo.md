@@ -1,47 +1,43 @@
-**关键词**：自动化 changelog
+**关键词**：commit 规范
 
-在编写 npm 包时，可以使用自动化工具来生成 changelog 和自动更新 tag。以下是你可以使用的一些流行的工具以及它们的基本用法。
+Commit lint 是一种实践，用于在代码库中规范化提交信息的格式。这种做法通常有助于团队成员理解代码库的历史记录，以及自动化生成变更日志。下面是实施 Commit lint 的一些基本步骤：
 
-1. **semantic-release**: 这是一个全自动的版本管理和包发布工具。它能根据 commit 信息来自动决定版本号、生成变更日志（changelog）以及发布。
+1. **选择 Commit 信息规范：** 首先，你需要选择一个提交信息的规范，最常见的是[Conventional Commits](https://www.conventionalcommits.org/)，它具有明确的结构和规则。
 
-   要使用 semantic-release，你需要按照以下步骤操作：
+2. **配置 Linter 工具：** [commitlint](https://commitlint.js.org/#/) 是一个流行的工具，用于检查提交信息是否符合规定的格式。安装 commitlint，通常是作为项目的开发依赖。
 
-   - 安装 semantic-release 工具：
+   ```bash
+   npm install --save-dev @commitlint/{config-conventional,cli}
+   ```
 
-     ```sh
-     npm install -D semantic-release
-     ```
+3. **设置 commitlint 配置：** 在你的项目根目录下创建一个名为 `commitlint.config.js` 的文件，并且导入你选择的规范：
 
-   - 在项目中添加配置文件 (`semantic-release.config.js`) 或在 `package.json` 中配置。
-   - 在 CI 工具中（例如 GitHub Actions、Travis CI）配置发布脚本。
-   - 遵循规范化的 commit 消息风格（如 Angular 规范），因为 semantic-release 会根据 commit 消息来确定版本号和生成 changelog。
+   ```javascript
+   module.exports = { extends: ["@commitlint/config-conventional"] };
+   ```
 
-2. **standard-version**: 如果你更希望进行半自动化的版本管理，standard-version 是一个很好的替代选择。它可以自动地根据 commit 记录来生成 changelog。
+4. **安装钩子（Hook）管理工具：** [Husky](https://typicode.github.io/husky/#/) 是一个钩子管理工具，它可以助你轻松的在 Git 挂钩中添加脚本（例如，在 commit 之前检查提交信息格式）。
 
-   使用 standard-version 的大致步骤如下：
+   ```bash
+   npm install husky --save-dev
+   ```
 
-   - 安装 standard-version 工具：
+5. **配置 Husky 来使用 commitlint**:
 
-     ```sh
-     npm install --save-dev standard-version
-     ```
+   - 初始化 husky：
 
-   - 在 `package.json` 中配置脚本：
+   ```bash
+   npx husky install
+   ```
 
-     ```json
-     {
-       "scripts": {
-         "release": "standard-version"
-       }
-     }
-     ```
+   - 添加 `commit-msg` 钩子来使用 commitlint。执行非交互式的命令配置钩子脚本：
 
-   - 当你准备发布新版本时，运行以下命令：
+   ```bash
+   npx husky add .husky/commit-msg 'npx --no-install commitlint --edit "$1"'
+   ```
 
-     ```sh
-     npm run release
-     ```
+   这行代码会在`.husky/commit-msg`文件中创建一个钩子，并且在你试图创建提交时，会调用 commitlint 来检查你的提交信息。
 
-   - standard-version 会自动根据 commit 消息创建一个新的 tag，并更新 changelog。然后，你可以手动推送这些改动到仓库。
+6. **提交代码：** 当你提交代码时，Husky 会触发 `commit-msg` 钩子调用 commitlint 检查提交信息。如果信息不符合规范，提交将被拒绝，并显示错误信息。
 
-在这两种情况下，都推荐使用遵循某种规范的 commit 消息，如 Conventional Commits 规范，这样可以让工具更准确地解析 commit 消息来进行版本管理。此外，确保你的 CI/CD 系统有足够的权限来推送 tags 到远程仓库。
+7. **配置 CI/CD 流水线：** 为了确保规范被强制执行，可以在 CI/CD 流水线中添加一步来执行 commitlint。这样，如果提交的信息不符合规范，构建将会失败。

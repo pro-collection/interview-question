@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "技术选型上有一些什么标准",
+  title: "[React] useEffect 依赖为空数组与 componentDidMount 区别",
   key_world: [
-    "技术选型",
+    "useEffect 与 componentDidMount 区别",
     // "husky 配置",
   ],
-  labels: [labels.application, company.pdd],
-  milestone: MileStone.master,
+  labels: [labels.frameWork, company.other],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

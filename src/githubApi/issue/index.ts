@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端如何做 页面主题色切换",
+  title: "[Webpack] 支持哪些模块化加载？",
   key_world: [
-    "主题色切换",
+    "webpack 模块化支持",
     // "husky 配置",
   ],
-  labels: [labels.application, company.other],
-  milestone: MileStone.senior,
+  labels: [labels.engineering, company.other],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

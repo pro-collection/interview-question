@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 支持哪些模块化加载？",
+  title: "[Webpack] 为何不支持 CMD 模块化",
   key_world: [
     "webpack 模块化支持",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.other],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 如何使用 ts 来编写配置文件？",
+  title: "[Webpack] 多入口打包共享模块",
   key_world: [
-    "webpack ts 编写配置文件",
+    "webpack 多入口共享模块",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.other],

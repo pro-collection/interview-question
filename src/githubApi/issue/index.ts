@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] useEffect 依赖为空数组与 componentDidMount 区别",
+  title: "[React] 如何针对 react hooks 写单测",
   key_world: [
-    "useEffect 与 componentDidMount 区别",
+    "hooks 单测",
     // "husky 配置",
   ],
   labels: [labels.frameWork, company.other],

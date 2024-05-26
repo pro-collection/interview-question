@@ -1,21 +1,72 @@
-**关键词**：useEffect 与 componentDidMount 区别
+**关键词**：hooks 单测
 
-`useEffect` 是 React 函数组件的生命周期钩子，它是替代类组件中 `componentDidMount`、`componentDidUpdate` 和 `componentWillUnmount` 生命周期方法的统一方式。
+如果你想对一个独立的 React Hook 函数进行单元测试，不涉及对它在组件中使用的测试，那么你可以使用由`react-hooks-testing-library`提供的工具来完成。这个库允许你在一个隔离的环境中渲染和测试 hook 函数，而不必担心组件的其他部分。
 
-当你给 `useEffect` 的依赖项数组传入一个空数组（`[]`），它的行为类似于 `componentDidMount`，但实质上有些区别：
+首先，你需要安装`@testing-library/react-hooks`：
 
-1. 执行时机：
+```sh
+npm install --save-dev @testing-library/react-hooks
+```
 
-   - `componentDidMount`：在类组件的实例被创建并插入 DOM 之后（即挂载完成后）会立即被调用一次。
-   - `useEffect`（依赖为空数组）：在函数组件的渲染结果被提交到 DOM 之后，在浏览器绘制之前被调用。React 保证了不会在 DOM 更新后阻塞页面绘制。
+或者使用 yarn：
 
-2. 清除操作：
+```sh
+yarn add --dev @testing-library/react-hooks
+```
 
-   - `componentDidMount`：不涉及清理机制。
-   - `useEffect`：可以返回一个清理函数，React 会在组件卸载或重新渲染（当依赖项改变时）之前调用这个函数。对于只依赖空数组的 `useEffect`，此清理函数只会在组件卸载时被调用。
+然后，让我们以一个简单的`useCounter` Hook 为例，来看怎么进行单元测试。以下是这个 Hook 的代码：
 
-3. 执行次数：
-   - `componentDidMount`：在 render 执行之后，componentDidMount 会执行，如果在这个生命周期中再一次 setState ，会导致再次 render ，返回了新的值，浏览器只会渲染第二次 render 返回的值，这样可以避免闪屏。
-   - `useEffect`：是在真实的 DOM 渲染之后才会去执行，在这个 hooks 中再一次 setState, 这会造成两次 render ，有可能会闪屏。
+```javascript
+import { useState, useCallback } from "react";
 
-实际上 `useLayoutEffect` 会更接近 `componentDidMount` 的表现，它们都同步执行且会阻碍真实的 DOM 渲染的
+function useCounter(initialValue = 0) {
+  const [count, setCount] = useState(initialValue);
+  const increment = useCallback(() => setCount((c) => c + 1), []);
+  const decrement = useCallback(() => setCount((c) => c - 1), []);
+
+  return { count, increment, decrement };
+}
+
+export default useCounter;
+```
+
+接下来是对应的单元测试：
+
+```javascript
+import { renderHook, act } from "@testing-library/react-hooks";
+import useCounter from "./useCounter";
+
+describe("useCounter", () => {
+  it("should use counter", () => {
+    const { result } = renderHook(() => useCounter());
+
+    expect(result.current.count).toBe(0);
+  });
+
+  it("should increment counter", () => {
+    const { result } = renderHook(() => useCounter());
+
+    act(() => {
+      result.current.increment();
+    });
+
+    expect(result.current.count).toBe(1);
+  });
+
+  it("should decrement counter", () => {
+    const { result } = renderHook(() => useCounter(10));
+
+    act(() => {
+      result.current.decrement();
+    });
+
+    expect(result.current.count).toBe(9);
+  });
+});
+```
+
+这里我们使用了`renderHook`函数来渲染我们的 hook 并返回一个对象，这个对象中包含当前 hook 返回的所有值。我们还使用了`act`函数来包裹我们对 hook 中函数的调用。这是因为 React 需要确保在测试过程中状态更新能够正常同步。
+
+需要注意的是，如果你的 hook 依赖于其他 React 的 Context，你可以使用`renderHook`的第二个参数来传入一个 wrapper，该 wrapper 是一个 React 组件，它将包裹你的 hook。
+
+上面的这个测试覆盖了 hook 在默认值和指定初始值时的行为，以及它暴露的`increment`和`decrement`函数是否正常工作。这种方式可以用来测试任何自定义 hook，并且只关注 hook 本身的逻辑，不涉及到任何组件。

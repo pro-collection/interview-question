@@ -1,75 +1,47 @@
-**关键词**：对外提供 d.ts
+**关键词**：自动化 changelog
 
-在 TypeScript (TS) 中使用 Webpack 构建并为库提供 `.d.ts` 类型声明文件，需要遵循以下步骤：
+在编写 npm 包时，可以使用自动化工具来生成 changelog 和自动更新 tag。以下是你可以使用的一些流行的工具以及它们的基本用法。
 
-1. **配置 TypeScript 编译选项**：
-   在库项目的根目录下创建或编辑 `tsconfig.json` 文件，确保编译器配置选项如下：
+1. **semantic-release**: 这是一个全自动的版本管理和包发布工具。它能根据 commit 信息来自动决定版本号、生成变更日志（changelog）以及发布。
 
-   ```json
-   {
-     "compilerOptions": {
-       "declaration": true, // 生成对应的 '.d.ts' 文件
-       "declarationDir": "types", // 指定生成的声明文件存放目录
-       "outDir": "lib" // 指定编译后文件的输出目录
-       // 其他需要的编译选项
-     },
-     "include": ["src/**/*"], // 包含源码的目录
-     "exclude": ["node_modules"] // 排除的目录
-   }
-   ```
+   要使用 semantic-release，你需要按照以下步骤操作：
 
-   - `declaration`: 这个选项会告诉 TypeScript 编译器为每个 `.ts` 文件生成相应的 `.d.ts` 声明文件。
-   - `declarationDir`: 这是指定声明文件的输出目录。
+   - 安装 semantic-release 工具：
 
-2. **配置 Webpack**：
-   在我们的 Webpack 配置中（通常是 `webpack.config.js`），我们需要设置 `output` 以指向我们的输出目录，同时可能需要使用一些加载器(loader)如 `ts-loader` 或 `babel-loader` 来处理 TypeScript 文件。
+     ```sh
+     npm install -D semantic-release
+     ```
 
-   一个简单的 webpack 配置示例可能如下：
+   - 在项目中添加配置文件 (`semantic-release.config.js`) 或在 `package.json` 中配置。
+   - 在 CI 工具中（例如 GitHub Actions、Travis CI）配置发布脚本。
+   - 遵循规范化的 commit 消息风格（如 Angular 规范），因为 semantic-release 会根据 commit 消息来确定版本号和生成 changelog。
 
-   ```javascript
-   const path = require("path");
+2. **standard-version**: 如果你更希望进行半自动化的版本管理，standard-version 是一个很好的替代选择。它可以自动地根据 commit 记录来生成 changelog。
 
-   module.exports = {
-     entry: "./src/index.ts", // 入口文件
-     module: {
-       rules: [
-         {
-           test: /\.tsx?$/,
-           use: "ts-loader",
-           exclude: /node_modules/,
-         },
-       ],
-     },
-     resolve: {
-       extensions: [".tsx", ".ts", ".js"],
-     },
-     output: {
-       filename: "your-library.js", // 输出文件名
-       path: path.resolve(__dirname, "lib"), // 输出文件夹
-       libraryTarget: "umd", // 使库支持各种模块系统
-       globalObject: "this",
-     },
-   };
-   ```
+   使用 standard-version 的大致步骤如下：
 
-3. **发布包**：
-   当你发布你的库时，你需要确保 `package.json` 文件中包含 `types` 或 `typings` 字段指向入口 `.d.ts` 文件。
+   - 安装 standard-version 工具：
 
-   例如：
+     ```sh
+     npm install --save-dev standard-version
+     ```
 
-   ```json
-   {
-     "name": "your-library",
-     "version": "1.0.0",
-     "main": "lib/your-library.js",
-     "typings": "types/index.d.ts"
-     // 其他配置项...
-   }
-   ```
+   - 在 `package.json` 中配置脚本：
 
-   这告诉使用你库的 TypeScript 用户，在哪里可以找到类型声明文件。
+     ```json
+     {
+       "scripts": {
+         "release": "standard-version"
+       }
+     }
+     ```
 
-4. **保证类型声明文件的发布**：
-   如果你的 npm 发布流程排除了 `types` 目录，你需要更新 `.npmignore` 文件来确保 `.d.ts` 文件会被包含在发布的 npm 包中。
+   - 当你准备发布新版本时，运行以下命令：
 
-完成这些配置后，当你用 webpack 构建并发布你的库时，用户将能够获得与 JavaScript 文件关联的 TypeScript 类型声明，以便在他们的 TypeScript 项目中获得类型检查和智能提示。
+     ```sh
+     npm run release
+     ```
+
+   - standard-version 会自动根据 commit 消息创建一个新的 tag，并更新 changelog。然后，你可以手动推送这些改动到仓库。
+
+在这两种情况下，都推荐使用遵循某种规范的 commit 消息，如 Conventional Commits 规范，这样可以让工具更准确地解析 commit 消息来进行版本管理。此外，确保你的 CI/CD 系统有足够的权限来推送 tags 到远程仓库。

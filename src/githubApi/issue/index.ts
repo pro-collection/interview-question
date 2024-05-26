@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] ts 编写的库， 在使用 webpack 构建的时候， 如何对外提供 d.ts",
+  title: "编写 npm 包的时候，可以办法自动生成 changlog 与自动更新 tag",
   key_world: [
-    "对外提供 d.ts",
+    "自动化 changelog",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.alibaba],
+  labels: [labels.frameWork, company.tencent],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

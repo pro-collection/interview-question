@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 你用过哪些可以提高效率的插件？",
+  title: "[Webpack] 配置代码太多，达到数千行，这个时候该如何优化配置代码",
   key_world: [
-    "webpack 效率提升",
+    "webpack 配置代码优化",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.other],

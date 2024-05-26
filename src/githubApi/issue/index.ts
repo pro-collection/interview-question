@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何做  commit lint",
+  title: "在做 eslint 和 commitlint 的时候， 可以使用 --no-verify 跳过， 这种情况下该如何强制卡点",
   key_world: [
-    "commit 规范",
+    "commit 与 eslint 规范",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.tencent],
+  labels: [labels.engineering, company.mt],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

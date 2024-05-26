@@ -1,33 +1,21 @@
-**关键词**：依赖打包
+**关键词**：代码复用
 
-在 Webpack 中，将一些通用的依赖，如 React、React DOM、React Router 等库和框架，打包成一个独立的 bundle，通常是为了长期缓存和减少每次部署更新的下载量。这可以通过 "代码分割" (code splitting) 和 "优化" (optimization) 配置来实现。
+在 Webpack 中提取源码里被多个入口点复用的代码，例如一个 `utils` 文件，可以通过配置 `optimization.splitChunks` 来实现。Webpack 会将这些频繁复用的模块提取出来，打包到一个独立的 chunk 中，使得浏览器可以单独缓存这部分代码，并在多个页面间共享使用，优化加载性能。
 
-以下是 Webpack 中分离通用依赖的几个步骤：
-
-1. **使用 `entry` 来定义不同的入口点**: 可以通过配置一个额外的入口来创建一个只包含通用库的 bundle，也就是所谓的 "vendor" bundle。
+使用 `splitChunks` 的基本配置如下：
 
 ```javascript
 module.exports = {
-  entry: {
-    main: "./src/index.js", // 你的应用代码
-    vendor: ["react", "react-dom", "react-router"], // 指定共享库
-  },
-  // ...
-};
-```
-
-2. **使用 `SplitChunksPlugin`**: 这个插件可以将共享代码分割成不同的 chunks，并可以通过配置将其从业务代码中分离出来。在 Webpack 4 及之后的版本中，默认内置了 `optimization.splitChunks`，就是这个插件的配置方法。
-
-```javascript
-module.exports = {
-  // ...
+  // ...其他配置...
   optimization: {
     splitChunks: {
+      chunks: "all", // 对所有的 chunk 有效，包括异步和非异步 chunk
       cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/, // 指定是 node_modules 下的第三方包
-          name: "vendors", // 打包后的文件名，任意命名
-          chunks: "all", // 对所有的 chunk 生效
+        commons: {
+          name: "commons", // 提取出来的文件命名为 'commons.js'
+          chunks: "initial", // 提取出的 chunk 类型，'initial' 为初始 chunk，'async' 为异步 chunk，'all' 表示全部 chunk
+          minChunks: 2, // 模块被引用>=2次，便分割
+          minSize: 0, // 模块的最小体积
         },
       },
     },
@@ -35,13 +23,15 @@ module.exports = {
 };
 ```
 
-3. **配置 `output`**: 虽然不是必须的，你还可以在 output 中定义 `filename` 和 `chunkFilename`，来控制主入口和非主入口 chunks 的文件名。
+这个配置的含义是：
 
-```javascript
-output: {
-  filename: '[name].[contenthash].js',
-  chunkFilename: '[name].[contenthash].js'
-}
-```
+- `chunks: 'all'` 指定要优化的 chunk 类型，这里设置为 `all` 代表所有的 chunk，不管是动态还是非动态加载的模块。
+- `cacheGroups` 是一个对象，用于定义缓存组，可以继承和/或覆盖 `splitChunks` 的任何选项。每个缓存组可以有自己的配置，将不同的模块提取到不同的文件中。
+- `cacheGroups.commons` 定义了一个缓存组，专门用于提取 `initial` chunk（最初依赖的模块）中被至少两个 chunk 所共享的模块。
+- `name: 'commons'` 为生成的文件定义了一个自定义名称。
+- `minChunks: 2` 表示模块至少被两个入口点引用时，才会被提取。
+- `minSize: 0` 指定模块的最小体积是 0，即任意大小的模块都被提取。
 
-通过这样的配置，Webpack 在打包时会自动将 node_modules 中的依赖和业务代码分离开来，业务代码会被打包到 `main` chunk 中，而第三方库则会打包到 `vendors` chunk。
+这会让任何从 `node_modules` 目录导入，并在至少两个入口点中使用的模块，都会被打包到一个名为 `commons.js` 的文件中（当然，实际的文件名会受到 `output` 配置的影响，例如是否包含哈希值等）。
+
+正确配置这些参数后，`utils` 这样的模块就会被自动提取并共享，而不是在每个入口点的 bundle 中重复包含。这样做的好处是，任何更新业务逻辑的时候，只要 `utils` 没有发生变化，用户浏览器上已缓存的 `commons.js` 文件就不需要重新下载。

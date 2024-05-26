@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 如何将一些通用的依赖打包成一个独立的 bundle",
+  title: "[Webpack] 如何提取复用代码给多个 entry 使用？",
   key_world: [
-    "依赖打包",
+    "代码复用",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.other],

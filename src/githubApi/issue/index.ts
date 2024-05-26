@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 如何提取复用代码给多个 entry 使用？",
+  title: "测试前端代码覆盖率一般有什么手段？",
   key_world: [
-    "代码复用",
+    "覆盖率",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.other],
+  labels: [labels.engineering, company.alibaba],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

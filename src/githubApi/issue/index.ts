@@ -9,13 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "判断一个对象是否为空，包含了其原型链上是否有自定义数据或者方法。 该如何判定？",
+  title: "css 实现打字机效果",
   key_world: [
-    "原型链相关知识",
+    "animation 帧动画",
+    "animation steps 属性",
     // "husky 配置",
   ],
-  labels: [labels.js, company.pdd],
-  milestone: MileStone.senior,
+  labels: [labels.css, company.other],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -1,60 +1,49 @@
-**关键词**：原型链相关知识
+**关键词**：animation 帧动画、animation steps 属性
 
-要判断一个对象是否为空，并且考虑到对象自身及其原型链上是否有自定义数据或方法，您可以使用以下的 JavaScript 函数来实现：
+主要是对 css 动画的一个实际应用考察
 
-```javascript
-function isObjectEmpty(obj) {
-  // 首先获取对象自身的属性
-  const ownProperties = Object.getOwnPropertyNames(obj);
+以下是一个使用 CSS 实现简单打字机效果的示例代码：
 
-  // 遍历自身属性
-  for (const property of ownProperties) {
-    const descriptor = Object.getOwnPropertyDescriptor(obj, property);
-    // 如果属性是数据属性并且有值，或者是方法（可调用函数），则对象不为空
-    if (
-      (descriptor.value && descriptor.value !== null && descriptor.value !== undefined) ||
-      typeof descriptor.value === "function"
-    ) {
-      return false;
-    }
-  }
-
-  // 获取对象的原型
-  const prototype = Object.getPrototypeOf(obj);
-
-  // 如果有原型并且原型不是 `Object.prototype`（避免误判普通对象的默认方法）
-  while (prototype && prototype !== Object.prototype) {
-    const prototypeProperties = Object.getOwnPropertyNames(prototype);
-
-    // 遍历原型的属性
-    for (const property of prototypeProperties) {
-      const descriptor = Object.getOwnPropertyDescriptor(prototype, property);
-      // 如果原型上的属性是数据属性并且有值，或者是方法（可调用函数），则对象不为空
-      if (
-        (descriptor.value && descriptor.value !== null && descriptor.value !== undefined) ||
-        typeof descriptor.value === "function"
-      ) {
-        return false;
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      .typewriter {
+        width: 300px;
+        border-right: 4px solid black;
+        animation: typing 4s steps(30), blink 0.5s step-end infinite;
+        white-space: nowrap;
+        overflow: hidden;
       }
-    }
 
-    // 继续沿着原型链向上查找
-    prototype = Object.getPrototypeOf(prototype);
-  }
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 300px;
+        }
+      }
 
-  // 如果以上检查都没有找到非空属性或方法，则对象为空
-  return true;
-}
+      @keyframes blink {
+        50% {
+          border-color: transparent;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <p class="typewriter">这是一个打字机效果的文本</p>
+  </body>
+</html>
 ```
 
-可以使用这个函数来判断对象是否为空，例如：
+在上述代码中，`.typewriter` 类的元素用于实现打字机效果。
 
-```javascript
-function MyClass() {}
+`animation: typing 4s steps(30), blink 0.5s step-end infinite;` 定义了两个动画：
 
-MyClass.prototype.myMethod = function () {};
+- `typing` 动画用于模拟文字逐个出现的效果，从宽度为 `0` 逐渐增加到 `300px`，`steps(30)` 表示分 30 步完成动画，使文字出现有逐个显示的效果。
 
-const instance = new MyClass();
-
-console.log(isObjectEmpty(instance));
-```
+- `blink` 动画用于模拟光标闪烁效果，每 `0.5s` 闪烁一次，在 `50%` 进度时，光标（通过右边框实现）变为透明来模拟闪烁。

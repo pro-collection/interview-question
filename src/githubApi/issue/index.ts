@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "js 如何判空？ 「空」包含了：空数组、空对象、空字符串、0、undefined、null、空 map、空 set , 都属于为空的数据",
+  title: "判断一个对象是否为空，包含了其原型链上是否有自定义数据或者方法。 该如何判定？",
   key_world: [
-    "判断",
+    "原型链相关知识",
     // "husky 配置",
   ],
   labels: [labels.js, company.pdd],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

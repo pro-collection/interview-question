@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "axios 是否可以取消请求",
+  title: "cookie 可以实现不同域共享吗",
   key_world: [
     "取消请求",
 
     // "husky 配置",
   ],
-  labels: [labels.application, company.other],
+  labels: [labels.network, company.other],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

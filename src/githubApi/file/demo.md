@@ -1,42 +1,11 @@
 **关键词**：取消请求
 
-Axios 可以取消请求。官方文档指出有两种方法可以取消请求，分别是`cancelToken`和`AbortController`，示例代码如下：
+默认情况下，Cookie 不能在不同的顶级域名之间共享数据。
 
-- 使用`cancelToken`的方法一：
+但是，如果两个域名属于同一主域名下的子域名，并且您设置了正确的 `Domain` 属性，那么在这些子域名之间是可以共享 Cookie 的。
 
-```javascript
-const CancelToken = axios.CancelToken;
-const source = CancelToken.source();
-axios.post("/user/12345", { name: "new name" }, { cancelToken: source.token });
-source.cancel("Operation canceled by the user.");
-```
+例如，对于 `sub1.example.com` 和 `sub2.example.com` 这样的子域名，如果设置 `Cookie` 的 `Domain` 属性为 `.example.com` ，那么在这两个子域名之间，这个 `Cookie` 是可以共享和访问的。
 
-- 使用` cancelToken`的方法二：
+然而，如果是完全不同的顶级域名，如 `example.com` 和 `anotherdomain.com` 之间，Cookie 是不能直接共享的。
 
-```javascript
-const CancelToken = axios.CancelToken;
-let cancel;
-axios.get("/user/12345", {
-  cancelToken: new CancelToken(function executor(c) {
-    cancel = c;
-  }),
-});
-cancel();
-```
-
-- 使用`AbortController`：
-
-```javascript
-const controller = new AbortController();
-axios.get("/foo/bar", { signal: controller.signal }).then(function (response) {
-  //...
-});
-controller.abort();
-```
-
-通过文档描述和示例代码，可以总结出以下功能点：
-
-- 支持`cancelToken`取消请求，`cancelToken`可以通过工厂函数产生，也可以通过构造函数生成；
-- 支持 Fetch API 的`AbortController`取消请求；
-- 一个`token`/`signal`可以取消多个请求，一个请求也可同时使用`token`/`signal`；
-- 如果在开始`axios request`之前执行了取消请求，则并不会发出真实的请求。
+此外，还需要注意 `Cookie` 的 `Path` 属性、安全属性（`Secure`）、`HttpOnly` 属性等，这些属性也会影响 `Cookie` 的使用范围和方式。

@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 配置代码太多，达到数千行，这个时候该如何优化配置代码",
+  title: "[React] 如何避免使用 context 的时候， 引起整个挂载节点树的重新渲染",
   key_world: [
-    "webpack 配置代码优化",
+    "React Context 渲染问题",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.other],
+  labels: [labels.frameWork, company.other],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

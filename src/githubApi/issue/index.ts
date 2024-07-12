@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[微前端] 为何通常在 微前端 应用隔离， 不选择 iframe 方案",
+  title: "应用如何做应用灰度发布",
   key_world: [
-    "iframe 隔离方案弊端",
+    "灰度发布",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.alibaba],
+  labels: [labels.engineering, company.tencent],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

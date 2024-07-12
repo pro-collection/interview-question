@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "请求失败会弹出一个 toast , 如何保证批量请求失败， 只弹出一个 toast",
+  title: "css 实现翻牌效果",
   key_world: [
-    "单例 toast",
+    "css 动效应用",
     // "husky 配置",
   ],
-  labels: [labels.application, company.pdd],
+  labels: [labels.css, company.quic],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

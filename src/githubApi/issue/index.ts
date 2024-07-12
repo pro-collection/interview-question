@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "应用如何做应用灰度发布",
+  title: "前端应用 如何做国际化？",
   key_world: [
-    "灰度发布",
+    "国际化",
     // "husky 配置",
   ],
-  labels: [labels.engineering, company.tencent],
-  milestone: MileStone.senior,
+  labels: [labels.application, company.mt],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

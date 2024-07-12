@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 如何避免使用 context 的时候， 引起整个挂载节点树的重新渲染",
+  title: "[React] 循环渲染中 为什么推荐不用 index 做 key",
   key_world: [
-    "React Context 渲染问题",
+    "React 循环渲染问题",
     // "husky 配置",
   ],
   labels: [labels.frameWork, company.other],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "css 实现打字机效果",
+  title: "dom 里面， 如何判定 a 元素是否是 b 元素的子元素",
   key_world: [
-    "animation 帧动画",
-    "animation steps 属性",
+    "dom.contains 方法",
+
     // "husky 配置",
   ],
-  labels: [labels.css, company.other],
+  labels: [labels.application, company.other],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

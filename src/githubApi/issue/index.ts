@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 循环渲染中 为什么推荐不用 index 做 key",
+  title: "[微前端] 微前端架构一般是如何做 JavaScript隔离",
   key_world: [
-    "React 循环渲染问题",
+    "JS 隔离",
     // "husky 配置",
   ],
-  labels: [labels.frameWork, company.other],
-  milestone: MileStone.inProgress,
+  labels: [labels.engineering, company.alibaba],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

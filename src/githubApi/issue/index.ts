@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "flex：1 代表什么",
+  title: "请求失败会弹出一个 toast , 如何保证批量请求失败， 只弹出一个 toast",
   key_world: [
-    "flex 布局相关属性问题",
+    "单例 toast",
     // "husky 配置",
   ],
-  labels: [labels.css, company.baidu],
+  labels: [labels.application, company.pdd],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

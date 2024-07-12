@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "一般是怎么做代码重构的",
+  title: "flex：1 代表什么",
   key_world: [
-    "代码重构",
+    "flex 布局相关属性问题",
     // "husky 配置",
   ],
-  labels: [labels.application, company.pdd],
-  milestone: MileStone.senior,
+  labels: [labels.css, company.baidu],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

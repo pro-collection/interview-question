@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[微前端] 微前端架构一般是如何做 JavaScript隔离",
+  title: "[微前端] Qiankun 是如何做 JS 隔离的",
   key_world: [
     "JS 隔离",
     // "husky 配置",

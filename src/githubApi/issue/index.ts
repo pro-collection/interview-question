@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[微前端] Qiankun 是如何做 JS 隔离的",
+  title: "[微前端] 为何通常在 微前端 应用隔离， 不选择 iframe 方案",
   key_world: [
-    "JS 隔离",
+    "iframe 隔离方案弊端",
     // "husky 配置",
   ],
   labels: [labels.engineering, company.alibaba],

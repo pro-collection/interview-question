@@ -1,94 +1,64 @@
-**关键词**：css 动效应用
+**关键词**：判断
 
-主要是考察几个属性的使用
+以下是一个 JavaScript 方法，用于校验您提到的各种“为空”的场景：
 
-- `transform: rotateY` 用于 Y 轴旋转
-- `transition` 用于过度动画
+```javascript
+function isEmpty(value) {
+  // 空字符串
+  if (typeof value === "string" && value.trim() === "") {
+    return true;
+  }
+  // 空数组
+  if (Array.isArray(value) && value.length === 0) {
+    return true;
+  }
+  // 空对象（不包括 `null`）
+  if (typeof value === "object" && value !== null && Object.keys(value).length === 0) {
+    return true;
+  }
+  // 数字 0
+  if (typeof value === "number" && value === 0) {
+    return true;
+  }
+  // `undefined`
+  if (typeof value === "undefined") {
+    return true;
+  }
+  // `null`
+  if (value === null) {
+    return true;
+  }
+  // 空 `Map`
+  if (value instanceof Map && value.size === 0) {
+    return true;
+  }
+  // 空 `Set`
+  if (value instanceof Set && value.size === 0) {
+    return true;
+  }
 
-还有一个要点：
+  return false;
+}
+```
 
-- 翻转卡牌的时候，正面在上， 要将背面隐藏； 背面在上， 要将正面隐藏；
+您可以使用这个方法来检测各种值是否为空，例如：
 
-**实现比较简单， 直接贴代码**：
+```javascript
+const emptyStr = "";
+const emptyArr = [];
+const emptyObj = {};
+const zero = 0;
+const undef = undefined;
+const nullVal = null;
+const emptyMap = new Map();
+const emptySet = new Set();
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <style>
-      .card {
-        display: flex;
-      }
-
-      .flip-card {
-        float: left;
-        position: relative;
-        height: 36vmin;
-        width: calc(40vmin / 1.4);
-        background-color: white;
-        padding: 20px;
-        border-radius: calc(40vmin / 20);
-        box-shadow: 0 calc(40vmin / 40) calc(40vmin / 10) 0 rgba(0, 0, 0, 0.6);
-        overflow: hidden;
-        transition: transform 200ms linear, box-shadow 200ms linear, background-color 200ms linear;
-        transform: rotateY(0deg);
-      }
-
-      .label:hover .flip-card {
-        transform: rotateY(180deg);
-        background-color: black;
-        transition: transform 200ms linear, box-shadow 200ms linear, background-color 200ms linear;
-      }
-
-      .label:hover .flip-front {
-        opacity: 0;
-        display: none;
-        transition: transform 200ms linear, box-shadow 200ms linear, background-color 200ms linear;
-      }
-
-      .label:hover .flip-end {
-        opacity: 1;
-        display: block;
-        transform: rotateY(180deg);
-        color: white;
-        font-size: 20px;
-        transition: transform 200ms linear, box-shadow 200ms linear, background-color 200ms linear;
-      }
-
-      .flip-front {
-        width: 100%;
-        height: 100%;
-        opacity: 1;
-        cursor: pointer;
-      }
-
-      .flip-end {
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        display: none;
-        cursor: pointer;
-      }
-
-      .label {
-        background-color: white;
-        border-radius: calc(40vmin / 20);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="card">
-      <div class="label">
-        <div class="flip-card">
-          <div class="flip-front">我是正面</div>
-          <div class="flip-end">
-            在上述代码中，我们创建了一个带有 card 类的容器，内部有一个 card-inner 元素，它包含了 card-front（正面）和
-            card-back（背面）两个元素。 当鼠标悬停在 card 元素上时，通过 :hover 选择器将 card-inner 元素绕 Y 轴旋转 180
-            度，实现翻牌效果。
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
-</html>
+console.log(isEmpty(emptyStr));
+console.log(isEmpty(emptyArr));
+console.log(isEmpty(emptyObj));
+console.log(isEmpty(zero));
+console.log(isEmpty(undef));
+console.log(isEmpty(nullVal));
+console.log(isEmpty(emptyMap));
+console.log(isEmpty(emptySet));
 ```

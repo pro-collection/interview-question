@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "css 实现翻牌效果",
+  title: "js 如何判空？ 「空」包含了：空数组、空对象、空字符串、0、undefined、null、空 map、空 set , 都属于为空的数据",
   key_world: [
-    "css 动效应用",
+    "判断",
     // "husky 配置",
   ],
-  labels: [labels.css, company.quic],
+  labels: [labels.js, company.pdd],
   milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端应用 如何做国际化？",
+  title: "如何清理源码里面没有被应用的代码， 主要是 JS、TS、CSS 代码",
   key_world: [
-    "国际化",
+    "代码清理",
     // "husky 配置",
   ],
-  labels: [labels.application, company.mt],
-  milestone: MileStone.inProgress,
+  labels: [labels.application, company.tencent],
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

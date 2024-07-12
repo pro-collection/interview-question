@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "dom 里面， 如何判定 a 元素是否是 b 元素的子元素",
+  title: "前端如何实现折叠面板效果？",
   key_world: [
     "dom.contains 方法",
 

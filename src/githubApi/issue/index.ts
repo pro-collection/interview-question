@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端如何实现折叠面板效果？",
+  title: "axios 是否可以取消请求",
   key_world: [
-    "dom.contains 方法",
+    "取消请求",
 
     // "husky 配置",
   ],

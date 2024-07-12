@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何清理源码里面没有被应用的代码， 主要是 JS、TS、CSS 代码",
+  title: "一般是怎么做代码重构的",
   key_world: [
-    "代码清理",
+    "代码重构",
     // "husky 配置",
   ],
-  labels: [labels.application, company.tencent],
+  labels: [labels.application, company.pdd],
   milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };

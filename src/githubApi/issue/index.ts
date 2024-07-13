@@ -9,14 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "cookie 可以实现不同域共享吗",
+  title: "浏览器有同源策略， 但是为何 cdn 请求资源的时候不会有跨域限制",
   key_world: [
-    "取消请求",
+    "同源策略",
+    "跨域限制",
 
     // "husky 配置",
   ],
   labels: [labels.network, company.other],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

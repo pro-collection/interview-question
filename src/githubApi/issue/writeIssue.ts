@@ -5,14 +5,16 @@ import repoConfig from "@utils/repoConfig";
 import { MileStone } from "@src/githubApi/issue/consts";
 import { giteeWriteIssue } from "@src/giteeApi/issue/writeIssue";
 import { giteeMileStone } from "@src/giteeApi/issue/consts";
-import { join } from "lodash";
+import { join, map } from "lodash";
 import { commitPush } from "@src/githubApi/issue/helper";
+import { getIssueContentWithCurrentVersion } from "./getReleaseNoteCount";
 
 // 写入 github
-const write = (options: WriteIssueOptions) => octokit.request(apiUrl.writeIssue, {
-  ...options,
-  ...repoConfig.interviewRepo,
-});
+const write = (options: WriteIssueOptions) =>
+  octokit.request(apiUrl.writeIssue, {
+    ...options,
+    ...repoConfig.interviewRepo,
+  });
 
 export const writeIssue = async (remote: any) => {
   const allPromise = [
@@ -34,6 +36,15 @@ export const writeIssue = async (remote: any) => {
   console.log(`yanle - logger: 写入 github - ${remote.title}`, res1?.status);
 
   await commitPush(remote.title);
+
+  // 当前版本一共有的题目数量
+  const { issueList } = await getIssueContentWithCurrentVersion();
+
+  console.log(
+    `[yanle] - logger: 当前待归档的 issue 文章列表： \n`,
+    map(issueList, (item) => item.title)
+  );
+  console.log(`[yanle] - logger: 当前待归档的 issue 文章数量： `, issueList?.length);
 };
 
 export {};

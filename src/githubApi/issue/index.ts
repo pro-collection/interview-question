@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "px 如何转为 rem",
+  title: "如何标准化处理线上用户反馈的问题",
   key_world: [
-    "移动端适配",
+    "处理线上用户反馈",
 
     // "husky 配置",
   ],
   labels: [
-    labels.css,
+    labels.application,
     // company.other,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.master,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

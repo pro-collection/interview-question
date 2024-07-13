@@ -9,15 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "浏览器有同源策略， 但是为何 cdn 请求资源的时候不会有跨域限制",
+  title: "px 如何转为 rem",
   key_world: [
-    "同源策略",
-    "跨域限制",
+    "移动端适配",
 
     // "husky 配置",
   ],
-  labels: [labels.network, company.other],
-  milestone: MileStone.senior,
+  labels: [
+    labels.css,
+    // company.other,
+    // xx
+  ],
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

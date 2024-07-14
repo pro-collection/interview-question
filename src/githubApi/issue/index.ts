@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何标准化处理线上用户反馈的问题",
+  title: "如何做好前端监控方案",
   key_world: [
-    "处理线上用户反馈",
+    "前端监控",
 
     // "husky 配置",
   ],

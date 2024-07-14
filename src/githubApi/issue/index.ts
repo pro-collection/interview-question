@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "富文本里面， 是如何做到划词的（鼠标滑动选择一组字符， 对组字符进行操作）？",
+  title: "如何在划词选择的文本上添加右键菜单（划词：鼠标滑动选择一组字符， 对组字符进行操作）",
   key_world: [
-    "DOM getSelection 方法",
+    "DOM getSelection 方法 应用场景",
 
     // "husky 配置",
   ],

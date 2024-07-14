@@ -1,45 +1,73 @@
-**关键词**：DOM getSelection 方法
+**关键词**：DOM getSelection 方法 应用场景
 
 > 主要考察 dom 方法， `getSelection`
 > 属于很冷门知识， 只会在做过富文本的同学面试过程中可能会问得到。
 
-在富文本环境中实现划词（鼠标滑动选择一组字符并对其进行操作）通常涉及以下几个关键步骤和技术：
+要在划词选择的文本上添加右键菜单，可以按照以下步骤进行操作：
 
-1. 事件监听
+1. 监听鼠标右键事件
+   在文档或富文本区域上添加 `contextmenu` 事件的监听。
 
-   - 监听鼠标按下、鼠标移动和鼠标松开这三个主要的鼠标事件。当鼠标按下时，标记选择的开始；在鼠标移动过程中，根据鼠标的位置更新选择范围；鼠标松开时，确定最终的选择。
+```javascript
+document.addEventListener("contextmenu", function (event) {
+  // 阻止默认的浏览器右键菜单
+  event.preventDefault();
 
-2. 选择范围计算
+  // 在此处显示自定义右键菜单
+  showCustomMenu(event);
+});
+```
 
-   - 使用浏览器提供的 `Selection` 对象来获取和管理选择的范围。在鼠标移动过程中，不断更新 `Selection` 对象的范围。
+2. 显示自定义右键菜单
+   创建一个自定义的菜单元素，并根据选择的文本设置菜单选项。
 
-3. 操作处理
-   - 一旦选择完成，可以根据具体的需求对选中的字符进行操作。例如，修改样式（如加粗、变色）、获取选中的文本内容、执行复制粘贴等操作。
+```javascript
+function showCustomMenu(event) {
+  const customMenu = document.createElement("div");
+  customMenu.style.position = "absolute";
+  customMenu.style.left = event.clientX + "px";
+  customMenu.style.top = event.clientY + "px";
 
-以下是一个简单的 JavaScript 示例，展示了如何获取选中的文本：
+  // 添加菜单选项
+  const menuItem1 = document.createElement("div");
+  menuItem1.textContent = "复制";
+  menuItem1.addEventListener("click", function () {
+    // 处理复制操作
+    copySelectedText();
+  });
+  customMenu.appendChild(menuItem1);
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
+  // 可以添加更多的菜单选项
 
-  <body>
-    <p>这是一段示例文本，您可以尝试选中一部分。</p>
+  document.body.appendChild(customMenu);
+}
+```
 
-    <script>
-      document.addEventListener("mouseup", function () {
-        const selection = window.getSelection();
-        if (selection) {
-          const selectedText = selection.toString();
-          console.log("选中的文本: ", selectedText);
-        }
-      });
-    </script>
-  </body>
-</html>
+3. 处理菜单选项的操作
+   例如，实现复制选中文本的功能。
+
+```javascript
+function copySelectedText() {
+  const selection = window.getSelection();
+  if (selection) {
+    const range = selection.getRangeAt(0);
+    const clipboardData = new ClipboardEvent("copy", {
+      clipboardData: { text: range.toString() },
+      bubbles: true,
+    }).clipboardData;
+    document.execCommand("copy", false, clipboardData);
+  }
+}
+```
+
+4. 隐藏右键菜单
+   当用户点击菜单之外的区域时，隐藏自定义右键菜单。
+
+```javascript
+document.addEventListener("click", function (event) {
+  const customMenu = document.querySelector(".custom-menu");
+  if (customMenu && !customMenu.contains(event.target)) {
+    customMenu.remove();
+  }
+});
 ```

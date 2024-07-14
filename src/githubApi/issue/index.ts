@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何做好前端监控方案",
+  title: "富文本里面， 是如何做到划词的（鼠标滑动选择一组字符， 对组字符进行操作）？",
   key_world: [
-    "前端监控",
+    "DOM getSelection 方法",
 
     // "husky 配置",
   ],
   labels: [
     labels.application,
-    // company.other,
+    company.other,
     // xx
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

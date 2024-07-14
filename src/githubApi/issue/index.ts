@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何实现预览 PDF 文件",
+  title: "[React] 生态有哪些",
   key_world: [
-    "预览 PDF 文件",
+    "React 生态",
 
     // "husky 配置",
   ],
   labels: [
-    labels.application,
-    // company.other,
+    labels.frameWork,
+    company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

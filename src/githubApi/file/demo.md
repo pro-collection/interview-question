@@ -1,73 +1,86 @@
-**关键词**：DOM getSelection 方法 应用场景
+**关键词**：预览 PDF 文件
 
-> 主要考察 dom 方法， `getSelection`
-> 属于很冷门知识， 只会在做过富文本的同学面试过程中可能会问得到。
+在前端实现 PDF 文件预览功能，主要有以下几种常用方法：
 
-要在划词选择的文本上添加右键菜单，可以按照以下步骤进行操作：
+### 1. 使用浏览器内置的 PDF 查看器
 
-1. 监听鼠标右键事件
-   在文档或富文本区域上添加 `contextmenu` 事件的监听。
+浏览器像 Chrome 和 Firefox 等内置了 PDF 查看器，可以直接在浏览器中打开和预览 PDF 文件。实现方式非常简单，只需将 PDF 文件的 URL 设置为`<a>`标签的`href`属性，或者使用`window.open`方法在新标签页中打开 PDF 文件。
 
-```javascript
-document.addEventListener("contextmenu", function (event) {
-  // 阻止默认的浏览器右键菜单
-  event.preventDefault();
+```html
+<!-- 方法1: 使用超链接 -->
+<a href="/path/to/your/document.pdf" target="_blank">预览PDF</a>
 
-  // 在此处显示自定义右键菜单
-  showCustomMenu(event);
-});
+<!-- 方法2: 使用JavaScript -->
+<button onclick="window.open('/path/to/your/document.pdf', '_blank')">预览PDF</button>
 ```
 
-2. 显示自定义右键菜单
-   创建一个自定义的菜单元素，并根据选择的文本设置菜单选项。
+### 2. 使用 PDF.js
 
-```javascript
-function showCustomMenu(event) {
-  const customMenu = document.createElement("div");
-  customMenu.style.position = "absolute";
-  customMenu.style.left = event.clientX + "px";
-  customMenu.style.top = event.clientY + "px";
+[PDF.js](https://mozilla.github.io/pdf.js/)是一个由 Mozilla 开发的开源库，它使用 HTML5 Canvas 来渲染 PDF 文件。PDF.js 提供了广泛的 API 来实现 PDF 的加载、渲染、缩放、打印等功能。
 
-  // 添加菜单选项
-  const menuItem1 = document.createElement("div");
-  menuItem1.textContent = "复制";
-  menuItem1.addEventListener("click", function () {
-    // 处理复制操作
-    copySelectedText();
+#### 如何使用：
+
+1. **引入 PDF.js**
+   首先，你需要在你的项目中包含 PDF.js。可以从其[GitHub 仓库](https://github.com/mozilla/pdf.js)中直接下载或使用 CDN。
+
+```html
+<!-- 引入pdf.js和pdf.worker.js -->
+<script src="/path/to/pdf.js"></script>
+<script src="/path/to/pdf.worker.js"></script>
+```
+
+2. **渲染 PDF 文件**
+   使用 PDF.js 提供的 API 来加载和渲染 PDF 文件。
+
+```html
+<!-- PDF容器 -->
+<div id="pdf-container"></div>
+
+<script>
+  // 初始化PDF.js
+  pdfjsLib.getDocument("/path/to/your/document.pdf").promise.then(function (pdfDoc) {
+    // 获取第一页
+    pdfDoc.getPage(1).then(function (page) {
+      // 设置视口和比例
+      var scale = 1.5;
+      var viewport = page.getViewport({ scale: scale });
+
+      // 准备用于渲染的Canvas
+      var canvas = document.createElement("canvas");
+      var ctx = canvas.getContext("2d");
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      // 将Canvas添加到DOM中
+      document.getElementById("pdf-container").appendChild(canvas);
+
+      // 通过Canvas渲染PDF页面
+      var renderContext = {
+        canvasContext: ctx,
+        viewport: viewport,
+      };
+      page.render(renderContext);
+    });
   });
-  customMenu.appendChild(menuItem1);
-
-  // 可以添加更多的菜单选项
-
-  document.body.appendChild(customMenu);
-}
+</script>
 ```
 
-3. 处理菜单选项的操作
-   例如，实现复制选中文本的功能。
+### 3. 使用第三方服务
 
-```javascript
-function copySelectedText() {
-  const selection = window.getSelection();
-  if (selection) {
-    const range = selection.getRangeAt(0);
-    const clipboardData = new ClipboardEvent("copy", {
-      clipboardData: { text: range.toString() },
-      bubbles: true,
-    }).clipboardData;
-    document.execCommand("copy", false, clipboardData);
-  }
-}
+也可以使用第三方服务如 Google Docs Viewer 来预览 PDF。这种方法的优点是容易实现，但依赖于外部服务。
+
+```html
+<iframe
+  src="http://docs.google.com/gview?url=http://path.to/your/document.pdf&embedded=true"
+  style="width:600px; height:500px;"
+  frameborder="0"
+></iframe>
 ```
 
-4. 隐藏右键菜单
-   当用户点击菜单之外的区域时，隐藏自定义右键菜单。
+其中，将`http://path.to/your/document.pdf`替换为你的 PDF 文件的真实 URL。
 
-```javascript
-document.addEventListener("click", function (event) {
-  const customMenu = document.querySelector(".custom-menu");
-  if (customMenu && !customMenu.contains(event.target)) {
-    customMenu.remove();
-  }
-});
-```
+### 选择适合的方法
+
+- **简单预览**：如果只需要一个简单的 PDF 文件预览，使用浏览器的内置功能是最快的方法。
+- **复杂的 PDF 交互**：对于需要复杂交互（如注释、填写表单）的 PDF 文件，PDF.js 提供了更多控制和定制选项。
+- **简易集成但依赖第三方**：使用第三方服务是最容易实现的，但您的数据可能会通过第三方服务器传递，需要考虑隐私和安全性。

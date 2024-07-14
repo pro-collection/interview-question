@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何在划词选择的文本上添加右键菜单（划词：鼠标滑动选择一组字符， 对组字符进行操作）",
+  title: "如何实现预览 PDF 文件",
   key_world: [
-    "DOM getSelection 方法 应用场景",
+    "预览 PDF 文件",
 
     // "husky 配置",
   ],
   labels: [
     labels.application,
-    company.other,
+    // company.other,
     // xx
   ],
   milestone: MileStone.inProgress,

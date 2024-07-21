@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "babel-runtime 作用是啥",
+  title: "如何减少项目里面 if-else",
   key_world: [
-    "babel-runtime 作用",
+    "减少 if-else",
 
     // "husky 配置",
   ],
   labels: [
-    labels.engineering,
-    company.tencent,
+    labels.application,
+    company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 生态有哪些",
+  title: "babel-runtime 作用是啥",
   key_world: [
-    "React 生态",
+    "babel-runtime 作用",
 
     // "husky 配置",
   ],
   labels: [
-    labels.frameWork,
+    labels.engineering,
     company.tencent,
     // xx
   ],

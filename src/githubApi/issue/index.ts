@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "ajax 和 xhr 是什么关系？",
+  title: "axios 请求的底层依赖是什么？",
   key_world: [
-    "ajax 和 xhr",
+    "axios 请求依赖",
 
     // "husky 配置",
   ],

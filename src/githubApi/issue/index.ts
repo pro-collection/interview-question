@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何减少项目里面 if-else",
+  title: "[React] hooks 调用是可以写在 if 语句里面吗",
   key_world: [
-    "减少 if-else",
+    "hooks 调用问题",
 
     // "husky 配置",
   ],
   labels: [
-    labels.application,
-    company.mt,
+    labels.frameWork,
+    company.tencent,
     // xx
   ],
   milestone: MileStone.inProgress,

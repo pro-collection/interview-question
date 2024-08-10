@@ -1,460 +1,343 @@
-> 作者：行星飞行  
-> 链接：https://juejin.cn/post/7238259557989613627?searchId=202407131651052CA80B7BDF83C3EF7B67  
+> 作者：植物系青年  
+> 链接：https://juejin.cn/post/7280429214607769658  
 > 来源：稀土掘金  
 > 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 ---
 
-写在前面：本文是我在前端团队的第三次分享，应该很少会有开发者写客户反馈处理流程以及 bug 排查的心得技巧，全文比较长，写了一个多星期大概 1W 多字，如果你有耐心阅读完，我相信在未来的问题排查上，一定会对你的思路拓展有些许帮助，考虑到篇幅问题，建议在阅读前找一个舒服的姿势并泡上一杯茶或咖啡，那么本文开始。
-
-# 一、引
-
-在过去，我曾有两年的时间每天跟各种奇怪或者难以解释的 bug 打交道，2 年时间累积处理 bug 1200+，所以在问题处理这块还算有一丢丢经验。修复 bug 研发往往需要先复现，而复现需要依赖一些关键信息，比如用户操作路径，日志信息等等；但站在组织架构角度，研发同学一般不会直接跟客户打交道，所以在客户提出问题的同时尝试搜集必要的 bug 信息对于整个 bug 修复流程很有重要，而这一部分是与客户对接的同学应该掌握的部分技巧。当然在拿到信息后，对于 bug 提出猜想，快速论证就是研发同学应该思考的问题了。
-
-回到本文，面对 CS 团队和研发团队同学，我想分别进行一次分享，对于与客户对接的同学：
-
-- 帮助大家掌握一些更为通用的引导排查方式，这会直接影响后续研发同学的排查方向
-- 知晓在与客户沟通过程中，哪些信息是研发希望得到的，让沟通更有效。
-- 教会大家在不同浏览器上如何拿到这些信息，只有大家先会才能引导客户操作。
-
-对于研发同学：
-
-- 问题复现的一些技巧
-- 在掌握初步信息后如何拟定排查方向
-- 帮助大家培养问题分析的思路，当一个可能是你完全不了解的业务 bug ，如何切入问题提出猜想
-- 案例分析，我会结合之前排查的疑难问题，说明我是如何运用这些经验一步步推导结论。
-
-通过一次分享让大家问题分析能力立马成长起来有些天方夜谭，但起码这些经验多多少少能帮助大家，��� 大家建立一些基础。
-
-我个人很喜欢侦探剧，福尔摩斯，金田一耕助，柯南，在面临案件时细心的搜集线索并推导真相，这个过程真的太帅了。修复 bug 其实也是一场小小的侦探剧，希望大家在面对一些奇怪问题时，也能享受解决问题的过程（当然不出问题是最好的）。
-
-# 二、客户沟通原则
-
-- 可以必现的问题不需要再找客户搜集信息，所以在与客户沟通前最好先尝试是否可复现客户反馈的问题。
-- **尽量少的打扰客户**，尽管这与我们从客户处获取信息相矛盾。当客户愿意主动反馈问题时，从心理上讲对方是期望得到回复以及问题得到解决，因此在第一次沟通时获取信息客户大多数都愿意配合，随着沟通次数逐渐变多，耐心递减，因此我们才需要列出一份清单，尽可能一次沟通拿到更可能多的信息。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cf0b164ff3dd49b08b266ae4d2fb35a0~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-# 三、前期通用排查手段
-
-产生 bug 的原因往往千奇百怪，即使是 Chrome 浏览器自身也可能会出现 bug，从而导致我们的业务功能无法按预期执行，因此在搜集信息前我们可以引导用户做一些常见的排查，如果这些操作能直接帮客户解决问题，那就万幸了！！！！
-
-### 3.1 是否受缓存影响？
-
-这里所说的缓存不仅仅是浏览器缓存，还包括浏览器对于代码资源的缓存，我们分开解释：
-
-浏览器缓存：包裹 cookies、本地缓存、indexDB 等等，这些缓存一般存储用户数据，账号信息，关键逻辑缓存等等。验证是否受浏览器缓存影响最直接的是让用户新开一个无痕浏览器测试功能是否正常即可，如果无痕正常但非无痕有问题，那就可以确定是这个问题了。
-
-比如我在四月我就遇到了只有我一个人无法登录 sentry 的问题，新开无痕正常，原先的浏览器怎么刷新都不行，最后通过修改密码强制更新本地 token 解决了这个问题。关于清除本地缓存的操作，这里以 Chrome 为例，步骤为：打开浏览器控制台（关于如何打开控制台见浏览器开发者工具篇章）> 选择 Application > 点击 Storage > 勾选你想清楚的缓存，比如 Cookies、indexedBD，不知道就全勾了 > 点击 Clear site data 即可。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/518640f031bf42c9aa3c4cf4a8d802e7~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-浏览器资源缓存：除了浏览器缓存外，浏览器本身也会存在对于代码资源的缓存，比如我们的功能版本之前是 1.0，发版后版本升级为 1.1 且功能有了大变动，用户在刷新浏览器后就应该使用我们 1.1 版本的代码资源，但是可能会存在浏览器资源更新不彻底造成的功能问题（我以前遇到过多次）。这种情况也可以使用无痕浏览器先验证排查，如果发现有问题回到原先的页面，使用快捷键 command（mac）/ctl（Windows） + shift + R 进行强制刷新即可，注意是强制刷新而非普通刷新，除此之外我们还可以打开控制台后，鼠标长按浏览器刷新图标，之后选择 清空缓存并硬性重新加载，注意这个操作只有打开控制台才行。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ca0ae87781374244a762c742627b4271~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-其实说来说去，缓存这块都用无痕来验证就好了，只是清理缓存有一些差异。
-
-### 3.2 是否受浏览器插件影响？
-
-客户自己安装的浏览器插件也可能影响我们的业务功能，而验证手段同样还是使用无痕模式，因为无痕模式默认不会加载你安装的插件，同理让用户使用无痕验证功能也是排查插件的影响，我以前也使用这个办法定位过具体是哪个插件造成的 bug，非常实用。
-
-到目前为止，无痕模式能帮我们排查是否是浏览器缓存，浏览器资源缓存，以及插件的影响。
-
-### 3.3 更换其它浏览器是否解决？
-
-会存在 Chrome 自身就有 bug 的情况，比如之前我们遇到了 mac Chrome 107 版本录音音频 30S 之后被加速以及出现噪音的问题，issue 地址，而这个问题如果使用 Windows 版本的 Chrome，或者其它浏览器均不会遇到，这就能证明就是 Chrome 官方的 bug，因此更换浏览器也是一个在早期尝试解决问题的好办法。
-
-### 3.4 网络问题更换 WiFi 或者链接手机热点是否可解决？
-
-有时候用户会遇到打开我们项目页面非常缓慢的情况，除去资源加载性能优化相关，用户自身的环境网络也会与这些问题息息相关，比如防火墙拦截导致某个接口无法调用页面加载不出来，自身网络慢导致页面加载缓存等等；
-
-比如我以前排查过一个客户反馈，用户提供的截图中好巧不巧把自己的 360 加速球给截进去了，在这个图标上可以看到用户在加载项目页面时网络上传下载只有几 kb，可以确定就是客户自身网络太差所导致，因此更换网络环境也是前期一个不错的排查方法，比如切换 WiFi，使用移动热点等等，前提用户反馈与加载缓慢有关。
-
-# 四、信息搜集清单
-
-在前期排查引导中，如果更换浏览器，使用无痕模式都无法解决客户问题，且这个问题我们还不是很好复现，那就需要在与用户第一次沟通中搜集一些关键信息，这对于我们模拟复现场景有很大的作用，这里我先列举需要的信息清单以及为什么需要，如何获取见下一章节：
-
-### 4.1 用户出现问题的复现路径
-
-为什么需要这个？我在以前遇到过客户反馈，说工作项列表的筛选失效了，但是我发现我怎么都复现不出来，无奈让售后找客户要了张页面截图，才发现客户说的是全局筛选而不是具体项目下工作项筛选，然后组件都是用的同一个，但不同场景下数据传输就是有差异，除此之外甚至用户的操作顺序差异都会干扰你，所以能问清楚一点是最好的。
-
-### 4.2 客户出现问题使用的操作系统和版本
-
-操作系统一般是 Mac 或者 Windows，为什么需要这个呢？我曾经遇到过用户反馈说微信赋值图标粘贴到产品富文本编辑器中每次都是两张....但是我们的功能近期又没变动，且我根本没法复现，最后与客户沟通要到了电脑操作系统类型以及版本，然后通过微信赋值就稳定复现了，追溯了粘贴板里面的数据，发现用户在电脑 CV 时这个数据就已经不对了，最终确认是 Window10 + 微信图片赋值 + Chrome 粘贴就能浮现，而且对比了当时的语雀，金山云文档都出现了此问题，最后给客户解释了原因也能接受，之后前面提到的软件某一个版本变动，平衡被打破，这个 bug 就不存在了。
-
-### 4.3 客户使用的浏览器类型与具体版本
-
-为什么需要，前面其实已经举了一个例子，Chrome 107 音频加速的问题就是通过浏览器类型以及版本对比最终排查出来的结论。
-
-### 4.4 控制台信息
-
-有没有报错信息。引导用户打开控制台，点击 console 这一栏，点击清除之后，让用户刷新页面并再进行一次有 bug 的操作，看看控制台是否会出现红色的报错信息，如果有麻烦用户提供控制台截图。
-
-### 4.5 客户遇到问题时的截图或录屏
-
-这个是针对出现问题时的功能界面的截图，或者用户操作的路径的录屏，可能会涉及用户隐私，所以最好征求下客户的意见。
-
-### 4.6 此问题是否是近期突然出现还是一直存在
-
-用于判断是否跟最近的新功能有关，也方便研发同学快速缩小范围定位。如果问题一直存在，那就可能是一个隐藏的历史问题。
-
-### 4.7 对于公司群体用户是否只有特定用户遇到了这个问题
-
-比如一个企业购买了我们的产品，如果某个人反馈问题，最好麻烦下 ta 询问下其 ta 同事是否也会遇到这个问题，如果只有 ta 自己遇到，前端角度那就可能与本地缓存，插件，特定浏览器类型有关，站在后端角度可能与此客户的用户数据有关，比如脏数据，这个方法曾经帮助我解决过不少脏数据以及环境问题问题。
-
-### 4.8 能否提供 har 文件（不一定可行，涉及数据隐私）
-
-har 文件是指浏览器记录用户操作过程中的接口数据文件，所以这个其实涉及用户隐私，是否能提供需要征求用户的同意；在过往除非是很严重的问题但我们又毫无头绪，用户又急着解决，才会尝试与客户沟通提供 har 文件，这里单纯提一嘴，如何提供见第五小节。
-
-### 4.9 性能问题的 performance 文件
-
-Chrome 可以通过 performance 录制页面渲染的过程，比如什么脚本执行比较耗时，这些 performance 都能以火焰图的形式展示出来，这个不涉及用户个人隐私，只是展示页面渲染的情况。在用户反馈使用卡顿但我们无法复现时，可能需要用户帮忙提供。比如在以前我们就接受过用户反馈页面加载直接崩溃，但是我们自己怎么无法复现，在拿到相关信息后才知道客户员工就有上万人，用户数据格外庞大，我们没这个用户数据，怎么想的上去哪段逻辑有性能缺陷呢。
-
-### 4.10 是否是私有部署用户（我们暂无私有部署，但还是先列在这吧）
-
-先说下 SaaS 客户与私有部署客户的区别，SaaS 客户所使用的软件版本受我们发版影响，我们发到哪个版客户就得用什么版本（比较被动），且用户数据均在我们的服务器保管。而私有部署的区别在于，客户可以选定一个他们认为稳定的版本单独部署（比如 LTS 版本），且用户数据客户自行管理，我们后续只提供售后以及升级服务。
-
-后者优势在于版本不会受 SaaS 版本影响，功能会更稳定（有的客户并不追求功能新特性，企业大了对于软件就是求稳），要不要升级自行决定，且用户数据自行保管，站在企业角度肯定更安全更稳定了。 因此如果未来我们也存在私有部署客户，在客户沟通过程中需要确认客户使用版本类型，如果是 SaaS 用户那默认就是最新的代码版本，而如果是私有部署则需要了解用户所部署的版本，这样我们才好根据对应版本复现问题，不然在 SaaS 版本分支可能就是大海捞针，完全复现不了也不知道怎么回事。
-
-### 4.11 电脑多久没关机了？（虽然这样跟客户说客户可能会觉得你不专业）
-
-你看到这个问题肯定想笑，怎么还问这么抽象的问题，如果同一个公司网络环境跑同一个项目，大家都没问题，只有你自己有问题，除开浏览器缓存插件干扰外，重启电脑也大概率也能解决你的问题。电脑在长期不关机运行下，性能体验就是会变得很糟糕，不管你是不是 MAC。我在之前遇到过测试给我提 bug ，他说他发现一个标签 hover 的 title 每次要 2S 左右才显示出来，感觉是不是一个 bug ，但是站在我的角度我非常清楚这里的 hover 是原生行为，我根本无法操控，于是我问他是不是很久没关过机了，让他重启，你还真别说，重启就恢复正常了，还是那句话，bug 之所以是 bug，有些时候它就是难以解释。
-
-# 五、信息提取方法以及开发者工具使用说明
-
-### 5.1 不同浏览器如何打开控制台
-
-前面提到控制台 console 看有没有报错信息，清除用户缓存，长按刷新图标强制刷新，以及导出 har 文件，导出 performance 文件前提都是打开控制台，所以先说这个操作。
-
-台式机一般都是直接按`F12`直接打开控制台，但笔记本因为键位比较少，有些 `F12` 单按就是音量键，所以需要 `Fn + F12` 可以打开控制台，如果用户不会使用快捷键也没关系，这里以 Chrome 和 Edge 和 Safari 举例，直接鼠标右键，然后选择**检查**或者**检查元素**即可。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d21b96595564426b85a20ef7b0b08574~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-### 5.2 控制台信息
-
-当打开控制台后，前面所说的页面报错均可以在 console 栏查看。为了方便用户截图而不被无关的信息感染，可以先点击清空控制台后再让用户操作，之后再截图。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8cda0ea13d4148cdb88a33ee86863720~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-### 5.3 查看操作系统和版本
-
-Mac：点击左上角苹果图标 > 点击关于本机 > 这里能看到系统名称和版本以及芯片信息
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cfc8e944bb2d4c7d987dce9d9cff3645~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-Windows：开始 > 设置 > 系统 > 关于。在**设备规格** > **系统类型**下，查看你运行的 Windows 是 32 位还是 64 位版本；在 **Windows 规格**下，查看设备运行的 Windows 版本和版本号。
-
-### 5.4 查看浏览器版本
-
-如果是 Mac 用户就比较简单，注意此时电脑前台一定是运行了浏览器了，比如运行 Chrome 后点击左上角 Chrome > 关于 Google Chrome 即可看到版本号信息，其它浏览器类似。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ec86fc0f3ac841b59899b765a602ee62~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-Windows 用户可以点击浏览器右上角的三个点 > 帮助 > 关于 Google Chrome
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0c69f3339a9a4ccfb03bb72ab8587949~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-### 5.5 如何提供 performance 信息
-
-同样需要先打开控制台 > 点击 performance > 点击 Record 按钮（一个黑色的圆） > 开始操作等待操作完成 > 等待 performance 生成数据 > 点击下载。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4bf3932ef3a6463ba84098cd1b0f5a5b~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-### 5.6 如何提供 har 文件
-
-操作与获取 performance 文件类似，同样需要打开控制台 > 点击 Network 后点击清空（避免无用信息干扰）> 刷新页面等待页面加载完成 > 点击下载即可。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/61d8a659e9e14c83acc7087cf8e16405~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-# 六、复现问题技巧
-
-### 6.1 根据反馈信息造复现环境
-
-在信息搜集清单这一栏我们介绍了十几条可能需要注意的点，说了那么多其实都是在为这里做铺垫。
-
-再次强调一遍，在复现问题时，如果你发现一个问题怎么都复现不了，但是对方可以复现，这个时候需要留意下对方所说的复现步骤，操作系统，版本等等，这些关键信息的能够很好的帮助你复现问题。
-
-### 6.2 注意出现问题的代码版本
-
-这个在之前确认用户是私有部署版本还是 SaaS 用户已经说过了一次，如果客户是私有部署版本，一定要问到客户所用的版本，这样你才好去对应的代码分支复现以及解决问题，不然你在 SaaS 分支玩一年不一定能发现问题在哪....
-
-### 6.3 跳出惯性逻辑思维
-
-其实挺多研发在测试自己开发完成的功能时，经常拍拍胸部说没问题，也确实没测出问题，但是一旦进入测试环节被测试同学接手，几十条用例一过甚至能测出七八个问题，很大一部分原因就是研发在思考问题上没跳出惯性思维。
-
-我用什么逻辑去实现它，于是我就惯性思维按照这个逻辑流程去测试它，流程在自己心中是符合预期的，自然测试出来的结果也是符合预期的。而测试同学在测试时是不知道你代码怎么写的，ta 们往往不受这个思维限制，所以能很轻松的测出、复现出你的问题。
-
-这里的惯性思维比如，不考逻辑的虑边界情况，例如值为空的情况，值类型不符合预期的情况，超出极限长度对于样式的影响，功能的压力测试等等，我们在写代码以及测试功能时都需要考虑，这不仅能让你的代码有更好的健壮性，在测试上也会少出问题（扯的有点远了），同理在复现一个问题时，不要本能用你的惯性思维。
-
-### 6.4 主动模拟更差的代码运行环境
-
-永远不要在一个很理想的的开发环境去复现测试或者客户反馈的问题，客户的电脑配置一般都比你差，特别你用 mac 的情况，那因为操作系统不同加上你的性能更好，很多问题你复现不了那都很正常，毕竟像一些事业编单位，win7 系统恨不得都给你整出来，那这时候客户给你反馈问题了，你拿你 mac 简单测测然后复现不了，说没问题没问题，所以主动降低自己的环境配置就很重要，这里的降低分为两种：
-
-当你怀疑 bug 跟接口请求有关系，比如 loading 异常，接口先发后至等等，你都可以主动降低网速，我们可以打开 performance，选择 network ，这里可以直接选择快慢 3G ，当然如果你觉得这个都不够，你可以点击 Add ，在这里自己配置上传和下载网速，比如你想模拟断网，直接设置两个 0kb 即可。需要注意的是，在模拟过程你必须打开控制台，如果你关闭了就不生效了。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc576c31df1747d1aefa6eb2696a2adf~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-网络设置在 network 其实也有这个开关，效果一样，随便你设置哪里都行。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7bfa1a4eb7804a7fa3aba72b6eae111a~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-而对于性能问题，比如用户说加载缓慢，电脑开项目感觉很卡，这时候除了接口，你还能主动降低电脑 CPU，同样还是 performance，选择降低六倍即可。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/808528abe1b245a49643ece7069bc393~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-# 七、排查思路，提出猜想
-
-我们从前期排查到信息搜集再到复现技巧，如果前面这些过程都没能帮你解决问题，那说明现在这个 bug 已经顺利摆在你面前了，现在你需要根据现有信息来解决这个问题，那么接下来我们来理解一些我以前经常使用也可能对你适用的排查思路。
-
-### 7.1 分支对比法
-
-如果一个功能之前没问题，但现在出现了 bug，且逻辑并不是你所写，这种问题在一开始接手确实很难下手，分支对比法是一种你不需要完全理解业务，起手比较粗糙但是非常有效的排查方法。
-
-分支对比的目的有两个，一是你能利用旧分支理解这个功能正确时是什么样子，这个感觉是视觉和体验上的直观，不需要看代码就能明白，在知道正确的表现后，你才好基于现在不正确的现象提出猜想，可能是数据问题？可能是交互异常？它能帮你先理解问题的大概原因，这比你一开始就立马想着看代码要高效的多。
-
-第二个目的就是真的去对比代码了，查下 commit 提交记录，对比文件代码改动差异等等，变化量一般就是问题出现的可能原因，加上对比过程中其实你脑子里也在印证之前的猜想，我用这种方法排查过很多问题，而且我都不是一开始就埋头去读代码。
-
-注释代码缩小范围，比如性能问题，注释，比如某个功能数据有问题，注释
-
-### 7.2 代码注释法
-
-在一些你已经确定 bug 所在的大致流程，但是不确定具体代码的时候，代码注释就跟二分法一样，能快速帮你切割缩小问题代码的范围，比如一些数据流问题或者性能问题，注释某一行代码，观察问题是否存在，如果存在继续往前注释，从多个文件缩小到某一个文件，从某个几千行代码的文件缩小到某个方法体内，非常管用。
-
-打个比方，现在业务有一个性能问题，根据问题表象我知道大概是哪一块的功能，根据经验我可能找到一个可能的组件，上手就先把这个组件的 return 注释掉，替换成一个最基础的 `<div>111</div>`，之后再观察问题在不在，如果在，那说明性能问题的代码在这个组件之上，继续往上找，如果不在，那说明问题代码在子组件中，接下的思路应该往下看，代码注释可以说是又笨又好用的方法，比你一行行 debug 块太多了。
-
-### 7.3 理解业务、原理，提出猜想
-
-如果一个问题，当你连猜想都提不出时，只能说明你对于问题不够了解，这是我两年前从一位架构师身上学来的道理。
-
-比如一个问题你接手，别人问你对这个问题有什么看法，你发现连个猜想都提不出来，或者某个问题的现象你真的无法解释，推进不下去，那这个时候你就得沉下心来好好去理解问题所在的业务，深挖问题表象下的原理，不跨过这一关浮于表面，一直纠结为什么为什么，时间过去了你还是一样给不出一个合理解释。
-
-我曾经接手过一个这样的问题，之前公司的项目应该是对滚动条做了统一美化，要么展示细长的滚动条，要么就是不展示滚动条。因为 UI 上统一，用户看到内容展示不全，心理默认就知道这里可能滚动了，但是有个功能的内容横轴展示不全，笔记本用户可能还好，触摸板左右拖动就行，但是你让 Windows PC 用户怎么玩，鼠标滚轮默认只能上下滚动，用户又不能横着滚，所以这个问题就是让我把这块的滚动条放出来。
-
-没错，就是这么简单的一个客户反馈，我搞了一下午都没解决.....因为在我潜意识里，滚动条应该就是被隐藏了（透明，或者没有宽度），添加显示的代码，主动添加宽高，然后加一些美化让它与展示的地方一致应该就能顺利解决，但是这些代码都加上了，我发现代码好像根本就没生效，因为我怎么改都看不到滚动条！！这直接颠覆了我的认知了，因为这类问题都是这么解决的啊，无奈我就抱着电脑去找了前端负责人（前端巨佬），把我所遇到的问题阐述了一遍，没想到他直接也懵了，不过他对了说了一句这样的话，当你对一个问题非常疑惑的时候，那说明你不够了解它，这时候你就应该去补充对应的知识，而不是继续盲目的尝试。
-
-对，就是他这句话，我意识到我可能完全陷入到自己的思维误区了，不止是我，不止是这一个问题，这真的太常见了，**人习惯用已有的经验或者知识来解决问题，当行不通时我们更多会本能诧异这不应该，这不太可能，很少会想到自己的经验或者知识是否一开始就是错的，否定自己或者意识到这一点真的很难，不是吗？** 。
-
-于是我去 MDN 查了下滚动条属性，才意识到我眼睛所谓的看不到其实是错的，滚动条的颜色，宽高都是独立生效，我以为我看不到代码没生效，但其实它一直都在只是因为没设置背景色，而我就是被所谓的解决经验拖了一下午。
-
-这个问题我在后面记录了一篇文章，感兴趣可以看看 [如何修复被隐藏的滚动条，记一个看似简单的样式问题所引发的一系列思考。](https://link.juejin.cn?target=https%3A%2F%2Fwww.yuque.com%2Fecholun%2Flxnbz9%2Fthw152 "https://www.yuque.com/echolun/lxnbz9/thw152")
-
-所以在面对其它问题也是，如果一个问题你真的走不下去了，思路全断，现在要做的不是抱怨或者无意义的尝试，去补充对应的知识，去真的理解业务，沉进去，你才可能发现问题真正的原因。
-
-# 八、案例分析（跟着我的思路走）
-
-接下来来分享一个案例，前段时间处理了一个 zoom 机器人入会失败的问题，正好演示下整个问题的分析过程。首先说下，我在此之前从未接触过这个业务，也不知道 zoom 参会的原理，所以符合排查一个你完全不了解的领域问题的场景，这个问题面前我们完全平等。
-
-### 8.1 问题现状：
-
-先解释下功能，现在就是有一个基于 zoom sdk 实现的机器人参加 zoom 会议的功能，假设 B 开启了 zoom 会议，现在邀请 A 来参会，如果 A 没空，那么 A 通过这个功能输入会议链接，点击参会，这时候代码逻辑会派遣一个机器人（真人参会也是数据，用数据模拟一个“人”就好了）去参会，然后对会议过程做记录和转写，这样 A 即使不在也能记录整个会议过程。
-
-关于参会的大概过程我顺带也说下，用户输入参会链接后，页面会**先进入 zoom 等候室**，这个界面用于你设置是否启动摄像头音频，点击入会后会**跳转到是否音频入会的页面**（第二个页面），这个页面有个电脑音频是否自动参会设置，假设你设置了电脑音频自动参会，那么之后你再从等候室进入页面 2，zoom 会自动基于页面 2 跳转到会议室。
-
-如果你没设置电脑音频自动入会那么跳到页面 2 则会弹出一个电脑音频入会的按钮，你需要点击按钮后才能入会（如下图）。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/335ce4de6aa04bf5a26b304b684003f8~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-但现在有一个偶现 bug ，派遣机器人参会后一定概率会参会失败，这个问题在线上 5 次可能失败 3 次，即使增加了 retry 机制都不行，而这个入会过程如果在本地尝试可以百分百成功，这是最头疼的。
-
-关于 retry 机制：我们默认启动了音频自动入会，假设过几秒还在这个页面，脚本会尝试获取这个按钮的元素，并执行 click 事件，假设尝试多次还不能成功则会完整刷新页面，再走自动入会以及点击按钮的逻辑。
-
-因为后端已经提前排查过了，这次也是希望站在前端视角能不能给一些建议和猜想。
-
-### 8.2 现有线索与现象
-
-我能掌握的线索包括一份 zoom sdK 源码，可以本地跑起来，但是无法复现问题，降低网速，故意模拟一些极端情况都尝试过，都是徒劳。
-
-两份后台日志，一份成功入会的日志，一份入会失败的日志，日志内容都是通信过程（如下图，都是一些 zoom 的事件派发）。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d1457316250c42689bd97b8dfe06f098~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-现在你跟我拥有相同的信息，那么你接下来要怎么切入这个问题？
-
-### 8.3 猜想与验证过程
-
-##### a.是否是按钮获取失败了？
-
-一开始我就考虑过这种情况，但是后续发现只要没设置电脑音频自动入会，过几秒按钮会自动弹出，外加上 retry 机制，所以不可能拿不到，这种情况直接排除（本地复现也从未出现按钮未弹出的情况）。
-
-##### b.是否因网络波动导致 websocket 断连？
-
-在前面信息搜集时发现整个入会过程控制台一个接口信息都没有，所以基本确定入会采用了 websocket 通信，很自然的就会怀疑是否跟网络波动有关导致的 websocket 断连，我在后续故意模拟网络差以及降低性能的情况，以及多次重复入会的操作，结果一次都没成功。
-
-后续有一次我从等候室进入到音频加入的界面，之后挂机跟同事聊一些额外猜想去了，大约过了十五分钟左右回来发现我点击音频入会按钮真进不去，而且控制台出现了 websocket 链接失败的报错，不过这只是一次偶现，大概线上问题有极少部分情况可能真的与网络波动断连有关，但这也不足以解释核心问题。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4c88731fe96c457e8e2e9e4d38fa6642~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-##### c.是否是用户信息获取失败导致入会失败？
-
-我尝试在错误日志中搜索了 error 字段，看看有没有什么报错信息，唯一就看到了一个 `userRole` 获取不到的报错，所以也有了个是否人员信息或许不到导致入会失败的猜想。于是我基于 sdk 源码尝试去搜了下相关的逻辑，遗憾的时候我发现这个字段是个只读字段，尝试跟踪此字段相关的逻辑，全程都是作为数据在被传递，并未有任何加工，所以跟这个可能关系不大。其实到这里，现有线索以及猜测就全部断了。
-
-##### d.观察 websocket 通信
-
-之后由于我无法再提出更多猜想，所以接下来就只能从源码入手了，只有再知晓了 zoom 入会的过程，我才好基于过程再提出可能得假象，源码其实都可以先别急着读，我第一想法是先观察 zoom 入会时 websocket 的通信过程到底是什么样的。于是我打开控制台，反复的入会观察通信，初步确认了在入会成功时，客户端会发送一条 `audioConnectionStatus` 更新的通知，表示状态需要从 1 变更为 2 ，如下图：
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f365e780fc1e48db8d2ced97a40486dd~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-这个关键点知道了，源码就好切入了，于是我运行项目直接查找 `audioConnectionStatus` 也成功定位到了音频入会事件派发源码的地方，那么接下来通过这个节点分别向上以及向下阅读源码，从而理解整个通信过程就非常简单了。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fb14475c0f204c6280b71c26cd7396fd~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-##### e.skd 源码分析以及过程猜想
-
-源码阅读因为比较枯燥，这里直接汇总当时我在源码中的发现以及新的猜想：
-
-在点击 `Join Audio by Computer` 按钮后，客户端需要先派发一个事件通知到 zoom 服务端（上图），表示我现在要音频入会，所以需要将 `audioConnectionStatus` 从 1 改为 2。关于 `audioConnectionStatus` 的状态说明：
-
-- 0：还没入会
-- 1：人入会了，但是音频还没入会
-- 2：音频也入会了
-
-服务端收到 `audioConnectionStatus` 变更的通知，确认成功后再推送一个消息到客户端，双方确认后没问题，此时音频正式入会，下图是 websocket 通信截图。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c111fb1610644286a0449de57e59a74e~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-我又对比了后端同学给我的两份日志，确实在成功中发现了跟上面提到的 websocket 通信完全相同的过程；而在失败日志中，我没找到 `audioConnectionStatus` 由 1 到 2 的通知，所以按钮点不了很正常，因为这部分通信缺失了。
-
-关于缺失我有三个猜想：
-
-- 猜想一，可能会有少部分 websocket 通信断开的情况，这时候前端和服务端没办法再通信，怎么点按钮都没用（前面提到我复现过 1 次）。
-- 猜想二，链接其实就没断开，但是点击加入音频时，前端 `audioConnectionStatus` 的状态是错的，一直在发 1 到服务端（正确预期是发送一个 2 给后端表示现在要音频入会）。
-- 猜想三，`audioConnectionStatus` 这个字段只要点击按钮默认就传递 2 过去，不会受其它任何因素影响，但因为 script 脚本错误导致并没有成功走到事件发送这一步（逻辑断了导致状态更新 2 的事件没派发成功）。
-
-针对于猜想二，我的想法是这个 `audioConnectionStatus` 是不是只要点了音频加入就一定给个 2 ，还是会受其它影响，然后我去看了下 SDK 源码，确认了这里只要条件符合一定会给 2 ，这个 2 是一个常量，所以它不可能被篡改。
-
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/484754d05a1f4a5bb88b6be64cb953c2~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
-
-但有趣的是，虽然是常量，但其实它还是依赖不同条件派发不同 `audioConnectionStatus` 的值，这里我通过 GPT 反编译了上图中被压缩的代码：
-
-（我的 prompt 为：这是一段 zoom sdk 前端源码，请帮我编译成 react 未压缩的格式，以及补充对应的注释）
-
-```scss
-scss 代码解读const handleAudioConnectionStatusChange = (isConnecting, currentUserOverride = null) => {
-  return (dispatch, getState) => {
-    const state = getState();
-    const showInviteDialog = state.meetingUI.showInviteDialog;
-    let currentUser = state.meeting.currentUser;
-    const lastSentAudioConnectionStatus = state.audio.lastSentAudioConnectionStatus;
-​
-    // If invite dialog is active, hide it
-    if (isConnecting && showInviteDialog) {
-      dispatch({
-        type: SET_SHOW_INVITE_DIALOG,
-        showInviteDialog: false
+# 一、问题背景
+
+目前，在我们的项目中通常会使用各种各样的埋点和监控来收集页面访问的信息，例如点击埋点、PV 埋点等，这些埋点数据能够反应绝大部分的用户行为，但是对于一些关注上下文的使用场景而言这些埋点是不够的。
+
+- 对于**产品**而言，通过点击或 PV 埋点来判断功能的使用情况有时候不够的，通常需要知道用户的真实使用路径以判断用户使用是否与功能设计所预想的保持一致，从而能够更好地分析用户使用情况并进一步优化和推广。
+- 对于**开发**而言，当我们收到系统异常通知的时候，监控系统只能告诉你系统出现了错误，但是不能给出错误的复现路径，对于稳定复现的错误而言还好，但对于偶发错误或复现路径隐藏较深的场景我们就较难去解决问题。
+- 对于**测试**而言，用户反馈线上 bug 的时候，首先需要知道的就是通过什么操作触发了这个问题，有时候用户自己可能也无法二次复现，这样的错误我们也无法通过埋点的数据去推导上下文，因此就会产生较大的沟通成本，在执行测试计划反馈 bug 时同理。
+- ......
+
+![Untitled.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/da3598fe4fcb461e89634bfc8ee4d8a0~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1955&h=305&s=14071&e=png&a=1&b=d5e8d4)
+
+因此，我们需要一种手段来获取用户某一时段连续的操作行为，也就是**录制用户行为**，包括整个会话中的每一个点击、滑动、输入等行为，同时支持回放录制的操作行为，完整且真实地重现用户行为以帮助我们回溯或分析某些使用场景。
+
+# **二、技术方案**
+
+### **2.1 视频录制**
+
+录制用户行为最容易想到的就是将屏幕操作通过视频的方式录制下来，目前浏览器本身已经提供了一套基于音视轨的实时数据流传输方案 [WebRTC](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FWebRTC_API "https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API")（Web Real-Time Communications），在我们的录屏使用场景主要关注以下几个 API：
+
+- [getDisplayMedia()](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FMediaDevices%2FgetUserMedia "https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia") - 提示用户给予使用媒体输入的许可从而获取屏幕的流；
+- [MediaRecorder()](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FMediaRecorder%2FMediaRecorder "https://developer.mozilla.org/zh-CN/docs/Web/API/MediaRecorder/MediaRecorder") - 生成对指定的媒体流进行录制的 MediaRecorder 对象；
+- [ondataavailable](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FMediaRecorder%2Fdataavailable_event "https://developer.mozilla.org/zh-CN/docs/Web/API/MediaRecorder/dataavailable_event") - 当 MediaRecorder 将媒体数据传递到应用程序以供使用时将触发该事件；
+
+整体录制流程如下：
+
+1. 调用`mediaDevices.getDisplayMedia()`由用户授权选择屏幕进行录制，获取到数据流；
+2. 生成一个`new MediaRecorder()`对象录制获取的屏幕的数据流；
+3. 在 MediaRecorder 对象上设置`ondataavailable`监听事件用于获取录制的 Blob 数据。
+
+```html
+代码解读<template>
+  <video ref="playerRef"></video>
+  <button @click="handleStart">开启录制</button>
+  <button @click="handlePause">暂停录制</button>
+  <button @click="handleResume">继续录制</button>
+  <button @click="handleStop">结束录制</button>
+  <button @click="handleReplay">播放录制</button>
+  <button @click="handleReset">重置内容</button>
+</template>
+
+<script lang="ts" setup>
+  import { ref, reactive } from "vue";
+
+  const playerRef = ref();
+  const state = reactive({
+    mediaRecorder: null as null | MediaRecorder,
+    blobs: [] as Blob[],
+  });
+
+  // 开始录制
+  const handleStart = async () => {
+    const stream = await navigator.mediaDevices.getDisplayMedia();
+    state.mediaRecorder = new MediaRecorder(stream, {
+      mimeType: "video/webm",
+    });
+    state.mediaRecorder.addEventListener("dataavailable", (e: BlobEvent) => {
+      state.blobs.push(e.data);
+    });
+    state.mediaRecorder?.start();
+  };
+  // canvas录制(特殊处理)
+  const handleCanvasRecord = () => {
+    const stream = canvas.captureStream(60); // 60 FPS recording
+    const recorder = new MediaRecorder(stream, {
+      mimeType: "video/webm;codecs=vp9",
+    });
+    recorder.ondataavailable = (e) => {
+      state.blobs.push(e.data);
+    };
+  };
+  // 暂停录制
+  const handlePause = () => {
+    state.mediaRecorder?.pause();
+  };
+  // 继续录制
+  const handleResume = () => {
+    state.mediaRecorder?.resume();
+  };
+  // 停止录制
+  const handleStop = () => {
+    state.mediaRecorder?.stop();
+  };
+  // 播放录制
+  const handleReplay = () => {
+    if (state.blobs.length === 0 || !playerRef.value) return;
+    const blob = new Blob(state.blobs, { type: "video/webm" });
+    playerRef.value.src = URL.createObjectURL(blob);
+    playerRef.value.play();
+  };
+
+  const handleReset = () => {
+    state.blobs = [];
+    state.mediaRecorder = null;
+    playerRef.value.src = null;
+  };
+  const handleDownload = () => {
+    if (state.blobs.length === 0) return;
+    const blob = new Blob(state.blobs, { type: "video/webm" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.style.display = "none";
+    a.download = "record.webm";
+    a.click();
+  };
+</script>
+```
+
+![Untitled 1.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7c4204442dc649d8af7027d85652bbcd~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=3582&h=2118&s=1544515&e=png&b=fcfcfc)
+
+尽管浏览器原生提供了这样既简单又实用的屏幕录制解决方案，但在我们实际应用场景中仍旧有非常多的问题：
+
+1. **由用户感知并控制**：通过 WebRTC 提供的 API 所实现的用户行为录制在开始录制前会通过弹窗来让用户完成对所需录制屏幕的授权，所有的录制行为均由用户自主控制，这种让用户感知到系统录制的方式对于我们预期的使用而言是不合适的，我们预期的录制行为对于用户而言应该是无感的，这种技术方案更适用于类似啄木鸟这种反馈系统由用户主动上报问题的场景或者考试系统屏幕监控、在线面试屏幕共享等等。
+2. **录制数据无法脱敏**：视频录制过程中直接就将整个页面的内容录制下来，对于一些敏感的数据同样也会直接录制下来，在录制的过程中我们无法进行脱敏，这对于一些数据安全要求比较高或者涉及用户隐私的场景就不适用了。
+3. **WebRTC 兼容性**：在实现录制过程中使用的几个 WebRTC API 都具有一定的兼容性要求，不同的浏览器的支持情况各不相同，具体可进行相应的[兼容性查询](https://link.juejin.cn?target=https%3A%2F%2Fcaniuse.com%2F "https://caniuse.com/")。
+
+### 2.2 页面截图
+
+众所周知，视频是由一帧帧的画面组合而成的，因此我们可以按照一定时间间隔来截图的方式保存当前页面快照，然后将快照按照相同的截取速度播放形成视频就能实现用户行为录制了。最常用的截图方法就是以 [html2canvas](https://link.juejin.cn?target=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fhtml2canvas "https://www.npmjs.com/package/html2canvas") 库为代表的 canvas 截图，我们在使用过程中也发现了较多问题：
+
+1. canvas 截图有较多局限之处，例如无法绘制动画、样式错位、[不支持部分 CSS 样式](https://link.juejin.cn?target=https%3A%2F%2Fhtml2canvas.hertzen.com%2Ffeatures "https://html2canvas.hertzen.com/features")等；
+2. 截图性能开销较大，可能会导致掉帧，例如我们在尝试中 css 动画有非常明显的卡顿等；
+3. 截图资源体积大，我们尝试中截图时单张图片体积为 200k 左右，以 24 帧来算一分钟录制的图片体积将近 300MB，对带宽和资源存储都是浪费；
+4. 在需要忽略的元素上增加 data-html2canvas-ignore 属性或者设置 ignoreElements 属性删除特定元素可以对某些特定数据或内容进行脱敏，但会直接删除元素无法做到“有占位但无内容”效果，影响页面布局。
+
+```html
+代码解读<template>
+  <el-button @click="handleStart">开启录制</el-button>
+  <el-button @click="handleStop">停止录制</el-button>
+  <el-button @click="handleReplay">播放录制</el-button>
+  <img :src="state.imgs[state.num ?? 0]" />
+</template>
+
+<script lang="ts" setup>
+  import { reactive } from "vue";
+  import html2canvas from "html2canvas";
+
+  const state = reactive({
+    visible: false,
+    imgs: [] as string[],
+    num: 0,
+    recordInterval: null as any,
+    replayInterval: null as any,
+  });
+
+  const FPS = 30;
+  const interval = 1000 / FPS;
+  const handleStart = async () => {
+    handleReset();
+    state.recordInterval = setInterval(() => {
+      if (state.imgs.length > 100) {
+        handleStop();
+        return;
+      }
+      html2canvas(document.body).then((canvas: any) => {
+        const img = canvas.toDataURL();
+        state.imgs.push(img);
       });
-    }
-​
-    // If currentUserOverride is provided, use it instead of the current user
-    if (currentUserOverride) {
-      currentUser = currentUserOverride;
-    }
-​
-    // Update audio connection status and broadcast to other participants
-    if (isConnecting && !isEmpty(currentUser)) {
-      // 注意观察这里的派发，前面的图片解释了这几个常量的意思，这里的 CONNECTING 是 1
-      dispatch(updateAudioConnectionStatus(lastSentAudioConnectionStatus, AudioConnectionStatus.CONNECTING));
-    } else if (!isConnecting && isEmpty(currentUser)) {
-      // 这里的 CONNECT_SUCCESS 状态是 2，也就是我们期望的状态
-      dispatch(updateAudioConnectionStatus(lastSentAudioConnectionStatus, AudioConnectionStatus.CONNECT_SUCCESS));
-    } else if (!isConnecting && !isEmpty(currentUser)) {
-      dispatch(updateAudioConnectionStatus(lastSentAudioConnectionStatus, AudioConnectionStatus.CONNECT_FAIL));
-    }
-​
-    // Finally, dispatch an action indicating that audio connection has changed
-    dispatch(setIsAudioConnected(isConnecting));
-  }
-}
+    }, interval);
+  };
+
+  const handleStop = () => {
+    state.recordInterval && clearInterval(state.recordInterval);
+  };
+
+  const handleReplay = async () => {
+    state.recordInterval && clearInterval(state.recordInterval);
+    state.num = 0;
+    state.visible = true;
+    state.replayInterval = setInterval(() => {
+      if (state.num >= state.imgs.length - 1) {
+        clearInterval(state.replayInterval);
+        return;
+      }
+      state.num++;
+    }, interval);
+  };
+
+  const handleReset = () => {
+    state.imgs = [];
+    state.recordInterval = null;
+    state.replayInterval = null;
+    state.num = 0;
+  };
+</script>
 ```
 
-这就验证了猜想 2 和猜想 3 ，虽然是常量，但其实 sdk 会根据不同情况派发 1 和 2 到服务端，现在问题就是，是什么导致了一直点击入会按钮，但是一直发状态 1，于是线索又来到了代码中的`isConnecting`与`isEmpty(currentUser)` ，我觉得这段逻辑很奇怪，为什么只有`isConnecting` 为`false`，且`isEmpty(currentUser)` 为`true`才会派发 2（当前用户为空才让入会成功？感觉怪怪的） ，这个就得再投入到源码中去跟踪了。
+| 实际内容                                                                                                                                                                                  | 截图效果                                                                                                                                                                                  |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![Untitled 2.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5118595c95054a39aecfb443e5bf2636~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=3584&h=2018&s=546007&e=png&b=ffffff) | ![Untitled 3.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d3f4b2c1b4284d0db03770d0bf01e62e~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=3584&h=2018&s=239956&e=png&b=ffffff) |
 
-（大概又读了几个小时源码....）
+### **2.3 Dom 快照录制**
 
-重新梳理了下 `Join Audio by Computer` 点击到加入音频成功的整个过程，先说结论，音频入会过程中必须要获取到用户信息，不然不可能音频入会成功。 点击音频入会按钮后客户端大致会有 3 个派发：
+每一个瞬间我们看到的页面都是浏览器当前渲染的 DOM 节点，那么我们完全可以将 DOM 节点保存下来，并持续记录 DOM 节点的变化，然后再将记录的 DOM 节点数据通过浏览器渲染回放，这样即可实现用户行为录制的需求。整个思路非常简单，但具体实现起来是非常复杂的事情，我们需要考虑 DOM 节点数据如何保存、如何捕获用户行为并记录 DOM 节点变换和如何将记录的数据在浏览器上回放出来等。所幸当前社区已经有非常成熟的库，也就是 [rrweb](https://link.juejin.cn?target=https%3A%2F%2Fwww.rrweb.io%2F "https://www.rrweb.io/")（record and replay the web）🎉
 
-1. **UPDATE_CURRENT_USER**：通知服务端进行人员信息更新，但这个用户信息也是用户一入会 zoom 服务端就提前通知给客户端的，并不是客户端自己组装的数据。
-2. **WS_AUDIO_VOIP_JOIN_CHANNEL_REQ**：更新 `audioConnectionStatus` 的派发，正常情况是由 1 到 2。
-3. **SET_JOIN_AUDIO_DIALOG_VISIBLE**：关闭按钮展示的弹窗，整个音频入会基本就算结束了（关闭音频加入会议这个页面的弹窗）。
+rrweb 主要由 3 部分组成：
 
-前面我提到派发 `audioConnectionStatus` 1 还是 2 跟 `isConnecting` 与 `isEmpty(currentUser)` 两个属性有关，这块逻辑我详细读了源码，`isConnecting`属性也是个常量，一定是 `false`，只要第一个派发能正常走，那这个就是 `false`，如下：
+1. [rrweb-snapshot](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Frrweb-io%2Frrweb%2Ftree%2Fmaster%2Fpackages%2Frrweb-snapshot%2F "https://github.com/rrweb-io/rrweb/tree/master/packages/rrweb-snapshot/")，包含 snapshot 和 rebuild 两部分，snapshot 用于将 DOM 及其状态转化为可序列化的数据结构并添加唯一标识，rebuild 是将 snapshot 记录的数据结构重建为对应 DOM。
+2. [rrweb](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Frrweb-io%2Frrweb "https://github.com/rrweb-io/rrweb")，包含 record 和 replay 两个功能，record 用于记录 DOM 中的所有变更，replay 则是将记录的变更按照对应的时间一一重放。
+3. [rrweb-player](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Frrweb-io%2Frrweb%2Ftree%2Fmaster%2Fpackages%2Frrweb-player%2F "https://github.com/rrweb-io/rrweb/tree/master/packages/rrweb-player/")，为 rrweb 提供一套 UI 控件，提供基于 GUI 的暂停、快进、拖拽至任意时间点播放等功能。
 
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d16077498c634602b9cc91ce15f6c1a7~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+![Untitled 4.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5c837f24b84d444db31b8941d2df4021~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1822&h=602&s=18559&e=png&a=1&b=fdf2f2)
 
-所以到这里嫌疑就只能是跟`isEmpty(currentUser)` 有关，我还纳闷这个用户信息为空才派发 2 ，GPT 其实给我编译错了（还是不能盲目相信 gpt），阅读了`isEmpty(currentUser)` 这个方法内部的逻辑的源码，才理解其实这个方法预期还是希望用户不能为空，这样这个方法的结果才能返回是 true，如下：
+**录制过程**
 
-```scss
-scss 代码解读function V(e) {
-  // 用户不能为空，且入会设备只能是手机或者电脑，且具备入会权限
-  return !o().isEmpty(e) && ("phone" === e.audio || "computer" === e.audio && s.AK.getJoinVoIPTimes() > 0)
-}
+rrweb 在录制时会首先进行首屏 DOM 快照，遍历整个页面的 DOM Tree 并通过 nodeType 映射转换为 JSON 结构数据。针对不同 [nodeType](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FNode%2FnodeType "https://developer.mozilla.org/zh-CN/docs/Web/API/Node/nodeType") 类型的节点类型的序列化操作具有非常多的细节，如想了解细节可阅读这部分[源码](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Frrweb-io%2Frrweb%2Fblob%2Fmaster%2Fpackages%2Frrweb-snapshot%2Fsrc%2Fsnapshot.ts%23L430 "https://github.com/rrweb-io/rrweb/blob/master/packages/rrweb-snapshot/src/snapshot.ts#L430")。全量快照数据示例如下：
+
+![Untitled 10.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ec7247b8906e40538dfe72e219b43a93~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1630&h=1448&s=634306&e=png&b=fdfdfd)
+
+在获取首屏全量快照之后，我们就需要监听各类变动以获取增量的数据，增量改变的数据也需要同步转换为 JSON 数据进行存储。对于增量数据更新，则是通过 [mutationObserver](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FMutationObserver "https://developer.mozilla.org/zh-CN/docs/Web/API/MutationObserver") 获取 DOM 增量变化，以及通过全局事件监听、事件（属性）代理的方式进行方法（属性）劫持，并将劫持到的增量变化数据存入 JSON 数据中。针对不同类型的变动有这不同的监听处理方式，如想了解细节可阅读这部分[源码](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Frrweb-io%2Frrweb%2Fblob%2Fmaster%2Fpackages%2Frrweb%2Fsrc%2Frecord%2Fobserver.ts%23L1278 "https://github.com/rrweb-io/rrweb/blob/master/packages/rrweb/src/record/observer.ts#L1278")。
+
+**回放过程**
+
+回放主要就是将录制过程中的全量快照和增量快照进行重建复原，那么为保证一个安全可靠的环境在回放时我们不应该执行被录制页面中的 JavaScript，在重建快照的过程中通过 script 标签改写为 noscript 标签和 dom 重建在 iframe 中并设置 [sandbox](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FHTML%2FElement%2Fiframe "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/iframe") 属性等手段来构建安全可靠的沙盒环境。在沙盒环境中，首先需要对首屏 DOM 快照进行重建，遍历 JSON 产物的同时通过自定义 type 映射到不同的节点构建方法以重建首屏 DOM 结构，然后 rrweb 内部则根据不同的增量类型调用不同的函数在页面对增量数据进行展现。同时，播放时通过录制产生的时间戳来保证回放顺序，通过 Node id 作用至指定的 DOM 节点，通过 requestAnimationFrame 保证页面播放流畅度。
+
+> rrweb 实现原理可参考以下相关资料以及[源码/官方文档](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Frrweb-io%2Frrweb%2Ftree%2Fmaster "https://github.com/rrweb-io/rrweb/tree/master")：
+>
+> - [rrweb：打开 web 页面录制与回放的黑盒子 - 知乎](https://link.juejin.cn?target=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F60639266 "https://zhuanlan.zhihu.com/p/60639266")
+> - [神策数据王磊：如何用 JS 实现页面录制与回放 - 掘金](https://juejin.cn/post/6963585876492288031 "https://juejin.cn/post/6963585876492288031")
+> - [rrweb 录屏原理浅析 - 掘金](https://juejin.cn/post/7071925342138531853 "https://juejin.cn/post/7071925342138531853")
+> - [rrweb 实现原理介绍 - 微信公众号](https://link.juejin.cn?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2F5RUjvKOBjqX5Btrse-C3Jg "https://mp.weixin.qq.com/s/5RUjvKOBjqX5Btrse-C3Jg")
+> - [rrweb 带你还原问题现场 - 云音乐大前端](https://link.juejin.cn?target=https%3A%2F%2Fmusicfe.com%2Frrweb%2F "https://musicfe.com/rrweb/")
+
+```html
+代码解读<template>
+  <button @click="handleStart">开启录制</button>
+  <button @click="handleStop">结束录制</button>
+  <button @click="handleReplay">播放录制</button>
+  <div class="replay" ref="replayRef"></div>
+</template>
+
+<script lang="ts" setup>
+  import { reactive, ref } from "vue";
+  import * as rrweb from "rrweb";
+  import rrwebPlayer from "rrweb-player";
+  import "rrweb-player/dist/style.css";
+
+  const replayRef = ref();
+  const state = reactive({
+    events: [] as any[],
+    stopFn: null as any,
+  });
+
+  const handleStart = () => {
+    state.stopFn = rrweb.record({
+      emit(event) {
+        if (state.events.length > 100) {
+          // 当事件数量大于 100 时停止录制
+          handleStop();
+        } else {
+          state.events.push(event);
+        }
+      },
+    });
+    ElMessage("开始录制");
+  };
+
+  const handleStop = () => {
+    state.stopFn?.();
+    ElMessage("已停止录制");
+  };
+
+  const handleReplay = () => {
+    new rrwebPlayer({
+      target: replayRef.value, // 可以自定义 DOM 元素
+      // 配置项
+      props: {
+        events: state.events,
+      },
+    });
+  };
+</script>
 ```
 
-- !o().isEmpty(e)：这里的 e 就是用户信息（我们所谓的机器人入会，这里的机器人身份就是 computer ），前面取反，表示用户信息必须不能为空。
+![Untitled.gif](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/519fe2915c8f4d408baa32ed3c95b47f~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=2132&h=1560&s=2846938&e=gif&f=167&b=fcfcfc)
 
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2a1c1679a5d94a6f9780ea46c6e7acd3~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+![Untitled 5.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f77862a4b5584fd9874b2ca6acbe1327~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=3504&h=1950&s=1270187&e=png&b=fcfcfc)
 
-- “phone” === e.audio || “computer” === e.audio：设备只能是手机或者电脑
-- s.AK.getJoinVoIPTimes() > 0：用于检查当前用户是否具有通过计算机连接音频的权限，正常情况下取值是 1，也就是 true。
+**从效果上来讲**，rrweb 录制内容存储了完整的页面结构能够较好地还原页面的整个操作，并且 rrweb 录制无损录制具有较好的清晰度，不像视频录制和页面截图需要考虑分辨率与产物大小的问题，同时也不像 canvas 截图一样对内容和样式有较大的局限性使得部分页面内容无法录制。
 
-总结来说，`!isConnecting && isEmpty(currentUser)`这一段判断，由于`isConnecting`一直是 false 所以前半段一定为真，`isEmpty(currentUser)`这一段内部也是预期用户不能为空，
+**从性能上来讲**，rrweb 录制传输的内容为 JSON 数据并且只对用户操作内容作增量记录，当页面静默的时候不会有额外数据的记录，相比较视频录制和页面截图而言大大减少了最终产物的体积，减轻了数据传输的压力，同时也提高了录制的性能。
 
-派发 1 和 2 都会走这个方法，以上三个条件只要有一个为假，那么用户信息更新不会派发，且第二个派发 `audioConnectionStatus` 更新会一直是 1（失败的日志就是一直派发 1），但是前面我说了，用户信息一开始是服务端先给过来的，**所以现在怀疑用户信息是否一开始就没推送过来**，**之后无论怎么点击按钮都不可能入会成功。**
+**从功能上来讲**，rrweb 除了基础的录制回放功能之外，还具有较好的可扩展性和可操作性：
 
-##### f.错误日志与正确日志的信息对比
+- rrweb 录制得到的产物是 JSON 数据，还支持将 JSON 数据转成视频，工具[rrvideo](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Frrweb-io%2Frrweb%2Ftree%2Fmaster%2Fpackages%2Frrvideo "https://github.com/rrweb-io/rrweb/tree/master/packages/rrvideo")
+- 其允许通过配置来进行数据脱敏，不录制某些元素或屏蔽某些事件，详见[链接](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Frrweb-io%2Frrweb%2Fblob%2Fmaster%2Fguide.zh_CN.md%23%25E9%259A%2590%25E7%25A7%2581 "https://github.com/rrweb-io/rrweb/blob/master/guide.zh_CN.md#%E9%9A%90%E7%A7%81")
+- 其还提供了存储优化的策略以减少录制的数据量，详见[链接](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Frrweb-io%2Frrweb%2Fblob%2Fmaster%2Fdocs%2Frecipes%2Foptimize-storage.zh_CN.md "https://github.com/rrweb-io/rrweb/blob/master/docs/recipes/optimize-storage.zh_CN.md")
+- 其还支持自定义插件来进行扩展，详见[链接](https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Frrweb-io%2Frrweb%2Fblob%2Fmaster%2Fdocs%2Frecipes%2Fplugin.zh_CN.md "https://github.com/rrweb-io/rrweb/blob/master/docs/recipes/plugin.zh_CN.md")
 
-在前面的分析中，我怀疑还是 zoom 在一开始未成功推送用户信息到客户端，导致未成功派发状态 2 到服务端，我想到正好手上有两份日志，那就加上之前的理解，来逐步对比两份日志的过程，看看是不是缺少了用户信息的推送。
+### **2.4 方案对比**
 
-又过了几个小时，我结合日志又去对了下源码，过程中我分别使用了点击按钮音频入会以及 zoom 音频自动入会，并跟踪了两种入会方式下源码的执行，发现两种入会只有前部分会有少微差异，后面的派发都会走同一套逻辑，而后半段逻辑我们前面已经分析过了，过程中不存在变量的改动以及其它不可控的因素，那问题只可能是出现在自动入会逻辑执行之前，导致执行到自动入会逻辑时，判断没办法让客户端成功派发状态 2 到服务端，自动入会失败了即便有兜底的获取按钮点击入会的逻辑，那你在错误的前提下再怎么点击按钮，结果自然是完全没办法入会了。
+| 对比内容   | 视频录制             | 页面截图                 | Dom 快照录制              |
+| ---------- | -------------------- | ------------------------ | ------------------------- |
+| 开源库     | WebRTC 原生支持      | html2canvas              | rrweb                     |
+| 用户感知   | 录制有感             | 录制无感                 | 录制无感                  |
+| 产物大小   | 大                   | 大                       | 相对较小                  |
+| 兼容性     | 详见相关 API 兼容性  | 部分场景内容截图无法显示 | 兼容性相对较好            |
+| 可操作性   | 弱                   | 弱                       | 强（支持数据脱敏/加密等） |
+| 回放清晰度 | 录制时决定，有损录制 | 录制时决定，有损录制     | 高保真                    |
 
-于是我现在的注意力集中在了入会状态更新之前，经过多次的自动入会以及按钮点击入会时对于 websocket 的观察，我发现只要准备入会，客户端一定一条如下的信息派发到服务端：
+> 💡 **Dom 快照录制 - rrweb 库** 是目前最为流行的解决方案，一些商业化平台解决方案也都主要基于 rrweb 库来进行录制与回放的功能开发。但是，方案的选择不是绝对的，在不同的使用场景下选择合适的方案才是最重要的哦 (^\_-)
 
-```json
- 代码解读{"evt":8203,"body":{"bOn":true},"seq":13}
-```
+# **三、应用场景**
 
-**接着服务端会推动更新的用户名，用户 ID 到客户端**，客户端这边是会监听到此消息，然后根据不同类型做不同的处理，**当是更新用户，则会派发我们前面说的更新音频连接状态的消息到服务端，状态更新成功，音频就入会成功了**，这个过程可以看下图，**自动入会或者点击按钮入会我测试了很多次，四条发送四条响应，一定遵守这个通信过程**。
+在获取页面的录屏内容之后，这只是第一步，更重要的是我们能够利用这些录屏信息获取到什么信息，分析出什么内容？
 
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3ba2b47491734e56ba27bbf315f307dd~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+| #   | 应用场景       | 说明                                                                                                                                                                                                                                                          |
+| --- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | 产品功能分析   | 产品在功能的上线后仅通过点击或 PV 埋点来判断使用情况是不够的，更应该关注于一些关键页面/功能的真实使用场景，通过用户行为录制将用户的操作路径记录下来，通过回放种子用户的操作进行分析或利用算法对使用路径进行分析能够更好了解功能设计的情况，并帮助进一步优化。 |
+| 2   | 用户访谈记录   | 产品在对用户进行访谈时通过整理用户口述记录和回放访谈录音等方式来进行分析和研究，整体访谈的成本较高，信息利用率也较低，而通过用户行为录制记录下来访谈过程中用户真实的操作记录能够更好地帮助产品来回顾访谈用户的操作习惯。                                      |
+| 3   | 问题现场复现   | 解决问题第一步就需要复现问题，但有时候问题的复现操作是极其隐蔽的或者由于用户的使用环境等因素很难定位，通过录制用户行为来保存报错时刻的上下文使得我们能够更好地了解用户报错的操作，最大程度减少沟通和内容传递的成本。                                          |
+| 4   | 自动化测试用例 | 通常自动化测试用例的编写和维护都由人工手动来完成，成本相对比较高，后期维护也不方便，通过用户行为录制将录制的数据加以转换就可以更加快捷方便地进行测试用例的采集，同时也便于管理。                                                                              |
+| 5   | 其他           | 还有案例复盘、行为监控/监管、业务流程质检...                                                                                                                                                                                                                  |
 
-我对比了成功和失败的日志行为，成功日志的通信过程完全吻合。在失败日志中通过`“bOn”:true`发送的密集程度，还有`bOn`的初始化过程可以清晰分析出整个入会失败的过程。
+# 四、平台方案
 
-自动入会发起第一次请求，遗憾的是 zoom 服务器没响应，之后触自动捕获按钮并点击的行为，可以看到有大量的`"bOn":true`的发送（注意 id 8203），但是服务端还是没有正确的响应（没提供用户更新的信息回来），**客户端缺少了用户更新的响应就没法触发更新音频加入会议的派发**，这就是为什么最开始说好像这个入会按钮点不动的原因了。
+[Sentry 平台](https://link.juejin.cn?target=https%3A%2F%2Fdocs.sentry.io%2Fproduct%2Fsession-replay%2F "https://docs.sentry.io/product/session-replay/") 提供了录制与回放功能用于进行分析，其应用重点在于查看错误或性能问题发生之前、期间和之后的操作情况，其录制与回放功能同样基于 **rrweb 库**进行开发。
 
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/04a3d363a9f64b898b61b810e05c38d6~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+![Untitled 6.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b9b655f47bb24057bd4e0dde931c7859~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1440&h=900&s=259558&e=png&b=ffffff)
 
-（理解 zoom 入会过程后，你会发现日志完全是可读的，甚至能根据日志信息频率脑补出当时的场景）
+[Hotjar 平台](https://link.juejin.cn?target=https%3A%2F%2Fwww.hotjar.com%2F "https://www.hotjar.com/")提供了录制与回放功能用于进行分析，其除了录制与回放功能外，其提供了页面热力图等分析能力，以帮助用户更好地了解产品的情况，官方也提供了 [Demo](https://link.juejin.cn?target=https%3A%2F%2Finsights.hotjar.com%2Fsites%2F2327305%2Foverview "https://insights.hotjar.com/sites/2327305/overview") 可体验 。
 
-错误日志一共有四次 welcome to zoom 的日志信息，说明除了第一次自动入会，还有 3 次浏览器刷新（retry 机制，假设入会失败了就刷新浏览器，再尝试走自动入会以及获取按钮点击入会的逻辑，如果过一段时间还不行就再次刷新浏览器），但一起四次都是上面的情况，不管尝试几次结果服务端一直没响应过。
+![Untitled 7.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e95d23b781ed4fde945e95ef018838c8~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=3584&h=2018&s=1620095&e=png&b=f4f3f3)
 
-我尝试在 websocket 通信日志中找到服务端错误的 response，结论就是完全没有，没有报错，zoom 服务器直接就是没响应。
+其他相关的商业化平台还有[LogRocket](https://link.juejin.cn?target=https%3A%2F%2Flogrocket.com%2Ffeatures%2Fsession-replay-developers "https://logrocket.com/features/session-replay-developers")、[FullStory](https://link.juejin.cn?target=https%3A%2F%2Fwww.fullstory.com%2F "https://www.fullstory.com/")、[marker.io](https://link.juejin.cn?target=https%3A%2F%2Fmarker.io%2F "https://marker.io/")等等。
 
-那么到这里已经证明其实就是 zoom skd 的问题，某种情况下客户端发送通知到服务端，但 zoom 服务器并未按预期响应，我询问了我们使用的 sdk 版本得知我们并非最新 sdk 版本，我猜测未来可能 skd 以及修复了此问题，所以提出升级 zoom skd 版本验证问题。
+# **五、总结**
 
-为什么最早出问题没第一时间升级 sdk ？因为业务已经运行很久了，冒然升级 sdk 可能造成无法预料的问题，而且服务端部署测试 sdk 还挺麻烦（我忘记具体细节了），我承认我有赌的成分，但矛头已经完全指向 zoom 自身了，很有尝试的必要不是吗？
+目前，用户行为录制已经在各个场景中广泛使用，例如用户调研、产品分析、Bug 回溯、自动化测试和行为监控等等。视频录制、页面截图和 Dom 快照录制等技术方案各有优劣，在面对不同的使用场景时要选择合适的技术方案，但总体而言，以 **rrweb 库**为代表的 Dom 快照录制技术是目前最为广泛使用也最具优势的技术方案，在各种商业化解决方案中也主要采用该技术方案或思路来实现。
 
-结论就是，在升级 sdk 后机器人入会失败的问题彻底被解决，经过多次测试对比，旧版本 sdk 依旧会存在 5 次入会 3 次失败的可能，而新版 sdk 已经能做到 10 次入会 10 次成功了，那么此问题也顺利解决了。
+# **参考资料**
 
-这里我们再汇总下过程：
-
-- 根据表象提出可能性，网络波动？入会按钮获取不到？入会用户信息获取不到？
-- 观察 websocket 通信过程，确认入会成功会有 audioConnectionStatus 为 2 的派发。
-- 通过 audioConnectionStatus 切入源码，分别往上以及往下阅读源码，梳理大概流程，同时查询 Status 不同数字的含义，以及梳理入会时客户端有哪些核心事件派发。
-- 最终定位到派发 2 的前置条件，怀疑可能入会失败跟 isConnecting 以及 用户为空判断这两个有关。
-- 分别跟踪 isConnecting 与用户判断的逻辑，是否存在中间被修改导致派送错误的可能性？最终确认还是跟用户为空有关系。
-- 对比自动入会与点击按钮入会的逻辑，同时对比两份日志的信息，找差异。
-- 证明用户更新时 zoom 服务端未响应，导致接下来更新入会状态的逻辑未成功执行。
-- 再次结合问题现状（retry 那一块）来阅读失败日志，发现完全对的上，证实是 zoom sdk 自身的问题。
-- 尝试升级 sdk 版本验证问题，运气不错赌对了，顺利解决了。
-
-# 九、耐心
-
-你也许会想怎么会有这么鸡汤且废话的标题。
-
-问题排查本身是一个提出猜想并论证的过程，很多时候我也会遇到所有猜想都被排除的情况，没有办法只能再去搜集信息给出额外的假定，这个过程就需要各位有足够的耐心，举个最简单的例子，上面 zoom 入会源码分析过程，我其实读了 3 天，过程中其实我还提出了不少失败的猜想，篇幅问题我就没记录。
-
-而且你可能还会遇到这种问题，还是以 zoom 入会这个为例，我从 `audioConnectionStatus` 这个变量入手开始排查，结果发现控制派发它的是变量`isConnecting`以及用户信息为空，变量由一个变成了 2 个，于是我得分别追踪这两个变量的变化过程；事实上你可能会遭遇变量因素从 1 个变 2 个，2 个变 4 个的情况，但如果你想解决问题，你就必须沉下心来梳理并验证每种可能性，即便是福尔摩斯也会留意每个常人不会察觉的细节不是吗？
-
-而现在大家现在修复的 bug 大多数都是自己亲自写的迭代 bug，假设让你处理一个你完全不了解的领域且代码并非你所写的问题，你真的有耐心解决吗？所以说耐心很重要。
-
-提问环节。
+- [用户行为录制技术方案 - 掘金](https://juejin.cn/post/7146776738888941575 "https://juejin.cn/post/7146776738888941575")
+- [前端录制回放系统初体验 - 掘金](https://juejin.cn/post/6953533236337197070 "https://juejin.cn/post/6953533236337197070")
+- [浏览器录制方案的调研和总结 - 知乎](https://link.juejin.cn?target=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F505961831 "https://zhuanlan.zhihu.com/p/505961831")
+- [快速入门 WebRTC：屏幕和摄像头的录制、回放、下载 - 掘金](https://juejin.cn/post/7043072338002182174 "https://juejin.cn/post/7043072338002182174")

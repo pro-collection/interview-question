@@ -9,18 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "axios 请求的底层依赖是什么？",
+  title: "日志监控：如何还原用户操作流程",
   key_world: [
-    "axios 请求依赖",
+    "日志监控 - 还原现场",
+    "日志监控 - 前端录制用户行为技术方案",
 
     // "husky 配置",
   ],
   labels: [
-    labels.network,
+    labels.application,
     company.other,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.master,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

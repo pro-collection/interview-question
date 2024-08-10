@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] 构建过程中， 是如何将我们 es6 代码 编译为 es5",
+  title: "[React] 类组件里面 setState 做了哪些事儿",
   key_world: [
-    "es6 编译为 es5",
+    "setState 做了哪些事儿",
 
     // "husky 配置",
   ],
   labels: [
-    labels.engineering,
+    labels.frameWork,
     company.other,
     // xx
   ],

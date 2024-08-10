@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 类组件里面 setState 做了哪些事儿",
+  title: "[React] useState 的原理是什么，背后怎么执行的",
   key_world: [
-    "setState 做了哪些事儿",
+    "useState 的原理",
 
     // "husky 配置",
   ],
@@ -20,7 +20,7 @@ const remote = {
     company.other,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

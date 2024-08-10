@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "0.1 + 0.2 不等于 0.3 这是什么原因，要怎么解决",
+  title: "[webpack] 构建过程中， 是如何将我们 es6 代码 编译为 es5",
   key_world: [
-    "精度计算",
+    "es6 编译为 es5",
 
     // "husky 配置",
   ],
   labels: [
-    labels.js,
-    // company.other,
+    labels.engineering,
+    company.other,
     // xx
   ],
   milestone: MileStone.inProgress,

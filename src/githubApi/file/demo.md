@@ -1,36 +1,40 @@
-**关键词**：盒模型
+**关键词**：精度计算
 
-### 盒模型
+在 JavaScript 中，`0.1 + 0.2` 不等于 `0.3` 的原因是浮点数的精度问题。
 
-CSS3 中的盒模型有以下两种：标准盒子模型、IE 盒子模型
+在计算机中，浮点数采用二进制存储，而有些十进制小数无法精确地用二进制表示。`0.1` 和 `0.2` 在二进制表示中是无限循环的，在进行运算时会产生舍入误差。
 
-盒模型都是由四个部分组成的，分别是 margin、border、padding 和 content。
+要解决这个问题，可以使用以下方法：
 
-**在标准盒模型性中**
+1. 使用 `Number.EPSILON` 来比较两个浮点数是否接近：
 
-![画板 (5)_看图王.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4bdd6da8a5db4f188a9a7d79c30ebcb6~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+```javascript
+function numbersAreCloseEnough(num1, num2) {
+  return Math.abs(num1 - num2) < Number.EPSILON;
+}
 
-盒子在网页中实际占用:  
-宽 = `width + padding2 + border2 + margin2`  
-高 = `height + padding2 + border2 + margin2`
+let result = 0.1 + 0.2;
+console.log(numbersAreCloseEnough(result, 0.3));
+```
 
-盒模型实际大小:  
-宽 = `width + padding2 + border2`  
-高 = `height + padding2 + border2`
+2. 将浮点数乘以一个适当的倍数转换为整数进行计算，计算完成后再除以这个倍数转换回浮点数：
 
-**在 IE 盒模型性中**
+```javascript
+let num1 = 0.1 * 10;
+let num2 = 0.2 * 10;
+let sum = (num1 + num2) / 10;
+console.log(sum === 0.3);
+```
 
-![画板 (4)_看图王.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0bc8aaa0306845e4a03ef9e78f55a9d5~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+3. 使用第三方库，如 `decimal.js` ，它提供了更精确的十进制运算：
 
-盒子在网页中实际占用:  
-宽 = `width + margin2`  
-高 = `height + margin2`
+```javascript
+const Decimal = require("decimal.js");
 
-盒模型实际大小:  
-宽 = `width`  
-高 = `height`
+let num1 = new Decimal("0.1");
+let num2 = new Decimal("0.2");
+let sum = num1.plus(num2);
+console.log(sum.eq(0.3));
+```
 
-可以通过修改元素的 box-sizing 属性来改变元素的盒模型：
-
-- `box-sizeing: content-box`表示标准盒模型
-- `box-sizeing: border-box`表示 IE 盒模型
+这些方法可以帮助您在处理浮点数运算时更准确地得到预期的结果。

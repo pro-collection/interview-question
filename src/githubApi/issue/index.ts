@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "盒模型",
+  title: "0.1 + 0.2 不等于 0.3 这是什么原因，要怎么解决",
   key_world: [
-    "盒模型",
+    "精度计算",
 
     // "husky 配置",
   ],
   labels: [
-    labels.css,
+    labels.js,
     // company.other,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

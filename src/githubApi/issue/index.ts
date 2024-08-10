@@ -9,15 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "日志监控：如何还原用户操作流程",
+  title: "[React] scheduler 调度机制原理",
   key_world: [
-    "日志监控 - 还原现场",
-    "日志监控 - 前端录制用户行为技术方案",
+    "scheduler 调度机制原理",
 
     // "husky 配置",
   ],
   labels: [
-    labels.application,
+    labels.frameWork,
     company.other,
     // xx
   ],

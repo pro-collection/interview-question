@@ -1,36 +1,87 @@
-**关键词**：日志监控问题
+**关键词**：ajax 和 xhr
 
-在使用了代码混淆（例如 Webpack 的 mina-hash、chunkhash 或 contenthash）的前端代码中，即使执行了混淆，依然可以通过以下方法在日志监控时提供足够的上下文信息，主要包括被请求的源代码地址以及代码行数：
+**Ajax**
 
-### 源码映射(Source Maps)
+全称为 Asynchronous JavaScript and XML（异步 JavaScript 和 XML），是一种在不重新加载整个网页的情况下，与服务器进行数据交换并更新部分网页内容的技术方法。
 
-1. **生成 Source Maps:**
-   在构建过程中生成功能强大的源码映射（Source Maps）文件是标准做法。Source Maps 主要用于将混淆、压缩后的 JavaScript 代码映射回到其原始版本，允许在浏览器调试工具中查看原始代码和追踪错误。
+Ajax 主要基于以下几个关键概念和技术：
 
-   - **保存映射文件:** 在生产版本中生成如`.map`的 Source Map 文件，并确保它们正常处理（通常是将它们放置在服务器上的一个公开但安全的位置）。
-   - **反映在 Source Maps 中的映射:** Source Maps 文件应将原始的源文件路径和行号映射到构建后的代码中对应的位置。
+1. 异步通信：允许网页在发送请求后继续执行其他操作，无需等待服务器响应。
 
-2. **错误跟踪系统集成:**
-   使用错误跟踪工具（也常被称为 Error Monitoring 平台, 如 Sentry、LogRocket、Bugsnag 等），这些工具通常兼容并支持 Source Maps:
+2. JavaScript：用于处理请求的发送、响应的接收和页面的动态更新。
 
-   - **自动和源码追踪:**
-     漏洞和崩溃报告将自动包含被未混淆的源码引用，您只需确保生产版本的 Source Maps 配置正确。
+3. XML 或其他数据格式：虽然名称中包含 XML，但实际上服务器返回的数据可以是 XML、JSON、HTML 等各种格式。
 
-   - **代码行号报告:**
-     用户报告的堆栈跟踪信息将包括对应底层源文件，而非混淆后的行号。
+**关系**
 
-### 自定义错误日志逻辑
+`Ajax`（Asynchronous JavaScript and XML）是一种使用多种技术（包括 `XMLHttpRequest`（XHR）对象）在后台与服务器进行异步数据交换，而无需重新加载整个网页的 Web 开发技术。
 
-1. **覆盖全局的错误处理器：**
-   对于更高级的错误追踪，你可能需要在前端代码中维护自定义的错误处理逻辑。
+`XMLHttpRequest` 是实现 `Ajax` 技术的关键对象之一。通过创建 `XMLHttpRequest` 对象，我们可以使用 JavaScript 向服务器发送请求，并处理服务器返回的响应。
 
-   - **使用`.Window.onerror`或`try...catch`:**
-     在`Window.onerror`中捕捉到运行时错误时，或者在自定义函数内`try...catch`捕获的错误，你可以从错误的堆栈跟踪中提取当前运行代码的位置，并尝试将符号化的堆栈信息发送到后端服务器。
+简单来说，`XMLHttpRequest` 是实现 `Ajax` 的一种底层机制或工具。`Ajax` 是一个更广泛的概念，涵盖了使用包括 `XMLHttpRequest` 在内的技术来实现异步数据交互的方法和模式。
 
-2. **在后端查阅符号化堆栈:**
-   为了安全和性能的考虑，源码映射通常不包括在客户端的部署中。因此固体堆栈信息需要在服务器端符号化，这是针对转换后的堆栈轨迹进行处理，将反向转换为源代码行。
+例如，以下是一个使用 `XMLHttpRequest` 实现简单 `Ajax` 请求的示例：
 
-### 注意:
+```javascript
+let xhr = new XMLHttpRequest();
 
-- 确保 Source Maps 不公开到客户端以避免潜在的安全风险。应该将它们存放于受控的服务器环境，以避免源码泄露或不当使用。
-- 以上方案更适合于开发或测试环境提供详细调试信息，确保在最终部署产品之前只公开给授权的人员。
+xhr.open("GET", "https://example.com/data");
+
+xhr.onreadystatechange = function () {
+  if (xhr.readyState === 4 && xhr.status === 200) {
+    let data = xhr.responseText;
+
+    console.log(data);
+  }
+};
+
+xhr.send();
+```
+
+在这个示例中，我们通过操作 `XMLHttpRequest` 对象来完成了一个异步获取数据的过程，这就是 `Ajax` 技术的一种应用。
+
+**其他实现方式**
+
+除了使用 `XMLHttpRequest` 实现 `Ajax` 之外，还有以下几种常见的实现方式：
+
+1. `fetch` API：这是现代浏览器中提供的一种更简洁的异步请求方式，基于 `Promise` 。
+
+```javascript
+fetch("https://example.com/data")
+  .then((response) => response.json())
+
+  .then((data) => console.log(data))
+
+  .catch((error) => console.error(error));
+```
+
+2. `Axios` 库：一个流行的第三方 `Ajax` 库，提供了丰富的功能和简洁的接口。
+
+```javascript
+axios
+  .get("https://example.com/data")
+
+  .then((response) => console.log(response.data))
+
+  .catch((error) => console.error(error));
+```
+
+3. `jQuery` 的 `$.ajax()` 方法：如果项目中使用了 `jQuery` 库，可以使用其提供的 `ajax` 方法。
+
+```javascript
+$.ajax({
+  url: "https://example.com/data",
+
+  method: "GET",
+
+  success: function (data) {
+    console.log(data);
+  },
+
+  error: function (error) {
+    console.error(error);
+  },
+});
+```
+
+这些方式各有特点，可以根据项目的需求和技术架构选择合适的 `Ajax` 实现方式。

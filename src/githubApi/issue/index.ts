@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "日志监控问题：可有办法将请求的调用源码地址包括代码行数也上报上去？",
+  title: "ajax 和 xhr 是什么关系？",
   key_world: [
-    "日志监控问题",
+    "ajax 和 xhr",
 
     // "husky 配置",
   ],
   labels: [
-    labels.application,
-    company.alibaba,
+    labels.network,
+    company.other,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

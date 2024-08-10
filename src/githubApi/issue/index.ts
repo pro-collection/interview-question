@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] hooks 调用是可以写在 if 语句里面吗",
+  title: "日志监控问题：可有办法将请求的调用源码地址包括代码行数也上报上去？",
   key_world: [
-    "hooks 调用问题",
+    "日志监控问题",
 
     // "husky 配置",
   ],
   labels: [
-    labels.frameWork,
-    company.tencent,
+    labels.application,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

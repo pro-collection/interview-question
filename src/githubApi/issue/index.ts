@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] useRef 是如何实现的",
+  title: "盒模型",
   key_world: [
-    "useRef 实现",
+    "盒模型",
 
     // "husky 配置",
   ],
   labels: [
-    labels.frameWork,
-    company.other,
+    labels.css,
+    // company.other,
     // xx
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -1,19 +1,22 @@
-**关键词**：scheduler 调度机制原理
+**关键词**：useRef 实现
 
-细节过于复杂， 可以参考一下文档：
+该问题也是非常复杂， 需要深入源码， 可以看下面文章解析：
 
-- https://juejin.cn/post/7331135154209308687
+https://juejin.cn/post/7341757372188065792
 
-后续是题库作者对上述文档的一些重点信息总结：
+> 以下是题库作者对上面文档的一些提炼总结
 
-1. scheduler 概念
-2. 时间片与优先级 概念
-3. 优先级切分
-4. 任务队列
-5. scheduleCallback
-6. requestHostCallback
-7. MessageChannel
-8. performWorkUntilDeadline
-   - 任务的中断和恢复
-   - 判断任务的完成状态
-   - 取消任务
+- 什么是数据共享层
+- hooks
+  - 如何确定 fiber 对应的 hook 上下文？
+  - hook 是如何存在的？保存在什么地方？
+  - 多个 hook 如何处理？
+- useRef
+  - 实现原理
+  - 标记 Ref​
+  - 执行 Ref​ 操作
+- mount 该如何操作
+- update 的时候该如何操作
+- 整体执行流程
+  - 标记
+  - 执行

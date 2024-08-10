@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] scheduler 调度机制原理",
+  title: "[React] useRef 是如何实现的",
   key_world: [
-    "scheduler 调度机制原理",
+    "useRef 实现",
 
     // "husky 配置",
   ],

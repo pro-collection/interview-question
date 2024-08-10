@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] useState 的原理是什么，背后怎么执行的",
+  title: "[React] 为什么要自定义合成事件",
   key_world: [
-    "useState 的原理",
+    "React 合成事件",
 
     // "husky 配置",
   ],

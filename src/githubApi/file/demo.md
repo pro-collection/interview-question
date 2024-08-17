@@ -1,77 +1,15 @@
-**关键词**：对象遍历方式
+**关键词**：vue 钩子出发
 
-遍历 JavaScript 对象的属性可以使用几种不同的方法，每种方法都有其适用场景和特点。以下是一些常用的遍历对象属性的方法：
+在 Vue.js 中，页面首次加载时，会按照以下顺序触发一系列的生命周期钩子：
 
-### 1. **for-in 循环**
+1. **beforeCreate**: 实例刚在内存中被创建时调用，此时还未初始化响应式数据和事件。
 
-`for-in` 循环可以遍历一个对象的所有**可枚举属性**，包括其原型链上的属性。
+2. **created**: 实例创建完成后被调用，此时已完成数据观测（即数据响应式）、属性和方法的运算，`$el`属性还未显示出来。
 
-```javascript
-const obj = { a: 1, b: 2, c: 3 };
-for (const key in obj) {
-  if (obj.hasOwnProperty(key)) {
-    // 推荐检查属性是否为对象本身的属性
-    console.log(key, obj[key]);
-  }
-}
-```
+3. **beforeMount**: 在挂载开始之前被调用，相关的 `render` 函数首次被调用。此时 `$el` 属性还未被创建。
 
-使用 `hasOwnProperty` 方法检查属性是否是对象本身的属性（而不是继承的属性）是一个好习惯。
+4. **mounted**: `el` 被新创建的 `vm.$el` 替换，并挂载到实例上去之后调用该钩子。如果根实例挂载了一个文档内元素，当 `mounted` 被调用时，组件已经在文档内。
 
-### 2. **Object.keys()**
+在这个过程中，`beforeCreate` 和 `created` 钩子在服务端渲染过程中也会被调用，而 `beforeMount` 和 `mounted` 只会在客户端被调用。需要特别注意的是，`mounted` 不会保证所有的子组件也都一起被挂载。如果你希望等待整个视图都渲染完毕，可以在 `mounted` 钩子内部使用 `Vue.nextTick` 或 `vm.$nextTick`。
 
-`Object.keys()` 方法返回一个包含对象自身所有可枚举属性名称的数组。
-
-```javascript
-const obj = { a: 1, b: 2, c: 3 };
-Object.keys(obj).forEach((key) => {
-  console.log(key, obj[key]);
-});
-```
-
-### 3. **Object.values()**
-
-`Object.values()` 方法返回一个包含对象自身所有可枚举属性值的数组。
-
-```javascript
-const obj = { a: 1, b: 2, c: 3 };
-Object.values(obj).forEach((value) => {
-  console.log(value);
-});
-```
-
-### 4. **Object.entries()**
-
-`Object.entries()` 方法返回一个给定对象自身可枚举属性的键值对数组。
-
-```javascript
-const obj = { a: 1, b: 2, c: 3 };
-Object.entries(obj).forEach(([key, value]) => {
-  console.log(key, value);
-});
-```
-
-### 5. **Object.getOwnPropertyNames()**
-
-`Object.getOwnPropertyNames()` 方法返回一个数组，包含对象自身的所有属性（不论属性是否可枚举），但不包括 Symbol 属性。
-
-```javascript
-const obj = { a: 1, b: 2, c: 3 };
-const propertyNames = Object.getOwnPropertyNames(obj);
-propertyNames.forEach((name) => {
-  console.log(name, obj[name]);
-});
-```
-
-### 6. **Reflect.ownKeys()**
-
-`Reflect.ownKeys()` 方法返回一个数组，包含对象自身的所有键，包括**字符串键**和**Symbol 键**。
-
-```javascript
-const obj = { a: 1, b: 2, c: 3, [Symbol("d")]: 4 };
-Reflect.ownKeys(obj).forEach((key) => {
-  console.log(key, obj[key]);
-});
-```
-
-根据需要选择合适的方法进行对象属性的遍历。例如，当你想要同时获取属性的键和值时，`Object.entries()` 是一个很好的选择。而如果你想要包括 Symbol 属性在内的所有键，那么 `Reflect.ownKeys()`可能是更合适的选择。
+简而言之，首次加载页面时，Vue 会按顺序触发 `beforeCreate`, `created`, `beforeMount`, 和 `mounted` 生命周期钩子。这些钩子提供了在不同阶段介入组件行为的机会，使得我们可以执行如访问数据、修改 DOM 等操作。

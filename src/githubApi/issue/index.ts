@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "对象的遍历方式有哪些",
+  title: "[vue] 第一次页面加载会触发哪几个钩子",
   key_world: [
-    "对象遍历方式",
+    "vue 钩子出发",
     // "husky 配置",
   ],
   labels: [
-    labels.js,
-    company.pdd,
+    labels.frameWork,
+    company.netEase,
     // xx
   ],
   milestone: MileStone.inProgress,

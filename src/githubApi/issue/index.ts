@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "在低版本的 node 中想使用 es module 该如何做？",
+  title: "CSS 中隐藏元素的方法有哪些？",
   key_world: [
-    "node 使用 es module",
+    "CSS  隐藏元素",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.node,
-    company.tencent,
+    labels.css,
+    company.baidu,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

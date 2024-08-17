@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[git] 将多次提交压缩成一次提交",
+  title: "实现一个函数，支持深度遍历 JS 对象，且允许再遍历的时候，修改对象的数据，得到新的对象",
   key_world: [
-    "多次提交压缩成一次提交",
+    "深度遍历对象",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.application,
+    labels.js,
     company.baidu,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

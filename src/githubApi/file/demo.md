@@ -1,51 +1,67 @@
-**关键词**：多次提交压缩成一次提交
+**关键词**：深度遍历对象
 
-将多次提交压缩成一次提交在 Git 中被称为“squash”。这通常在你完成一段工作后，想要将这段时间内的多个提交整理为一个更干净、更整洁的提交记录时使用。Git 提供了几种方法来实现提交的压缩，最常用的是通过 `git rebase` 命令配合交互模式（interactive mode）来实现。
+实现一个这样的函数，我们需要考虑几个关键点：
 
-### 使用 `git rebase -i` 进行交互式压缩
+1. **深度遍历**：使用递归遍历对象的所有层级。
+2. **修改数据**：在遍历过程中允许修改对象的数据。
+3. **返回新对象**：保持原对象不变，对每个属性或值进行操作，将修改后的结果存储在新的对象中返回。
 
-假设你想压缩最近的 N 次提交。首先，你需要确定从哪个提交开始进行操作。可以通过 `git log` 查看提交历史，然后选择你想要压缩的提交的前一个提交作为起点。
+以下是一个简单示例，展示了如何实现上述功能：
 
-1. **启动交互式 rebase 会话**：
+```javascript
+function deepTraverseAndModify(object, modifierFunction) {
+  // 验证 object 是对象或数组，否则直接返回
+  if (typeof object !== "object" || object === null) {
+    return object;
+  }
 
-   ```bash
-   git rebase -i HEAD~N
-   ```
+  // 如果传入的是数组，遍历数组每个元素
+  if (Array.isArray(object)) {
+    return object.map((item) => deepTraverseAndModify(item, modifierFunction));
+  }
 
-   其中 `N` 是你想要压缩的提交数量。例如，如果你想要压缩最近的 3 次提交，你应该使用 `git rebase -i HEAD~3`。
+  // 初始化一个新对象来存储修改后的对象
+  const modifiedObject = {};
 
-2. **编辑 rebase 会话中出现的命令列表**：
+  // 遍历对象的每个属性
+  Object.keys(object).forEach((key) => {
+    const originalValue = object[key];
 
-   执行上述命令后，你的默认文本编辑器会打开一个带有待压缩提交列表的文件。这些提交被列出来，前面默认是 `pick` 命令。
+    // 判断属性值是否是对象或数组，如果是，递归调用自身，否则直接应用修改函数
+    const modifiedValue =
+      typeof originalValue === "object" && originalValue !== null
+        ? deepTraverseAndModify(originalValue, modifierFunction)
+        : modifierFunction(originalValue, key);
 
-   ```plaintext
-   pick e3a1b35 第一次提交的消息
-   pick 7ac9a67 第二次提交的消息
-   pick 1d2a3f4 第三次提交的消息
-   ```
+    modifiedObject[key] = modifiedValue;
+  });
 
-   将除了第一个提交之外的所有 `pick` 命令改为 `squash` 或简写 `s`，表示这些提交将被压缩到前一个提交中。
+  return modifiedObject;
+}
 
-   ```plaintext
-   pick e3a1b35 第一次提交的消息
-   squash 7ac9a67 第二次提交的消息
-   squash 1d2a3f4 第三次提交的消息
-   ```
+// 使用示例
+const originalObject = {
+  a: 1,
+  b: [1, 2, { c: true, d: [3, 4] }],
+  e: { f: 5, g: 6 },
+};
 
-3. **保存并退出编辑器**：
+const modifiedObject = deepTraverseAndModify(originalObject, (value, key) => {
+  // 示例：将所有数字加 10
+  if (typeof value === "number") {
+    return value + 10;
+  }
+  return value;
+});
 
-   一旦保存并关闭编辑器，Git 将开始 rebase 过程，并可能会要求你解决任何合并冲突。然后，它会打开你的文本编辑器，让你编辑最终的提交消息。默认情况下，这会包含你压缩的所有原始提交消息。
+console.log("Original:", originalObject);
+console.log("Modified:", modifiedObject);
+```
 
-4. **完成 rebase 过程**：
+在这个例子中：
 
-   解决完所有冲突（如果有的话）并保存你的最终提交消息之后，你可以完成 rebase 过程。
+- `deepTraverseAndModify` 函数通过递归遍历接受两个参数：要遍历的对象和一个修改函数（`modifierFunction`），这个修改函数对每个遇到的值进行操作。
+- 如果当前项是对象或数组，函数会递归调用自身；否则，会对其值应用 `modifierFunction` 函数进行修改。
+- 使用 `Object.keys()` 遍历对象属性，并通过映射修改值，确保返回一个新的对象，不会修改原始输入。
 
-5. **推送更改到远端仓库（如果需要）**：
-
-   如果你已经将提交推送到了远端仓库，你可能需要使用 `--force` 参数来强制推送更改，**但请注意，这可以覆盖远端仓库的历史，因此仅在确保不会影响他人工作的情况下使用**。
-
-   ```bash
-   git push origin your-branch-name --force
-   ```
-
-通过这种方法，你可以将多个提交压缩成一个更整洁的提交，以保持项目历史的清晰。
+通过这种方式，我们不仅可以深度遍历 JavaScript 对象，还能在遍历过程中修改对象的数据，并最终得到一个全新的对象。

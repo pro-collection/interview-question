@@ -9,15 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "js 数据类型里面， Set 和  object 分别有哪些适用场景，开发中该如何抉择",
+  title: "对象的遍历方式有哪些",
   key_world: [
-    "Set 和 object 适用场景",
-    "Set 和 object 选型",
+    "对象遍历方式",
     // "husky 配置",
   ],
   labels: [
     labels.js,
-    company.mt,
+    company.pdd,
     // xx
   ],
   milestone: MileStone.inProgress,

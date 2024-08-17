@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 为什么要自定义合成事件",
+  title: "手写瀑布流布局",
   key_world: [
-    "React 合成事件",
+    "瀑布流布局",
 
     // "husky 配置",
   ],
   labels: [
-    labels.frameWork,
-    company.other,
+    labels.js,
+    company.alibaba,
     // xx
   ],
   milestone: MileStone.senior,

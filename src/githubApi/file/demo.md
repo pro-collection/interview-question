@@ -1,29 +1,154 @@
-**关键词**：React 合成事件
+**关键词**：瀑布流布局
 
-React 选择自定义合成事件系统主要是为了提供一个统一的事件处理接口，解决浏览器原生事件的兼容性问题，并优化性能。以下是自定义合成事件系统的几个关键原因：
+> 作者备注， 此文章属于转载
+> 原文作者：有机后脑  
+> 链接：https://juejin.cn/post/7360534173718167579  
+> 来源：稀土掘金  
+> 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-1. **跨浏览器一致性**：
-   不同的浏览器对事件的实现存在差异，这可能导致在不同浏览器上运行的代码行为不一致。React 的合成事件系统提供了一个统一的 API，使得开发者可以编写一次代码，而无需担心浏览器兼容性问题。
+---
 
-2. **性能优化**：
-   React 的合成事件系统允许事件处理在事件冒泡阶段进行，而不是在捕获阶段。这样可以减少不必要的事件处理调用，因为事件在冒泡阶段到达目标元素时，通常意味着用户与页面的交互已经完成。此外，React 还可以将多个事件合并处理，减少对 DOM 的操作次数，从而提高性能。
+### 瀑布流布局
 
-3. **简化事件处理**：
-   在原生事件中，事件处理函数需要处理事件的捕获和冒泡阶段，这可能会导致代码复杂且难以维护。React 的合成事件系统抽象了这些细节，开发者只需要关注事件的冒泡阶段，简化了事件处理逻辑。
+当前主流的一些软件当中我们常常可以看见这样的一种布局,该布局可以将大小不一的图片完整的显示在页面上，并且在杂乱的布局中保持着一定的美感。（如下图:）
 
-4. **事件池**：
-   React 的合成事件对象是池化的，这意味着在事件处理函数执行完毕后，事件对象会被重用，以减少垃圾回收的压力。这有助于提高应用的性能。
+![Screenshot_2024-04-23-23-12-35-519_com.jingdong.a.jpg](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c4e450f7ba984760833bb58e9ff2f5ce~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1440&h=3200&s=1715452&e=jpg&b=f7efed)
 
-5. **安全性和可控性**：
-   React 的合成事件系统提供了一个安全的环境，可以防止一些常见的安全问题，如跨站脚本攻击（XSS）。同时，它也使得开发者可以更容易地控制事件的行为。
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fd2338600ce942ab8f0347d1bf8efbed~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1860&h=890&s=1332320&e=png&b=f8f4f3)
 
-6. **与 React 的生命周期集成**：
-   React 的合成事件系统与组件的生命周期紧密集成，例如，事件处理函数可以在组件卸载时自动清理，避免内存泄漏。
+### HTML 与 CSS 部分
 
-7. **与 React 的其他特性集成**：
-   合成事件系统与 React 的其他特性（如虚拟 DOM、组件状态管理等）紧密集成，提供了一致的开发体验。
+1. div#container 作为所有图片的容器
+2. div.box 作为每个图片的容器
+3. div.box-img 包裹 img 标签
+4. img 负责显示图片
+5. 多个 div.box 排列图片
+6. 重复上述结构,排列了多行图片
+7. 主容器使用相对定位占据文档流中的位置而其子标签 box 使用浮动式布局
 
-8. **便于调试和开发工具**：
-   React 的合成事件系统使得开发者可以更容易地调试事件处理代码，因为事件对象具有一致的结构和属性。
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
 
-综上所述，React 的自定义合成事件系统是为了提供一个更加一致、高效和安全的事件处理机制，使得开发者可以更容易地构建高性能的用户界面。
+      #container {
+        position: relative;
+      }
+
+      .box {
+        float: left;
+        padding: 5px;
+      }
+
+      .box-img {
+        width: 150px;
+        padding: 5px;
+        border: 1px solid #dd9f9f;
+      }
+
+      img {
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="box">
+        <div class="box-img">
+          <img src="./img/1.webp" alt="" />
+        </div>
+      </div>
+      ......省略了19个box
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
+```
+
+此时的页面:
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4948c01e92814e9583a34ea2ce4bbd42~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1928&h=1040&s=1053345&e=png&b=ffffff)
+
+### JavaScript 部分
+
+### 实现原理：
+
+1.使用一个父容器 container 包裹子容器 box
+
+2.图片容器 box-img 包裹在容器 box 中，用来展示
+
+3.通过 js 获取父容器的 DOM 结构，再获取其子元素图片容器 box
+
+4.将其按照瀑布流的规则使用绝对定位放置
+
+5.获取屏幕大小计算该屏幕最多能放下几张图片，将前 n 张图片放在第一行
+
+6.使用一个 heightArr 高度数组,在放置的时候记录每一列图片的高度,后面的图片放置在高度最低的那一列
+
+### 图解:
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d2e0b52959ea49df9cb63ab2a5aa9bd2~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=905&h=636&s=34819&e=png&b=ffffff)
+
+### js 代码实现:
+
+```javascript
+//获取用户屏幕宽度，决定一行几张图
+//操作下一张图，放到上一行最矮的列下
+imgLocation("container", "box");
+
+function imgLocation(parent, content) {
+  var cparent = document.getElementById(parent);
+  var ccontent = getChildElement(cparent, content); //document.querySelectorAll('#container .box')
+  // console.log(ccontent)
+  var imgWidth = ccontent[0].offsetWidth;
+  var num = Math.floor(document.documentElement.clientWidth / imgWidth);
+  cparent.style.width = `${imgWidth * num}px`;
+  //要操作的是哪张，每一列的高度
+
+  var BoxHeightArr = [];
+  for (var i = 0; i < ccontent.length; i++) {
+    if (i < num) {
+      //记录第一行
+      BoxHeightArr[i] = ccontent[i].offsetHeight;
+    } else {
+      //开始操作，找到最矮的高度及列数
+      minHeight = Math.min.apply(null, BoxHeightArr);
+      var minIndex = BoxHeightArr.indexOf(minHeight);
+
+      //摆放图片位置
+      ccontent[i].style.position = "absolute";
+      ccontent[i].style.top = minHeight + "px";
+      ccontent[i].style.left = ccontent[minIndex].offsetLeft + "px";
+      //更新这一列图片高度
+      BoxHeightArr[minIndex] = BoxHeightArr[minIndex] + ccontent[i].offsetHeight;
+    }
+  }
+  console.log(BoxHeightArr);
+}
+
+function getChildElement(parent, child) {
+  //获取parent中所有child
+  var childArr = [];
+  var allChild = parent.getElementsByTagName("*");
+  //找出所有box
+  for (var i = 0; i < allChild.length; i++) {
+    if (allChild[i].className == child) {
+      childArr.push(allChild[i]);
+    }
+  }
+  return childArr;
+}
+```
+
+### 最终效果:
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/19e9ec489a484120b12c43fe87b532e7~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1920&h=911&s=1021235&e=png&b=fefcfc)

@@ -9,10 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "【git] 如何移除一个指定的 commit",
+  title: "【git] 当项目报错，你想定位是哪个 commit 引入的错误的时候，该怎么做",
   key_world: [
-    "commit 移除",
-
+    "二分法查找错误 commit",
     // "husky 配置",
   ],
   labels: [
@@ -20,7 +19,7 @@ const remote = {
     company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,17 +9,17 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "手写一个 axios 中间件，支持缓存返回到本地内存",
+  title: "promise 的三种状态分别是什么， 是怎么转换的， 转换时机呢?",
   key_world: [
-    "请求缓存",
+    "promise 状态",
     // "husky 配置",
   ],
   labels: [
-    labels.network,
-    company.tencent,
+    labels.js,
+    company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

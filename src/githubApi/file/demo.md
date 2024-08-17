@@ -1,100 +1,55 @@
-**关键词**：请求缓存
+**关键词**：promise 状态
 
-手写一个 axios 中间件， 支持缓存返回到本地内存， 下次同样的请求路径和参数， 直接返回上一次的缓存内容即可， 不需再请求， 同时支持设置自动清除缓存数据的时间。
+`Promise` 在 JavaScript 中是一种非常有用的异步编程构造，它代表了一个可能现在、将来或永远都不会完成的操作的结果。每个`Promise`对象都会经历以下三种状态之一：
 
-创建一个简单的 Axios 中间件来支持内存缓存可以大致分为以下步骤：
+### Promise 的三种状态：
 
-1. 实现一个缓存管理器，可以存储、检索和删除缓存数据。
-2. 在发送请求前，检查是否存在对应的缓存数据，如果存在，则直接返回缓存数据，而不是发起新的请求。
-3. 在接收到新的请求响应后，将响应数据存储到缓存中，并设置一个定时器来自动清除过期的缓存数据。
+1. **Pending (待定)**: 这是`Promise`的初始状态，表示异步操作尚未完成，也尚未失败。
+2. **Fulfilled (已兑现)**: 表示与`Promise`相关联的异步操作已成功完成。
+3. **Rejected (已拒绝)**: 表示与`Promise`相关联的异步操作已失败。
 
-下面是一个简单的实现示例：
+### 状态转换：
+
+- **从 Pending 到 Fulfilled**:
+
+  - 当异步操作成功完成时，调用`resolve()`函数，此时 Promise 的状态会从`Pending`变为`Fulfilled`。
+  - 这时`.then()`方法中注册的成功处理函数（如果有的话）会被调用。
+
+- **从 Pending 到 Rejected**:
+  - 当异步操作失败或出现错误时，调用`reject()`函数，此时 Promise 的状态会从`Pending`变为`Rejected`。
+  - 这时`.catch()`方法中注册的失败处理函数（如果有的话）会被调用。
+
+一旦`Promise`的状态从`Pending`变为`Fulfilled`或`Rejected`，它就不能再变为任何其它状态，即`Promise`的状态是不可逆的。相应地，`resolve`和`reject`函数也只能有效地各自调用一次；额外的调用将被忽略。
+
+### 转换时机：
+
+- `Promise`状态的转换时机取决于异步操作何时完成或失败。
+- 使用`resolve()`或`reject()`函数明确地标记异步操作的成功或失败。
+- 调用`resolve()`后，所有挂在该`Promise`上的`.then()`中成功处理函数将被异步调用。
+- 调用`reject()`后，所有挂在该`Promise`上的`.catch()`中失败处理函数将被异步调用。
+
+### 示例：
+
+下面是一个简单的`Promise`示例，它演示了如何创建`Promise`，以及`Promise`的状态如何从`Pending`转变为其他状态：
 
 ```javascript
-import axios from "axios";
-
-class CacheManager {
-  constructor() {
-    this.cache = {};
-  }
-
-  // 生成缓存键
-  _generateCacheKey(url, params) {
-    const paramString = Object.keys(params)
-      .sort()
-      .map((key) => `${key}=${params[key]}`)
-      .join("&");
-    return `${url}?${paramString}`;
-  }
-
-  // 设置缓存
-  set(url, params, data, ttl) {
-    const cacheKey = this._generateCacheKey(url, params);
-
-    // 清除可能存在的旧缓存
-    if (this.cache[cacheKey]) {
-      clearTimeout(this.cache[cacheKey].timeout);
+let promise = new Promise((resolve, reject) => {
+  // 异步操作
+  setTimeout(() => {
+    const success = true; // 假设这是根据异步操作结果而定的逻辑
+    if (success) {
+      resolve("Operation successful"); // 从 Pending 到 Fulfilled
+    } else {
+      reject("Operation failed"); // 从 Pending 到 Rejected
     }
-
-    // 设置新的缓存
-    const timeout = setTimeout(() => {
-      delete this.cache[cacheKey];
-    }, ttl);
-
-    this.cache[cacheKey] = { data, timeout };
-  }
-
-  // 获取缓存
-  get(url, params) {
-    const cacheKey = this._generateCacheKey(url, params);
-    return this.cache[cacheKey] ? this.cache[cacheKey].data : null;
-  }
-}
-
-// 创建缓存管理器实例
-const cacheManager = new CacheManager();
-
-// 自定义请求拦截器
-axios.interceptors.request.use((config) => {
-  // 检查缓存
-  const cachedResponse = cacheManager.get(config.url, config.params || {});
-
-  if (cachedResponse) {
-    // 如果找到缓存，将缓存数据作为Promise直接返回
-    return Promise.reject({
-      config,
-      response: cachedResponse,
-      isCached: true, // 自定义属性，标记这是一个缓存的结果
-    });
-  }
-
-  return config;
+  }, 1000);
 });
 
-// 自定义响应拦截器
-axios.interceptors.response.use(
-  (response) => {
-    // 存储新的响应数据到缓存。假设 TTL（生存时间）为 1 分钟（60000 毫秒）
-    cacheManager.set(response.config.url, response.config.params || {}, response, 60000);
-    return response;
-  },
-  (error) => {
-    // 检查错误对象中是否包含缓存响应
-    if (error.isCached) {
-      // 直接返回缓存响应
-      return Promise.resolve(error.response);
-    }
-    // 对于其他类型的错误，继续抛出
-    return Promise.reject(error);
-  }
+// 监听 Promise 的结果
+promise.then(
+  (value) => console.log(value), // 成功处理函数
+  (error) => console.log(error) // 失败处理函数
 );
-
-// 使用自定义的 Axios 实例发送请求
-// 随后的请求（在缓存未过期之前），会直接返回缓存的数据
-axios
-  .get("https://example.com/data", { params: { userId: "123" } })
-  .then((response) => console.log("Response:", response))
-  .catch((error) => console.log("Error:", error));
 ```
 
-这个简单的实现展示了如何在 Axios 请求级别添加缓存逻辑。你可以根据你的实际需求调整和扩展这个实现，比如添加错误处理逻辑、支持更复杂的缓存失效策略等。
+在这个示例中，`setTimeout`模拟了异步操作，`success`变量代表操作是否成功。根据`success`的值，`promise`的状态会相应地转换成`Fulfilled`或`Rejected`。

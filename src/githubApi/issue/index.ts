@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "CSS 中隐藏元素的方法有哪些？",
+  title: "[git] 将多次提交压缩成一次提交",
   key_world: [
-    "CSS  隐藏元素",
+    "多次提交压缩成一次提交",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.css,
+    labels.application,
     company.baidu,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

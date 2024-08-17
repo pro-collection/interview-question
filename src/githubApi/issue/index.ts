@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "【git] 当项目报错，你想定位是哪个 commit 引入的错误的时候，该怎么做",
+  title: "axios 是否可以缓存请求返回值到内存里面，下次调用的时候，直接使用内存中的缓存数据？",
   key_world: [
-    "二分法查找错误 commit",
+    "请求缓存",
     // "husky 配置",
   ],
   labels: [
-    labels.application,
-    company.alibaba,
+    labels.network,
+    company.tencent,
     // xx
   ],
   milestone: MileStone.senior,

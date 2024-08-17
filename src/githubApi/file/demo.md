@@ -1,56 +1,62 @@
-**关键词**：二分法查找错误 commit
+**关键词**：请求缓存
 
-确实，当你不确定哪个提交(commit)引入了错误时，Git 提供了一个非常强大的工具 `git bisect` 来帮助你通过二分法快速定位出问题的提交。这个命令通过逐步缩小导致问题的提交范围，最终帮助你找出导致错误的具体提交。使用方法如下：
+**Axios 本身没有内置的请求缓存机制**，但你可以通过一些策略手动实现，或者使用第三方库来帮助你实现请求缓存。以下是实现 Axios 请求缓存的两种方法：
 
-### 如何使用 git bisect
+### 方法 1: 手动实现缓存逻辑
 
-1. **开始 bisect 会话**：
-   打开终端或命令行，切换到你的项目目录下，然后使用命令开始一个 bisect 会话：
+你可以通过创建一个缓存对象和一个自定义的 Axios 实例来实现请求的缓存。每次发起请求前，检查缓存对象中是否已经存在该请求的数据；如果存在，则直接返回缓存数据，否则发起真实的请求，并将请求结果存入缓存对象中。
 
-```shell
-git bisect start
+```javascript
+import axios from "axios";
+
+// 创建一个简单的缓存对象
+const cache = {};
+
+const fetchWithCache = async (url, config = {}) => {
+  // 检查缓存对象中是否已存在请求结果
+  const cacheKey = JSON.stringify({ url, ...config });
+  if (cache[cacheKey]) {
+    return Promise.resolve(cache[cacheKey]);
+  }
+
+  // 发起真实请求
+  try {
+    const response = await axios.get(url, config);
+    // 将请求结果存入缓存
+    cache[cacheKey] = response;
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+// 使用 fetchWithCache 函数
+fetchWithCache("https://example.com/data")
+  .then((response) => console.log(response.data))
+  .catch((error) => console.error(error));
 ```
 
-2. **标记一个坏的提交**：
-   使用下面的命令标记当前最新的提交为'坏'的（假设当前分支上的最新提交包含了错误）：
+### 方法 2: 使用第三方库
 
-```shell
-git bisect bad
+有些第三方库如 `axios-cache-adapter` 可以为 Axios 添加缓存功能，这样你就不需要手动实现缓存逻辑。
+
+```javascript
+import axios from "axios";
+import { setupCache } from "axios-cache-adapter";
+
+// 创建 cache adapter 实例
+const cache = setupCache({
+  maxAge: 15 * 60 * 1000, // 设置缓存有效期为 15 分钟
+});
+
+// 创建一个带有缓存能力的 axios 实例
+const axiosWithCache = axios.create({
+  adapter: cache.adapter,
+});
+
+// 使用带有缓存能力的 axios 实例发起请求
+axiosWithCache
+  .get("https://example.com/data")
+  .then((response) => console.log(response.data))
+  .catch((error) => console.error(error));
 ```
-
-如果你已经知道一个特定的坏提交，可以指定它：`git bisect bad [坏的提交id]`
-
-3. **标记一个好的提交**：
-   接下来，使用以下命令标记一个'好'的提交，即一个没有问题的旧版本：
-
-```shell
-git bisect good [好的提交id]
-```
-
-这个好的提交应该是你确定不包含当前问题的一次提交。
-
-完成以上步骤之后，`git bisect` 将自动检出一个中间的提交供你测试。你需要编译（如果必要的话）并测试这个版本，然后根据运行结果告诉 Git 这是好是坏：
-
-- 如果这个提交版本没有问题，使用 `git bisect good`。
-- 如果这个提交版本有问题，使用 `git bisect bad`。
-
-每次你输入结果后，Git 会继续选择另一个提交进行测试，直至找到第一个'坏'的提交。
-
-### 结束 bisect 会话
-
-一旦找到了问题提交，别忘了结束 bisect 会话，释放由 `git bisect` 占用的资源：
-
-```shell
-git bisect reset
-```
-
-这将会把你的工作目录恢复到 `git bisect` 开始之前的状态。
-
-### 注意事项
-
-- 使用 `git bisect` 时，确保有足够的测试覆盖，以准确判断某个提交是好是坏。
-- 一旦找到问题提交，你可以通过查看该提交的详情(`git show [提交id]`)来了解更多信息，从而帮助你理解为何会引入错误。
-
-### 更加详细的介绍， 可以参考下面文章链接
-
-https://juejin.cn/post/7232591499069653051

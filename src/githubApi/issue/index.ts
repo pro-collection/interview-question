@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 脚本延迟加载的方式有哪些？",
+  title: "node 里面可以使用 es module 吗",
   key_world: [
-    "JS 延迟加载",
-    "JS 异步加载",
+    "node 使用 es module",
+    // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.js,
+    labels.node,
     company.tencent,
     // xx
   ],

@@ -1,67 +1,39 @@
-**关键词**：JS 延迟加载、JS 异步加载
+**关键词**：node 使用 es module
 
-JavaScript 脚本的延迟加载是一种优化网页加载时间的技术，可以提高页面的加载速度，提升用户体验。以下是常见的几种 JS 脚本延迟加载的方式：
+是的，从 Node.js 的较新版本开始，你可以在 Node.js 中使用 ES Modules（ESM）。
 
-### 1. 使用 `<script>` 标签的 `defer` 属性
+### 如何启用 ES Modules
 
-在 `<script>` 标签中使用 `defer` 属性可以使得脚本在文档解析完成后，但在 `DOMContentLoaded` 事件触发之前执行。`defer` 属性仅适用于外部脚本。
+要在 Node.js 中使用 ES Modules，你可以采取以下几种方式之一：
 
-```html
-<script src="path/to/your-script.js" defer></script>
+1. **使用 `.mjs` 扩展名**:
+   你可以将你的模块文件保存为 `.mjs` 文件。Node.js 会将 `.mjs` 文件自动识别为 ES Modules。你可以直接使用 `import` 和 `export` 语法。
+
+2. **在 `package.json` 中设置 `"type": "module"`**:
+   如果你更倾向于使用 `.js` 扩展名，你可以在 `package.json` 文件中添加 `"type": "module"`。这会使得 Node.js 将`.js` 文件当作 ES Modules 来处理。注意，这样设置后，如果你需要使用 CommonJS 模块，那么 CommonJS 文件必须采用 `.cjs` 扩展名。
+
+```json
+{
+  "type": "module"
+}
 ```
 
-### 2. 使用 `<script>` 标签的 `async` 属性
+这样，你的 `.js` 文件中就可以使用 `import` 和 `export` 语句了。
 
-与 `defer` 类似，`async` 属性使得脚本在加载时不会阻塞 HTML 文档的解析，但它与 `defer` 的区别在于，脚本一旦下载完成就会立即执行，而不是等到整个页面都解析完毕。这意味着 `async` 脚本的执行顺序是不确定的。
+### 补充知识 - node 是从什么时候开始支持 esm 的？
 
-```html
-<script src="path/to/your-script.js" async></script>
-```
+Node.js 对 ES Modules (ESM) 的支持始于 Node.js 8.5.0（发布于 2017 年 9 月），但当时这一特性处于实验阶段，使用时需要通过 `--experimental-modules` 标志来启用。
 
-### 3. 动态创建 `<script>` 标签
+Node.js 12 版本（具体地，12.17.0 及更高版本）中，ES Module (ESM) 支持进入了稳定状态，使得开发者可以在不需要任何标志的情况下直接使用 ESM。
 
-可以通过 JavaScript 动态创建 `<script>` 标签并插入到文档中，以此来延迟加载脚本。
+随后的 Node.js 版本继续改进和增强对 ESM 的支持，包括改善与 CommonJS 模块互操作性等方面，从而提供更加稳定和完整的模块系统支持。
 
-```javascript
-var script = document.createElement("script");
-script.src = "path/to/your-script.js";
-document.body.appendChild(script);
-```
+因此，如果您想使用不需要任何实验性标志的 ESM，应该使用 Node.js 12.17.0 或更高的版本。但要获得最佳的支持和最新的功能，推荐使用 Node.js 的最新稳定版本。
 
-### 4. 使用加载器库（如 RequireJS、SystemJS）
+### 注意事项
 
-现代 JavaScript 项目中，可以使用模块加载器（如 RequireJS 或 SystemJS）来实现对脚本及其依赖的异步加载。
+- 当使用 ES Modules 时，`import` 语句必须使用完整的文件路径，包括文件扩展名，或者指向存在 `package.json` 的模块。这与 CommonJS 的 `require()` 有所不同，后者可以省略文件扩展名。
+- 在使用 ES Modules 时，一些 Node.js 的全局变量和方法有所不同，比如，代替 `__dirname` 和 `__filename`，你可能需要通过 `import.meta.url` 来获取当前文件的 URL。
+- 如果你的项目中同时使用了 ES Modules 和 CommonJS 模块，需要注意模块间的导入导出兼容性问题。
 
-```javascript
-require(["path/to/your-module"], function (module) {
-  // 使用模块
-});
-```
-
-### 5. 利用 `IntersectionObserver`
-
-`IntersectionObserver` API 允许你配置一个回调，当监测到指定元素进入或离开视口时触发。通过这种方式，可以在元素即将出现在视图中时，动态加载相应的脚本。
-
-```javascript
-let observer = new IntersectionObserver(
-  (entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        // 元素现在可见，加载脚本
-        var script = document.createElement("script");
-        script.src = "path/to/your-script.js";
-        document.head.appendChild(script);
-      }
-    });
-  },
-  { rootMargin: "0px 0px 0px 0px" }
-);
-
-observer.observe(document.querySelector(".some-element"));
-```
-
-### 6. 使用服务端的延迟加载技术
-
-服务端渲染 (SSR) 或服务器端动态渲染技术（如用 Node.js 配合框架 Next.js、Nuxt.js 等）也可以实现对特定条件下的脚本延迟加载。
-
-各个技术方案适用的场景不同，选择合适的延迟加载方式可以大幅改善网页的性能和用户体验。
+截止到我的知识更新日期（2023 年 4 月），Node.js 已经良好地支持 ES Modules，并且社区和生态系统也在不断地改进和适配这一新特性。实际使用中，应当关注你所使用的 Node.js 版本文档，查看关于 ES Modules 的最新支持情况和最佳实践。

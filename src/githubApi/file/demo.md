@@ -1,39 +1,62 @@
 **关键词**：node 使用 es module
 
-是的，从 Node.js 的较新版本开始，你可以在 Node.js 中使用 ES Modules（ESM）。
+在低版本的 Node.js 中想要使用 ES Modules (ESM)，你主要有以下几种方法。但是，请注意，这些方法或许涉及到一定程度的实验性特性或依赖第三方工具，可能不会像在高版本 Node.js 中那样稳定。
 
-### 如何启用 ES Modules
+### 1. 使用实验性支持
 
-要在 Node.js 中使用 ES Modules，你可以采取以下几种方式之一：
+在 Node.js 版本 8.5.0 到 12.17.0 之间，你可以通过启用实验性支持来使用 ES Modules：
 
-1. **使用 `.mjs` 扩展名**:
-   你可以将你的模块文件保存为 `.mjs` 文件。Node.js 会将 `.mjs` 文件自动识别为 ES Modules。你可以直接使用 `import` 和 `export` 语法。
+- 启动 Node.js 时使用 `--experimental-modules` 标志。
+- 文件需要使用 `.mjs` 扩展名，或者在项目的 `package.json` 中设置 `"type": "module"`。
 
-2. **在 `package.json` 中设置 `"type": "module"`**:
-   如果你更倾向于使用 `.js` 扩展名，你可以在 `package.json` 文件中添加 `"type": "module"`。这会使得 Node.js 将`.js` 文件当作 ES Modules 来处理。注意，这样设置后，如果你需要使用 CommonJS 模块，那么 CommonJS 文件必须采用 `.cjs` 扩展名。
+例如，通过命令行参数启用：
+
+```bash
+node --experimental-modules my-app.mjs
+```
+
+请注意，这种方法可能会遇到一些 API 兼容性或行为上的差异。
+
+### 2. 使用 Babel
+
+[Babel](https://babeljs.io/) 是一个广泛使用的 JavaScript 编译器，可以将 ES6+ 代码转换为向后兼容的 JavaScript 版本。你可以使用 Babel 来编译使用了 ES Modules 语法的代码，使其能在旧版本的 Node.js 上运行。
+
+配置 Babel 进行转换通常需要以下几步：
+
+1. 安装 Babel 相关的依赖：
+
+```bash
+npm install --save-dev @babel/core @babel/cli @babel/preset-env
+```
+
+2. 创建一个 `.babelrc` 配置文件或在 `package.json` 中添加 Babel 配置，指定预设（presets）：
 
 ```json
 {
-  "type": "module"
+  "presets": ["@babel/preset-env"]
 }
 ```
 
-这样，你的 `.js` 文件中就可以使用 `import` 和 `export` 语句了。
+3. 使用 Babel CLI 编译你的代码：
 
-### 补充知识 - node 是从什么时候开始支持 esm 的？
+```bash
+npx babel src --out-dir dist
+```
 
-Node.js 对 ES Modules (ESM) 的支持始于 Node.js 8.5.0（发布于 2017 年 9 月），但当时这一特性处于实验阶段，使用时需要通过 `--experimental-modules` 标志来启用。
+在这个例子中，Babel 会将 `src` 目录下的所有文件编译到 `dist` 目录下，转换后的代码将兼容更早版本的 JavaScript。
 
-Node.js 12 版本（具体地，12.17.0 及更高版本）中，ES Module (ESM) 支持进入了稳定状态，使得开发者可以在不需要任何标志的情况下直接使用 ESM。
+### 3. 使用 TypeScript
 
-随后的 Node.js 版本继续改进和增强对 ESM 的支持，包括改善与 CommonJS 模块互操作性等方面，从而提供更加稳定和完整的模块系统支持。
+如果你的项目使用 TypeScript，你也可以通过 TypeScript 编译器来转换 ES Modules 语法到 CommonJS，从而允许代码在旧版本的 Node.js 上运行。TypeScript 编译设置中有一个 `module` 配置项，你可以将其设置为 `"CommonJS"` 来实现转换。
 
-因此，如果您想使用不需要任何实验性标志的 ESM，应该使用 Node.js 12.17.0 或更高的版本。但要获得最佳的支持和最新的功能，推荐使用 Node.js 的最新稳定版本。
+在 `tsconfig.json` 中配置如下：
 
-### 注意事项
+```json
+{
+  "compilerOptions": {
+    "module": "CommonJS"
+  }
+}
+```
 
-- 当使用 ES Modules 时，`import` 语句必须使用完整的文件路径，包括文件扩展名，或者指向存在 `package.json` 的模块。这与 CommonJS 的 `require()` 有所不同，后者可以省略文件扩展名。
-- 在使用 ES Modules 时，一些 Node.js 的全局变量和方法有所不同，比如，代替 `__dirname` 和 `__filename`，你可能需要通过 `import.meta.url` 来获取当前文件的 URL。
-- 如果你的项目中同时使用了 ES Modules 和 CommonJS 模块，需要注意模块间的导入导出兼容性问题。
-
-截止到我的知识更新日期（2023 年 4 月），Node.js 已经良好地支持 ES Modules，并且社区和生态系统也在不断地改进和适配这一新特性。实际使用中，应当关注你所使用的 Node.js 版本文档，查看关于 ES Modules 的最新支持情况和最佳实践。
+这样配置后，使用 tsc 编译你的 TypeScript 代码时，它会自动将 ES Modules 转换为 CommonJS 模块。

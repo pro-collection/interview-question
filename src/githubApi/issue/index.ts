@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "node 里面可以使用 es module 吗",
+  title: "在低版本的 node 中想使用 es module 该如何做？",
   key_world: [
     "node 使用 es module",
     // "JS 异步加载",
@@ -20,7 +20,7 @@ const remote = {
     company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

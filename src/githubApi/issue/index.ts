@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "手写瀑布流布局",
+  title: "【git] 如何移除一个指定的 commit",
   key_world: [
-    "瀑布流布局",
+    "commit 移除",
 
     // "husky 配置",
   ],
   labels: [
-    labels.js,
+    labels.application,
     company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

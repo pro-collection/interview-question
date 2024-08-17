@@ -9,14 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[vue] 第一次页面加载会触发哪几个钩子",
+  title: "JS 脚本延迟加载的方式有哪些？",
   key_world: [
-    "vue 钩子出发",
+    "JS 延迟加载",
+    "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.frameWork,
-    company.netEase,
+    labels.js,
+    company.tencent,
     // xx
   ],
   milestone: MileStone.inProgress,

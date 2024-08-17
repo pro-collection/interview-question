@@ -9,9 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "promise 的三种状态分别是什么， 是怎么转换的， 转换时机呢?",
+  title: "js 数据类型里面， Set 和  object 分别有哪些适用场景，开发中该如何抉择",
   key_world: [
-    "promise 状态",
+    "Set 和 object 适用场景",
+    "Set 和 object 选型",
     // "husky 配置",
   ],
   labels: [
@@ -19,7 +20,7 @@ const remote = {
     company.mt,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

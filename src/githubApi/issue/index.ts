@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "axios 是否可以缓存请求返回值到内存里面，下次调用的时候，直接使用内存中的缓存数据？",
+  title: "手写一个 axios 中间件，支持缓存返回到本地内存",
   key_world: [
     "请求缓存",
     // "husky 配置",

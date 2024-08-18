@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] 手写 webpack plugin 有那些重要 api 与注意的地方？",
+  title: "[webpack] 手写 loader: 我要在方法调用的时候， 上报调用源文件地址",
   key_world: [
-    "手写 webpack plugin",
+    "手写 webpack loader",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
     labels.engineering,
-    company.mt,
+    company.alibaba,
     // xx
   ],
   milestone: MileStone.senior,

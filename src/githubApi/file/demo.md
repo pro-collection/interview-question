@@ -1,59 +1,39 @@
-**关键词**：手写 webpack loader
+**关键词**：webpack loader 通信
 
-在开发一个 webpack loader 时，除了理解 loader 的基本概念和功能之外，还有一些重要的 API 和注意事项是必需了解的。这些能够帮助你更高效地编写和调试 loader。
+在 webpack 中，loader 之间传递数据的常见方式是通过资源文件（即要处理的源文件本身）的内容。每个 loader 接收上一个 loader 的处理结果作为输入，并提供自己的输出给下一个 loader。这种方式适用于大多数使用场景。然而，在某些情况下，loader 需要在它们之间共享额外的状态或数据，而不仅仅是文件内容。对于这种需求，webpack 提供了一种机制，允许 loader 之间共享数据。
 
-### 重要 API
+### 使用 `this.data`
 
-1. **this.callback**:
+在 webpack 4 及以后的版本中，一个 loader 可以利用它的 `this.data` 属性来共享会话数据。这个属性是特定于当前 loader 运行实例的，可以在 loader 的 `pitch` 阶段和正常的加载阶段之间共享数据。
 
-   - 在 loader 函数内部，`this.callback` 是一个允许 loader 异步返回结果的函数。你可以通过 `this.callback(err, content, sourceMap, meta)` 来传递错误或返回结果。
+```javascript
+// pitch 阶段
+module.exports.pitch = function (remainingRequest, precedingRequest, data) {
+  data.sharedValue = "Hello from pitch phase";
+};
+```
 
-2. **this.async**:
+在上面的代码片段中，`pitch` 方法设置了 `data.sharedValue`。这个 `pitch` 方法是可选的，它在 loader 处理资源之前执行。`data` 对象会从 `pitch` 阶段传递到正常的加载阶段，从而可以在后者中访问之前设置的共享值。
 
-   - 调用 `this.async` 会返回一个 callback 函数，你可以在异步操作完成后通过这个函数返回结果。如果 loader 要进行异步处理，这个方法非常有用。
+```javascript
+// 正常的加载阶段
+module.exports = function (content) {
+  const callback = this.async();
+  const sharedValue = this.data.sharedValue;
 
-3. **this.loaders**:
+  // 这里可以根据 sharedValue 来处理 content
+  console.log(sharedValue); // 将输出 "Hello from pitch phase"
 
-   - `this.loaders` 是一个包含所有需要应用到当前处理文件的 loaders 的数组，当前 loader 的信息也包含在内。
+  callback(null, content);
+};
+```
 
-4. **this.resourcePath** 和 **this.resourceQuery**:
+### 使用自定义属性
 
-   - 这两个属性提供了当前正在处理的资源文件的路径和查询字符串。
-
-5. **this.data**:
-
-   - 在 loader 的 pitch 阶段和普通阶段之间共享数据的自由对象。
-
-6. **Loader Utils (loader-utils)**:
-   - `loader-utils` 提供了一些实用的工具函数，比如 `getOptions(this)` 用于获取 loader 配置项。
+一些特定的 loader 实现可能通过向源文件内容附加额外的信息来实现间接的通信。例如，一个 loader 可以在文件内容的末尾追加一些注释或者特殊标记，然后下一个 loader 可以读取这些注释或标记来获取必要的信息。然而，这种方法是高度依赖上下文且难以维护的，不推荐在实际项目中使用。
 
 ### 注意事项
 
-1. **使用异步 API 处理异步任务**:
+当使用一种方法在 loader 之间共享数据时，请注意数据的共享是在每个模块的构建过程中进行的，这些数据是特定于当前处理中的资源文件的。通过这种方式共享的数据不应该包含敏感信息，也不应该用于在不同模块或不同构建之间共享全局状态。
 
-   - 对于需要进行异步操作的 loader，应使用 `this.async` 来获取异步 callback 函数，而不是直接返回内容。
-
-2. **保持 loader 的简单**:
-
-   - 按照最佳实践，每个 loader 只做一件事情。这让 loader 链更加灵活和可维护。
-
-3. **避免使用箭头函数**:
-
-   - 在编写 loader 时，避免使用箭头函数来声明 loader 函数，因为箭头函数会绑定父作用域的 `this`，而你需要访问 webpack 传递给 loader 函数的 `this` 上下文。
-
-4. **处理异常**:
-
-   - 在处理资源的过程中，如果遇到错误，应该使用 `this.emitError` 方法或通过 `this.callback` 函数的第一个参数传递错误。
-
-5. **缓存**:
-
-   - 除非有特定的理由，否则避免关闭 loader 的缓存。webpack 默认会缓存 loader 的结果，以提升构建性能。
-
-6. **资源映射（Source Maps）**:
-
-   - 如果你的 loader 转换源内容，生成新的源内容，应当生成新的 source map。然后，使用 `this.callback` 来返回更新后的代码和对应的 source map。
-
-7. **通信**:
-   - 如果有多个 loader 对同一个资源进行处理，它们之间可以通过 `this.data` 来共享数据。
-
-掌握并妥当使用上述 API 和注意事项，将帮助你开发出高效、健壮且易于维护的 webpack loader。
+理解这些机制以及如何在 loader 之间正确共享数据是创建高效可维护 webpack 构建流程的关键。

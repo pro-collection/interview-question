@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] 手写 webpack loader 有哪些重要 api 与注意事项？",
+  title: "[webpack] 多个 loader 对同一个资源进行处理， 他们之间如何通信？",
   key_world: [
-    "手写 webpack loader",
+    "webpack loader 通信",
     // "JS 异步加载",
     // "husky 配置",
   ],

@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "实现一个函数，支持深度遍历 JS 对象，且允许再遍历的时候，修改对象的数据，得到新的对象",
+  title: "[React] 类组件中，为什么修改状态要使用 setState 而不是用 this.state.xxx = xxx",
   key_world: [
-    "深度遍历对象",
+    "react state 问题",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.js,
-    company.baidu,
+    labels.frameWork,
+    company.other,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

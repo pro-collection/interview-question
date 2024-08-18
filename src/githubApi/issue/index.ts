@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack ] 手写一个 plugin, 统计源码里面的 console.log 调用数量与调用路径",
+  title: "[webpack] 手写 webpack plugin 有那些重要 api 与注意的地方？",
   key_world: [
     "手写 webpack plugin",
     // "JS 异步加载",

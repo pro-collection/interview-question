@@ -1,67 +1,59 @@
 **关键词**：手写 webpack plugin
 
-创建一个 webpack 插件需要遵循 webpack 插件的基本结构和原则，同时为了实现统计源码里的 `console.log` 调用数量与调用路径的目标，我们可能需要对 webpack 的编译过程有一定的了解，尤其是如何操作 webpack 的模块系统内部的原始源代码。
+在手写一个 webpack 插件时，理解和使用一些核心的 API 是非常关键的。以下是编写 webpack 插件时需要知道的一些重要的 API 和注意事项。
 
-以下是创建这样一个插件的步骤与代码示例：
+### 重要的 API
 
-### 步骤 1: 定义插件类
+1. **compiler 对象**:
 
-首先，你需要定义一个 JavaScript 类。在类的 `apply` 方法中，你将会监听 webpack 的 `compilation` 钩子来访问并处理模块的源代码。
+   - `compiler.hooks`: 提供了一系列的钩子，用于插件挂载到 webpack 的整个编译过程。这些钩子包括：
+     - `compile`、`compilation`：允许你在编译器开始编译以及创建新的编译对象时挂载功能。
+     - `emit`、`done`：这些阶段更适合于生成资源、修改输出和记录状态。
 
-### 步骤 2: 监听适当的 webpack 钩子
+2. **compilation 对象**:
 
-针对源代码的处理，我们选择监听 `compilation` 阶段的 `optimizeModules` 钩子。在这个阶段，模块的原始源代码可以被访问和修改。
+   - 同样提供了一系列钩子，它们以更细粒度控制编译阶段，比如：
+     - `optimize`、`optimizeModules`：用于优化阶段。
+     - `buildModule`：在构建模块时触发。
+     - `moduleAssets`：处理模块产出的资源。
 
-### 步骤 3: 处理源代码
+3. **tapable**:
+   - webpack 依赖于 tapable 库来实现钩子系统。使用 `tap()` 或 `tapAsync()` 方法来挂载这些钩子。这些方法通常接受两个参数：插件名称和一个回调函数。
 
-处理每个模块的源代码，你可以使用简单的正则表达式或更高级的方法（如 AST 解析）来识别 `console.log` 的调用。在这个示例中，我将使用正则表达式来简化处理流程。
+### 注意的地方
 
-### 代码示例
+1. **异步操作**:
+   - 如果你的插件中涉及异步操作，确保正确处理。如果使用异步钩子，可以使用 `tapAsync()` 方法，它提供了一个回调函数来告知 webpack 何时异步操作完成。
+2. **资源操作**:
 
-下面是一个插件的基本实现：
+   - 当操作 compilation 中的资源时，务必小心。确保不要删除或覆盖 webpack 或其他插件所需的关键资源。
+
+3. **性能考虑**:
+   - 插件的性能影响编译时长。避免在插件中执行过重的操作，尤其是在像 `compiler` 或 `compilation` 这样的生命周期钩子中，它们会影响到整个编译过程。
+4. **webpack 版本兼容性**:
+
+   - webpack 的 API 在不同版本间可能会有变动。编写插件时，需要注意兼容性，并明确指出插件支持的 webpack 版本范围。
+
+5. **钩子选择**:
+   - 精确选择最适合的钩子对性能和功能都至关重要。了解每个钩子的含义和最佳用途能帮助插件更高效地工作。
+
+### 示例
+
+以下是一个简单的 webpack 插件示例，展示了如何使用上述 API：
 
 ```javascript
-class ConsoleLogStatsPlugin {
+class MyWebpackPlugin {
   apply(compiler) {
-    compiler.hooks.compilation.tap("ConsoleLogStatsPlugin", (compilation) => {
-      compilation.moduleTemplates.javascript.hooks.render.tap("ConsoleLogStatsPlugin", (moduleSource, module) => {
-        // 计算当前模块的 console.log 调用并记录文件路径
-        const source = moduleSource.source();
-        const consoleLogMatches = source.match(/console\.log\(/g) || [];
+    // 监听 emit 钩子
+    compiler.hooks.emit.tapAsync("MyWebpackPlugin", (compilation, callback) => {
+      // 在这里可以处理 compilation 中的资源、模块等
+      console.log("This is an example webpack plugin!");
 
-        if (consoleLogMatches.length > 0) {
-          console.log(`模块 ${module.resource} 包含 ${consoleLogMatches.length} 次 console.log 调用。`);
-        }
-
-        return moduleSource;
-      });
+      // 完成插件处理后调用 callback 通知 webpack
+      callback();
     });
   }
 }
-
-module.exports = ConsoleLogStatsPlugin;
 ```
 
-### 使用该插件
-
-要在你的 webpack 配置中使用这个插件，首先要导入它，然后将它的一个实例添加到配置的 `plugins` 数组中：
-
-```javascript
-const ConsoleLogStatsPlugin = require("./path/to/ConsoleLogStatsPlugin");
-
-module.exports = {
-  // ...其他配置...
-  plugins: [
-    new ConsoleLogStatsPlugin(),
-    // ...其他插件...
-  ],
-};
-```
-
-### 注意事项
-
-- **性能考虑**：直接操作源码可能对构建性能有一定影响。如果项目较大，可能需要考虑更高效的方式，例如仅在生产构建中运行该插件，或者使用更高效的代码分析方法。
-- **正则表达式的局限性**：简单的正则表达式可能无法准确匹配所有 `console.log` 调用的场景，尤其是当代码中包含多行语句或复杂表达式时。更复杂的场景可能需要使用抽象语法树（AST）解析工具，如 Babel。
-- **webpack 版本兼容性**：webpack 的插件 API 在不同的版本之间可能会有所变化。上述代码示例是基于假定的 API 结构编写的，实际使用时需要根据你的 webpack 版本调整 API 的使用。
-
-此插件可以视为检测源代码中 `console.log` 使用情况的起点，可以根据具体需求进行扩展和优化。
+这个简单的插件打印一条消息，在 `emit` 阶段被触发。尽管这个示例很基础，但是它展示了插件的基本结构和一些重要的 API。记得在编写更复杂的插件时阅读并理解 webpack 的文档，以利用 webpack 提供的完整能力。

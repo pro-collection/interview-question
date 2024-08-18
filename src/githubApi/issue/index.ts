@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] 多个 loader 对同一个资源进行处理， 他们之间如何通信？",
+  title: "在创建对象的时候， new class 和 new function 可有什么区别",
   key_world: [
-    "webpack loader 通信",
+    "创建对象实例",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.engineering,
-    company.alibaba,
+    labels.js,
+    company.baidu,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

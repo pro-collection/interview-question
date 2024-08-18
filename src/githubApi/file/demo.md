@@ -1,39 +1,58 @@
-**关键词**：webpack loader 通信
+**关键词**：创建对象实例
 
-在 webpack 中，loader 之间传递数据的常见方式是通过资源文件（即要处理的源文件本身）的内容。每个 loader 接收上一个 loader 的处理结果作为输入，并提供自己的输出给下一个 loader。这种方式适用于大多数使用场景。然而，在某些情况下，loader 需要在它们之间共享额外的状态或数据，而不仅仅是文件内容。对于这种需求，webpack 提供了一种机制，允许 loader 之间共享数据。
+在 JavaScript 中，使用`new`操作符创建对象时，既可以使用类（`class`）也可以使用构造函数（`function`）。二者都可以用来实例化新的对象，但它们之间存在一些关键的区别和相似之处：
 
-### 使用 `this.data`
+### 使用`new`操作符
 
-在 webpack 4 及以后的版本中，一个 loader 可以利用它的 `this.data` 属性来共享会话数据。这个属性是特定于当前 loader 运行实例的，可以在 loader 的 `pitch` 阶段和正常的加载阶段之间共享数据。
+当使用`new`操作符时，JavaScript 会执行以下步骤：
+
+1. 创建一个全新的空对象。
+2. 将这个空对象的原型(`__proto__`)设置为构造函数的`prototype`属性。
+3. 将`this`绑定到新创建的对象上，以便构造函数可以引用它。
+4. 执行构造函数内的代码（对新对象进行初始化）。
+5. 如果构造函数返回一个对象，则返回该对象；否则，返回刚才创建的新对象。
+
+### 使用`new function()`
+
+- 在使用函数时，实际上是在使用函数构造器模式。这个函数充当构造函数的角色，定义了如何初始化新对象的属性和方法。
 
 ```javascript
-// pitch 阶段
-module.exports.pitch = function (remainingRequest, precedingRequest, data) {
-  data.sharedValue = "Hello from pitch phase";
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+Person.prototype.greet = function () {
+  console.log("Hello, my name is " + this.name + " and I am " + this.age + " years old.");
 };
+const person1 = new Person("Alice", 30);
+person1.greet(); // 输出: Hello, my name is Alice and I am 30 years old.
 ```
 
-在上面的代码片段中，`pitch` 方法设置了 `data.sharedValue`。这个 `pitch` 方法是可选的，它在 loader 处理资源之前执行。`data` 对象会从 `pitch` 阶段传递到正常的加载阶段，从而可以在后者中访问之前设置的共享值。
+### 使用`new class`
+
+- ES6 引入了类语法（`class`），使得基于类的面向对象编程在语法上更加清晰和直观。类的内部工作原理与使用构造函数的模式相似，但提供了更丰富的语法和特性，比如基于类的继承等。
 
 ```javascript
-// 正常的加载阶段
-module.exports = function (content) {
-  const callback = this.async();
-  const sharedValue = this.data.sharedValue;
-
-  // 这里可以根据 sharedValue 来处理 content
-  console.log(sharedValue); // 将输出 "Hello from pitch phase"
-
-  callback(null, content);
-};
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  greet() {
+    console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
+  }
+}
+const person2 = new Person("Bob", 25);
+person2.greet(); // 输出: Hello, my name is Bob and I am 25 years old.
 ```
 
-### 使用自定义属性
+### 主要区别
 
-一些特定的 loader 实现可能通过向源文件内容附加额外的信息来实现间接的通信。例如，一个 loader 可以在文件内容的末尾追加一些注释或者特殊标记，然后下一个 loader 可以读取这些注释或标记来获取必要的信息。然而，这种方法是高度依赖上下文且难以维护的，不推荐在实际项目中使用。
+- **语法和语义**：`class`提供了一种清晰、模块化的方式来定义构造函数和原型方法。通过`class`关键字声明类使得代码更加直观易懂。
+- **继承**：使用`class`语法，可以通过`extends`关键字更加简洁地实现继承。而在传统的函数式继承中，需要手动设置原型链。
+- **严格模式**：使用`class`语法定义的类的方法自动运行在严格模式下(`"use strict"`)，而传统的构造函数则需要手动声明。
+- **构造函数和原型方法的声明**：`class`语法使得构造函数和原型方法的声明更加直观和组织化，而在传统的构造函数中，需要分别设置构造函数的属性和其原型的方法。
 
-### 注意事项
+### 结论
 
-当使用一种方法在 loader 之间共享数据时，请注意数据的共享是在每个模块的构建过程中进行的，这些数据是特定于当前处理中的资源文件的。通过这种方式共享的数据不应该包含敏感信息，也不应该用于在不同模块或不同构建之间共享全局状态。
-
-理解这些机制以及如何在 loader 之间正确共享数据是创建高效可维护 webpack 构建流程的关键。
+虽然`new function()`和`new class`都可以用来创建新的对象实例，但`class`提供了更现代、更丰富的语法和特性，使得代码更加直观、易于管理和维护。然而，重要的是理解两者在 JavaScript 底层使用相同的原型继承机制。

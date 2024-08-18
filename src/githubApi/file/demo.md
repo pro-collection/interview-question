@@ -1,66 +1,59 @@
 **关键词**：手写 webpack loader
 
-要在方法调用时上报调用源文件的地址，并且希望通过 webpack 编译时来实现，你可以通过编写一个自定义的 webpack loader 来操作源代码，为特定的方法调用插入上报的代码。自定义 loader 本质上是一个函数，该函数接收源码作为输入，对源码进行处理后返回新的源码。
+在开发一个 webpack loader 时，除了理解 loader 的基本概念和功能之外，还有一些重要的 API 和注意事项是必需了解的。这些能够帮助你更高效地编写和调试 loader。
 
-### 步骤 1: 设计你的上报逻辑
+### 重要 API
 
-首先明确你想要上报的信息和上报的方式。比如，你可能想要在方法调用时，插入一个上报函数调用，该函数包含当前文件的路径和文件名。
+1. **this.callback**:
 
-### 步骤 2: 创建自定义 Loader
+   - 在 loader 函数内部，`this.callback` 是一个允许 loader 异步返回结果的函数。你可以通过 `this.callback(err, content, sourceMap, meta)` 来传递错误或返回结果。
 
-你可以开始编写你的 loader。假设你有一个上报函数 `reportFunction(filePath)`，你希望自动为所有 `targetMethod()` 调用注入这个上报函数。
+2. **this.async**:
 
-loader 文件 `report-loader.js` 可能看起来像这样：
+   - 调用 `this.async` 会返回一个 callback 函数，你可以在异步操作完成后通过这个函数返回结果。如果 loader 要进行异步处理，这个方法非常有用。
 
-```javascript
-module.exports = function (source) {
-  // 使用此 loader 处理的文件的路径
-  const filePath = this.resourcePath;
+3. **this.loaders**:
 
-  // 定义一个正则表达式匹配特定的方法调用，比如 targetMethod()
-  const methodCallRegex = /targetMethod\(\)/g;
+   - `this.loaders` 是一个包含所有需要应用到当前处理文件的 loaders 的数组，当前 loader 的信息也包含在内。
 
-  // 替换匹配到的方法调用
-  const modifiedSource = source.replace(methodCallRegex, function (match) {
-    // 插入上报函数调用，传入文件路径
-    return `reportFunction('${filePath}'); ${match}`;
-  });
+4. **this.resourcePath** 和 **this.resourceQuery**:
 
-  return modifiedSource;
-};
-```
+   - 这两个属性提供了当前正在处理的资源文件的路径和查询字符串。
 
-这个简单的 loader 使用正则表达式查找文件中所有的 `targetMethod()` 调用，并在每个调用前插入 `reportFunction(filePath)` 的调用。注意，考虑到文件路径可能需要处理才能安全地用作字符串字面量（例如，转义特殊字符），这里的实现做得很简单，可能需要根据你的具体需求调整。
+5. **this.data**:
 
-### 步骤 3: 在 webpack 配置中使用你的 Loader
+   - 在 loader 的 pitch 阶段和普通阶段之间共享数据的自由对象。
 
-在你的 `webpack.config.js` 文件中，添加一个 `module.rules` 条目，以确定哪些文件应该通过你的 loader 处理：
-
-```javascript
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.js$/, // 匹配 JavaScript 文件
-        use: [
-          {
-            loader: "path/to/your/report-loader.js", // 使用自定义 loader 的路径
-          },
-        ],
-      },
-    ],
-  },
-};
-```
-
-确保将 `loader` 属性设置为你自定义 loader 文件的路径。
+6. **Loader Utils (loader-utils)**:
+   - `loader-utils` 提供了一些实用的工具函数，比如 `getOptions(this)` 用于获取 loader 配置项。
 
 ### 注意事项
 
-1. **正则表达式**: 我在例子中使用的正则表达式非常简单，只匹配特定形式的方法调用。根据你的需要，可能要编写更复杂的正则表达式或使用其他方法（比如抽象语法树解析库，如 Babel）来更准确地识别和修改代码。
+1. **使用异步 API 处理异步任务**:
 
-2. **安全性**: 自动修改源代码会带来风险，确保你的匹配和替换逻辑不会导致代码中出现意外的改变。
+   - 对于需要进行异步操作的 loader，应使用 `this.async` 来获取异步 callback 函数，而不是直接返回内容。
 
-3. **性能**: 增加自定义 loader 可能会影响构建的速度，特别是匹配和修改逻辑比较复杂的时候。
+2. **保持 loader 的简单**:
 
-编写和测试好你的 loader 后，就可以集成到你的项目中，通过 webpack 构建过程中自动执行所需的代码注入了。
+   - 按照最佳实践，每个 loader 只做一件事情。这让 loader 链更加灵活和可维护。
+
+3. **避免使用箭头函数**:
+
+   - 在编写 loader 时，避免使用箭头函数来声明 loader 函数，因为箭头函数会绑定父作用域的 `this`，而你需要访问 webpack 传递给 loader 函数的 `this` 上下文。
+
+4. **处理异常**:
+
+   - 在处理资源的过程中，如果遇到错误，应该使用 `this.emitError` 方法或通过 `this.callback` 函数的第一个参数传递错误。
+
+5. **缓存**:
+
+   - 除非有特定的理由，否则避免关闭 loader 的缓存。webpack 默认会缓存 loader 的结果，以提升构建性能。
+
+6. **资源映射（Source Maps）**:
+
+   - 如果你的 loader 转换源内容，生成新的源内容，应当生成新的 source map。然后，使用 `this.callback` 来返回更新后的代码和对应的 source map。
+
+7. **通信**:
+   - 如果有多个 loader 对同一个资源进行处理，它们之间可以通过 `this.data` 来共享数据。
+
+掌握并妥当使用上述 API 和注意事项，将帮助你开发出高效、健壮且易于维护的 webpack loader。

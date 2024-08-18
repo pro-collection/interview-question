@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "proxy能够监听到对象中的对象的引用吗？",
+  title: "[webpack ] 手写一个 plugin, 统计源码里面的 console.log 调用数量与调用路径",
   key_world: [
-    "proxy 监听引用",
+    "手写 webpack plugin",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.js,
-    company.other,
+    labels.engineering,
+    company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

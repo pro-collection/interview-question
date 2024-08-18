@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 类组件中，为什么修改状态要使用 setState 而不是用 this.state.xxx = xxx",
+  title: "proxy能够监听到对象中的对象的引用吗？",
   key_world: [
-    "react state 问题",
+    "proxy 监听引用",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.frameWork,
+    labels.js,
     company.other,
     // xx
   ],

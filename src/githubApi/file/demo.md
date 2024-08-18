@@ -1,25 +1,38 @@
-**关键词**：react state 问题
+**关键词**：proxy 监听引用
 
-在 React 类组件中，状态（state）是组件的局部状态，你可以通过调用 `setState` 方法来异步更新组件的状态。有几个重要原因解释了为什么在 React 类组件中应该使用 `setState` 而不是直接修改 `this.state`：
+是的，`Proxy` 能够监听到对象属性的读取和设置操作，包括对象中嵌套的对象的引用操作。但是，要注意的是，如果你想要监听一个嵌套对象内部的变化（例如，对象的属性或者数组的元素），那么你需要单独为这个嵌套对象也创建一个 `Proxy` 实例。因为 `Proxy` 只能直接监听它直接代理的对象的操作，对于嵌套对象的操作，需要嵌套地使用 `Proxy` 来实现深度监听。
 
-### 1. **保证状态的不可变性（Immutability）**
+举个例子：
 
-React 强烈建议开发人员保持状态（state）的不可变性。这意味着状态不应被直接修改，而应该通过创建一个新的状态对象来更新。直接修改 `this.state` 不遵循不可变性原则，这可能会导致未定义的行为和性能问题。
+```javascript
+function createDeepProxy(obj) {
+  // 递归函数，为对象及其嵌套对象创建代理
+  const handler = {
+    get(target, property, receiver) {
+      const value = Reflect.get(target, property, receiver);
+      if (typeof value === "object" && value !== null) {
+        // 如果属性是对象（且非 null），则为该属性也创建代理
+        return createDeepProxy(value);
+      }
+      return value;
+    },
+    set(target, property, value, receiver) {
+      console.log(`Setting property ${property} to ${value}`);
+      return Reflect.set(target, property, value, receiver);
+    },
+  };
 
-### 2. **状态更新是异步的**
+  return new Proxy(obj, handler);
+}
 
-React 可能会将多个 `setState` 调用批量处理为一个更新，以优化性能。因为 `setState` 是异步的，所以这意呀着在调用 `setState` 之后立即读取 `this.state` 可能不会返回预期的值。如果直接修改 `this.state`，则无法利用 React 的异步更新和批量处理机制。
+const original = { name: "John", address: { city: "New York" } };
 
-### 3. **组件重新渲染**
+const proxied = createDeepProxy(original);
 
-`setState` 方法不仅更新状态，而且还告诉 React 该组件及其子组件需要重新渲染，以反映状态的变化。直接修改 `this.state` 不会触发组件的重新渲染，因此即使状态发生了变化，用户界面也不会更新。
+proxied.address.city = "San Francisco"; // 控制台输出：Setting property city to San Francisco
+console.log(original.address.city); // 输出 San Francisco
+```
 
-### 4. **可预测的状态变更**
+在这个例子中，`createDeepProxy` 函数使用了递归，为对象及其所有嵌套对象创建了 `Proxy` 代理。因此，修改嵌套对象 `address` 下的 `city` 属性时，`set` 陷阱（trap）被触发，并且控制台有相应的输出。但注意这种递归创建 `Proxy` 的做法可能会带来性能问题，特别是在处理有很深嵌套结构或者很大的对象时。
 
-使用 `setState` 方法可以确保所有状态更新都有一个清晰、可预测的流程。这使得调试和理解组件的行为变得更加容易。同时，`setState` 还提供了一个回调函数，只有在状态更新和组件重新渲染完成后，这个回调函数才会被执行，这样就可以安全地操作更新后的状态。
-
-### 5. **合并状态更新**
-
-当你调用 `setState`，React 会将你提供的对象合并到当前状态中。这是一种浅合并（shallow merge），意味着只合并顶层属性，而不会影响到嵌套的状态。这种行为让状态更新变得简单而直接。如果直接修改 `this.state`，则需要手动处理这种合并逻辑。
-
-因为以上原因，建议遵循 React 的最佳实践，即通过 `setState` 方法而不是直接修改 `this.state` 来更新组件的状态。这样可以保证应用的性能、可维护性和可预测性。
+此外，需要留意的是，由于每次访问嵌套对象时都会动态创建新的 `Proxy` 实例，这可能导致一些意料之外的行为，比如基于身份的比较或引用检查可能会失败。因此，在实际应用中，应根据需求精心设计 `Proxy` 的使用方式。

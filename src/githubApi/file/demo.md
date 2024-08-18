@@ -1,58 +1,51 @@
-**关键词**：创建对象实例
+**关键词**：vue 样式个例
 
-在 JavaScript 中，使用`new`操作符创建对象时，既可以使用类（`class`）也可以使用构造函数（`function`）。二者都可以用来实例化新的对象，但它们之间存在一些关键的区别和相似之处：
+Vue 中的样式隔离是通过 Vue 单文件组件（Single File Components，简称 SFC）的 `<style>` 标签中的 `scoped` 属性实现的。当你在一个 Vue 组件的 `<style>` 标签上添加 `scoped` 属性时，Vue 会自动将该样式限定在当前组件的范围内，从而防止样式冲突和不必要的样式泄漏。
 
-### 使用`new`操作符
+### 实现原理
 
-当使用`new`操作符时，JavaScript 会执行以下步骤：
+Vue 在编译带有 `scoped` 属性的 `<style>` 标签时，会按照以下步骤处理样式隔离：
 
-1. 创建一个全新的空对象。
-2. 将这个空对象的原型(`__proto__`)设置为构造函数的`prototype`属性。
-3. 将`this`绑定到新创建的对象上，以便构造函数可以引用它。
-4. 执行构造函数内的代码（对新对象进行初始化）。
-5. 如果构造函数返回一个对象，则返回该对象；否则，返回刚才创建的新对象。
+1. **生成唯一的作用域 ID**：Vue 为每个带有 `scoped` 属性的组件生成一个唯一的作用域 ID（如 `data-v-f3f3eg9`）。这个 ID 是随机的，确保每个组件的作用域 ID 是独一无二的。
 
-### 使用`new function()`
+2. **添加作用域 ID 到模板元素**：Vue 会在编译组件模板的过程中，将这个作用域 ID 作为自定义属性添加到组件模板的所有元素上。例如，如果作用域 ID 是 `data-v-f3f3eg9`，那么在该组件模板的所有元素上都会添加一个属性 `data-v-f3f3eg9`。
 
-- 在使用函数时，实际上是在使用函数构造器模式。这个函数充当构造函数的角色，定义了如何初始化新对象的属性和方法。
+3. **修改 CSS 选择器**：对于组件内部的每个 CSS 规则，Vue 会自动转换其选择器，使其仅匹配带有对应作用域 ID 的元素。这是通过在 CSS 选择器的末尾添加相应的作用域 ID 属性选择器来实现的。例如，如果 CSS 规则是 `.button { color: red; }`，并且作用域 ID 是 `data-v-f3f3eg9`，那么该规则会被转换成 `.button[data-v-f3f3eg9] { color: red; }`。
 
-```javascript
-function Person(name, age) {
-  this.name = name;
-  this.age = age;
+### 示例
+
+假设有如下 Vue 单文件组件：
+
+```vue
+<template>
+  <button class="btn">Click Me</button>
+</template>
+
+<style scoped>
+.btn {
+  background-color: red;
 }
-Person.prototype.greet = function () {
-  console.log("Hello, my name is " + this.name + " and I am " + this.age + " years old.");
-};
-const person1 = new Person("Alice", 30);
-person1.greet(); // 输出: Hello, my name is Alice and I am 30 years old.
+</style>
 ```
 
-### 使用`new class`
+编译后，CSS 规则会变成类似于这样（注意：实际的作用域 ID 是随机生成的）：
 
-- ES6 引入了类语法（`class`），使得基于类的面向对象编程在语法上更加清晰和直观。类的内部工作原理与使用构造函数的模式相似，但提供了更丰富的语法和特性，比如基于类的继承等。
-
-```javascript
-class Person {
-  constructor(name, age) {
-    this.name = name;
-    this.age = age;
-  }
-  greet() {
-    console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
-  }
+```css
+.btn[data-v-f3f3eg9] {
+  background-color: red;
 }
-const person2 = new Person("Bob", 25);
-person2.greet(); // 输出: Hello, my name is Bob and I am 25 years old.
 ```
 
-### 主要区别
+并且模板里的 `<button>` 元素会被编译为类似这样：
 
-- **语法和语义**：`class`提供了一种清晰、模块化的方式来定义构造函数和原型方法。通过`class`关键字声明类使得代码更加直观易懂。
-- **继承**：使用`class`语法，可以通过`extends`关键字更加简洁地实现继承。而在传统的函数式继承中，需要手动设置原型链。
-- **严格模式**：使用`class`语法定义的类的方法自动运行在严格模式下(`"use strict"`)，而传统的构造函数则需要手动声明。
-- **构造函数和原型方法的声明**：`class`语法使得构造函数和原型方法的声明更加直观和组织化，而在传统的构造函数中，需要分别设置构造函数的属性和其原型的方法。
+```html
+<button class="btn" data-v-f3f3eg9>Click Me</button>
+```
 
-### 结论
+这样，`.btn` 样式规则只会应用到当前组件中的 `<button>` 元素上，而不会影响到其他组件中的同类元素，实现了样式隔离。
 
-虽然`new function()`和`new class`都可以用来创建新的对象实例，但`class`提供了更现代、更丰富的语法和特性，使得代码更加直观、易于管理和维护。然而，重要的是理解两者在 JavaScript 底层使用相同的原型继承机制。
+### 注意事项
+
+- 由于样式隔离是通过属性选择器和自定义属性实现的，因此这种方法的性能可能会略低于全局样式规则。
+- `scoped` 样式不能影响子组件，仅限于当前的组件。如果需要影响子组件，则需要使用深度选择器（`>>>` 或 `/deep/`）。
+- 其他 Web 组件技术如 Shadow DOM 也可以提供样式隔离的功能，但 Vue 选择了这种不需要 polyfill、兼容性更好的实现方式。

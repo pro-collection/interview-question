@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "在创建对象的时候， new class 和 new function 可有什么区别",
+  title: "[vue] scope 是怎么做的样式隔离的",
   key_world: [
-    "创建对象实例",
+    "vue 样式个例",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.js,
-    company.baidu,
+    labels.frameWork,
+    company.jd,
     // xx
   ],
   milestone: MileStone.inProgress,

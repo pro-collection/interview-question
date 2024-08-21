@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[vue] scope 是怎么做的样式隔离的",
+  title: "JS 数据类型里面， Set 和 数组分别有哪些适用场景，开发中该如何抉择",
   key_world: [
-    "vue 样式个例",
+    "Set 和 数组 适用场景",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.frameWork,
-    company.jd,
+    labels.js,
+    company.mt,
     // xx
   ],
   milestone: MileStone.inProgress,

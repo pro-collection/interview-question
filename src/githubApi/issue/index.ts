@@ -9,16 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何统计页面的 long task(长任务)",
+  title: "PerformanceObserver 如何测量页面性能",
   key_world: [
-    "统计 long task",
+    "PerformanceObserver api 使用",
     // "混动导航",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
     labels.application,
-    company.tencent,
+    company.baidu,
     // xx
   ],
   milestone: MileStone.senior,

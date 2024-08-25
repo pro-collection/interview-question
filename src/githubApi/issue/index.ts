@@ -9,16 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 navigator.sendBeacon 方法",
+  title: "如何判断用户设备",
   key_world: [
-    "sendBeacon 发送请求",
+    "判断设备",
     // "混动导航",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
     labels.application,
-    // company.mt,
+    company.alibaba,
     // xx
   ],
   milestone: MileStone.inProgress,

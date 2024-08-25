@@ -1,44 +1,73 @@
-**关键词**：sendBeacon 发送请求
+**关键词**：判断设备
 
-`navigator.sendBeacon()` 方法使得网页可以异步地将数据发送到服务器，与页面的卸载过程同时进行，这一点非常重要，因为它允许在不影响用户体验的情况下，安全地结束会话或者发送统计数据。这方法主要用于追踪和诊断信息，特别是在需要确保数据被成功发送到服务器的场景中——比如记录用户在网页上的行为数据。
+在 Web 前端开发中，判断用户设备类型（如手机、平板、桌面电脑）主要依赖于用户代理字符串（User-Agent）和/或视口（Viewport）的尺寸。以下是一些常用方法：
 
-### 基本语法
+### 使用用户代理字符串（User-Agent）
 
-```javascript
-navigator.sendBeacon(url, data);
-```
-
-- `url`：一个字符串，代表您想要发送数据到的服务器地址。
-- `data`：可选参数，要发送的数据。可以是 `ArrayBufferView`、`Blob`、`DOMString`、或者 `FormData` 对象。
-
-### 返回值
-
-- 该方法返回一个布尔值：如果浏览器成功地将请求入队进行发送，则返回 `true`；如果请求因任何原因未能入队，则返回 `false`。
-
-### 特点
-
-1. **异步**：`sendBeacon()` 发送的请求是异步的，不会阻塞页面卸载过程或者延迟用户浏览器的关闭操作。
-2. **小数据量**：适用于发送少量数据，如统计信息和会话结束信号。
-3. **不影响关闭**：它允许在页面卸载或关闭时发送数据，而不会阻止或延迟页面的卸载过程。
-4. **可靠**：它确保数据能够在页面退出时被送出，相较于 `beforeunload` 或 `unload` 事件中使用同步的 `XMLHttpRequest` 更为可靠。
-
-### 使用示例
-
-发送一些统计数据到服务器的简单示例：
+用户代理字符串包含了浏览器类型、版本、操作系统等信息，可以通过分析这些信息来大致判断用户的设备类型。`navigator.userAgent` 属性用于获取用户代理字符串。
 
 ```javascript
-window.addEventListener("unload", function () {
-  var data = { action: "leave", timestamp: Date.now() };
-  navigator.sendBeacon("https://example.com/analytics", JSON.stringify(data));
-});
+function detectDevice() {
+  const userAgent = navigator.userAgent;
+
+  if (/mobile/i.test(userAgent)) {
+    return "Mobile";
+  }
+  if (/tablet/i.test(userAgent)) {
+    return "Tablet";
+  }
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return "iOS Device";
+  }
+  // Android, Windows Phone, BlackBerry 识别可以类似添加
+
+  return "Desktop";
+}
+
+console.log(detectDevice());
 ```
 
-在上面的例子中，当用户离开页面时，我们监听 `unload` 事件，并在该事件触发时使用 `navigator.sendBeacon()` 方法发送一些统计数据到服务器。使用 `JSON.stringify(data)` 将数据对象转换成字符串形式，因为 `sendBeacon` 需要发送的数据必须是文本或二进制形式。
+### 使用视口尺寸
 
-### 兼容性与限制
+有时候用户代理字符串可能不够准确或被修改，此时可以根据视口尺寸作为补充手段。通过检测屏幕的宽度，你可以推断出设备的大致类别。
 
-- 虽然 `navigator.sendBeacon()` 被现代浏览器广泛支持，但在使用前最好检查浏览器兼容性。
-- 发送数据量有限制，一般适用于发送小量的数据。
-- 某些浏览器实现可能有细微差异，建议在实际使用前进行充分测试。
+```javascript
+function detectDeviceByViewport() {
+  const width = window.innerWidth;
 
-通过使用 `navigator.sendBeacon()`，开发者可以确保在页面卸载过程中，重要的数据能够被可靠地发送到服务器，从而改善数据收集的准确性和用户体验。
+  if (width < 768) {
+    return "Mobile";
+  }
+  if (width >= 768 && width < 992) {
+    return "Tablet";
+  }
+  return "Desktop";
+}
+
+console.log(detectDeviceByViewport());
+```
+
+### 使用 CSS 媒体查询
+
+虽然 CSS 媒体查询主要用于响应式设计，但你也可以在 JavaScript 中使用 `window.matchMedia()` 方法来判断设备类型。这提供了一种基于 CSS 媒体查询语法来检测设备/视口特性的方式。
+
+```javascript
+function detectDeviceByMediaQuery() {
+  if (window.matchMedia("(max-width: 767px)").matches) {
+    return "Mobile";
+  } else if (window.matchMedia("(min-width: 768px) and (max-width: 991px)").matches) {
+    return "Tablet";
+  } else {
+    return "Desktop";
+  }
+}
+
+console.log(detectDeviceByMediaQuery());
+```
+
+### 注意
+
+- **用户代理字符串被视为不可靠**：由于用户代理字符串可以被修改，某些情况下可能不能准确反映用户的设备信息。
+- **响应式设计原则**：在进行设备检测时，最佳实践是根据内容和功能的需要来适应不同设备，而不是针对特定设备进行优化或限制。
+
+综上，设备检测方法多种多样，选择合适的方法取决于你的具体需求和场景。在可能的情况下，优先考虑使用响应式设计原则，来创建能够在不同设备上良好工作的网页。

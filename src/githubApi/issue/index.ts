@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "混动跟随导航（电梯导航）该如何实现",
+  title: "退出浏览器之间， 发送积压的埋点数据请求， 该如何做",
   key_world: [
-    "电梯导航",
-    "混动导航",
+    "退出浏览器发送积压请求数据",
+    // "混动导航",
     // "JS 异步加载",
     // "husky 配置",
   ],

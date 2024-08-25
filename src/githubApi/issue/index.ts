@@ -9,16 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "PerformanceObserver 如何测量页面性能",
+  title: "移动端如何实现下拉滚动加载（顶部加载）",
   key_world: [
-    "PerformanceObserver api 使用",
+    "移动端下拉加载",
     // "混动导航",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
     labels.application,
-    company.baidu,
+    // company.baidu,
     // xx
   ],
   milestone: MileStone.senior,

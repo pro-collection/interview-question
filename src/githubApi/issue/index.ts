@@ -9,19 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "退出浏览器之间， 发送积压的埋点数据请求， 该如何做",
+  title: "介绍一下 fetch 请求 keepalive 属性",
   key_world: [
-    "退出浏览器发送积压请求数据",
+    "fetch keepalive 属性",
     // "混动导航",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.application,
+    labels.network,
     // company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

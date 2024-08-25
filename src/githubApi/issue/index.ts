@@ -9,19 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何判断用户设备",
+  title: "如何统计页面的 long task(长任务)",
   key_world: [
-    "判断设备",
+    "统计 long task",
     // "混动导航",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
     labels.application,
-    company.alibaba,
+    company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

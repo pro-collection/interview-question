@@ -9,14 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 TypeScript 类型兼容——逆变、协变、双向协变和不变 这四个概念",
+  title: "混动跟随导航（电梯导航）该如何实现",
   key_world: [
-    "TS 类型兼容",
+    "电梯导航",
+    "混动导航",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.ts,
+    labels.application,
     // company.mt,
     // xx
   ],

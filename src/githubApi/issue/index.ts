@@ -9,19 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "移动端如何实现下拉滚动加载（顶部加载）",
+  title: "如何组织工程项目",
   key_world: [
-    "移动端下拉加载",
+    "组织工程项目",
     // "混动导航",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
     labels.application,
-    // company.baidu,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.master,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

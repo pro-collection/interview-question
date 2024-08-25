@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 fetch 请求 keepalive 属性",
+  title: "介绍一下 navigator.sendBeacon 方法",
   key_world: [
-    "fetch keepalive 属性",
+    "sendBeacon 发送请求",
     // "混动导航",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.network,
+    labels.application,
     // company.mt,
     // xx
   ],

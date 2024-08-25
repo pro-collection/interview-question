@@ -1,36 +1,44 @@
-**关键词**：fetch keepalive 属性
+**关键词**：sendBeacon 发送请求
 
-`keepalive` 选项在 `fetch` 请求中的作用主要是允许在浏览器即将关闭或者用户即将离开当前页面时，仍然能够成功发送网络请求。这个选项的设计初衷是为了处理那些需要在页面生命周期结束时发送的统计或追踪数据的场景，比如用户的行为追踪数据、性能数据等。
+`navigator.sendBeacon()` 方法使得网页可以异步地将数据发送到服务器，与页面的卸载过程同时进行，这一点非常重要，因为它允许在不影响用户体验的情况下，安全地结束会话或者发送统计数据。这方法主要用于追踪和诊断信息，特别是在需要确保数据被成功发送到服务器的场景中——比如记录用户在网页上的行为数据。
 
-### keepalive 选项的主要特点包括：
-
-- **异步发送**：`keepalive` 选项允许请求在后台异步发送，即使在 `unload` 或 `beforeunload` 事件中触发。这确保了页面卸载过程不会因等待数据发送而延迟。
-- **请求不会阻止页面关闭**：使用了 `keepalive` 选项的请求不会阻止浏览器关闭页面，提升了用户体验。
-- **数据量限制**：为了保证功能的有效性和避免滥用，`keepalive` 请求的数据大小有限制。最新的浏览器通常限制请求体的大小在 64KB 左右。
-
-- **用例限制**：考虑到 `keepalive` 选项设计的是为了处理小量且关键的数据，比如统计和追踪数据，因此它并不适合用于发送大量数据。
-
-### 示例
-
-以下是如何在 `fetch` 请求中使用 `keepalive` 选项的例子：
+### 基本语法
 
 ```javascript
-window.addEventListener("beforeunload", (event) => {
-  // 构造你想要发送的数据
-  const data = {
-    // ...一些追踪数据
-  };
+navigator.sendBeacon(url, data);
+```
 
-  // 发送请求到服务器
-  fetch("https://yourserver.com/api/track", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    keepalive: true, // 使用 keepalive 选项
-  });
+- `url`：一个字符串，代表您想要发送数据到的服务器地址。
+- `data`：可选参数，要发送的数据。可以是 `ArrayBufferView`、`Blob`、`DOMString`、或者 `FormData` 对象。
+
+### 返回值
+
+- 该方法返回一个布尔值：如果浏览器成功地将请求入队进行发送，则返回 `true`；如果请求因任何原因未能入队，则返回 `false`。
+
+### 特点
+
+1. **异步**：`sendBeacon()` 发送的请求是异步的，不会阻塞页面卸载过程或者延迟用户浏览器的关闭操作。
+2. **小数据量**：适用于发送少量数据，如统计信息和会话结束信号。
+3. **不影响关闭**：它允许在页面卸载或关闭时发送数据，而不会阻止或延迟页面的卸载过程。
+4. **可靠**：它确保数据能够在页面退出时被送出，相较于 `beforeunload` 或 `unload` 事件中使用同步的 `XMLHttpRequest` 更为可靠。
+
+### 使用示例
+
+发送一些统计数据到服务器的简单示例：
+
+```javascript
+window.addEventListener("unload", function () {
+  var data = { action: "leave", timestamp: Date.now() };
+  navigator.sendBeacon("https://example.com/analytics", JSON.stringify(data));
 });
 ```
 
-这种方法非常适合收集页面关闭前的最后一些用户行为数据，以便于更准确地追踪用户在网页上的活动和体验。但要记住，`keepalive` 选项应当谨慎使用，并确保发送的数据量不会超过浏览器的限制。
+在上面的例子中，当用户离开页面时，我们监听 `unload` 事件，并在该事件触发时使用 `navigator.sendBeacon()` 方法发送一些统计数据到服务器。使用 `JSON.stringify(data)` 将数据对象转换成字符串形式，因为 `sendBeacon` 需要发送的数据必须是文本或二进制形式。
+
+### 兼容性与限制
+
+- 虽然 `navigator.sendBeacon()` 被现代浏览器广泛支持，但在使用前最好检查浏览器兼容性。
+- 发送数据量有限制，一般适用于发送小量的数据。
+- 某些浏览器实现可能有细微差异，建议在实际使用前进行充分测试。
+
+通过使用 `navigator.sendBeacon()`，开发者可以确保在页面卸载过程中，重要的数据能够被可靠地发送到服务器，从而改善数据收集的准确性和用户体验。

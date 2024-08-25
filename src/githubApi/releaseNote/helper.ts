@@ -10,11 +10,11 @@ import { company } from "@src/githubApi/issue/consts";
 export const getReleaseContent = (issueList: any[], releaseName: string, isBody: boolean = false) => {
   const companyList = Object.values(company);
 
-  const list = map(issueList, item => {
+  const list = map(issueList, (item) => {
     return {
       title: item.title,
       url: item.html_url,
-      labels: map(item.labels, label => label.name),
+      labels: map(item.labels, (label) => label.name),
       level: item.milestone.title,
       number: item.number,
       body: item.body,
@@ -26,7 +26,7 @@ export const getReleaseContent = (issueList: any[], releaseName: string, isBody:
   const senior: any[] = [];
   const master: any[] = [];
 
-  forEach(list, item => {
+  forEach(list, (item) => {
     switch (item.level) {
       case "初":
         base.push(item);
@@ -45,42 +45,44 @@ export const getReleaseContent = (issueList: any[], releaseName: string, isBody:
     }
   });
 
-  const itemTitle = (list: any[]) => map(list, item => {
-
-    const bodyContent = `      
+  const itemTitle = (list: any[]) =>
+    map(list, (item) => {
+      const bodyContent = `      
 ${item.body}
 `;
-    const questionLink = `回答链接：${item.url}           `;
-    const body = isBody ? bodyContent : questionLink;
+      const questionLink = `回答链接：${item.url}           `;
+      const body = isBody ? bodyContent : questionLink;
 
-    // 出现该问题的公司是谁
-    const companyName = filter(item.labels, labelItem => includes(companyList, labelItem));
-    const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName, '、')}】`;
+      // 出现该问题的公司是谁
+      const companyName = filter(item.labels, (labelItem) => includes(companyList, labelItem));
+      const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName, "、")}】`;
 
-    // 普通的标签
-    const commonLabels = filter(item.labels, label => !includes(companyList, label));
+      // 普通的标签
+      const commonLabels = filter(item.labels, (label) => !includes(companyList, label));
 
-    const simpleTitle = `${item.number}.${item.title}【${join(commonLabels, "、")}】${companyString}`;
-    const title = isBody ? `## ${simpleTitle}` : simpleTitle;
-    return `
+      const simpleTitle = `${item.number}. ${item.title}【${join(commonLabels, "、")}】${companyString}`;
+      const title = isBody ? `## ${simpleTitle}` : simpleTitle;
+      return `
 ${title}
 ${body}           
 `;
-  });
+    });
 
-  const justTitle = (list: any[]) => map(list, item => {
-    // 出现该问题的公司是谁
-    const companyName = filter(item.labels, labelItem => includes(companyList, labelItem));
-    const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName, '、')}】`;
+  const justTitle = (list: any[]) =>
+    map(list, (item) => {
+      // 出现该问题的公司是谁
+      const companyName = filter(item.labels, (labelItem) => includes(companyList, labelItem));
+      const companyString = isEmpty(companyName) ? "" : `【出题公司: ${join(companyName, "、")}】`;
 
-    // 普通的标签
-    const commonLabels = filter(item.labels, label => !includes(companyList, label));
+      // 普通的标签
+      const commonLabels = filter(item.labels, (label) => !includes(companyList, label));
 
-    // title
-    return `  - ${item.number}.${item.title}【${join(commonLabels, "、")}】${companyString}`;
-  });
+      // title
+      return `  - ${item.number}. ${item.title}【${join(commonLabels, "、")}】${companyString}`;
+    });
 
-  const mapTitle = (list: any[]) => reduce(justTitle(sortBy(list, "number")), (prev, current) => prev + current + "\n", "");
+  const mapTitle = (list: any[]) =>
+    reduce(justTitle(sortBy(list, "number")), (prev, current) => prev + current + "\n", "");
 
   // 目录文件
   const index = `
@@ -99,11 +101,11 @@ ${mapTitle(master)}
 
 `;
 
-  const reduceToString = (list: any[]) => reduce(itemTitle(sortBy(list, "number")), (prev, current) => prev + current, "");
+  const reduceToString = (list: any[]) =>
+    reduce(itemTitle(sortBy(list, "number")), (prev, current) => prev + current, "");
 
   // 需要将 list 写成一个 markdown
-  const content =
-    `> ${releaseName}           
+  const content = `> ${releaseName}           
 > 获取更多面试相关问题可以访问            
 > github 地址: https://github.com/pro-collection/interview-question/issues            
 > gitee 地址: https://gitee.com/yanleweb/interview-question/issues          

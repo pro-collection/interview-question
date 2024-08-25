@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 数据类型里面， Set 和 数组分别有哪些适用场景，开发中该如何抉择",
+  title: "介绍一下 TypeScript 类型兼容——逆变、协变、双向协变和不变 这四个概念",
   key_world: [
-    "Set 和 数组 适用场景",
+    "TS 类型兼容",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
-    labels.js,
-    company.mt,
+    labels.ts,
+    // company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

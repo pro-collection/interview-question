@@ -9,19 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何组织工程项目",
+  title: "如何判断页签是否为活跃状态",
   key_world: [
-    "组织工程项目",
+    "页签活跃状态",
     // "混动导航",
     // "JS 异步加载",
     // "husky 配置",
   ],
   labels: [
     labels.application,
-    company.alibaba,
+    company.baidu,
     // xx
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -1,3 +1,5 @@
+**关键词**：请求数量统计
+
 **关键词**：beforeunload 和 unload 事件
 
 在页面关闭时执行特定的方法，你可以使用 `window` 对象的 `beforeunload` 和 `unload` 事件。不过，这两个事件有一些微妙的区别和适用场景。

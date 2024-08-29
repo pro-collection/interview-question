@@ -9,17 +9,17 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "在页面关闭时执行方法，该如何做",
+  title: "如何统计用户 pv 访问的发起请求数量（所有域名的）",
   key_world: [
-    "beforeunload 和 unload 事件",
+    "请求数量统计",
     // "todo",
   ],
   labels: [
     labels.application,
-    company.tencent,
+    company.baidu,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

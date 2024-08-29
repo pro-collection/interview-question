@@ -9,17 +9,17 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "可有办法判断用户的网络条件, 判断网速快慢，网络状态？",
+  title: "大文件切片上传的时候，确定切片数量的时候，有那些考量因素",
   key_world: [
-    "网络状态",
+    "文件切片上传",
     // "todo",
   ],
   labels: [
-    labels.network,
-    company.mi,
+    labels.application,
+    company.baidu,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

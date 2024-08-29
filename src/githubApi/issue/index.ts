@@ -9,17 +9,17 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "大文件切片上传的时候，确定切片数量的时候，有那些考量因素",
+  title: "在页面关闭时执行方法，该如何做",
   key_world: [
-    "文件切片上传",
+    "beforeunload 和 unload 事件",
     // "todo",
   ],
   labels: [
     labels.application,
-    company.baidu,
+    company.tencent,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

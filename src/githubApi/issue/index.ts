@@ -9,16 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如果在网络带宽一定的情况下， 切片上传感觉和整体上传， 消费的时间应该是差不多的。 这种说法正确吗",
+  title: "可有办法判断用户的网络条件, 判断网速快慢，网络状态？",
   key_world: [
-    "切换上传合理性",
-    // "混动导航",
-    // "JS 异步加载",
-    // "husky 配置",
+    "网络状态",
+    // "todo",
   ],
   labels: [
-    labels.application,
-    company.baidu,
+    labels.network,
+    company.mi,
     // xx
   ],
   milestone: MileStone.inProgress,

@@ -9,17 +9,17 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "长文本溢出，展开/收起如何实现",
+  title: "[React] 性能调优中，如何确定哪个数据变化引起的组件渲染",
   key_world: [
-    "长文本溢出",
+    "react 渲染性能调优",
     // "todo",
   ],
   labels: [
-    labels.application,
+    labels.frameWork,
     company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何判断页签是否为活跃状态",
+  title: "如果在网络带宽一定的情况下， 切片上传感觉和整体上传， 消费的时间应该是差不多的。 这种说法正确吗",
   key_world: [
-    "页签活跃状态",
+    "切换上传合理性",
     // "混动导航",
     // "JS 异步加载",
     // "husky 配置",

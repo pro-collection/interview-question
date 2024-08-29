@@ -9,17 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 性能调优中，如何确定哪个数据变化引起的组件渲染",
+  title: "如何实现鼠标拖拽",
   key_world: [
-    "react 渲染性能调优",
+    "拖拽 api",
+    "`mousedown`、`mousemove`和`mouseup`事件",
     // "todo",
   ],
   labels: [
-    labels.frameWork,
-    company.alibaba,
+    labels.application,
+    // company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

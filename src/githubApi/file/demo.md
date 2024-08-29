@@ -1,50 +1,59 @@
-**关键词**：请求数量统计
+**关键词**：长文本溢出
 
-**关键词**：beforeunload 和 unload 事件
+长文本溢出展开/收起功能通常需要使用一些 JavaScript 来动态控制文本的显示状态，及 CSS 来处理文本的默认显示样式。以下是一个基本实现示例，展示了如何结合 HTML、CSS 和 JavaScript 来实现这个功能。
 
-在页面关闭时执行特定的方法，你可以使用 `window` 对象的 `beforeunload` 和 `unload` 事件。不过，这两个事件有一些微妙的区别和适用场景。
+### HTML 结构
 
-### 使用 `beforeunload` 事件
+我们定义一个容器来显示文本，并添加一个用于触发展开/收起操作的按钮。
 
-`beforeunload` 事件在窗口、文档或其资源即将卸载时触发，这一点让它成为在页面关闭前提示用户保存未保存更改的理想选择。在绑定到该事件的处理函数中，你可以执行特定的逻辑，但请注意，按照现代浏览器的安全策略，除非你设置了 `event.returnValue`，否则不会显示自定义的离开提示信息。
+```html
+<div id="textContainer" class="text-overflow">
+  这是一段可能很长的文本，我们希望在一开始时只显示部分，点击“展开”按钮后显示全部内容，再次点击则“收起”文本。
+</div>
+<button id="toggleButton">展开</button>
+```
+
+### CSS 样式
+
+使用 CSS 设置文本的默认显示状态为隐藏超出部分，并且用省略号表示溢出。
+
+```css
+.text-overflow {
+  /* 设置一个高度限制，模拟文本“收起”时的状态 */
+  max-height: 60px; /* 这个值根据需要调整 */
+  overflow: hidden;
+  position: relative;
+  line-height: 20px; /* 根据实际情况调整 */
+  padding-right: 20px;
+}
+```
+
+### JavaScript 代码
+
+使用 JavaScript 来控制文本的“展开”和“收起”状态。我们监听按钮的点击事件来切换文本的显示状态。
 
 ```javascript
-window.addEventListener("beforeunload", (event) => {
-  // 在这里执行你的清理逻辑或者其他操作
-  // 例如，发送一个统计日志
-  navigator.sendBeacon("/log", "用户即将离开页面");
+document.getElementById("toggleButton").addEventListener("click", function () {
+  var textContainer = document.getElementById("textContainer");
+  var button = document.getElementById("toggleButton");
 
-  // 显示离开提示（大多数现代浏览器不支持自定义文本）
-  event.returnValue = "您确定要离开此页面吗？";
+  // 检查当前是展开还是收起状态
+  if (button.textContent === "展开") {
+    // 修改文本容器的最大高度以显示全部文本
+    textContainer.style.maxHeight = "none";
+    button.textContent = "收起";
+  } else {
+    // 重新设置最大高度以隐藏文本
+    textContainer.style.maxHeight = "60px"; // 与CSS中定义的相同
+    button.textContent = "展开";
+  }
 });
 ```
 
-### 使用 `unload` 事件
+这只是实现长文本溢出展开/收起的一种基本方法。根据具体需求，这个示例可以进一步扩展或修改，比如添加动画效果使展开/收起操作更平滑，或者根据文本长度动态决定是否显示“展开/收起”按钮等。
 
-`unload` 事件在用户即将从页面导航走，或关闭页面时触发。你可以在这个事件的处理函数中执行不能阻止页面卸载的清理逻辑。不过需要注意，这个事件的执行时间非常短，某些操作（例如异步操作）可能无法完成。
+还有其他方法可以实现这一功能，包括使用纯 CSS 的技巧（虽然可能不那么灵活），或者利用现成的 JavaScript 库和框架来简化实现过程。
 
-```javascript
-window.addEventListener("unload", (event) => {
-  // 执行简短的同步操作，例如发送统计信息
-  // 注意：这种情况下 navigator.sendBeacon 是更好的选择
-});
-```
+### 更有多实现细节， 可以参考以下文档
 
-### 使用 `navigator.sendBeacon`
-
-对于在页面卸载时需要发送数据到服务器的情况，使用 `navigator.sendBeacon` 方法是一种更可靠的方式。它有效地解决了通过异步 AJAX 请求可能导致的数据不被送出的问题。
-
-```javascript
-window.addEventListener("unload", (event) => {
-  navigator.sendBeacon("/log-out", "用户离开");
-});
-```
-
-### 注意事项
-
-- 不是所有浏览器都完全一样地支持这些事件和 `navigator.sendBeacon` 方法。实施时应当考虑兼容性。
-- 在 `beforeunload` 和 `unload` 事件中执行大量的同步操作或长时间运行的脚本可能会导致用户体验下降。推荐尽量使用简洁快速的逻辑。
-- `beforeunload` 事件可以控制是否提示用户离开页面的确认对话框，但自定义的确认对话框信息可能不被所有浏览器支持。
-- 使用 `navigator.sendBeacon` 来发送数据是因为它能在请求中携带足够的数据量，且即使页面卸载过程中也能确保数据被发送。
-
-根据你的应用需求，选择合适的事件和方法，确保页面关闭时能够执行你的逻辑。
+https://juejin.cn/post/7407259487193399333

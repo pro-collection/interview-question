@@ -9,17 +9,17 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何统计用户 pv 访问的发起请求数量（所有域名的）",
+  title: "长文本溢出，展开/收起如何实现",
   key_world: [
-    "请求数量统计",
+    "长文本溢出",
     // "todo",
   ],
   labels: [
     labels.application,
-    company.baidu,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

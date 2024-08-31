@@ -1,67 +1,95 @@
-**关键词**：flex 属性
+**关键词**：数字转中文
 
-Flex 布局（即 Flexible Box 布局）提供了一种更有效的方式来布置、对齐和分布容器内项目的空间，即使它们的大小是未知或者动态变化的。以下是 Flex 布局中一些常用属性及其作用的简介：
+将阿拉伯数字转换成中文数字，主要考虑到以下几个转换规则：
 
-### 容器属性（应用于 flex 容器）
+1. **基本数字**：0-9 对应的汉字数字。
+2. **单位**：十、百、千、万、亿等。
+3. **规则**：数字从右到左，每 4 位一小节，小节内部和小节之间的转换规则。
 
-1. **`display`**：
+### 实现思路
 
-   - 设置为`flex`或`inline-flex`以启用 flex 布局。
-   - `flex`使容器成为块级元素；
-   - `inline-flex`使容器成为行内元素。
+1. 将阿拉伯数字分解成单个数字，从右到左进行处理。
+2. 对每 4 位数字进行处理，即一个小节，处理完再根据小节的位置添加对应的单位（万、亿等）。
+3. 处理当前小节内部的数字，并添加十、百、千的单位，注意去除连续的零，并且在必要时加入“零”字。
+4. 将各个小节合并得到最终结果。
 
-2. **`flex-direction`**：
+下面的 JavaScript 函数实现了阿拉伯数字到中文数字的基本转换：
 
-   - 确定主轴的方向（即项目的排列方向）。
-   - 可选值包括`row`（默认，水平方向）、`row-reverse`（水平方向，反向）、`column`（垂直方向）、`column-reverse`（垂直方向，反向）。
+```js
+const number2text = (number, type = "upper") => {
+  // 配置
+  const confs = {
+    lower: {
+      num: ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"],
+      unit: ["", "十", "百", "千", "万"],
+      level: ["", "万", "亿"],
+    },
+    upper: {
+      num: ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"],
+      unit: ["", "拾", "佰", "仟"],
+      level: ["", "万", "亿"],
+    },
+    decimal: {
+      unit: ["分", "角"],
+    },
+    maxNumber: 999999999999.99,
+  };
 
-3. **`flex-wrap`**：
+  // 过滤不合法参数
+  if (Number(number) > confs.maxNumber) {
+    console.error(`The maxNumber is ${confs.maxNumber}. ${number} is bigger than it!`);
+    return false;
+  }
 
-   - 控制容器是单行还是多行，以及如何换行。
-   - 可选值包括`nowrap`（默认，不换行）、`wrap`（换行，第一行在上方）、`wrap-reverse`（换行，第一行在下方）。
+  const conf = confs[type];
+  const numbers = String(Number(number).toFixed(2)).split(".");
+  const integer = numbers[0].split("");
+  const decimal = Number(numbers[1]) === 0 ? [] : numbers[1].split("");
 
-4. **`flex-flow`**：
+  // 四位分级
+  const levels = integer.reverse().reduce((pre, item, idx) => {
+    let level = pre[0] && pre[0].length < 4 ? pre[0] : [];
+    let value = item === "0" ? conf.num[item] : conf.num[item] + conf.unit[idx % 4];
+    level.unshift(value);
 
-   - 是`flex-direction`和`flex-wrap`两个属性的简写形式。
-   - 默认值为`row nowrap`。
+    if (level.length === 1) {
+      pre.unshift(level);
+    } else {
+      pre[0] = level;
+    }
 
-5. **`justify-content`**：
+    return pre;
+  }, []);
 
-   - 定义了项目在主轴上的对齐方式。
-   - 可选值包括`flex-start`（默认，起点对齐）、`flex-end`（终点对齐）、`center`（居中对齐）、`space-between`（两端对齐，项目之间的间隔相等）、`space-around`（每个项目两侧的间隔相等）、`space-evenly`（所有项目之间及周围的空间完全相等）。
+  // 整数部分
+  const _integer = levels.reduce((pre, item, idx) => {
+    let _level = conf.level[levels.length - idx - 1];
+    let _item = item.join("").replace(/(零)\1+/g, "$1"); // 连续多个零字的部分设置为单个零字
 
-6. **`align-items`**：
+    // 如果这一级只有一个零字，则去掉这级
+    if (_item === "零") {
+      _item = "";
+      _level = "";
 
-   - 定义项目在交叉轴上如何对齐。
-   - 可选值包括`flex-start`（交叉轴的起点对齐）、`flex-end`（交叉轴的终点对齐）、`center`（交叉轴的中点对齐）、`baseline`（项目的第一行文字的基线对齐）、`stretch`（默认，如果项目未设置高度或设为 auto，将占满整个容器的高度）。
+      // 否则如果末尾为零字，则去掉这个零字
+    } else if (_item[_item.length - 1] === "零") {
+      _item = _item.slice(0, _item.length - 1);
+    }
 
-7. **`align-content`**：
-   - 定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用。
-   - 可选值和`justify-content`类似，包括：`flex-start`、`flex-end`、`center`、`space-between`、`space-around`、`stretch`（默认值）。
+    return pre + _item + _level;
+  }, "");
 
-### 项目属性（应用于 flex 项目）
+  // 小数部分
+  let _decimal = decimal
+    .map((item, idx) => {
+      const unit = confs.decimal.unit;
+      const _unit = item !== "0" ? unit[unit.length - idx - 1] : "";
 
-1. **`order`**：
+      return `${conf.num[item]}${_unit}`;
+    })
+    .join("");
 
-   - 定义项目的排列顺序。数值越小，排列越靠前，默认为 0。
-
-2. **`flex-grow`**：
-
-   - 定义项目的放大比例，默认为 0，即如果存在剩余空间，也不放大。
-
-3. **`flex-shrink`**：
-
-   - 定义项目的缩小比例，默认为 1，即如果空间不足，该项目将缩小。
-
-4. **`flex-basis`**：
-
-   - 设置或检索弹性盒伸缩基准值，默认值为`auto`，即项目本来的大小。
-
-5. **`flex`**：
-
-   - 是`flex-grow`、`flex-shrink` 和 `flex-basis`的简写，默认值为`0 1 auto`。后两个属性可选。
-
-6. **`align-self`**：
-   - 允许单个项目有与其他项目不一样的对齐方式，可覆盖`align-items`属性。
-   - 默认值为`auto`，表示继承父元素的`align-items`属性，如果没有父元素，则等同于`stretch`。
-   - 可选的值除了`auto`，还有`flex-start`、`flex-end`、`center`、`baseline`和`stretch`。
+  // 如果是整数，则补个整字
+  return `${_integer}元` + (_decimal || "整");
+};
+```

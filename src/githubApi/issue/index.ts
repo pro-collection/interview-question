@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "flex 布局中，有哪些常用的属性，分别作用是啥",
+  title: "实现阿拉伯数字转中文",
   key_world: [
-    "flex 属性",
+    "数字转中文",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.css,
-    company.baidu,
+    labels.code,
+    company.mi,
     // xx
   ],
   milestone: MileStone.inProgress,

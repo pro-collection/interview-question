@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何实现鼠标拖拽",
+  title: "统计全站每一个静态资源加载耗时， 该如何做",
   key_world: [
-    "拖拽 api",
-    "`mousedown`、`mousemove`和`mouseup`事件",
+    "统计资源加载耗时",
+    "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.application,
-    // company.alibaba,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -1,5 +1,8 @@
 ## 问题收集
 
+- https://juejin.cn/post/7231081140790476857
+- https://juejin.cn/post/7399983901806854179
+
 发现题库羊毛
 
 - https://fe.ecool.fun/topic-list

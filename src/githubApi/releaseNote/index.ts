@@ -5,7 +5,8 @@ import {
   createTagObjectRequest,
   createTagRequest,
   getDataIssue,
-  getPackageJson, getTag,
+  getPackageJson,
+  getTag,
   updatePackageJson,
 } from "./request";
 import dayjs from "dayjs";
@@ -41,6 +42,7 @@ const main = async () => {
 
   // package.json 版本自增
   const [a, b, c] = split(currentVersion, ".");
+  // 新的版本期号
   const patch = toNumber(c) + 1;
   const newVersion = join([a, b, patch], ".");
 
@@ -69,7 +71,7 @@ const main = async () => {
   const tag_name = newVersion;
 
   // 通过创建时间 过滤
-  const filterData = filter(issueRes.data, item => {
+  const filterData = filter(issueRes.data, (item) => {
     // 必须要在上一次创建时间之后
     return dayjs(item.created_at).isAfter(createDate);
   });
@@ -89,7 +91,7 @@ const main = async () => {
   const contentHasBody = getReleaseContent(filterData, releaseName, true);
   const bookPath = path.resolve(__dirname, "../../../books");
 
-  const fileName = `${dayjs().format('YYYY-MM-DD')} 更新`
+  const fileName = `${dayjs().format("YYYY-MM-DD")} 更新`;
 
   await writeContentForLocal({ path: bookPath, fileName, content: contentHasBody });
   /* ==============================  写入本地 - End   ============================== */

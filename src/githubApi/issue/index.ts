@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "tsconfig.json 中有哪些重用的配置项",
+  title: "如何开启 ts 类型强校验，ts 类型错误 webpack 直接编译失败",
   key_world: [
-    "TS 配置项",
+    "ts 类型强校验",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.ts,
-    company.alibaba,
+    company.mi,
     // xx
   ],
   milestone: MileStone.senior,

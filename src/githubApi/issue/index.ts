@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "统计全站每一个静态资源加载耗时， 该如何做",
+  title: "如何防止前端页面重复请求",
   key_world: [
-    "统计资源加载耗时",
-    "PerformanceObserver PerformanceResourceTiming api 使用",
+    "重复请求问题",
+    // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.application,
-    company.alibaba,
+    company.jd,
     // xx
   ],
   milestone: MileStone.senior,

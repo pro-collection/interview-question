@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "TypeScript 中 any、never、unknown、null & undefined 和 void 有什么区别",
+  title: "JS 项目逐步迁移到 TS 项目，该如何做",
   key_world: [
-    "TS 类型",
+    "TS 项目迁移",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.ts,
-    // company.shopee,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

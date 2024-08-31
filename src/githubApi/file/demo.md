@@ -1,38 +1,66 @@
-**关键词**：样式加载
+**关键词**：TS 类型
 
-内联样式（Inline Style）和外联样式（External Style）是 CSS 应用在 HTML 文档中的两种不同方法，它们主要的区别在于如何将 CSS 规则与 HTML 元素关联起来。
+在 TypeScript 中，`any`、`never`、`unknown`、`null` & `undefined` 以及 `void` 都是类型系统的一部分，各自具有不同的用途和含义，下面是它们的主要区别：
 
-### 内联样式
+### `any`
 
-- **定义方式**：通过元素的`style`属性直接在 HTML 标签内定义 CSS 样式。
-- **优先级**：内联样式的优先级高于外联样式和嵌入样式（在`<head>`标签内的`<style>`标签中定义的样式），因为它是直接应用到元素上的。
-- **应用场景**：适合对单个元素进行样式定义，或者进行快速测试。但如果用于大量元素的样式定义，会使 HTML 文档变得非常臃肿，难以维护。
+- **含义**：`any` 类型表示任何 JavaScript 值都可以赋值给它。使用 `any` 类型，可以绕过 TypeScript 的静态类型检查。
+- **用途**：适用于你不想给变量设置具体类型的情况，或者在迁移旧 JavaScript 项目到 TypeScript 时临时使用。
 - **示例**：
+  ```typescript
+  let anything: any = "Hello world";
+  anything = 25; // ok
+  anything = false; // ok
+  ```
 
-```html
-<div style="color: blue; font-size: 14px;">这是一段内联样式的文本。</div>
-```
+### `never`
 
-### 外联样式
-
-- **定义方式**：将 CSS 样式定义在一个外部的`.css`文件中，然后通过`<link>`标签在 HTML 的`<head>`中引用。
-- **优先级**：一般情况下，外联样式的优先级低于内联样式。但在多个样式之间的优先级还取决于选择器的具体性、样式定义的顺序等因素。
-- **应用场景**：适合网站或应用的全局样式定义，能够实现样式的复用和统一管理，便于维护和更新。
+- **含义**：`never` 类型表示永远不存在的值的类型。例如，`never` 类型是那些总是抛出异常或根本就不会有返回值的函数表达式或箭头函数的返回类型。
+- **用途**：`never` 用于表示那些总是异常或无限循环的函数返回类型，或者用在永远不可能有匹配结果的类型守卫条件。
 - **示例**：
+  ```typescript
+  function error(message: string): never {
+    throw new Error(message);
+  }
+  ```
 
-```html
-<!-- HTML文件中引用 -->
-<link rel="stylesheet" href="style.css" />
+### `unknown`
 
-/* style.css文件中定义样式 */ div { color: red; font-size: 16px; }
-```
+- **含义**：`unknown` 类型表示任何值。它类似于 `any`，但是更安全，因为对 `unknown` 类型的值执行大多数操作都是不允许的，直到我们通过类型检查缩小了该值的类型。
+- **用途**：当我们不确定将要使用的变量的类型时可以使用 `unknown` 类型，它是 `any` 类型的类型安全等价物。
+- **示例**：
+  ```typescript
+  let uncertainValue: unknown = 4;
+  uncertainValue = "maybe a string instead";
+  // TypeScript会阻止你执行不安全的操作
+  // console.log(uncertainValue.length); // Error
+  ```
 
-### 主要区别
+### `null` & `undefined`
 
-1. **加载方式**：内联样式直接写在 HTML 元素的`style`属性中，而外联样式则放在单独的 CSS 文件中，通过`<link>`标签引入。
-2. **复用性**：外联样式可以被多个 HTML 页面共享，提高了样式的复用性；内联样式只作用于具体的元素，无法复用。
-3. **维护性**：外联样式易于维护和更新，只需修改一个 CSS 文件即可影响引用该 CSS 文件的所有页面；内联样式则需要逐个元素修改，维护成本较高。
-4. **优先级**：内联样式的优先级高于外联样式和嵌入式样式，因为它更“接近”元素。
-5. **性能影响**：外联样式可利用浏览器缓存，有助于减少页面加载时间；而大量使用内联样式会增加 HTML 文档的大小，可能对性能产生不利影响。
+- **含义**：`null` 和 `undefined` 在 TypeScript 里分别有各自的类型，分别叫做 `null` 和 `undefined`。`null` 是一个表示无值的特殊值，而 `undefined` 表示未定义。
+- **用途**：`null` 和 `undefined` 分别用于表示变量的“空”或“未定义”状态。
+- **示例**：
+  ```typescript
+  let empty: null = null;
+  let notDefined: undefined = undefined;
+  ```
 
-通常，推荐使用外联样式来实现样式的规范化管理和复用，特别是在大型项目和团队协作的场景中。内联样式则适用于对单个元素快速测试样式或进行特殊样式覆盖的情况。
+### `void`
+
+- **含义**：`void` 类型与 `any`、`never` 和 `unknown` 不同，它表示没有任何类型。在函数中使用 `void` 类型，表示该函数没有返回值。
+- **用途**：主要用在没有返回值的函数的返回类型注解上。
+- **示例**：
+  ```typescript
+  function warnUser(): void {
+    console.log("This is a warning message");
+  }
+  ```
+
+总结如下：
+
+- `any` 允许你对值执行任何操作，但是使用它会放弃类型检查的保护。
+- `never` 用于函数永远不会正常结束的返回类型。
+- `unknown` 用在不确定类型时，比 `any` 更安全因为它不允许你随便操作这个值。
+- `null` 和 `undefined` 用于表示没有值或值未定义。
+- `void` 用于没有返回任何值的函数。

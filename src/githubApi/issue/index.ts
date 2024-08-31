@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "内联加载样式和外联加载样式有啥区别",
+  title: "TypeScript 中 any、never、unknown、null & undefined 和 void 有什么区别",
   key_world: [
-    "样式加载",
+    "TS 类型",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.css,
-    company.shopee,
+    labels.ts,
+    // company.shopee,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

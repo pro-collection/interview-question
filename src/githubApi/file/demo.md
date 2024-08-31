@@ -1,38 +1,65 @@
-**关键词**：ResizeObserver api
+**关键词**：resize 事件应用
 
-`ResizeObserver` 的作用是监测元素的尺寸变化。这是一种强大的 Web API，允许开发者在元素的尺寸发生改变时（无论是因为元素内容的变化、窗口大小的调整还是其他原因导致的尺寸改变），执行一些操作或布局更新。在过去，开发者通常需要依赖定时器或者窗口的 `resize` 事件来间接监测元素尺寸的变化，这种方法不仅不够精确，而且效率低下。`ResizeObserver` 提供了一种更为直接和高效的方式来响应尺寸变化。
+要实时统计用户浏览器窗口大小，可以利用 JavaScript 中的 `resize` 事件。当浏览器窗口尺寸变化时，此事件会被触发。通过侦听此事件，可以实时获取并处理浏览器窗口的宽度和高度。
 
-### 如何使用 `ResizeObserver`
+### 基础示例
 
-使用 `ResizeObserver` 很简单，你只需要创建一个 `ResizeObserver` 实例，并为它提供一个回调函数。在回调函数中，你可以基于元素尺寸的变化来执行相应的操作。然后，使用 `observe` 方法来指定需要被观察尺寸变化的元素。
-
-### 示例代码
-
-下面的示例代码展示了如何使用 `ResizeObserver` 来监测一个元素的尺寸变化，并在尺寸变化时输出新的尺寸信息：
+下面是一个简单的示例，展示如何使用 `resize` 事件来获取并打印当前浏览器窗口的宽度和高度：
 
 ```javascript
-// 监测的目标元素
-const targetElement = document.querySelector(".resizable");
+// 定义一个函数来处理窗口大小变化
+function handleResize() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  console.log(`当前窗口大小：宽度 = ${width}, 高度 = ${height}`);
+}
 
-// 创建 ResizeObserver 实例
-const resizeObserver = new ResizeObserver((entries) => {
-  for (let entry of entries) {
-    // entry.target 是被观察的元素
-    // entry.contentRect 包含了元素的尺寸信息
-    console.log("Element size changed:", entry.target);
-    console.log(`New width: ${entry.contentRect.width}`);
-    console.log(`New height: ${entry.contentRect.height}`);
-  }
-});
+// 在窗口 resize 事件上添加监听器
+window.addEventListener("resize", handleResize);
 
-// 开始观察目标元素
-resizeObserver.observe(targetElement);
+// 初始化时执行一次，确保获取初始窗口大小
+handleResize();
 ```
+
+### 节流优化
+
+如果你担心 `resize` 事件触发得太频繁，可能会影响页面性能，可以引入“节流”（throttle）机制来限制事件处理函数的执行频率。节流确保了即使事件持续触发，事件处理函数也只在每隔一段时间执行一次。
+
+以下是如何应用节流优化的示例：
+
+```javascript
+function throttle(fn, wait) {
+  let inThrottle, lastFn, lastTime;
+  return function () {
+    const context = this,
+      args = arguments;
+    if (!inThrottle) {
+      fn.apply(context, args);
+      lastTime = Date.now();
+      inThrottle = true;
+    } else {
+      clearTimeout(lastFn);
+      lastFn = setTimeout(function () {
+        if (Date.now() - lastTime >= wait) {
+          fn.apply(context, args);
+          lastTime = Date.now();
+        }
+      }, Math.max(wait - (Date.now() - lastTime), 0));
+    }
+  };
+}
+
+// 使用节流函数包装我们的处理器
+const throttledHandleResize = throttle(handleResize, 100);
+
+// 添加节流化的事件监听
+window.addEventListener("resize", throttledHandleResize);
+```
+
+这个 `throttle` 函数通过确保被包装的 `handleResize` 函数在指定的时间间隔（本例中为 100 毫秒）内最多只执行一次，来减少 `resize` 事件处理函数的调用频率。
 
 ### 应用场景
 
-`ResizeObserver` 的常见应用场景包括：
+这样实时统计用户浏览器窗口大小的方法可以用于多种应用场景，如响应式布局调整、基于窗口大小动态加载资源、或者其他需要根据视窗大小变化进行调整的交互效果实现。
 
-- **响应式布局**：当容器的尺寸改变时，动态调整内容或布局，提供更好的响应式设计。
-- **图表和可视化**：在图表或数据可视化的容器大小改变时，重新绘制图表来适应新的尺寸。
-- **动态元素（如弹出窗口和下拉菜单）**：监测并根据内容大小自动调整元素的尺寸。
+使用这种方法时，重要的是平衡事件处理函数的执行频率和页面的性能，特别是当你的窗口大小调整处理函数中包含复杂操作时。通过合理利用“节流”或“防抖”（debounce）技术，可以有效地解决这个问题。

@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "ResizeObserver 作用是什么",
+  title: "要实时统计用户浏览器窗口大小，该如何做",
   key_world: [
-    "ResizeObserver api",
+    "resize 事件应用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],

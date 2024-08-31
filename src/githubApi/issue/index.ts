@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 项目逐步迁移到 TS 项目，该如何做",
+  title: "tsconfig.json 中有哪些重用的配置项",
   key_world: [
-    "TS 项目迁移",
+    "TS 配置项",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],

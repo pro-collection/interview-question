@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "要实时统计用户浏览器窗口大小，该如何做",
+  title: "flex 布局中，有哪些常用的属性，分别作用是啥",
   key_world: [
-    "resize 事件应用",
+    "flex 属性",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.application,
-    company.mt,
+    labels.css,
+    company.baidu,
     // xx
   ],
   milestone: MileStone.inProgress,

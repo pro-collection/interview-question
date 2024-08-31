@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "实现阿拉伯数字转中文",
+  title: "内联加载样式和外联加载样式有啥区别",
   key_world: [
-    "数字转中文",
+    "样式加载",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.code,
-    company.mi,
+    labels.css,
+    company.shopee,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

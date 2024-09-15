@@ -1,29 +1,66 @@
-**关键词**：js 隐式转换
+**关键词**：长文本隐藏
 
-这个问题涉及到 JavaScript 中的类型转换和比较操作的规则。
+在前端处理长文本且需要在中间显示省略号（...），两端保留完整文本的情况，通常有下面几种方法可以达到效果：
 
-在 JavaScript 中，`[] == ![]`的比较过程如下：
+### 1. 纯 CSS 解决方案（对于单行文本）
 
-1. **![]的计算**
+对于单行的文本，可以使用 CSS 的`text-overflow`属性来实现，但这种方法一般只能实现末尾的省略号，无法直接实现中间省略的效果。
 
-   `!`是逻辑非操作符，它会首先将右侧的操作数转换为布尔值，然后反转该布尔值。对于空数组`[]`，在 JavaScript 中，所有对象（包括数组）在布尔上下文中都被认为是`true`。因此，`![]`首先将`[]`转换为`true`，然后取反，变成`false`。
+### 2. JavaScript + CSS
 
-2. **比较`[]`与`false`**
+当需要在文本中间显示省略号时，就需要结合使用 JavaScript 和 CSS 来处理。以下是一种可能的实现方法：
 
-   根据 ECMAScript 规范，在进行抽象等值比较（`==`）时，如果比较的两个操作数类型不同，JavaScript 会尝试将它们转换成一个共同的可比较类型。在本例中，一边是对象（空数组`[]`），另一边是布尔值`false`。
+1. **确定保留文本的长度。** 首先确定需要在文本的开始和结束保留多少字符。
+2. **使用 JavaScript 计算并处理文本。** 根据上面确定的长度，使用 JavaScript 截取字符串，并添加省略号。
+3. **使用 CSS 来保证文本的美观展示。**
 
-   规则是，如果有布尔值参与比较，先将布尔值转换为数值再进行比较。布尔值`false`转换为数值`0`。
+下面是一个简单的示例代码：
 
-3. **比较`[]`与`0`**
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .text-container {
+        width: 60%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 20px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="text" class="text-container">
+      <!-- 动态生成的文本会放在这里 -->
+    </div>
 
-   现在比较的是对象（空数组`[]`）与数字（`0`）。根据规范，当比较对象与数字时，对象会先尝试转换为原始值（通过调用它的`valueOf`和（或）`toString`方法），用于比较。
+    <script>
+      function truncateText(selector, text, frontLen, backLen) {
+        const totalLen = frontLen + backLen;
+        if (text.length > totalLen) {
+          const startText = text.substr(0, frontLen);
+          const endText = text.substr(-backLen);
+          document.querySelector(selector).textContent = `${startText}...${endText}`;
+        } else {
+          document.querySelector(selector).textContent = text;
+        }
+      }
 
-   对于空数组`[]`，`[].toString()`结果是`""`（空字符串）。
+      const exampleText = "这是一个长文本示例，需要在中间显示省略号，同时保留两端的文本内容。";
+      truncateText("#text", exampleText, 10, 10);
+    </script>
+  </body>
+</html>
+```
 
-4. **比较`""`与`0`**
+在这个例子中，`truncateText`函数接收一个选择器（在这里是指容器的 ID）、要处理的文本、前端和后端应保留文本的长度。函数计算并生成了新的文本内容，其中间部分被省略号（...）替代。
 
-   最后的比较是在空字符串（`""`）与数字`0`之间进行。在这个阶段，字符串会被转换为数字，空字符串转换为数字时结果是`0`。
+这个方法给予了你灵活性去确定前后端保留的文本长度，以及省略的部分。但需要注意，这是针对简单场景的解决方案，对于更复杂的布局或特殊字体，可能需要更细致的处理来保证良好的显示效果。
 
-   因此，最终比较的是`0 == 0`，这显然是`true`。
+### 其他复杂实现可以参考下面的文档
 
-因此，`[] == ![]`返回`true`的原因是，在 JavaScript 中将操作数从对象到布尔值，再到字符串，最后到数字的一系列隐式类型转换导致的。这也展示了 JavaScript 中类型强制转换规则的复杂性和`==`运算符可能带来的意外行为。这就是为什么很多 JavaScript 编程风格指南推荐使用`===`（严格等于运算符），因为它不会进行类型转换，可以避免这种类型的意外结果。
+- https://juejin.cn/post/7329967013923962895

@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "eslint 如何设置只校验本次 MR 变更的文件内容",
+  title: "长文本场景，中间显示省略号..., 两端正常展示",
   key_world: [
-    "js 隐式转换",
+    "长文本隐藏",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.js,
-    // company.mi,
+    company.mt,
     // xx
   ],
   milestone: MileStone.inProgress,

@@ -1,40 +1,101 @@
-**关键词**：webpack 代码分割
+**关键词**：webpack 产物大小优化
 
-为了实现你的需求，即将所有外部依赖（`node_modules` 中的依赖）打包成一个单独的包，而你自己的源码打包成另一个包，可以通过配置 Webpack 的 `optimization.splitChunks` 选项来实现。下面是具体的实施方案：
+在使用 Webpack 进行项目构建时，减少包体积是提升加载速度、改善用户体验的关键措施之一。以下是一些通用的方法和技巧来减小构建结果的包体积：
 
-### 1. 编辑 `webpack.config.js`
+### 1. **使用 Tree Shaking**
 
-在你的 `webpack.config.js` 配置文件中，找到或添加 `optimization` 部分，并在 `splitChunks` 中配置如下：
+Tree Shaking 是一个通过清除未引用代码（dead-code）的过程，可以有效减少最终包的大小。确保你的代码使用 ES6 模块语法（import 和 export），因为这允许 Webpack 更容易地识别并删除未被使用的代码。
+
+在 `webpack.config.js` 中设置 `mode` 为 `production` 可自动启用 Tree Shaking。
+
+### 2. **启用压缩(Uglification)**
+
+Webpack 通过压缩输出文件来减小包大小，如删除未使用的代码、缩短变量名等。确保在生产环境中启用了 UglifyJS 插件或 TerserPlugin。
 
 ```javascript
-module.exports = {
-  // ...其他配置
+const TerserPlugin = require("terser-webpack-plugin");
 
+module.exports = {
   optimization: {
-    runtimeChunk: "single", // 为 webpack 运行时代码创建一个额外的包
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          // 定义一个缓存组用以分离外部依赖
-          test: /[\\/]node_modules[\\/]/, // 检索 node_modules 目录下的模块
-          name: "vendors", // 分离后的包名称
-          chunks: "all", // 对所有模块生效
-        },
-        source: {
-          // 我们可以通过添加另一个缓存组来实现源码的分离（如果需要）
-          test: /[\\/]src[\\/]/, // 检索 src 目录
-          name: "source",
-          chunks: "all",
-        },
-      },
-    },
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        /* 附加选项 */
+      }),
+    ],
   },
 };
 ```
 
-### 解释
+### 3. **代码分割(Code Splitting)**
 
-- `runtimeChunk: 'single'` 创建一个运行时文件，管理模块化交互，比如加载和解析模块。
-- 在`splitChunks.cacheGroups` 中定义了两个缓存组:
-  - `vendor`：这个缓存组的目标是将来自 `node_modules` 目录的所有代码移动到命名为 `vendors` 的包中。它通过 `test` 属性来匹配 `node_modules` 目录下的模块。
-  - `source`：这个部分是为了演示如何单独将 `src` 目录下的源代码打包成一个文件。这不是必须的，因为默认情况下，Webpack 会将未被上述规则匹配到的模块（即你的源代码）打包到主包中。
+通过代码分割，你可以把代码分成多个 bundle，然后按需加载，从而减少初始加载时间。Webpack 提供了多种分割代码的方式，最常见的是动态导入（Dynamic Imports）。
+
+```javascript
+import(/* webpackChunkName: "my-chunk-name" */ "path/to/myModule").then((module) => {
+  // 使用module
+});
+```
+
+### 4. **使用 Externals 减轻体积**
+
+通过配置 externals 选项，可以阻止 Webpack 将某些 import 的包打包到 bundle 中，而是在运行时(runtime)再去从外部获取这些扩展依赖。
+
+```javascript
+module.exports = {
+  externals: {
+    jquery: "jQuery",
+  },
+};
+```
+
+### 5. **利用缓存(Caching)**
+
+使用 `[contenthash]` 替换 `[hash]` 或 `[chunkhash]` 来为输出文件命名，这确保了只有当文件内容改变时，文件名称才会改变，可以更好地利用浏览器缓存。
+
+```javascript
+output: {
+  filename: '[name].[contenthash].js',
+}
+```
+
+### 6. **移除未使用的 CSS**
+
+使用 PurgeCSS 或`purify-css`等工具检查你的 CSS 文件，自动去除未使用的 CSS，可以极大地压缩 CSS 的体积。
+
+```javascript
+const PurgecssPlugin = require("purgecss-webpack-plugin");
+```
+
+### 7. **优化图片**
+
+使用`image-webpack-loader`等图片压缩插件，可以减小图片文件的体积。
+
+```javascript
+module: {
+  rules: [
+    {
+      test: /\.(png|svg|jpg|jpeg|gif)$/i,
+      use: [
+        'file-loader',
+        {
+          loader: 'image-webpack-loader',
+          options: {
+            // 配置选项
+          },
+        },
+      ],
+    },
+  ],
+}
+```
+
+### 8. **使用动态 Polyfills**
+
+只为那些实际需要它们的浏览器提供 polyfills，而不是所有浏览器都提供。
+
+以上方法和技巧可以根据项目的具体需求和情况灵活使用，有的方法可能会对构建和重构现有代码产生较大影响，因此在采用前应评估其必要性和影响。
+
+### 9. **高版本浏览器直接使用 es6 代码**
+
+将代码编译（或者说不编译）为 ES6（ECMAScript 2015）或更高版本的 JavaScript 代码，确实可以减少产物体积。

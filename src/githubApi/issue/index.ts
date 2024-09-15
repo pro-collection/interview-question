@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "webpack 代码分割中，让所有的外部依赖打成一个包，源码 source 打成一个包，该如何配置",
+  title: "[webpack] 如何优化产物大小",
   key_world: [
-    "webpack 代码分割",
+    "webpack 产物大小优化",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],

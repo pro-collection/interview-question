@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 如何计算一段文本渲染之后的长度",
+  title: "需要详细记录多个操作链路的性能耗时，进行结构化场景分析，该如何做",
   key_world: [
-    "计算文本长度",
+    "操作链路耗时分析",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.js,
-    company.baidu,
+    labels.application,
+    company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

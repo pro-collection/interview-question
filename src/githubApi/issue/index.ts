@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "长文本场景，中间显示省略号..., 两端正常展示",
+  title: "JS 如何计算一段文本渲染之后的长度",
   key_world: [
-    "长文本隐藏",
+    "计算文本长度",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.js,
-    company.mt,
+    company.baidu,
     // xx
   ],
   milestone: MileStone.inProgress,

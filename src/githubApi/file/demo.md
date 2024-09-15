@@ -1,66 +1,56 @@
-**关键词**：长文本隐藏
+**关键词**：计算文本长度
 
-在前端处理长文本且需要在中间显示省略号（...），两端保留完整文本的情况，通常有下面几种方法可以达到效果：
+> 追加描述  
+> 需要根据这个长度来冬天计算文本是否折叠， 所以这个文本没有计算出长度是否折叠之前，还不能在用户可视区域渲染出来
 
-### 1. 纯 CSS 解决方案（对于单行文本）
+要在 JavaScript 中计算一段文本渲染之后的长度，可以通过几种方法来实现。这里的“长度”可以是文本渲染后的像素宽度，它取决于具体的字体、字号、文本内容等因素。以下是一些可行的方法：
 
-对于单行的文本，可以使用 CSS 的`text-overflow`属性来实现，但这种方法一般只能实现末尾的省略号，无法直接实现中间省略的效果。
+### 1. 创建一个临时元素来计算文本尺寸
 
-### 2. JavaScript + CSS
+这个方法涉及到创建一个与目标文本拥有相同样式（字体、字号等）的临时 DOM 元素，将目标文本内容设置到临时元素中，然后插入到文档流（不可见状态下）来测量其尺寸。测量完成后，再从文档中移除该临时元素。
 
-当需要在文本中间显示省略号时，就需要结合使用 JavaScript 和 CSS 来处理。以下是一种可能的实现方法：
+```javascript
+function getTextWidth(text, font) {
+  // 创建一个临时的span元素
+  let tempEl = document.createElement("span");
+  tempEl.style.visibility = "hidden"; // 确保元素不可见
+  tempEl.style.whiteSpace = "nowrap"; // 防止文本换行
+  tempEl.style.font = font; // 应用字体样式
+  tempEl.textContent = text;
 
-1. **确定保留文本的长度。** 首先确定需要在文本的开始和结束保留多少字符。
-2. **使用 JavaScript 计算并处理文本。** 根据上面确定的长度，使用 JavaScript 截取字符串，并添加省略号。
-3. **使用 CSS 来保证文本的美观展示。**
+  document.body.appendChild(tempEl);
+  let width = tempEl.offsetWidth; // 获取元素的宽度
+  document.body.removeChild(tempEl);
 
-下面是一个简单的示例代码：
+  return width;
+}
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
-      .text-container {
-        width: 60%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin: 20px auto;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="text" class="text-container">
-      <!-- 动态生成的文本会放在这里 -->
-    </div>
-
-    <script>
-      function truncateText(selector, text, frontLen, backLen) {
-        const totalLen = frontLen + backLen;
-        if (text.length > totalLen) {
-          const startText = text.substr(0, frontLen);
-          const endText = text.substr(-backLen);
-          document.querySelector(selector).textContent = `${startText}...${endText}`;
-        } else {
-          document.querySelector(selector).textContent = text;
-        }
-      }
-
-      const exampleText = "这是一个长文本示例，需要在中间显示省略号，同时保留两端的文本内容。";
-      truncateText("#text", exampleText, 10, 10);
-    </script>
-  </body>
-</html>
+// 示例用法
+const font = "16px Arial";
+const text = "这是一段测试文本";
+console.log(getTextWidth(text, font));
 ```
 
-在这个例子中，`truncateText`函数接收一个选择器（在这里是指容器的 ID）、要处理的文本、前端和后端应保留文本的长度。函数计算并生成了新的文本内容，其中间部分被省略号（...）替代。
+### 2. 使用 Canvas 的 measureText 方法
 
-这个方法给予了你灵活性去确定前后端保留的文本长度，以及省略的部分。但需要注意，这是针对简单场景的解决方案，对于更复杂的布局或特殊字体，可能需要更细致的处理来保证良好的显示效果。
+如果你不想与 DOM 打交道，也可以使用 Canvas 的 API 来测量文本宽度。`CanvasRenderingContext2D.measureText()` 方法返回一个对象，该对象包含了给定文本渲染后的宽度（以像素为单位）。
 
-### 其他复杂实现可以参考下面的文档
+```javascript
+function measureTextWidth(text, font) {
+  let canvas = document.createElement("canvas");
+  let ctx = canvas.getContext("2d");
+  ctx.font = font; // 应用字体样式，格式与 CSS font 属性相同
+  let metrics = ctx.measureText(text);
+  return metrics.width;
+}
 
-- https://juejin.cn/post/7329967013923962895
+// 示例用法
+const font = "16px Arial";
+const text = "这是一段测试文本";
+console.log(measureTextWidth(text, font));
+```
+
+### 注意事项
+
+- 尽量在文档加载完毕后使用这些方法，特别是如果你依赖于页面上的样式信息时。
+- 如果文本在页面上多次出现且样式一致，可以考虑缓存测量结果来提升性能。

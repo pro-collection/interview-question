@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "请求数量过多，该如何治理",
+  title: "eslint 如何设置只校验本次 MR 变更的文件内容",
   key_world: [
-    "治理请求数量",
+    "eslint 和 git 结合校验",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.network,
-    company.alibaba,
+    labels.application,
+    company.mi,
     // xx
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

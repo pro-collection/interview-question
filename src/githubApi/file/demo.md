@@ -1,108 +1,53 @@
-**关键词**：治理请求数量
+**关键词**：eslint 和 git 结合校验
 
-> 作者备注  
-> 很多同学我有 http2 ， 可以多路复用， 所以请求再多都不会影响页面性能。 实际上是错误的。
-> 在作者知道的很多超大型项目（千万行级别的项目）里面， 太多的网络并发（首屏可能就有好大几百的请求发出去）， 会因为 IO 问题到时吃掉很多的 CUP 与网络带宽， 用户依然会觉得非常的卡顿。
-> 所以这个话题是非常有意义的。 但是实际中遇到请求过多的问题， 场景是非常少的。
-> 目前作者暂定 该问题级别为 「资深」
-> 而且该问题没有一个准确的答案， 作者在这里知识提供干一些思路。
+要让 ESLint 只校验在 Merge Request (MR)、Pull Request (PR)或代码提交中变更的文件，可以采用几种方法。下面是几个可能的方案：
 
-**1. 常量请求做本地内存存储**
+### 1. 命令行 Git 和 ESLint 组合使用
 
-不是使用 https 缓存， 而是直接存一个 promise 在浏览器内存里面。 保证整个系统里面， 请求只调用一次。
+通过组合`git`命令和`eslint`命令来实现。首先，使用`git diff`获取变更的文件列表，然后将这些文件传递给`eslint`进行校验。
 
-对于一些数据不经常变化的请求，例如用户信息、配置数据等，可以将请求的结果缓存起来。下一次请求相同的资源时，先从缓存中读取数据，如果缓存有效，则无需再发起新的网络请求。
-
-思路类似于下面这张图
-![img](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b6ce7486c01f451684160a7738c6417e~tplv-k3u1fbpfcp-jj-mark:3024:0:0:0:q75.awebp#?w=1103&h=401&s=57837&e=png&b=fdfdfd)
-
-要达到这样的效果，可以设计一个请求缓存管理器，来管理并发的请求。如果有相同的请求（URL、参数、方法相同）时，只发起一次网络调用，然后将结果分发给所有等待的请求。这种模式通常可以通过一个简单的缓存对象来实现，该对象将请求的唯一标识作为键，对应的 Promise 作为值。
-
-以下是一个基本实现的示例：
-
-```javascript
-class RequestCache {
-  constructor() {
-    this.cache = new Map();
-  }
-
-  // 生成请求的唯一标识符，这里仅以 URL 和 Method 为例，实际可能需要包括请求体等
-  generateKey(url, method) {
-    return `${method}:${url}`;
-  }
-
-  // 执行请求的方法，接受 fetch 的所有参数
-  request(url, options = {}) {
-    const { method = "GET" } = options;
-    const key = this.generateKey(url, method);
-
-    // 检查缓存中是否有相同的请求
-    if (this.cache.has(key)) {
-      return this.cache.get(key);
-    }
-
-    // 没有相同的请求，发起新的请求
-    const requestPromise = fetch(url, options)
-      .then((response) => response.json())
-      .then((data) => {
-        // 请求成功后，将其从缓存中移除
-        this.cache.delete(key);
-        return data;
-      })
-      .catch((error) => {
-        // 请求失败也应该从缓存中移除
-        this.cache.delete(key);
-        throw error;
-      });
-
-    // 将新的请求 Promise 保存在缓存中
-    this.cache.set(key, requestPromise);
-
-    return requestPromise;
-  }
-}
-
-// 使用示例
-const cache = new RequestCache();
-const URL = "https://api.example.com/data";
-
-// 假设这三个请求几乎同时发起
-cache.request(URL).then((data) => console.log("请求1:", data));
-cache.request(URL).then((data) => console.log("请求2:", data));
-cache.request(URL).then((data) => console.log("请求3:", data));
+```bash
+# 获取master分支与当前分支变更的文件列表，然后对这些文件执行eslint校验
+git diff --name-only --diff-filter=d master | grep '\.js$' | xargs eslint
 ```
 
-这个简单的 `RequestCache` 类通过一个内部的 `Map` 对象管理缓存的请求。当一个新的请求发起时，它会首先检查是否已经有相同的请求存在。如果已存在，那么它只返回先前请求的 Promise；如果不存在，它会发起一个新的网络请求，并将请求的 Promise 存储在缓存中，直到请求完成（无论是成功还是失败）之后，再将其从缓存中移除。
+这里的命令解释：
 
-请注意，这里的示例非常基础，且主要用于说明如何缓存并复用请求的结果。在实际应用中，你可能还需要考虑更多细节，比如如何更精细地处理 POST 请求的请求体内容、如何设置缓存的过期时间、错误处理策略、缓存大小限制等。
+- `git diff --name-only --diff-filter=d master`：获取相对于`master`分支变更的文件列表，`--diff-filter=d`表示排除已删除的文件。
+- `grep '\.js$'`：过滤出`.js`结尾的文件。
+- `xargs eslint`：将过滤后的文件列表作为参数传递给`eslint`命令。
 
-**推荐参考文档**： https://juejin.cn/post/7341840038964363283
+注意：这个命令以`master`分支作为对比对象，如果你需要对比其他分支，请将`master`替换为相应的分支名。
 
-**2. 合并请求**
+### 2. 使用 lint-staged 运行 ESLint
 
-对于多个小请求，特别是对同一个服务器或 API 的调用，考虑将它们合并为一个较大的请求。例如，如果有多个 API 分别获取用户信息、用户订单、用户地址等，可以考虑后端提供一个合并接口，一次性返回所有所需数据。
+[lint-staged](https://github.com/okonet/lint-staged) 是一个在 git 暂存文件上运行 linters 的工具，它非常适合与 pre-commit 钩子结合使用，确保只有符合代码规范的代码才能被提交。
 
-**3. 使用 Web 缓存**
+首先，安装`lint-staged`和`husky`（用于管理 git 钩子的工具）：
 
-- **浏览器缓存**：利用 HTTP 缓存头控制静态资源（CSS、JS、图片）的缓存策略，减少重复请求。
-- **数据缓存**：对于 AJAX 请求的响应，可以在前端进行数据缓存，避免短时间内对相同资源的重复请求。
+```bash
+npm install lint-staged husky --save-dev
+```
 
-**4. 延迟加载（懒加载）**
+然后，你可以在项目的`package.json`文件中配置`lint-staged`：
 
-对于非首屏必须的资源（如图片、视频、长列表等），可以采用延迟加载或懒加载的方式，只有当用户滚动到相应位置时才加载这些内容，减少初次加载时的请求数量。
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": ["eslint --fix", "git add"]
+  }
+}
+```
 
-**5. 使用服务工作线程（Service Workers）**
+这样配置后，每次执行`git commit`操作时，`husky`会触发`pre-commit`钩子，运行`lint-staged`，再由`lint-staged`运行 ESLint 检查所有暂存的`.js`文件。通过这种方式，只有变更的并且被 git track 的文件会被 ESLint 校验。
 
-通过 Service Workers 可以拦截和缓存网络请求，实现离线体验，减少对服务器的请求。此外，Service Workers 还可以用于请求合并、请求失败的重试策略等。
+### 3. CI/CD 中集成 ESLint
 
-**6. 避免重复请求**
+在持续集成/持续部署 (CI/CD) 流程中，你也可以配置脚本使用类似于第一个方案的命令，只校验在 MR/PR 中变更的文件。具体实现方式会依赖于你使用的 CI/CD 工具（如 GitLab CI、GitHub Actions、Jenkins 等）。
 
-在某些情况下，为了保证数据的实时性，前端可能会频繁地轮询服务器。可以通过设置合理的轮询间隔或采用基于 WebSocket 的实时数据推送方案，以减少请求次数。
-
-**7. 使用 GraphQL**
-
-对于 REST API 可能导致的过度取数据（over-fetching）或取少数据（under-fetching）问题，可以考虑使用 GraphQL。GraphQL 允许客户端准确指定所需数据的结构，一次请求准确获取所需信息，减少无效数据的传输。
-
-**8. 防抖和节流**
-
-在处理连续的事件触发对后端的请求（如输入框实时搜索、窗口大小调整等）时，使用防抖（debouncing）和节流（throttling）技术可以限制触发请求的频率，减少不必要的请求量。
+通过在 CI/CD 流程中加入这一步，可以确保只有通过 ESLint 校验的代码变更才能合并到主分支。

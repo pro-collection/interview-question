@@ -1,42 +1,84 @@
-**关键词**：flex 子元素不压缩
+**关键词**：websocket 断联数据不丢失
 
-在 Flex 布局中，如果你想要子元素在容器内不被压缩，即保持其原始尺寸或指定尺寸，不受容器大小变化的影响，可以通过设置子元素的`flex-shrink`属性来实现。`flex-shrink`属性决定了当父容器大小小于其所有 flex 项总大小时，各 flex 项的缩小比例。默认值是 1，表示 flex 项会等比例缩小，以适应父容器的大小。
+实现 WebSocket 的自动重连并保证断连期间数据不丢失，通常需要在客户端实现一些机制来管理连接状态、定时重试以及缓存未成功发送的消息。以下是一个简单的步骤和策略指南：
 
-要阻止子元素压缩，你应该将它的`flex-shrink`属性设置为 0。这样，无论容器大小如何变化，子元素都不会缩小。
+### 1. 监听连接状态
 
-示例如下：
+首先，你需要监听 WebSocket 连接的各种事件，以便知道何时发生了断连，并根据这些事件来触发重连逻辑。
 
-HTML:
+- `onclose`: 当 WebSocket 连接关闭时，触发重连逻辑。
+- `onerror`: 出现错误时，也可视为一个触发重连的信号。
+- `onopen`: 连接成功时，清除重试计数器和缓存的数据（如果之前成功发送了）。
 
-```html
-<div class="flex-container">
-  <div class="flex-item">不压缩的项目</div>
-  <!-- 其他的flex-item -->
-</div>
-```
+### 2. 实现重连逻辑
 
-CSS:
+- **使用指数退避算法**来延迟重连尝试，避免短时间内频繁重连。
+  - 例如，第一次重连延迟 1 秒，第二次 2 秒，然后 4 秒，最大延迟设置为 1 分钟。
+- 在每次重连时，重置 WebSocket 对象并重新发起连接。
 
-```css
-.flex-container {
-  display: flex;
-  /* 添加其他需要的flex布局属性 */
+### 3. 缓存数据
+
+- **发送数据前检查连接状态**：如果 WebSocket 处于非开放状态，将数据缓存起来，待连接恢复后再发送。
+- **使用队列存储待发送数据**：便于按顺序发送，保证数据的完整性和顺序。
+
+### 4. 发送缓存数据
+
+- 在连接成功的回调（`onopen`事件）中，检查是否有缓存的数据，如果有，则遍历队列发送。
+
+### 示例代码
+
+下面是一个示范代码片段：
+
+```javascript
+var ws;
+var retryInterval = 1000; // 初始重连间隔为 1 秒
+const maxInterval = 60000; // 最大间隔为 1 分钟
+var messageQueue = []; // 数据缓存队列
+
+function connect() {
+  ws = new WebSocket("wss://your-websocket-url");
+
+  ws.onopen = function () {
+    console.log("WebSocket connected");
+    retryInterval = 1000; // 重置重连间隔
+    sendMessageQueue(); // 尝试发送缓存中的数据
+  };
+
+  ws.onclose = function () {
+    console.log("WebSocket disconnected, attempting to reconnect...");
+    setTimeout(connect, retryInterval);
+    retryInterval = Math.min(retryInterval * 2, maxInterval); // 指数退避
+  };
+
+  ws.onerror = function (error) {
+    console.error("WebSocket error:", error);
+    ws.close(); // 确保触发 onclose 事件
+  };
+
+  ws.onmessage = function (message) {
+    // 处理接收到的数据
+  };
 }
 
-.flex-item {
-  flex-shrink: 0; /* 这使得该flex项目不会被压缩 */
-  /* 设置宽度或其他样式 */
+function sendMessage(data) {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send(data);
+  } else {
+    console.log("WebSocket is not open. Queuing message.");
+    messageQueue.push(data); // 缓存待发送数据
+  }
 }
+
+function sendMessageQueue() {
+  while (messageQueue.length > 0) {
+    const data = messageQueue.shift(); // 获取并移除队列中的第一个元素
+    sendMessage(data); // 尝试再次发送
+  }
+}
+
+connect(); // 初始化连接
 ```
 
-在这个例子中，任何带有`flex-item`类的元素都不会在容器空间不足时被压缩。
+这个示例实现了基本的重连逻辑和数据缓存策略。在实际应用中，根据实际需求对这些逻辑进行扩展和定制化是很有必要的，尤其是数据缓存和发送逻辑，可能需要结合业务特点进行更复杂的处理。
 
-此外，`flex`属性是`flex-grow`、`flex-shrink`和`flex-basis`这三个属性的简写。如果你想在保证元素不被压缩的同时，具体控制元素的放大行为或基础大小，也可以直接使用`flex`属性进行设置。例如，如果你还希望元素不放大，并且有一个固定的基础大小，可以这样设置：
-
-```css
-.flex-item {
-  flex: 0 0 auto; /* 不放大，不缩小，基础大小为auto */
-}
-```
-
-这种方式提供了更细致的控制，`0 0 auto`分别对应`flex-grow`、`flex-shrink`和`flex-basis`的值。这告诉浏览器该项目即不应放大，也不应缩小，并且以其默认大小作为基础大小。
+特别是数据缓存这个场景， 如果有多个 webscoket 数据， 建议使用 `indexedDB` 做一个系统级别的数据管理。

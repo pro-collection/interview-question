@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "flex 布局中子元素不压缩， 该如何设置属性",
+  title: "websocket 断联之后如何重连，且保证锻炼期间数据不丢失",
   key_world: [
-    "flex 子元素不压缩",
+    "websocket 断联数据不丢失",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.css,
-    company.mi,
+    labels.application,
+    company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

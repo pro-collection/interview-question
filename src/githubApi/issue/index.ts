@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "在开发过程中，想做 git 代码暂存，该如何做",
+  title: "介绍一下 position sticky",
   key_world: [
-    "git stash 使用",
+    "position sticky",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.application,
-    company.baidu,
+    labels.css,
+    company.mt,
     // xx
   ],
   milestone: MileStone.inProgress,

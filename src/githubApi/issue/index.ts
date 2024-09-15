@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "websocket 断联之后如何重连，且保证锻炼期间数据不丢失",
+  title: "在开发过程中，想做 git 代码暂存，该如何做",
   key_world: [
-    "websocket 断联数据不丢失",
+    "git stash 使用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.application,
-    company.tencent,
+    company.baidu,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

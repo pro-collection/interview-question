@@ -11,16 +11,16 @@ import { input, confirm } from "@inquirer/prompts";
 const remote = {
   title: "eslint 如何设置只校验本次 MR 变更的文件内容",
   key_world: [
-    "eslint 和 git 结合校验",
+    "js 隐式转换",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.application,
-    company.mi,
+    labels.js,
+    // company.mi,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

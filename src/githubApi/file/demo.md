@@ -1,90 +1,40 @@
-**关键词**：资源预加载
+**关键词**：webpack 代码分割
 
-### 预加载
+为了实现你的需求，即将所有外部依赖（`node_modules` 中的依赖）打包成一个单独的包，而你自己的源码打包成另一个包，可以通过配置 Webpack 的 `optimization.splitChunks` 选项来实现。下面是具体的实施方案：
 
-预加载是指在用户需要数据或资源之前，提前加载这些数据或资源的过程。
+### 1. 编辑 `webpack.config.js`
 
-这个过程可以提高应用程序或网站的响应速度和用户体验
-
-### 预加载的优点
-
-- **提升加载速度**：通过提前加载资源，用户在访问页面时可以更快地看到完整内容。
-- **提高用户体验**：减少页面加载时的延迟，使用户感到更流畅。
-- **优化资源使用**：合理安排资源加载顺序，提高网络利用率。
-
-### WebWorker 实现预加载
-
-下面的示例将展示如何使用 Web Worker 来预加载静态资源。我们将创建一个简单的 Web Worker 脚本，用于在后台预加载一些指定的静态资源（例如图片、CSS、JavaScript 文件等）。这个过程不会阻塞主线程，使得主线程可以继续处理其他任务，如用户交互，从而提升页面的响应性能。
-
-###3 步骤 1：创建 Web Worker 脚本
-
-首先，创建一个 JS 文件作为 Web Worker 的脚本。我们把这个文件命名为 `preloadWorker.js`。
+在你的 `webpack.config.js` 配置文件中，找到或添加 `optimization` 部分，并在 `splitChunks` 中配置如下：
 
 ```javascript
-// preloadWorker.js
+module.exports = {
+  // ...其他配置
 
-self.addEventListener("message", (e) => {
-  const urls = e.data;
-  urls.forEach((url) => {
-    fetch(url)
-      .then((response) => {
-        // 一个简单的操作，标识资源已被预加载
-        if (response.status === 200) {
-          postMessage(`Resource preloaded: ${url}`);
-        } else {
-          postMessage(`Resource failed: ${url}`);
-        }
-      })
-      .catch((error) => {
-        postMessage(`Resource fetch error: ${url}`);
-      });
-  });
-});
+  optimization: {
+    runtimeChunk: "single", // 为 webpack 运行时代码创建一个额外的包
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          // 定义一个缓存组用以分离外部依赖
+          test: /[\\/]node_modules[\\/]/, // 检索 node_modules 目录下的模块
+          name: "vendors", // 分离后的包名称
+          chunks: "all", // 对所有模块生效
+        },
+        source: {
+          // 我们可以通过添加另一个缓存组来实现源码的分离（如果需要）
+          test: /[\\/]src[\\/]/, // 检索 src 目录
+          name: "source",
+          chunks: "all",
+        },
+      },
+    },
+  },
+};
 ```
 
-这个脚本监听来自主线程的消息，该消息包含了要预加载的资源的 URL 列表。对于每个 URL，它使用 `fetch` 请求该资源。根据请求的结果，它会通过 `postMessage` 向主线程发送一条消息，表明该资源已被预加载，或者载入失败。
+### 解释
 
-#### 步骤 2：在主线程中使用 Web Worker
-
-接下来，在 HTML 页面中使用这个 Web Worker。
-
-首先，确保在你的 HTML 中引入一个脚本，初始化并使用这个 Web Worker。
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Web Worker Preload Demo</title>
-  </head>
-  <body>
-    <script src="main.js"></script>
-  </body>
-</html>
-```
-
-然后，创建主线程脚本 `main.js` 用于启动和与 Web Worker 交互。
-
-```javascript
-// main.js
-
-if (window.Worker) {
-  const worker = new Worker("preloadWorker.js");
-
-  const resources = [
-    "image.png", // 示例资源，确保替换为实际的 URL
-    "style.css",
-    "script.js",
-  ];
-
-  worker.postMessage(resources);
-
-  worker.onmessage = (e) => {
-    console.log(e.data);
-  };
-} else {
-  console.log("Your browser doesn't support web workers.");
-}
-```
-
-这段脚本首先检查浏览器是否支持 Web Worker。如果支持，它会创建一个指向 `preloadWorker.js` 的新 Worker 实例，然后将要预加载的资源列表发送给这个 Worker。最后，它设置一个事件监听器来接收并处理 Worker 发出的消息。
+- `runtimeChunk: 'single'` 创建一个运行时文件，管理模块化交互，比如加载和解析模块。
+- 在`splitChunks.cacheGroups` 中定义了两个缓存组:
+  - `vendor`：这个缓存组的目标是将来自 `node_modules` 目录的所有代码移动到命名为 `vendors` 的包中。它通过 `test` 属性来匹配 `node_modules` 目录下的模块。
+  - `source`：这个部分是为了演示如何单独将 `src` 目录下的源代码打包成一个文件。这不是必须的，因为默认情况下，Webpack 会将未被上述规则匹配到的模块（即你的源代码）打包到主包中。

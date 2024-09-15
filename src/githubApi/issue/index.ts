@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何做静态资源预加载",
+  title: "webpack 代码分割中，让所有的外部依赖打成一个包，源码 source 打成一个包，该如何配置",
   key_world: [
-    "资源预加载",
+    "webpack 代码分割",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.application,
-    company.tencent,
+    labels.frameWork,
+    company.alibaba,
     // xx
   ],
   milestone: MileStone.senior,

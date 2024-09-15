@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何开启 ts 类型强校验，ts 类型错误 webpack 直接编译失败",
+  title: "请求数量过多，该如何治理",
   key_world: [
-    "ts 类型强校验",
+    "治理请求数量",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.ts,
-    company.mi,
+    labels.network,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.master,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

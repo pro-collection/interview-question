@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "需要详细记录多个操作链路的性能耗时，进行结构化场景分析，该如何做",
+  title: "flex 布局中子元素不压缩， 该如何设置属性",
   key_world: [
-    "操作链路耗时分析",
+    "flex 子元素不压缩",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.application,
-    company.mt,
+    labels.css,
+    company.mi,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

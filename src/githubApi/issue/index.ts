@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] vue 全局注册组件很方便，为何不都是用全局注册",
+  title: "[Vue] 子组件定义 接受的 props 方式有哪些",
   key_world: [
-    "组件注册细节",
+    "组件定义 props",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

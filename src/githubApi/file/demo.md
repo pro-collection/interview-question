@@ -1,71 +1,84 @@
-**关键词**：组件注册细节
+**关键词**：组件定义 props
 
-**关键词**：`<script setup>` 作用
+在 Vue 中，子组件可以通过 `props` 接收来自父组件的数据。`props` 是组件的可配置项之一，它允许外部环境传递数据给组件。有几种不同的方式来定义组件的 `props`，这些方式提供了不同级别的验证和默认值设置。以下是 Vue 中定义 `props` 的不同方式及其特点：
 
-在 Vue 3 中，`<script setup>` 是一种新的组件编写方式，旨在使组件的编写更为简洁明了。它是 Composition API 的一个语法糖，提供了一种更为简洁和易用的方式来定义组件。使用 `<script setup>` 可以带来几个主要好处：
+### 1. **数组形式**
 
-### 1. 更简洁的代码
+直接使用字符串数组列出所有想要接受的 `props`。这种方式最简单，但不提供额外的验证。
 
-通过 `<script setup>`，你可以直接在 `<script>` 标签内使用 Composition API（如 `ref`, `reactive`, `computed`, `watch`, 等），而无需明确地定义 `setup()` 函数。这减少了引导性的样板代码，使得组件的逻辑更加紧凑和易读。
-
-### 2. 更好的类型推断
-
-对于使用 TypeScript 的项目，`<script setup>` 提供了更好的类型推断支持。在 `<script setup>` 中声明的变量和函数会自动被视为组件的一部分，使得类型推断更为直接和准确。
-
-### 3. 易于使用 Composition API 特性
-
-使用 `<script setup>`，所有顶级的绑定（如变量、函数等）都自动认为是组件的一部分，并且可以在模板中直接使用，无需返回对象。
-
-### 4. 简化 Props 和 Emits 定义
-
-`<script setup>` 提供了特殊的编译时 `defineProps` 和 `defineEmits` 函数，允许你以更声明式的方式定义组件的 props 和 emits，同时也提供了类型推断的好处。
-
-### 示例
-
-为了展示 `<script setup>` 如何使 Vue 3 组件代码更加简洁，让我们对比传统的 Composition API 用法和使用 `<script setup>` 语法的用法。
-
-**使用传统 Composition API 的组件**
-
-```html
-<template>
-  <button @click="increment">{{ count }}</button>
-</template>
-
-<script>
-  import { ref, defineComponent } from "vue";
-
-  export default defineComponent({
-    setup() {
-      const count = ref(0);
-
-      function increment() {
-        count.value++;
-      }
-
-      return { count, increment };
-    },
-  });
-</script>
+```javascript
+props: ["title", "likes", "isPublished", "commentIds", "author"];
 ```
 
-在这个例子中，我们首先需要从 `vue` 导入 `ref` 和 `defineComponent`。然后，我们通过 `defineComponent` 函数定义组件，并在 `setup` 函数中定义响应式状态和函数，最后返回这些响应式状态和函数以在模板中使用它们。
+### 2. **对象形式（具有类型检查）**
 
-**使用 `<script setup>` 的组件**
+使用对象形式，你可以为每个 prop 指定类型，这提供了基本的类型检查。`type` 可以是下列原生构造函数之一：`String`、`Number`、`Boolean`、`Array`、`Object`、`Date`、`Function`、`Symbol`，或者这些构造函数组成的数组，表示多种可能的类型。
 
-```html
-<template>
-  <button @click="increment">{{ count }}</button>
-</template>
+```javascript
+props: {
+  title: String,
+  likes: Number,
+  isPublished: Boolean,
+  commentIds: Array,
+  author: Object,
+  callback: Function,
+  contactsPromise: Promise // 仅在 Vue 3 中可用
+}
+```
 
-<script setup>
-  import { ref } from "vue";
+### 3. **对象形式（具有类型检查和默认值）**
 
-  const count = ref(0);
+除了类型检查之外，还可以为每个 prop 指定默认值或验证函数。这种方式在需要确保组件的 prop 具有正确的类型或默认值时非常有用。
 
-  function increment() {
-    count.value++;
+```javascript
+props: {
+  title: {
+    type: String,
+    required: true
+  },
+  likes: {
+    type: Number,
+    default: 0
+  },
+  isPublished: {
+    type: Boolean,
+    default: false
+  },
+  comments: {
+    type: Array,
+    // 对于对象或数组类型的 prop，必须使用一个函数来返回默认值
+    default: function () {
+      return []
+    }
+  },
+  author: {
+    type: Object,
+    default: function () {
+      return { name: 'Anonymous' }
+    }
+  },
+  callback: {
+    type: Function,
+    // 默认值为一个函数
+    default: function () {
+      return () => {}
+    }
   }
-</script>
+}
 ```
 
-当使用 `<script setup>` 时，我们不需要使用 `defineComponent` 来定义组件或在 `setup` 函数中返回响应式状态和方法。相反，我们可以直接定义响应式状态和函数，这些都会自动被视为组件的一部分，并且可以在模板中直接使用。
+### 4. **对象形式（具有验证函数）**
+
+可以为 `props` 提供一个自定义验证函数。如果验证失败，则 Vue 会发出警告（仅在开发模式下）。这种方式适用于需要进行更复杂验证的场景。
+
+```javascript
+props: {
+  age: {
+    type: Number,
+    validator: function (value) {
+      // 这个值必须匹配下面的条件
+      return value > 0 && value < 100;
+    }
+  }
+}
+```

@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: `[Vue] 响应式里面 ref 和 reactive 有啥区别`,
+  title: `[Vue] 深层嵌套的对象、数组或者 JavaScript 内置的数据结构，比如 Map 等， 在响应式使用方面， ref 和 reactive 有何区别吗`,
   key_world: [
     "响应式 api",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
@@ -20,7 +20,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

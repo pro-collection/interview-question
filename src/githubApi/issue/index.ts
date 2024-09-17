@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: `[Vue] reactive() 的局限性有哪些`,
+  title: `[Vue] computed 和 普通函数有何区别`,
   key_world: [
-    "响应式 api",
+    "计算属性 computed 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
@@ -20,7 +20,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

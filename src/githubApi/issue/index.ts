@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 如何处理异步加载组件",
+  title: `[Vue] 解释一下 @submit.prevent="onSubmit" 这个指令`,
   key_world: [
-    "异步加载组件",
+    "指令的含义",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
@@ -20,7 +20,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

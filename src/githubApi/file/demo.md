@@ -1,66 +1,22 @@
-**关键词**：异步加载组件
+**关键词**：指令的含义
 
-在 Vue 应用中，异步组件是指那些在声明时不会立即加载，而是在需要的时候才加载的组件。使用异步组件能够帮助你提高应用的加载速度和性能，特别是在处理大型应用和路由懒加载时。Vue 提供了几种处理异步加载组件的方法。
+直接上图：
+![directive.DtZKvoAo.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/9d7bd9b5ac9245f29fc6b5fe0e65f4d1~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAg5pm05bCP56-G:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDEyNTAyMzM1Nzg5OTM2NyJ9&rk3s=e9ecf3d6&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1726640513&x-orig-sign=qOuHSrsmLnAlyBuGcjPCxflvsOg%3D)
 
-### Vue 3 中处理异步组件的方法
+在 Vue 中，`@submit.prevent="onSubmit"` 是一个指令修饰符的示例，它结合了事件侦听和事件修饰符的概念来提供一种声明式的方式处理表单提交事件，并自动阻止其默认行为。
 
-#### 使用 `defineAsyncComponent` 方法
+这个指令可以分为几个部分来解释：
 
-Vue 3 提供了 `defineAsyncComponent` 方法，使得定义和使用异步组件变得简单。你可以通过传递一个函数，该函数返回一个 `import()` 调用（返回 Promise），来动态加载组件。
+### `@submit`
 
-```javascript
-import { defineAsyncComponent } from "vue";
+- `@` 是一个简写符号，用于标识事件侦听器。它是 `v-on:` 的简写，因此 `@submit` 等同于 `v-on:submit`。
+- `submit` 是要侦听的事件名称。在这里，它指的是 HTML 表单的提交事件。
 
-const AsyncComponent = defineAsyncComponent(() => import("./components/AsyncComponent.vue"));
+### `.prevent`
 
-// 在组件中使用
-export default {
-  components: {
-    AsyncComponent,
-  },
-};
-```
+- `.prevent` 是一个事件修饰符。事件修饰符用于指示 Vue 对触发的事件进行特定的处理。
+- 在这种情况下，`.prevent` 修饰符告诉 Vue 阻止事件的默认行为。对于 `submit` 事件，其默认行为通常是将表单数据发送到服务器（根据 `action` 属性的值）并重新加载页面。使用 `.prevent` 可以防止这种默认行为，允许你通过 JavaScript 手动处理表单提交。
 
-#### 加载状态处理
+### `"onSubmit"`
 
-你还可以使用 `defineAsyncComponent` 的高级用法，提供一个对象来处理加载状态，如显示加载中的提示、错误处理和超时处理。
-
-```javascript
-const AsyncComponent = defineAsyncComponent({
-  // 加载异步组件的工厂函数
-  loader: () => import("./components/AsyncComponent.vue"),
-  // 加载中时要使用的组件
-  loadingComponent: LoadingComponent,
-  // 加载失败时要使用的组件
-  errorComponent: ErrorComponent,
-  // 在显示 loadingComponent 之前的延迟 | 默认值：200（毫秒）
-  delay: 200,
-  // 如果提供了超时时间（毫秒），超时后将显示错误组件 | 默认值：Infinity
-  timeout: 3000,
-});
-```
-
-### Vue 2 中处理异步组件的方法
-
-在 Vue 2 中，异步组件的定义略有不同，你可以直接在组件注册时提供一个返回 Promise 的工厂函数。
-
-```javascript
-Vue.component("async-component", () => import("./components/AsyncComponent.vue"));
-```
-
-或者为了处理加载状态，可以提供一个高级的对象形式：
-
-```javascript
-Vue.component("async-component", (resolve, reject) => ({
-  // 需要加载的组件 (应该是一个 Promise)
-  component: import("./components/AsyncComponent.vue"),
-  // 异步组件加载时使用的组件
-  loading: LoadingComponent,
-  // 加载失败时使用的组件
-  error: ErrorComponent,
-  // 展示加载中组件前的等待时间。默认：200ms。
-  delay: 200,
-  // 如果提供了超时时间 (毫秒)，超时后会显示错误组件。默认：Infinity
-  timeout: 3000,
-}));
-```
+- 这部分是对应的方法名称，当事件被触发时应该调用。在这个例子中，当表单提交事件被触发（同时默认行为被 `.prevent` 阻止）时，Vue 会调用组件中名为 `onSubmit` 的方法。

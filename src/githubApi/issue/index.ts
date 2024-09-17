@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http 的请求和响应都有哪些传输数据格式",
+  title: "http 常见的几个重定向 code 是多少，区别是啥",
   key_world: [
-    "http 传输格式",
+    "http 重定向 code",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],

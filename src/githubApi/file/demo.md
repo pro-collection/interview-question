@@ -1,70 +1,65 @@
-**关键词**：侦听器 watch
+**关键词**：侦听器 watchEffect
 
-Vue 3 提供了一个灵活的响应式系统，其中 `watch` 函数是实现细粒度数据观察和响应的重要工具。`watch` 能够侦听 Vue 应用中的响应式数据的变化，并在数据变化时执行相应的回调函数。这个功能在 Vue 2 中以 `watch` 选项的形式存在，而在 Vue 3 的组合式 API 中，则是作为 `watch` 函数来使用。
+Vue 3 引入了 Composition API，其中包括一个强大的函数 `watchEffect`，用于侦听响应式状态的变化，并当响应式状态变化时自动执行。
 
-### 使用 `watch` 侦听 Refs
+### 基本用法
 
-`watch`函数可以用来侦听一个引用类型（ref）的变化：
+`watchEffect` 接收一个函数作为参数，Vue 将会自动跟踪这个函数内部使用的所有响应式状态（响应式引用、响应式对象等）。当这些状态变化时，`watchEffect` 将重新执行这个函数。
 
 ```javascript
-import { ref, watch } from "vue";
+import { ref, watchEffect } from "vue";
 
 const count = ref(0);
 
-watch(count, (newValue, oldValue) => {
-  console.log(`新值：${newValue}，旧值：${oldValue}`);
+watchEffect(() => {
+  console.log(count.value);
 });
 ```
 
-在上面的例子中，当 `count` 的值变化时，回调函数就会被调用，并打印新旧值。
+在上面的示例中，每当 `count` 的值发生变化时，`watchEffect`回调函数都会被执行，并打印 `count` 的新值。
 
-### 使用 `watch` 侦听响应式对象
+### 立即执行
 
-除了侦听引用类型，`watch` 还可以侦听响应式对象的属性变化：
+与 `watch` API 不同，`watchEffect` 在初次调用时会立即执行一次回调函数。这对于根据响应式状态进行初始化设置非常有用。
+
+### 清理副作用
+
+`watchEffect` 的回调函数可以返回一个清理函数，用来在回调函数重新执行之前进行清理。这就像组件的 `beforeDestroy` 钩子函数，用来防止内存泄露等问题。
 
 ```javascript
-import { reactive, watch } from "vue";
+watchEffect((onInvalidate) => {
+  const timer = setInterval(() => {
+    /* ... */
+  }, 1000);
 
-const state = reactive({ count: 0 });
+  // 当侦听器重新执行或组件卸载时，清理定时器
+  onInvalidate(() => {
+    clearInterval(timer);
+  });
+});
+```
 
-watch(
-  () => state.count,
-  (newValue, oldValue) => {
-    console.log(`新值：${newValue}，旧值：${oldValue}`);
+### 控制侦听
+
+`watchEffect` 函数还可以接收一个第二个参数——一个选项对象，用来控制侦听器的行为。例如，通过设置 `flush` 选项，你可以控制执行时机是在组件更新之前、之后，还是同步执行。
+
+```javascript
+watchEffect(
+  () => {
+    /* ... */
+  },
+  {
+    flush: "post", // 'pre', 'post', 或 'sync'
   }
 );
 ```
 
-记住，当侦听响应式对象的某个属性时，你需要使用一个函数来返回这个属性的当前值。
+### 使用场景
 
-### 侦听多个源
+`watchEffect` 适用于以下场景：
 
-`watch` 还可以同时侦听多个数据源：
+- 自动收集依赖：不需要像 `watch` 那样明确指定侦听的源。
+- 初始化时的副作用：例如，根据响应式状态的初始值进行 DOM 操作、发送请求等。
+- 定期自动清理：比如，自动清理定时器、取消订阅等。
 
-```javascript
-watch([ref1, ref2], ([newVal1, newVal2], [oldVal1, oldVal2]) => {
-  // 处理逻辑
-});
-```
-
-### 深度侦听
-
-通过设置 `watch` 的选项 `{ deep: true }`，可以进行深度侦听，即侦听对象内嵌属性的变化：
-
-```javascript
-watch(obj, callback, { deep: true });
-```
-
-### 清理和停止监听
-
-`watch` 函数返回一个停止监听的函数，可以用来在合适的时机停止侦听：
-
-```javascript
-const stopWatching = watch(dataSource, callback);
-// 停止侦听
-stopWatching();
-```
-
-### watchEffect
-
-除了 `watch`，Vue 3 也引入了 `watchEffect` 函数。`watchEffect` 自动跟踪其回调函数中使用的响应式引用和响应式对象的属性，并在它们变化时运行回调函数。它不需要显式声明侦听的数据源，这让它更简单易用，但在某些情况下，它可能不如 `watch` 那么精确控制。
+`watchEffect` 提供了一种更为简洁和自动化的方式来响应状态变更，使得管理副作用（side effects）的逻辑更加直观和易于维护。

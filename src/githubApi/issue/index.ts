@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: `[Vue] watch 和 watchEffect 场景上有何区别， 该如何选择`,
+  title: `[Vue] 侦听器在什么情况下是需要清理副作用的`,
   key_world: [
-    "侦听器选择",
+    "侦听器副作用",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
@@ -21,7 +21,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

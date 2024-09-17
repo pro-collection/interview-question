@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: `[Vue] vue 中 reactive() 返回的为何是一个原始对象的 Proxy，有和好处`,
+  title: `[Vue] reactive() 的局限性有哪些`,
   key_world: [
     "响应式 api",
     // "PerformanceObserver PerformanceResourceTiming api 使用",

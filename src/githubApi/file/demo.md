@@ -1,84 +1,40 @@
 **关键词**：组件定义 props
 
-在 Vue 中，子组件可以通过 `props` 接收来自父组件的数据。`props` 是组件的可配置项之一，它允许外部环境传递数据给组件。有几种不同的方式来定义组件的 `props`，这些方式提供了不同级别的验证和默认值设置。以下是 Vue 中定义 `props` 的不同方式及其特点：
+在 Vue 中，子组件默认情况下不能使用未在 `props` 选项中明确定义的属性。Vue 的组件系统旨在明确组件之间的接口，其中 `props` 作为组件公开的属性，必须被明确声明。这样做的目的是为了增强代码的可读性和可维护性，确保组件之间的通信清晰和有序。
 
-### 1. **数组形式**
+### 但是，有几种方式可以绕过这个限制：
 
-直接使用字符串数组列出所有想要接受的 `props`。这种方式最简单，但不提供额外的验证。
+#### 1. 使用 `$attrs`
 
-```javascript
-props: ["title", "likes", "isPublished", "commentIds", "author"];
+尽管子组件不能直接使用未声明的 `props`，但它可以通过继承未声明的属性来接收来自父组件的非 `props` 属性。Vue 实例的 `$attrs` 对象包含了传递给一个组件，但是未在 `props` 配置中声明的属性。这些属性包括 `class` 和 `style`，以及绑定的事件监听器（如果 `inheritAttrs` 配置项设置为 `false`）。
+
+```html
+<!-- 子组件 -->
+<template>
+  <div>{{ $attrs.someProp }}</div>
+</template>
+
+<script>
+  export default {
+    // 如果你不希望组件的根元素继承属性，可以设置 inheritAttrs: false
+    inheritAttrs: false,
+  };
+</script>
 ```
 
-### 2. **对象形式（具有类型检查）**
+#### 2. 使用 `$props`
 
-使用对象形式，你可以为每个 prop 指定类型，这提供了基本的类型检查。`type` 可以是下列原生构造函数之一：`String`、`Number`、`Boolean`、`Array`、`Object`、`Date`、`Function`、`Symbol`，或者这些构造函数组成的数组，表示多种可能的类型。
+虽然不推荐这种做法，但理论上，如果你通过动态的方式绑定父组件的属性到子组件上，并在子组件内部使用 `this.$props` 来访问这些属性，Vue 会警告未找到对应的 `prop` 定义，但这并不会阻止你在组件内部获取这些属性的值。
 
-```javascript
-props: {
-  title: String,
-  likes: Number,
-  isPublished: Boolean,
-  commentIds: Array,
-  author: Object,
-  callback: Function,
-  contactsPromise: Promise // 仅在 Vue 3 中可用
-}
+```html
+<!-- 子组件 -->
+<template>
+  <div>{{ $props.someUndeclaredProp }}</div>
+</template>
 ```
 
-### 3. **对象形式（具有类型检查和默认值）**
+这种方式不利于保持组件接口的清晰，很容易导致难以跟踪和理解的代码，因此并不推荐使用。
 
-除了类型检查之外，还可以为每个 prop 指定默认值或验证函数。这种方式在需要确保组件的 prop 具有正确的类型或默认值时非常有用。
+### 最佳实践
 
-```javascript
-props: {
-  title: {
-    type: String,
-    required: true
-  },
-  likes: {
-    type: Number,
-    default: 0
-  },
-  isPublished: {
-    type: Boolean,
-    default: false
-  },
-  comments: {
-    type: Array,
-    // 对于对象或数组类型的 prop，必须使用一个函数来返回默认值
-    default: function () {
-      return []
-    }
-  },
-  author: {
-    type: Object,
-    default: function () {
-      return { name: 'Anonymous' }
-    }
-  },
-  callback: {
-    type: Function,
-    // 默认值为一个函数
-    default: function () {
-      return () => {}
-    }
-  }
-}
-```
-
-### 4. **对象形式（具有验证函数）**
-
-可以为 `props` 提供一个自定义验证函数。如果验证失败，则 Vue 会发出警告（仅在开发模式下）。这种方式适用于需要进行更复杂验证的场景。
-
-```javascript
-props: {
-  age: {
-    type: Number,
-    validator: function (value) {
-      // 这个值必须匹配下面的条件
-      return value > 0 && value < 100;
-    }
-  }
-}
-```
+最佳实践是始终在子组件中明确声明你打算使用的所有 `props`。这有助于保持接口清晰，并使得组件之间的通信更加可靠和可维护。使用 `$attrs` 是处理未声明属性的推荐方式，尤其是当你需要构建高度复用的组件库时，它能提供额外的灵活性，而且可以保持组件接口的整洁和明确。

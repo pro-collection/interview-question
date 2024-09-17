@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 子组件定义 接受的 props 方式有哪些",
+  title: "[Vue] 子组件是否能使用 未定义的 props ",
   key_world: [
     "组件定义 props",
     // ".exact 作用",

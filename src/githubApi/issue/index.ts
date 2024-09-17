@@ -9,19 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] vue3 里面 `<script setup>` 作用是啥",
+  title: "[Vue] vue 全局注册组件很方便，为何不都是用全局注册",
   key_world: [
-    "`<script setup>` 作用",
+    "组件注册细节",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.frameWork,
-    // company.mt,
+    company.other,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -1,35 +1,21 @@
-**关键词**：事件修饰符
+**关键词**：事件修饰符、.exact 作用
 
-在 Vue 中，事件修饰符是一些由点 (.) 开头的特殊后缀，用于指示 Vue 对 DOM 事件进行某种特殊处理。Vue 提供了一系列的默认事件修饰符来帮助开发者更方便地处理一些常见的 DOM 事件行为。
+`.exact` 修饰符在 Vue 事件处理中起着非常特定的作用。它允许控制触发事件处理器的确切方式，确保只有在指定的系统修饰键（如 `ctrl`、`alt`、`shift`、`meta`）组合完全匹配时，事件处理函数才会被触发。这意味着，如果你绑定了 `.exact` 修饰符到一个事件上，只有在没有其他未指定的修饰键被按下的情况下，该事件才会被触发。
 
-下面是 Vue 3 中提供的一些默认事件修饰符：
+### 使用场景
 
-| 事件修饰符 | 描述                                                                     |
-| ---------- | ------------------------------------------------------------------------ |
-| `.stop`    | 调用 `event.stopPropagation()` 阻止事件冒泡。                            |
-| `.prevent` | 调用 `event.preventDefault()` 阻止默认事件行为。                         |
-| `.capture` | 使用事件捕获模式添加事件监听器，而不是冒泡模式。                         |
-| `.self`    | 仅当事件是从事件绑定的元素本身触发时才触发回调。                         |
-| `.once`    | 事件只触发一次，之后移除事件监听器。                                     |
-| `.passive` | 以 `{ passive: true }` 模式添加监听器，表示不会调用 `preventDefault()`。 |
+`.exact` 修饰符非常有用，尤其是在你想要精确控制事件触发条件的时候。例如，你可能有以下场景：
 
-这些修饰符可以单独使用，也可以组合使用。以下是一些示例：
+- 当用户严格只按下 `ctrl` 键时触发一个动作，如果用户同时按下了 `ctrl` 和 `shift`，则不触发。
+
+### 示例
 
 ```html
-<!-- 阻止点击事件冒泡 -->
-<button @click.stop="doThis">Stop Propagation</button>
+<!-- 只有当没有任何其他键被同时按下时，点击才会调用 doThis -->
+<button @click.exact="doThis">No Modifier Key</button>
 
-<!-- 提交事件不再重载页面 -->
-<form @submit.prevent="onSubmit">Prevent Default</form>
-
-<!-- 修饰符链 -->
-<a @click.stop.prevent="doThat">Stop Propagation and Prevent Default</a>
-
-<!-- 只在 @click.self 表达式中的元素本身（而非子元素）触发时调用 doThat -->
-<div @click.self="doThat">Only Trigger on Self</div>
-
-<!-- 点击事件将只触发一次 -->
-<button @click.once="doOnce">Trigger Once</button>
+<!-- 只有当仅按下 ctrl 键时点击才会调用 doThat -->
+<button @click.ctrl.exact="doThat">Ctrl + Click Only</button>
 ```
 
-使用这些事件修饰符可以使你的事件处理逻辑更简洁和直观，同时也能够实现一些复杂的事件处理方式。
+在第一个例子中，点击按钮将只在没有按下 `ctrl`、`alt`、`shift` 或 `meta` 键的情况下触发 `doThis` 方法。在第二个例子中，`doThat` 方法只会在严格按下 `ctrl` 键时触发点击事件。

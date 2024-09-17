@@ -9,9 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: `[Vue] 提供了哪些默认事件修饰符`,
+  title: `[Vue] 触发事件修饰符 .exact 的作用是啥`,
   key_world: [
     "事件修饰符",
+    ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
@@ -20,7 +21,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

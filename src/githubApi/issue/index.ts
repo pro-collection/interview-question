@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: `[Vue] useTemplateRef 作用是啥， 哪些情况下要要使用这个 api`,
+  title: "[Vue] vue3 里面 `<script setup>` 作用是啥",
   key_world: [
-    "useTemplateRef api",
+    "`<script setup>` 作用",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

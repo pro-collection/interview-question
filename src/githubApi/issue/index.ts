@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 为何会被称为渐进式框架， 哪儿体现了渐进式",
+  title: "[Vue] 选项式 API 和组合式 API，两者有何区别，该如何取舍",
   key_world: [
-    "如何体现渐进式",
+    "选项式 API 和组合式 API 区别",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.frameWork,
-    // company.other,
+    company.mt,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

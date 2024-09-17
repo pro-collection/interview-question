@@ -1,22 +1,42 @@
-**关键词**：指令的含义
+**关键词**：响应式 api
 
-直接上图：
-![directive.DtZKvoAo.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/9d7bd9b5ac9245f29fc6b5fe0e65f4d1~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAg5pm05bCP56-G:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDEyNTAyMzM1Nzg5OTM2NyJ9&rk3s=e9ecf3d6&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1726640513&x-orig-sign=qOuHSrsmLnAlyBuGcjPCxflvsOg%3D)
+在 Vue 3 中，`ref` 和 `reactive` 是创建响应式数据的两种不同方法，它们都是 Vue 的响应式系统的一部分，但在使用方式和适用场景上有一些区别。下面是 `ref` 和 `reactive` 的主要区别：
 
-在 Vue 中，`@submit.prevent="onSubmit"` 是一个指令修饰符的示例，它结合了事件侦听和事件修饰符的概念来提供一种声明式的方式处理表单提交事件，并自动阻止其默认行为。
+### `ref`
 
-这个指令可以分为几个部分来解释：
+- **用法**：`ref` 用于创建一个响应式的引用类型数据。当你需要使基本数据类型（例如：string, number, boolean）变得响应式时，`ref` 是一个很好的选择。
+- **返回值**：`ref` 返回一个包含 `value` 属性的对象。你需要通过 `.value` 属性来访问或修改其内部值。
+- **适用场景**：适用于基本数据类型，也可以用于对象和数组，但主要是为了基本数据类型设计的。
 
-### `@submit`
+```javascript
+import { ref } from "vue";
 
-- `@` 是一个简写符号，用于标识事件侦听器。它是 `v-on:` 的简写，因此 `@submit` 等同于 `v-on:submit`。
-- `submit` 是要侦听的事件名称。在这里，它指的是 HTML 表单的提交事件。
+const count = ref(0);
+console.log(count.value); // 访问值
+count.value++; // 修改值
+```
 
-### `.prevent`
+### `reactive`
 
-- `.prevent` 是一个事件修饰符。事件修饰符用于指示 Vue 对触发的事件进行特定的处理。
-- 在这种情况下，`.prevent` 修饰符告诉 Vue 阻止事件的默认行为。对于 `submit` 事件，其默认行为通常是将表单数据发送到服务器（根据 `action` 属性的值）并重新加载页面。使用 `.prevent` 可以防止这种默认行为，允许你通过 JavaScript 手动处理表单提交。
+- **用法**：`reactive` 用于创建一个响应式的复杂类型数据，如对象或数组。
+- **返回值**：直接返回原始对象的响应式代理，不需要通过 `.value` 属性来访问或修改。
+- **适用场景**：是为了使对象或数组这样的引用数据类型变得响应式而设计的。
 
-### `"onSubmit"`
+```javascript
+import { reactive } from "vue";
 
-- 这部分是对应的方法名称，当事件被触发时应该调用。在这个例子中，当表单提交事件被触发（同时默认行为被 `.prevent` 阻止）时，Vue 会调用组件中名为 `onSubmit` 的方法。
+const state = reactive({ count: 0 });
+console.log(state.count); // 访问值
+state.count++; // 修改值
+```
+
+### 主要区别
+
+1. **数据类型**：`ref` 主要用于基本数据类型，但也可以用于对象和数组；`reactive` 适用于对象或数组等引用数据类型。
+2. **返回值**：`ref` 返回一个对象，这个对象包含一个 `value` 属性，这意味着你需要通过 `.value` 来获取或设置值；而 `reactive` 返回的是对象或数组的响应式代理，可以直接操作。
+3. **模板中使用**：在模板中使用时，`ref` 创建的响应式数据访问时不需要 `.value`，Vue 模板会自动解包；`reactive` 对象在模板中的行为与普通对象相同。
+
+### 使用建议
+
+- 当你处理基本数据类型时，使用 `ref`；
+- 当你需要管理一个复杂的数据结构（如对象或数组），使用 `reactive` 以保持代码的简洁和直观。

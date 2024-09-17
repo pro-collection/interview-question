@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: `[Vue] 解释一下 @submit.prevent="onSubmit" 这个指令`,
+  title: `[Vue] 响应式里面 ref 和 reactive 有啥区别`,
   key_world: [
-    "指令的含义",
+    "响应式 api",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],

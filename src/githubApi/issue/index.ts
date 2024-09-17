@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "pnpm install 和 npm install 有何区别",
+  title: "npm run start 的过程是啥，为何能执行对应的命令",
   key_world: [
-    // "monorepo 技术选项",
+    "npm run start 过程",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.engineering,
-    company.alibaba,
+    labels.application,
+    company.tencent,
     // xx
   ],
   milestone: MileStone.inProgress,

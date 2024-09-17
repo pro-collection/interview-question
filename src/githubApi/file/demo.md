@@ -1,43 +1,70 @@
-**关键词**：生命周期
+**关键词**：侦听器 watch
 
-最基础生命周期直接可以看下面这个图， 如果只能回答下面这个图里面的生命周期， 那么该问题只能是「中等」级别； 之所以是 「高等」级别的问题， 因为还有很多别的生命周期， 大家不一定知道， 但是也很重要；
+Vue 3 提供了一个灵活的响应式系统，其中 `watch` 函数是实现细粒度数据观察和响应的重要工具。`watch` 能够侦听 Vue 应用中的响应式数据的变化，并在数据变化时执行相应的回调函数。这个功能在 Vue 2 中以 `watch` 选项的形式存在，而在 Vue 3 的组合式 API 中，则是作为 `watch` 函数来使用。
 
-![image.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/135d7bede61b4423961c2dfb208f44a7~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAg5pm05bCP56-G:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDEyNTAyMzM1Nzg5OTM2NyJ9&rk3s=e9ecf3d6&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1726649822&x-orig-sign=7AZx17uuMqrw4eKTe%2BJoj%2FHSI4c%3D)
+### 使用 `watch` 侦听 Refs
 
-### Vue3 新增的生命周期
+`watch`函数可以用来侦听一个引用类型（ref）的变化：
 
-- `onErrorCaptured()`
-- `onRenderTracked()`
-- `onRenderTriggered()`
-- `onActivated()`
-- `onDeactivated()`
-- `onServerPrefetch()`
+```javascript
+import { ref, watch } from "vue";
 
-Vue 3 引入了组合式 API，随之而来的是一系列新的生命周期钩子，这些钩子提供了更细粒度的控制方式，尤其是在使用 `setup()` 函数时非常有用。下面简单解释一下你提到的这几个新的生命周期钩子：
+const count = ref(0);
 
-**onErrorCaptured()**
+watch(count, (newValue, oldValue) => {
+  console.log(`新值：${newValue}，旧值：${oldValue}`);
+});
+```
 
-- **作用**：捕获组件及其子组件树中发生的错误。它提供了一个句柄来处理错误，并防止错误继续冒泡。
-- **使用场景**：当你需要在组件树中某个层级捕获并处理错误时使用，特别适用于构建错误边界。
+在上面的例子中，当 `count` 的值变化时，回调函数就会被调用，并打印新旧值。
 
-**onRenderTracked()**
+### 使用 `watch` 侦听响应式对象
 
-- **作用**：每当一个响应式依赖被访问时调用，允许开发者跟踪渲染过程中依赖的访问。
-- **使用场景**：用于调试目的，帮助开发者理解组件如何响应数据变化，以及哪些依赖触发了组件的重新渲染。
+除了侦听引用类型，`watch` 还可以侦听响应式对象的属性变化：
 
-**onRenderTriggered()**
+```javascript
+import { reactive, watch } from "vue";
 
-- **作用**：每当响应式依赖的变化导致组件重新渲染时调用。
-- **使用场景**：同样用于调试目的，让开发者知道是哪个具体的依赖变化导致了组件的更新。
+const state = reactive({ count: 0 });
 
-**onActivated() 和 onDeactivated()**
+watch(
+  () => state.count,
+  (newValue, oldValue) => {
+    console.log(`新值：${newValue}，旧值：${oldValue}`);
+  }
+);
+```
 
-- **作用**：这两个钩子分别在 `<keep-alive>` 缓存的组件激活和停用时被调用。
-- **使用场景**：在使用 `<keep-alive>` 时非常有用，可以用来执行如清理或设置相关资源的操作。
+记住，当侦听响应式对象的某个属性时，你需要使用一个函数来返回这个属性的当前值。
 
-**onServerPrefetch()**
+### 侦听多个源
 
-- **作用**：允许组件在服务器端渲染（SSR）期间进行数据预取。
-- **使用场景**：用于服务器端渲染的 Vue 应用中，可以在组件级别添加数据预取逻辑，提高首屏加载性能和 SEO 优化。
+`watch` 还可以同时侦听多个数据源：
 
-这些新的生命周期钩子为 Vue 应用提供了更多的灵活性和控制力，允许开发者编写更高效、更可靠的代码。特别是在构建大型应用或需要精细管理资源和错误处理的情况下非常有用。
+```javascript
+watch([ref1, ref2], ([newVal1, newVal2], [oldVal1, oldVal2]) => {
+  // 处理逻辑
+});
+```
+
+### 深度侦听
+
+通过设置 `watch` 的选项 `{ deep: true }`，可以进行深度侦听，即侦听对象内嵌属性的变化：
+
+```javascript
+watch(obj, callback, { deep: true });
+```
+
+### 清理和停止监听
+
+`watch` 函数返回一个停止监听的函数，可以用来在合适的时机停止侦听：
+
+```javascript
+const stopWatching = watch(dataSource, callback);
+// 停止侦听
+stopWatching();
+```
+
+### watchEffect
+
+除了 `watch`，Vue 3 也引入了 `watchEffect` 函数。`watchEffect` 自动跟踪其回调函数中使用的响应式引用和响应式对象的属性，并在它们变化时运行回调函数。它不需要显式声明侦听的数据源，这让它更简单易用，但在某些情况下，它可能不如 `watch` 那么精确控制。

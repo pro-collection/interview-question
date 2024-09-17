@@ -1,82 +1,20 @@
-HTTP（HyperText Transfer Protocol，超文本传输协议）的请求和响应报文都遵循特定的格式。理解这些格式对于开发 Web 应用和 API 非常重要。以下是 HTTP 请求和响应报文的一般结构：
+**关键词**：如何体现渐进式
 
-### HTTP 请求报文
+> 作者备注  
+> 这个概念直接在官网起步就可以看到 https://cn.vuejs.org/guide/introduction.html
+> 所以作为基础知识即可， 定义为 「简单」级别
 
-HTTP 请求报文由三个主要部分组成：请求行、请求头部（Headers）、消息主体（Body）。
+Vue 是一个框架，也是一个生态。其功能覆盖了大部分前端开发常见的需求。但 Web 世界是十分多样化的，不同的开发者在 Web 上构建的东西可能在形式和规模上会有很大的不同。考虑到这一点，Vue 的设计非常注重灵活性和“可以被逐步集成”这个特点。根据你的需求场景，你可以用不同的方式使用 Vue：
 
-1. **请求行**：
+- 无需构建步骤，渐进式增强静态的 HTML
+- 在任何页面中作为 Web Components 嵌入
+- 单页应用 (SPA)
+- 全栈 / 服务端渲染 (SSR)
+- Jamstack / 静态站点生成 (SSG)
+- 开发桌面端、移动端、WebGL，甚至是命令行终端中的界面
 
-   - 包括方法（如 GET、POST）、请求的资源（如 URL）、HTTP 版本（如 HTTP/1.1）。
-   - 例：`GET /index.html HTTP/1.1`
+如果你是初学者，可能会觉得这些概念有些复杂。别担心！理解教程和指南的内容只需要具备基础的 HTML 和 JavaScript 知识。即使你不是这些方面的专家，也能够跟得上。
 
-2. **请求头部**：
+如果你是有经验的开发者，希望了解如何以最合适的方式在项目中引入 Vue，或者是对上述的这些概念感到好奇，我们在使用 Vue 的多种方式中讨论了有关它们的更多细节。
 
-   - 包括关于客户端环境和请求主体的详细信息，如`Host`、`User-Agent`、`Accept`、`Content-Type`等。
-   - 例：
-     ```
-     Host: www.example.com
-     User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) ...
-     Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
-     ```
-
-3. **消息主体**：
-   - 不是所有的请求都有消息主体，比如 GET 请求通常没有。对于 POST 或 PUT 请求，消息主体包含了发送给服务器的数据。
-   - 例（表单数据）：
-     ```
-     username=john&password=123456
-     ```
-
-### HTTP 响应报文
-
-HTTP 响应报文也由三个主要部分组成：状态行、响应头部（Headers）、消息主体（Body）。
-
-1. **状态行**：
-
-   - 包括 HTTP 版本、状态码（如 200、404）、状态消息（如 OK、Not Found）。
-   - 例：`HTTP/1.1 200 OK`
-
-2. **响应头部**：
-
-   - 包含了服务器的信息及进一步的操作指示，如`Content-Type`、`Content-Length`、`Set-Cookie`等。
-   - 例：
-     ```
-     Content-Type: text/html; charset=UTF-8
-     Content-Length: 438
-     ```
-
-3. **消息主体**：
-   - 包含了返回给客户端的数据，可能是网页的 HTML，或者是 API 调用的 JSON 数据。
-   - 例（HTML 内容）：
-     ```
-     <html>
-       <head><title>Example</title></head>
-       <body>
-         <h1>Hello, world!</h1>
-       </body>
-     </html>
-     ```
-
-### 示例
-
-#### 请求示例
-
-```
-GET /hello.txt HTTP/1.1
-User-Agent: curl/7.58.0
-Accept: */*
-Host: www.example.com
-```
-
-#### 响应示例
-
-```
-HTTP/1.1 200 OK
-Date: Wed, 21 Oct 2020 07:28:00 GMT
-Server: Apache/2.4.1 (Unix)
-Content-Type: text/plain
-Content-Length: 13
-
-Hello, world!
-```
-
-HTTP 请求和响应报文的结构相对简单，遵循标准的格式，容易解析。了解这些基本的组成部分有助于进行 Web 开发和调试网络通信问题。
+无论再怎么灵活，Vue 的核心知识在所有这些用例中都是通用的。即使你现在只是一个初学者，随着你的不断成长，到未来有能力实现更复杂的项目时，这一路上获得的知识依然会适用。如果你已经是一个老手，你可以根据实际场景来选择使用 Vue 的最佳方式，在各种场景下都可以保持同样的开发效率。这就是为什么我们将 Vue 称为“渐进式框架”：它是一个可以与你共同成长、适应你不同需求的框架。

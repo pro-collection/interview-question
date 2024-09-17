@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http 的 请求和 响 应报文分 别是什么样的",
+  title: "[Vue] 为何会被称为渐进式框架， 哪儿体现了渐进式",
   key_world: [
-    // "请求报文、响应报文",
+    "如何体现渐进式",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.network,
-    company.other,
+    labels.frameWork,
+    // company.other,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

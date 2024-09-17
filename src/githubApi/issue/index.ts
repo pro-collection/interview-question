@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http的请求和响应报文 有啥区别",
+  title: "http 的 请求和 响 应报文分 别是什么样的",
   key_world: [
     // "请求报文、响应报文",
     // "PerformanceObserver PerformanceResourceTiming api 使用",

@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 选项式 API 和组合式 API，两者有何区别，该如何取舍",
+  title: "[Vue] 3.x 中 app.config 有哪些应用配置？",
   key_world: [
-    "选项式 API 和组合式 API 区别",
+    "app.config 配置",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
@@ -20,7 +20,7 @@ const remote = {
     company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

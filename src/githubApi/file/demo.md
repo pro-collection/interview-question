@@ -1,90 +1,93 @@
-**关键词**：选项式 API 和组合式 API 区别
+**关键词**：app.config 配置
 
-### 选项式 API (Options API)
+确实，在 Vue 3 中，`app.config` 提供了一系列的应用级别的配置选项，用于自定义或调整 Vue 应用的行为。你提到的这些配置项都是 `app.config` 的一部分，下面是关于它们的详细介绍：
 
-使用选项式 API，我们可以用包含多个选项的对象来描述组件的逻辑，例如 data、methods 和 mounted。选项所定义的属性都会暴露在函数内部的 this 上，它会指向当前的组件实例。
+### `app.config.errorHandler`
 
-```html
-<script>
-  export default {
-    // data() 返回的属性将会成为响应式的状态
-    // 并且暴露在 `this` 上
-    data() {
-      return {
-        count: 0,
-      };
-    },
+- **作用**：为未捕获的异常定义一个全局的处理函数。这在集中处理组件渲染或观察者(watchers)中的异常时非常有用。
+- **示例**：
 
-    // methods 是一些用来更改状态与触发更新的函数
-    // 它们可以在模板中作为事件处理器绑定
-    methods: {
-      increment() {
-        this.count++;
-      },
-    },
+```javascript
+app.config.errorHandler = (err, instance, info) => {
+  // 处理错误
+};
+```
 
-    // 生命周期钩子会在组件生命周期的各个不同阶段被调用
-    // 例如这个函数就会在组件挂载完成后被调用
-    mounted() {
-      console.log(`The initial count is ${this.count}.`);
-    },
+### `app.config.warnHandler`
+
+- **作用**：为 Vue 运行时警告定义一个全局的处理函数，允许你在开发过程中自定义处理警告的方式。
+- **示例**：
+
+```javascript
+app.config.warnHandler = (msg, instance, trace) => {
+  // 处理警告
+};
+```
+
+### `app.config.performance`
+
+- **作用**：开启性能追踪。在开发模式下启用，能够测量和追踪组件的初始化、编译时间等性能指标。
+- **示例**：
+
+```javascript
+app.config.performance = true;
+```
+
+### `app.config.compilerOptions`
+
+- **作用**：允许自定义编译器选项，如模板中的自定义指令等。这对于更细致地控制模板的编译过程很有帮助。
+- **示例**：
+
+```javascript
+app.config.compilerOptions = {
+  // 编译器配置
+};
+```
+
+### `app.config.globalProperties`
+
+- **作用**：定义全局可用的属性。这在 Vue 2 中通过 `Vue.prototype` 实现，Vue 3 中通过 `app.config.globalProperties` 实现。
+- **示例**：
+
+```javascript
+app.config.globalProperties.$utils = {
+  // 一些全局方法或属性
+};
+```
+
+### `app.config.optionMergeStrategies`
+
+- **作用**：自定义选项的合并策略。允许你为自定义选项指定如何合并父子选项。
+- **示例**：
+  ```javascript
+  app.config.optionMergeStrategies.myOption = (parent, child) => {
+    // 合并策略
   };
-</script>
+  ```
 
-<template>
-  <button @click="increment">Count is: {{ count }}</button>
-</template>
+### `app.config.idPrefix`
+
+- **作用**：配置此应用中通过 useId() 生成的所有 ID 的前缀。由 3.5+ 版本引入。
+- **示例**：
+
+```javascript
+app.config.idPrefix = "custom-";
+
+// 在组件中：
+const id1 = useId(); // 'my-app:0'
+const id2 = useId(); // 'my-app:1'
 ```
 
-### 组合式 API (Composition API)
+### `app.config.throwUnhandledErrorInProduction`
 
-通过组合式 API，我们可以使用导入的 API 函数来描述组件逻辑。在单文件组件中，组合式 API 通常会与 `<script setup>` 搭配使用。这个 setup attribute 是一个标识，告诉 Vue 需要在编译时进行一些处理，让我们可以更简洁地使用组合式 API。比如，`<script setup>` 中的导入和顶层变量/函数都能够在模板中直接使用。
+- **作用**：强制在生产模式下抛出未处理的错误。 由 3.5+ 版本引入。
 
-下面是使用了组合式 API 与` <script setup>` 改造后和上面的模板完全一样的组件：
+默认情况下，在 Vue 应用中抛出但未显式处理的错误在开发和生产模式下有不同的行为：
 
-```html
-<script setup>
-  import { ref, onMounted } from "vue";
+在开发模式下，错误会被抛出并可能导致应用崩溃。这是为了使错误更加突出，以便在开发过程中被注意到并修复。
 
-  // 响应式状态
-  const count = ref(0);
+在生产模式下，错误只会被记录到控制台以尽量减少对最终用户的影响。然而，这可能会导致只在生产中发生的错误无法被错误监控服务捕获。
 
-  // 用来修改状态、触发更新的函数
-  function increment() {
-    count.value++;
-  }
+通过将 app.config.throwUnhandledErrorInProduction 设置为 true，即使在生产模式下也会抛出未处理的错误。
 
-  // 生命周期钩子
-  onMounted(() => {
-    console.log(`The initial count is ${count.value}.`);
-  });
-</script>
-
-<template>
-  <button @click="increment">Count is: {{ count }}</button>
-</template>
-```
-
-### 如何取舍
-
-在 Vue.js 开发中，选择使用选项式 API 或组合式 API 取决于多个因素，包括项目的规模、团队的熟悉度、组件复杂性，以及对 TypeScript 的需求。下面是一些建议，帮助你决定在特定情况下应该采用哪种 API 风格：
-
-**考虑项目规模和复杂性**
-
-- 对于**简单或中等复杂度的项目**，特别是如果你已经习惯于 Vue 2 的开发模式，选项式 API 可能更加简单直接。它提供了一个清晰的结构，将组件的不同方面（如数据、方法、计算属性等）分隔开，易于理解和上手。
-
-- 对于**大型项目或具有复杂组件逻辑的项目**，组合式 API 更能展现其优势。它能够更好地组织和复用逻辑，尤其是当你需要处理跨组件的共享逻辑时。通过使用组合式 API，可以将相关的逻辑紧密地放在一起，而不是分散在选项式 API 的各个区域。这降低了大型项目的维护难度。
-
-**考虑团队熟悉度**
-
-- 如果你的团队已经对选项式 API 比较熟悉，且没有遇到因结构导致的维护问题，那么可能没有必要强制迁移到组合式 API。但是，鼓励团队了解和探索组合式 API，以便于未来可能的迁移或混合使用。
-
-- 对于新项目或新团队，考虑从一开始就采用组合式 API，尤其是在团队成员对其感兴趣或组件逻辑预期较为复杂的情况下。这样可以从项目初期就充分利用组合式 API 的优点。
-
-**考虑对 TypeScript 的支持**
-
-- 组合式 API 对 TypeScript 的支持更友好，如果你的项目或团队打算使用 TypeScript，那么组合式 API 是更好的选择。它提供了类型推导和更清晰的类型定义，使得 TypeScript 代码更加健壮和易于维护。
-
-**考虑代码复用和逻辑抽象**
-
-- 当有大量需要跨组件复用的逻辑时，组合式 API 提供了更灵活和强大的方式来组织这些逻辑。通过自定义组合函数，可以更容易地在组件之间共享逻辑，减少代码重复。
+这些应用级配置选项提供了对 Vue 应用的高度控制，允许开发者根据实际需要调整 Vue 的默认行为。在使用时，建议根据项目实际情况和需求进行选择性地配置。

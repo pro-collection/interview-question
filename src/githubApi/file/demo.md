@@ -1,31 +1,28 @@
-**关键词**：npm run start 过程
+**关键词**：预检请求
 
-当你在项目的根目录下执行 `npm run start` 命令时，实际上触发了一个由 Node.js 包管理器（npm）管理的一系列流程。理解这一过程，可以帮助你更好地掌握项目的构建和开发流程。以下是 `npm run start` 执行过程的概述：
+当看到 method 为 `OPTIONS` 的请求时，这是一个 HTTP OPTIONS 请求。OPTIONS 请求是 HTTP/1.1 协议中定义的一种方法，用于获取目的资源（服务器）支持的通信选项。这种请求主要被用于 CORS（Cross-Origin Resource Sharing，跨域资源共享）预检请求，在真正的跨域请求被发送之前执行。
 
-### 1. `npm run start` 是怎么工作的？
+### 作用和目的
 
-- **查找 `package.json` 文件**：npm 首先在当前目录下查找 `package.json` 文件。这个文件包含了项目的元数据和配置信息，包括一系列定义了脚本（scripts）的键值对。
-- **解析 `scripts` 对象**：`npm run start` 会在 `package.json` 文件的 `scripts` 对象里查找名为 `"start"` 的脚本命令。例如：
+- **确定服务器的支持性**：客户端通过发送一个 OPTIONS 请求来确定服务器支持的 HTTP 方法（如 GET、POST、DELETE 等）。
+- **CORS 预检请求**：在发送实际的跨域请求前，浏览器会自动发出一个 OPTIONS 预检请求，询问目标资源的服务器是否允许该跨域请求。这个步骤用来确保安全，避免非法站点调用敏感资源。
 
-  ```json
-  "scripts": {
-      "start": "node index.js"
-  }
-  ```
+### CORS 预检请求内容
 
-- **执行命令**：找到 `"start"` 脚本后，npm 会在命令行中执行其定义的命令，如上述例子中的 `node index.js`。这里的命令可以是任何可以在终端或命令提示符下运行的命令，包括启动一个服务器、打包应用等。
+在 CORS 上下文中，OPTIONS 请求会包含一些 HTTP 头，指明了实际请求将会使用哪些 HTTP 方法和头部。服务器响应该请求时会指明允许的方法、头部和是否允许带有凭证的请求（如 Cookies）。重要的 HTTP 头包括：
 
-### 2. `npm run start` 为何能够执行对应命令？
+- **`Access-Control-Request-Method`**：在预检请求中，这个头部告诉服务器实际请求将使用的 HTTP 方法是什么。
 
-这归功于 npm 的工作方式。`npm run` 命令是一个通用命令，用于执行 `package.json` 文件中 `scripts` 属性下定义的任意脚本。这些脚本可以是几乎任何你希望自动运行的命令行指令。当执行 `npm run start` 时，npm 会查找并执行与 `start` 相关联的脚本指令。
+- **`Access-Control-Request-Headers`**：当实际请求中需要携带额外的头部时，这个字段会列出它们。
 
-### 3. 为什么使用 `npm run start`？
+- **`Access-Control-Allow-Methods`**：在响应中，这个头部告诉客户端服务器允许的方法。
 
-使用 `npm run start` 以及 `package.json` 中的其他脚本有几个好处：
+- **`Access-Control-Allow-Headers`**：在响应中，这个头部告诉客户端服务器允许的头部。
 
-- **标准化**：为常用任务（如启动开发服务器、构建生产代码等）提供一致的命令接口。
-- **简化复杂命令**：将长长的、可能很复杂的命令简化为一个简单的脚本命令，提高开发效率。
-- **跨平台兼容**：一些命令（尤其是 UNIX 命令）在不同的操作系统下表现不同。使用 npm 脚本可以通过特定工具（如 `cross-env`）来实现跨平台兼容。
-- **依赖局部安装的包**：在 npm 脚本中运行的命令可以直接使用项目 `node_modules/.bin` 目录下安装的本地依赖，无需全局安装或在命令前添加路径。
+- **`Access-Control-Allow-Origin`**：这个头部指明了哪些源可以访问该资源。如果服务器支持请求的源，则会在响应中包含这个头部。
 
-总结而言，`npm run start` 以及 `package.json` 中定义的其他脚本，为项目开发提供了一种灵活、标准化、易于管理的方式来执行各种命令行任务。
+### 示例
+
+当您的 Web 应用尝试从另一个域名（源）的服务器获取资源时，浏览器会首先发起一个 OPTIONS 请求。例如，如果您的前端应用运行在 `http://example.com` 并尝试通过 AJAX 请求 `http://api.example.com/data`，浏览器会先发送 OPTIONS 请求到 `http://api.example.com/data`。服务器响应该请求后，如果允许此类请求，则浏览器会继续发起实际的 GET/POST/等请求；如果不允许，则停止请求。
+
+总的来说，OPTIONS 请求是 HTTP 规范的一部分，它是 CORS 预检机制中非常重要的一步，用于在实际跨域请求发出之前确定通信的可能性和条件。

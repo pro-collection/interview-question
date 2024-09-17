@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "npm run start 的过程是啥，为何能执行对应的命令",
+  title: "发送请求的时候， method = OPTIONS 是什么请求",
   key_world: [
-    "npm run start 过程",
+    "预检请求",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.application,
-    company.tencent,
+    labels.network,
+    company.mi,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

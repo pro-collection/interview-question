@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 3.x 中 app.config 有哪些应用配置？",
+  title: "[Vue] 如何处理异步加载组件",
   key_world: [
-    "app.config 配置",
+    "异步加载组件",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.frameWork,
-    company.mt,
+    // company.mt,
     // xx
   ],
   milestone: MileStone.senior,

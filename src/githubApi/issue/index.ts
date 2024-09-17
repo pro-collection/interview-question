@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: `[Vue] computed 和 普通函数有何区别`,
+  title: `[Vue] 提供了哪些默认事件修饰符`,
   key_world: [
-    "计算属性 computed 作用",
+    "事件修饰符",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],

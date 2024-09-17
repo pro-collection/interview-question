@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http 常见的几个重定向 code 是多少，区别是啥",
+  title: "http的请求和响应报文 有啥区别",
   key_world: [
-    "http 重定向 code",
+    // "请求报文、响应报文",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.network,
-    company.mt,
+    company.other,
     // xx
   ],
   milestone: MileStone.inProgress,

@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "monorepo 工程有哪些工具架构， 该如何选型",
+  title: "pnpm install 和 npm install 有何区别",
   key_world: [
-    "monorepo 技术选项",
+    // "monorepo 技术选项",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.frameWork,
+    labels.engineering,
     company.alibaba,
     // xx
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

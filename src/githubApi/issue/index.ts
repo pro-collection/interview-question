@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] 如何优化产物大小",
+  title: "monorepo 工程有哪些工具架构， 该如何选型",
   key_world: [
-    "webpack 产物大小优化",
+    "monorepo 技术选项",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
@@ -20,7 +20,7 @@ const remote = {
     company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.master,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

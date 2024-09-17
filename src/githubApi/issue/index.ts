@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: `[Vue] 介绍一下 3.x 侦听器 watchEffect`,
+  title: `[Vue] watch 和 watchEffect 场景上有何区别， 该如何选择`,
   key_world: [
-    "侦听器 watchEffect",
+    "侦听器选择",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: `[Vue] 输入绑定修饰符 .lazy 作用是啥`,
+  title: `[Vue] 生命周期`,
   key_world: [
-    "输入绑定修饰符",
+    "生命周期",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

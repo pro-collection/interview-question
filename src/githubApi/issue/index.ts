@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 详细介绍一下 teleport 内置组件",
+  title: "[Vue] 介绍一下 component 动态组件",
   key_world: [
-    "teleport 内置组件",
+    "component 动态组件",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

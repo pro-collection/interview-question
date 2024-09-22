@@ -1,89 +1,49 @@
-**关键词**：defineModel 和 reactive 异同
+**关键词**：介绍一下 defineEmits
 
-在 Vue 3 中，`defineModel`和`reactive`虽然都与响应式相关，但它们有以下不同之处：
+在 Vue 3 中，`defineEmits`是一个用于定义组件触发的自定义事件的函数。
 
-### **一、功能目的**
+**一、作用与目的**
 
-1. **reactive**：
-   - 主要用于创建响应式对象。它接收一个普通的 JavaScript 对象，并将其转换为响应式对象，使得对这个对象的属性进行修改时，可以触发依赖这个对象的组件重新渲染。
-   - 例如：
-   ```javascript
-   import { reactive } from "vue";
-   const state = reactive({
-     count: 0,
-   });
-   state.count++; // 修改响应式对象的属性，会触发相关组件重新渲染
-   ```
-2. **defineModel**：
-   - 主要用于在组合式函数中简化双向绑定的实现。它通常与`reactive`等响应式函数一起使用，自动解包响应式对象的属性，使得这些属性可以在模板中直接使用，无需通过`.value`来访问，并且方便与`v-model`指令配合实现双向绑定。
-   - 例如：
-   ```javascript
-   import { reactive, defineModel } from "vue";
-   export default function useCounter() {
-     const state = reactive({
-       count: 0,
-     });
-     return defineModel(() => ({
-       count: state.count,
-     }));
-   }
-   ```
+在 Vue 3 的组合式 API 中，使用`defineEmits`可以明确地声明组件向外触发的事件类型，这有助于提高代码的可读性和可维护性。通过定义触发的事件，其他使用该组件的地方可以清楚地知道组件可能会触发哪些事件，以便进行相应的处理。
 
-### **二、使用方式**
+**二、使用方法**
 
-1. **reactive**：
-   - 直接接收一个普通对象作为参数，返回一个响应式对象。这个响应式对象的属性可以在组件的逻辑部分（如`setup`函数、方法等）中被修改，从而触发视图更新。
-   - 例如在组件中使用：
-   ```html
-   <template>
-     <div>{{ state.count }}</div>
-   </template>
-   <script setup>
-     import { reactive } from "vue";
-     const state = reactive({
-       count: 0,
-     });
-     setTimeout(() => {
-       state.count++;
-     }, 1000);
-   </script>
-   ```
-2. **defineModel**：
-   - 在组合式函数中使用，通常返回一个对象，其中包含需要进行双向绑定的属性。这个对象中的属性可以在模板中直接使用`v-model`指令进行双向绑定。
-   - 例如：
-   ```html
-   <template>
-     <div>
-       <input v-model="count" />
-     </div>
-   </template>
-   <script setup>
-     import useCounter from "./useCounter";
-     const { count } = useCounter();
-   </script>
-   ```
+1. 基本用法：
 
-### **三、作用范围**
+```vue
+<script setup>
+import { defineEmits } from "vue";
 
-1. **reactive**：
-   - 创建的响应式对象可以在整个组件中使用，包括模板、`setup`函数、方法等。它主要用于管理组件的状态数据，使得这些数据的变化能够反映到视图中。
-2. **defineModel**：
-   - 主要作用于组合式函数中，用于处理特定的逻辑并返回可以在模板中进行双向绑定的属性。它的作用范围相对较窄，主要是为了方便实现双向绑定的场景。
+const emits = defineEmits(["customEvent1", "customEvent2"]);
 
-### **四、与`v-model`的配合**
+// 在某个逻辑中触发自定义事件
+emits("customEvent1", arg1, arg2);
+</script>
+```
 
-1. **reactive**：
-   - 如果要在自定义组件中使用`reactive`创建的响应式对象与父组件进行双向绑定，需要手动处理`v-model`绑定的值的传递和更新。通常需要在组件的`props`中接收一个值，并在组件内部通过事件触发将更新后的值传递回父组件。
-   - 例如：
-   ```html
-   <template>
-     <div>
-       <input :value="inputValue" @input="$emit('update:inputValue', $event.target.value)" />
-     </div>
-   </template>
-   <script setup>
-     defineProps(["inputValue"]);
-   </script>
-   ```
-2. **defineModel**：
-   - 与`v-model`配合更加方便，使用`defineModel`返回的属性可以直接在模板中使用`v-model`进行双向绑定，无需手动处理事件的触发和值的传递。它自动处理了输入事件，并将新的值更新到响应式对象中。
+在这个例子中，定义了一个组件，该组件可以触发名为`customEvent1`和`customEvent2`的两个自定义事件。
+
+2. 带参数的事件：
+
+可以定义带参数的事件，在触发事件时传递相应的参数。例如：
+
+```vue
+<script setup>
+import { defineEmits } from "vue";
+
+const emits = defineEmits(["eventWithArgs", "eventWithoutArgs"]);
+
+function someFunction() {
+  const argValue = "some value";
+  emits("eventWithArgs", argValue);
+}
+</script>
+```
+
+这里定义了一个带参数的事件`eventWithArgs`，在`someFunction`函数中触发该事件并传递了一个参数。
+
+**三、优势**
+
+1. 类型安全：明确了事件的名称和参数类型，减少了因事件名称错误或参数传递错误导致的问题。
+2. 清晰的组件接口：让使用者更容易理解组件的行为和交互方式。
+3. 更好的维护性：在代码重构或团队协作时，更容易找到和处理与事件相关的逻辑。

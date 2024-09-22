@@ -9,19 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 都是支持响应式， defineModel 和 reactive 有何不同",
+  title: "[Vue] 介绍一下 defineEmits",
   key_world: [
-    "defineModel 和 reactive 异同",
+    "介绍一下 defineEmits",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.frameWork,
-    company.other,
+    // company.other,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

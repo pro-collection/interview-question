@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 介绍一下条件插槽",
+  title: "[Vue] 介绍一下动态插槽名",
   key_world: [
-    "vue3 条件插槽",
+    "vue3 动态插槽名",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

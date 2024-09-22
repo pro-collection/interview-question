@@ -9,19 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 介绍一下 vue 工具链",
+  title: "[Vue] 对比一下 vuex 和 Pinia 两个状态库",
   key_world: [
-    "vue 工具链",
+    "vue 状态库对比",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.frameWork,
-    // company.other,
+    company.mi,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

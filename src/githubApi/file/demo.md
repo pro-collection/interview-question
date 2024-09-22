@@ -1,80 +1,135 @@
-**关键词**：vue 工具链
+**关键词**：vue 状态库对比
 
-> 作者备注
->
-> 这个其实没有啥好说的， 官网上面都有。 直接看官网即可 https://cn.vuejs.org/guide/scaling-up/tooling
+Vuex 和 Pinia 都是用于 Vue 应用程序的状态管理库，它们有一些相似之处，但也存在一些差异。以下是它们的对比：
 
-以下是 Vue 的相关工具链介绍：
+**一、相似之处**
 
-**一、项目脚手架**
+1. **集中式状态管理**：
 
-1. **Vue CLI**：
-   - 功能：Vue CLI 是一个官方的 Vue.js 项目脚手架工具。它提供了快速搭建 Vue 项目的模板和配置选项，可以轻松生成项目结构、配置开发服务器、集成各种构建工具和插件等。
-   - 特点：支持多种项目模板，如默认模板、移动端模板、PWA（Progressive Web App）模板等。可以方便地进行项目配置和扩展，如添加路由、状态管理、单元测试等功能模块。
+   - 两者都提供了一种集中式的方式来管理应用程序的状态。这使得状态可以在不同的组件之间共享，并且可以更容易地跟踪和调试状态的变化。
+   - 例如，在一个电商应用中，用户的购物车状态可以存储在状态管理库中，以便在不同的页面和组件中访问和更新。
 
-**二、IDE 支持**
+2. **响应式状态**：
+   - Vuex 和 Pinia 都与 Vue 的响应式系统集成，使得状态的变化可以自动触发相关组件的重新渲染。
+   - 当购物车中的商品数量发生变化时，相关的组件可以自动更新以反映这个变化。
 
-1. **Visual Studio Code**：
+**二、不同之处**
 
-   - 功能：一款非常流行的轻量级代码编辑器，对 Vue 有很好的支持。通过安装 Vue 相关的扩展插件，可以实现语法高亮、智能提示、代码片段、调试等功能。
-   - 特点：拥有丰富的扩展生态系统，如 Vetur 插件提供了全面的 Vue 开发支持，包括单文件组件（SFC）的语法高亮、模板智能提示、组件自动补全等功能。同时，VS Code 的调试功能也非常强大，可以方便地对 Vue 项目进行调试。
+1. **语法和 API**：
 
-2. **WebStorm**：
-   - 功能：一款功能强大的专业 IDE，对 Vue 也有很好的支持。提供了全面的开发功能，包括语法高亮、智能提示、代码重构、调试、版本控制等。
-   - 特点：具有强大的代码分析和错误检测功能，可以帮助开发者快速发现和修复代码中的问题。同时，WebStorm 还支持多种前端技术栈，方便开发者在一个 IDE 中进行多种技术的开发。
+   - **Pinia**：
 
-**三、Chrome 开发插件**
+     - Pinia 提供了一种更加简洁和直观的 API。它使用类似于 Vue 组件的语法来定义状态和操作，使得代码更加易读和易于维护。
+     - 例如，定义一个 store 可以像这样：
 
-1. **Vue Devtools**：
-   - 功能：这是 Vue.js 官方推出的 Chrome 浏览器插件。它可以帮助开发者在浏览器中调试 Vue 应用程序，提供了组件层次结构查看、状态检查、事件监听、性能分析等功能。
-   - 特点：能够实时查看 Vue 应用的组件结构和状态，方便开发者进行调试和优化。可以在开发过程中快速定位问题，提高开发效率。
+     ```javascript
+     import { defineStore } from "pinia";
 
-**四、TS 支持**
+     export const useCartStore = defineStore("cart", {
+       state: () => ({
+         items: [],
+       }),
+       actions: {
+         addItem(item) {
+           this.items.push(item);
+         },
+       },
+     });
+     ```
 
-1. **Vue + TypeScript**：
-   - 功能：Vue 本身支持 TypeScript，可以使用 TypeScript 来编写 Vue 应用程序。通过使用 TypeScript，可以获得静态类型检查、更好的代码提示和自动补全等功能，提高代码的可维护性和可扩展性。
-   - 特点：Vue 提供了专门的类型定义文件，可以让 TypeScript 正确地识别 Vue 的语法和 API。同时，Vue 的官方文档也提供了详细的 TypeScript 支持指南，帮助开发者快速上手。
+   - **Vuex**：
 
-**五、测试**
+     - Vuex 的语法相对较为复杂，需要定义 mutations、actions 和 getters 等不同的概念来管理状态。
+     - 例如，定义一个 store 可能如下所示：
 
-1. **Jest**：
+     ```javascript
+     import Vuex from "vuex";
 
-   - 功能：一个流行的 JavaScript 测试框架，也适用于 Vue 项目。可以用于单元测试、集成测试和快照测试等。提供了丰富的断言库和测试工具，方便开发者编写和运行测试用例。
-   - 特点：具有自动模拟、并行测试、代码覆盖率报告等功能。可以与 Vue CLI 集成，方便地进行项目的测试配置和运行。
+     const store = new Vuex.Store({
+       state: {
+         items: [],
+       },
+       mutations: {
+         ADD_ITEM(state, item) {
+           state.items.push(item);
+         },
+       },
+       actions: {
+         addItem({ commit }, item) {
+           commit("ADD_ITEM", item);
+         },
+       },
+       getters: {
+         cartItems: (state) => state.items,
+       },
+     });
+     ```
 
-2. **Vue Test Utils**：
-   - 功能：这是 Vue.js 官方提供的测试工具库，用于编写 Vue 组件的单元测试。提供了一系列的 API，可以方便地获取组件实例、模拟用户交互、检查组件状态等。
-   - 特点：与 Jest 等测试框架配合使用，可以方便地对 Vue 组件进行测试。支持 Vue 的各种特性，如响应式数据、计算属性、生命周期钩子等。
+2. **模块系统**：
 
-**六、代码规范**
+   - **Pinia**：
 
-1. **ESLint**：
+     - Pinia 的模块系统更加灵活和易于使用。可以轻松地将 store 拆分为多个模块，并且可以在不同的模块之间共享状态和操作。
+     - 例如，可以创建一个名为`user`的模块和一个名为`cart`的模块，并在它们之间共享一些状态和操作：
 
-   - 功能：一个强大的 JavaScript 代码检查工具，可以用于检查 Vue 项目中的代码规范问题。可以配置各种规则和插件，对代码的格式、语法、风格等进行检查和规范。
-   - 特点：拥有丰富的规则集和插件生态系统，可以根据项目的需求进行定制化配置。可以与各种开发工具集成，如 VS Code、WebStorm 等，在开发过程中实时检查代码规范问题。
+     ```javascript
+     import { defineStore } from "pinia";
 
-2. **Prettier**：
-   - 功能：一个代码格式化工具，可以自动格式化 Vue 项目中的代码，使其符合统一的代码风格。支持多种前端技术栈，包括 JavaScript、Vue、CSS 等。
-   - 特点：具有简洁的配置和快速的格式化速度。可以与各种开发工具集成，实现自动格式化功能，提高代码的可读性和可维护性。
+     const useUserStore = defineStore("user", {
+       //...
+     });
 
-**七、格式化**
+     const useCartStore = defineStore("cart", {
+       state: () => ({
+         //...
+       }),
+       actions: {
+         addItem(item) {
+           // 可以访问 userStore 的状态
+           if (useUserStore().isLoggedIn) {
+             //...
+           }
+         },
+       },
+     });
+     ```
 
-1. **Prettier**：
-   - 如上述代码规范中提到，Prettier 主要用于代码格式化，确保代码风格的一致性。它可以自动格式化 Vue 的单文件组件、JavaScript、CSS 等代码，使代码更加易读和易于维护。
+   - **Vuex**：
+     - Vuex 的模块系统也很强大，但相对来说更加复杂。需要使用命名空间来区分不同模块的 actions、mutations 和 getters，并且在模块之间共享状态和操作需要一些额外的配置。
 
-**八、单文件组件自定义块集成**
+3. **类型支持**：
 
-1. **Vue Loader**：
-   - 功能：这是 Webpack 或 Vue CLI 中用于处理 Vue 单文件组件的加载器。它可以解析 Vue 的单文件组件，将其拆分为模板、脚本和样式三个部分，并进行相应的处理和编译。
-   - 特点：支持自定义块的处理，可以通过在单文件组件中添加自定义的块标签，如`<docs>`、`<config>`等，来扩展组件的功能和文档。可以与各种构建工具和插件集成，实现更强大的功能。
+   - **Pinia**：
 
-**九、底层库**
+     - Pinia 对 TypeScript 的支持非常好，可以轻松地为 store 定义类型，并且在开发过程中可以获得更好的类型提示和错误检查。
+     - 例如，可以使用 TypeScript 来定义一个 store 的类型：
 
-1. **Vue Router**：
+     ```javascript
+     import { defineStore } from 'pinia';
 
-   - 功能：Vue 的官方路由库，用于实现单页应用的路由功能。可以定义不同的路由路径，对应不同的组件显示，实现页面之间的导航和切换。
-   - 特点：支持动态路由、嵌套路由、路由守卫等功能。可以与 Vue 的响应式系统深度集成，实现流畅的页面切换和导航体验。
+     interface CartItem {
+       id: number;
+       name: string;
+       price: number;
+     }
 
-2. **Vuex**：
-   - 功能：Vue 的官方状态管理库，用于集中管理 Vue 应用的状态。可以将应用中的数据存储在一个集中的状态容器中，通过 mutations 和 actions 来修改状态，实现数据的共享和管理。
-   - 特点：支持模块化、严格模式、插件扩展等功能。可以与 Vue 的组件系统深度集成，实现高效的数据管理和响应式更新。
+     export const useCartStore = defineStore('cart', {
+       state: () => ({
+         items: [] as CartItem[],
+       }),
+       //...
+     });
+     ```
+
+   - **Vuex**：
+     - Vuex 也支持 TypeScript，但相对来说需要一些额外的配置和类型定义文件来获得更好的类型支持。
+
+4. **开发体验**：
+   - **Pinia**：
+     - Pinia 提供了一些开发工具，如 Pinia Devtools，可以方便地调试和检查 store 的状态和操作。它还与 Vue Devtools 集成，使得在开发过程中可以更好地跟踪状态的变化。
+     - Pinia 的 API 更加简洁，使得开发过程更加高效和愉快。
+   - **Vuex**：
+     - Vuex 也有一些开发工具，如 Vuex Devtools，但相对来说功能可能没有 Pinia Devtools 那么强大。
+     - Vuex 的语法相对较为复杂，可能需要一些时间来适应和掌握。
+
+总的来说，Pinia 和 Vuex 都是强大的状态管理库，选择哪一个取决于你的具体需求和个人偏好。如果你喜欢简洁和直观的 API，并且对 TypeScript 有较好的支持需求，那么 Pinia 可能是一个更好的选择。如果你已经熟悉 Vuex 并且对其功能和模块系统有特定的需求，那么 Vuex 也是一个可靠的选择。

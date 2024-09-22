@@ -1,156 +1,54 @@
-**关键词**：vue3 复用逻辑
+**关键词**：组合式函数 对比 mixins
 
-在 Vue 3 中，可以通过以下几种方式提升复用逻辑：
+在 Vue 3 中，组合式函数（Composables）与 Vue 2 中的混入（Mixins）相比，有以下优劣：
 
-**一、组合式函数（Composables）**
+**一、组合式函数的优势**
 
-1. 定义与使用：
+1. 更好的可读性和可维护性：
 
-   - 组合式函数是一个封装了可复用逻辑的函数，可以接收参数并返回响应式数据和方法。例如：
+   - 组合式函数通常是一个独立的函数，其逻辑更加清晰，容易理解和调试。每个组合式函数专注于特定的功能，使得代码结构更加模块化。
+   - 相比之下，混入可能会导致命名冲突和难以追踪的代码来源，尤其是当多个混入被应用到一个组件时。
 
-     ```javascript
-     import { ref } from "vue";
+2. 灵活的组合和参数化：
 
-     export function useCounter(initialValue = 0) {
-       const count = ref(initialValue);
-       const increment = () => count.value++;
-       const decrement = () => count.value--;
+   - 可以根据需要选择和组合不同的组合式函数，并且可以传递参数来定制它们的行为。这使得代码更加灵活，可以适应不同的场景。
+   - 混入的组合相对固定，难以进行灵活的参数化。
 
-       return { count, increment, decrement };
-     }
-     ```
+3. 更好的类型支持：
 
-   - 在组件中使用组合式函数：
+   - 在使用 TypeScript 时，组合式函数可以更好地利用类型系统，提供更准确的类型提示和错误检查。
+   - 混入在类型支持方面相对较弱，可能会导致类型不明确的问题。
 
-     ```vue
-     <script setup>
-     import { useCounter } from "./path/to/composable";
+4. 避免命名冲突：
+   - 组合式函数通过命名空间或函数名来避免命名冲突，而混入可能会因为相同的属性或方法名而产生冲突。
 
-     const { count, increment, decrement } = useCounter();
-     </script>
+**二、混入的优势**
 
-     <template>
-       <div>
-         Count: {{ count }}
-         <button @click="increment">Increment</button>
-         <button @click="decrement">Decrement</button>
-       </div>
-     </template>
-     ```
+1. 历史兼容性：
 
-2. 优势：
-   - 可维护性高：将可复用的逻辑封装在独立的函数中，使得代码更易于理解和维护。
-   - 可测试性强：可以单独对组合式函数进行测试，而不需要依赖于整个组件。
-   - 易于复用：可以在多个组件中导入和使用相同的组合式函数。
+   - 如果是从 Vue 2 迁移过来的项目，已经使用了混入，那么在一定程度上可以继续使用它们，减少迁移成本。
 
-**二、自定义指令**
+2. 简单的使用方式：
+   - 对于一些简单的复用场景，混入可以快速地将一些通用的属性和方法添加到组件中，使用起来相对简单。
 
-1. 定义与使用：
+**三、组合式函数的劣势**
 
-   - 自定义指令可以在元素上应用特定的行为。例如：
+1. 学习曲线：
 
-     ```javascript
-     const focusDirective = {
-       mounted(el) {
-         el.focus();
-       },
-     };
+   - 对于习惯了 Vue 2 混入的开发者来说，学习和适应组合式函数可能需要一定的时间。
 
-     export default focusDirective;
-     ```
+2. 代码组织要求高：
+   - 由于组合式函数需要更加细致的代码组织，对于一些小型项目或快速开发场景，可能会觉得相对繁琐。
 
-   - 在组件中使用自定义指令：
+**四、混入的劣势**
 
-     ```vue
-     <script setup>
-     import focusDirective from "./path/to/directive";
-     </script>
+1. 不明确的来源：
 
-     <template>
-       <input v-focus />
-     </template>
-     ```
+   - 当多个混入被应用到一个组件时，很难确定某个属性或方法的具体来源，这会增加代码的理解难度。
 
-2. 优势：
-   - 特定行为复用：对于一些需要在多个元素上重复应用的特定行为，可以通过自定义指令进行复用。
-   - 解耦逻辑：将特定的行为从组件的逻辑中分离出来，使得组件更加专注于业务逻辑。
+2. 潜在的命名冲突：
 
-**三、混入（Mixins）**
+   - 如前所述，混入容易产生命名冲突，尤其是在大型项目中，可能会导致难以调试的问题。
 
-1. 定义与使用：
-
-   - 混入是一种可以将多个组件的可复用选项合并到一个对象中的方式。例如：
-
-     ```javascript
-     const myMixin = {
-       data() {
-         return {
-           commonData: "This is common data",
-         };
-       },
-       methods: {
-         commonMethod() {
-           console.log("This is a common method");
-         },
-       },
-     };
-
-     export default myMixin;
-     ```
-
-   - 在组件中使用混入：
-
-     ```vue
-     <script setup>
-     import myMixin from "./path/to/mixin";
-
-     export default {
-       mixins: [myMixin],
-     };
-     </script>
-
-     <template>
-       <div>
-         {{ commonData }}
-         <button @click="commonMethod">Call common method</button>
-       </div>
-     </template>
-     ```
-
-2. 优势：
-   - 代码复用：可以将一些通用的属性、方法或生命周期钩子合并到多个组件中。
-   - 减少重复代码：避免在多个组件中重复编写相同的逻辑。
-
-**四、函数式组件**
-
-1. 定义与使用：
-
-   - 函数式组件是一个无状态、无实例的组件，它接收 props 并返回一个 VNode。例如：
-
-     ```vue
-     <script setup>
-     import { h } from "vue";
-
-     const MyFunctionalComponent = (props) => {
-       return h("div", {}, props.message);
-     };
-
-     export default MyFunctionalComponent;
-     </script>
-     ```
-
-   - 在其他组件中使用函数式组件：
-
-     ```vue
-     <script setup>
-     import MyFunctionalComponent from "./path/to/functionalComponent";
-     </script>
-
-     <template>
-       <MyFunctionalComponent message="Hello from functional component" />
-     </template>
-     ```
-
-2. 优势：
-   - 轻量级：函数式组件没有实例化的开销，性能更高。
-   - 简洁性：对于一些简单的展示性组件，可以使用函数式组件来简化代码。
+3. 可维护性问题：
+   - 随着项目的发展，混入可能会变得复杂和难以维护，特别是当需要修改或扩展它们的功能时。

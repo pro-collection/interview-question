@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 如何提升复用逻辑",
+  title: "[Vue] 组合式函数 和 vue2 mixins 对比， 有何优劣",
   key_world: [
-    "vue3 复用逻辑",
+    "组合式函数 对比 mixins",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

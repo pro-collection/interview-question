@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 实现一个简单的 i18n (国际化 (Internationalization) 的缩写) 插件",
+  title: "[Vue] 有哪些内置组件",
   key_world: [
-    "vue i18n 插件实现",
+    "vue 内置组件",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
@@ -21,7 +21,7 @@ const remote = {
     // company.other,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -1,40 +1,67 @@
-**关键词**：组件定义 props
+**关键词**：vue3 双向绑定 defineModel
 
-在 Vue 中，子组件默认情况下不能使用未在 `props` 选项中明确定义的属性。Vue 的组件系统旨在明确组件之间的接口，其中 `props` 作为组件公开的属性，必须被明确声明。这样做的目的是为了增强代码的可读性和可维护性，确保组件之间的通信清晰和有序。
+在 Vue 3 中，`defineModel`是一个用于简化双向绑定的函数，通常与组合式函数（composition function）一起使用。
 
-### 但是，有几种方式可以绕过这个限制：
+**一、主要作用**
 
-#### 1. 使用 `$attrs`
+1. **自动解包响应式对象**：
+   - 当在组合式函数中使用响应式对象时，使用`defineModel`可以自动解包响应式对象的属性，使得这些属性可以在模板中直接使用，无需通过`.value`来访问。
+   - 例如，如果有一个响应式对象`state`，其中包含属性`count`，在不使用`defineModel`时，在模板中需要使用`state.count.value`来访问`count`的值。但使用`defineModel`后，可以直接在模板中使用`count`。
+2. **实现双向绑定**：
+   - 配合`v-model`指令使用时，`defineModel`可以轻松实现双向绑定。它会自动处理输入事件，并将新的值更新到响应式对象中。
+   - 例如，在一个自定义组件中，使用`defineModel`可以让组件的`props`中的一个值与组件内部的状态实现双向绑定，使得父组件和子组件之间的数据传递更加方便。
 
-尽管子组件不能直接使用未声明的 `props`，但它可以通过继承未声明的属性来接收来自父组件的非 `props` 属性。Vue 实例的 `$attrs` 对象包含了传递给一个组件，但是未在 `props` 配置中声明的属性。这些属性包括 `class` 和 `style`，以及绑定的事件监听器（如果 `inheritAttrs` 配置项设置为 `false`）。
+**二、使用方法**
 
-```html
-<!-- 子组件 -->
-<template>
-  <div>{{ $attrs.someProp }}</div>
-</template>
+1. **导入`defineModel`**：
+   - 在组合式函数中，首先需要从`'vue'`模块中导入`defineModel`函数。
+   ```javascript
+   import { defineModel } from "vue";
+   ```
+2. **使用`defineModel`**：
 
-<script>
-  export default {
-    // 如果你不希望组件的根元素继承属性，可以设置 inheritAttrs: false
-    inheritAttrs: false,
-  };
-</script>
-```
+   - 在组合式函数内部，将需要双向绑定的响应式对象作为参数传递给`defineModel`。
 
-#### 2. 使用 `$props`
+   ```javascript
+   import { reactive } from "vue";
 
-虽然不推荐这种做法，但理论上，如果你通过动态的方式绑定父组件的属性到子组件上，并在子组件内部使用 `this.$props` 来访问这些属性，Vue 会警告未找到对应的 `prop` 定义，但这并不会阻止你在组件内部获取这些属性的值。
+   export default function useCounter() {
+     const state = reactive({
+       count: 0,
+     });
 
-```html
-<!-- 子组件 -->
-<template>
-  <div>{{ $props.someUndeclaredProp }}</div>
-</template>
-```
+     return defineModel(() => ({
+       count: state.count,
+     }));
+   }
+   ```
 
-这种方式不利于保持组件接口的清晰，很容易导致难以跟踪和理解的代码，因此并不推荐使用。
+   - 在上面的例子中，`state.count`是一个响应式属性，通过`defineModel`函数返回后，可以在模板中直接使用`count`进行双向绑定。
 
-### 最佳实践
+3. **在模板中使用**：
 
-最佳实践是始终在子组件中明确声明你打算使用的所有 `props`。这有助于保持接口清晰，并使得组件之间的通信更加可靠和可维护。使用 `$attrs` 是处理未声明属性的推荐方式，尤其是当你需要构建高度复用的组件库时，它能提供额外的灵活性，而且可以保持组件接口的整洁和明确。
+   - 在组件的模板中，可以使用`v-model`指令来绑定使用了`defineModel`的属性。
+
+   ```html
+   <template>
+     <div>
+       <input v-model="count" />
+     </div>
+   </template>
+
+   <script setup>
+     import useCounter from "./useCounter";
+     const { count } = useCounter();
+   </script>
+   ```
+
+   - 在这个例子中，`input`元素的`v-model`绑定了`count`属性，当用户在输入框中输入内容时，`count`的值会自动更新，实现了双向绑定。
+
+**三、优势和适用场景**
+
+1. **优势**：
+   - **简化代码**：减少了在模板中访问响应式属性时需要添加`.value`的繁琐操作，使代码更加简洁易读。
+   - **方便双向绑定**：特别是在自定义组件中，使用`defineModel`可以快速实现双向绑定，提高开发效率。
+2. **适用场景**：
+   - **自定义组件开发**：当开发自定义组件时，如果需要实现双向绑定的属性，使用`defineModel`可以简化代码，提高组件的易用性。
+   - **复杂业务逻辑处理**：在组合式函数中处理复杂的业务逻辑时，`defineModel`可以帮助更好地管理响应式数据，实现数据的双向绑定。

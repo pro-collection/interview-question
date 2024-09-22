@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 子组件是否能使用 未定义的 props ",
+  title: "[Vue] 介绍一下 defineModel",
   key_world: [
-    "组件定义 props",
+    "vue3 双向绑定 defineModel",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

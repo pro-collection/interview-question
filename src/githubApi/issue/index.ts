@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 介绍一下动态插槽名",
+  title: "[Vue] 介绍一下 Provide",
   key_world: [
-    "vue3 动态插槽名",
+    "vue3 Provide",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
@@ -21,7 +21,7 @@ const remote = {
     // company.other,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

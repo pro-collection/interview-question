@@ -1,75 +1,115 @@
-**关键词**：vue 自定义指令
+**关键词**：vue 全局配置
 
-在 Vue 中，可以通过以下步骤来自定义指令：
+在 Vue 中，可以通过以下几种方式配置全局使用的定义或常量：
 
-**一、全局自定义指令**
+**一、使用 Vue 原型（不推荐在 Vue 3 中使用）**
 
-1. 使用`Vue.directive()`方法定义全局指令：
+在 Vue 2 中，可以通过在`main.js`文件中向 Vue 的原型上添加属性来实现全局定义或常量的访问。但在 Vue 3 中不推荐这种方式，因为它可能会导致一些潜在的问题。
+
+```javascript
+// Vue 2 示例
+Vue.prototype.$globalConstant = "This is a global constant";
+```
+
+**二、使用 provide/inject（推荐）**
+
+1. 在根组件中提供全局定义或常量：
 
    ```javascript
-   Vue.directive("my-directive", {
-     // 指令的定义对象
-     bind(el, binding, vnode) {
-       // 在元素绑定指令时调用
-       // el 是指令所绑定的元素
-       // binding 包含指令的信息，如 value、arg、modifiers 等
-       // vnode 是虚拟节点
+   import { createApp } from "vue";
+
+   const app = createApp({
+     setup() {
+       return {
+         globalValue: "Global value",
+       };
      },
-     inserted(el, binding, vnode) {
-       // 被绑定元素插入父节点时调用
-     },
-     update(el, binding, vnode, oldVnode) {
-       // 当组件更新时调用，包括数据更新和组件本身的更新
-     },
-     componentUpdated(el, binding, vnode, oldVnode) {
-       // 组件及其子组件的 VNode 更新后调用
-     },
-     unbind(el, binding, vnode) {
-       // 指令与元素解绑时调用
+     provide() {
+       return {
+         global: this.globalValue,
+       };
      },
    });
+
+   app.mount("#app");
    ```
 
-2. 在模板中使用自定义指令：
-   ```html
-   <div v-my-directive="someValue"></div>
-   ```
+2. 在子组件中注入并使用：
 
-**二、局部自定义指令**
+   ```vue
+   <script setup>
+   import { inject } from "vue";
 
-1. 在组件中定义局部指令：
+   const global = inject("global");
+   </script>
 
-   ```javascript
-   export default {
-     directives: {
-       "my-directive": {
-         bind(el, binding, vnode) {
-           // 指令定义
-         },
-       },
-     },
-   };
-   ```
-
-2. 在组件的模板中使用局部自定义指令：
-   ```html
    <template>
-     <div v-my-directive="someValue"></div>
+     <div>{{ global }}</div>
    </template>
    ```
 
-**三、指令定义对象的参数说明**
+**三、创建全局变量文件并导入**
 
-1. `el`：指令所绑定的元素，可以通过这个参数来操作元素的属性、样式等。
-2. `binding`：一个对象，包含以下属性：
-   - `value`：指令的绑定值，例如在`v-my-directive="someValue"`中，`value`就是`someValue`的值。
-   - `arg`：指令的参数，如果指令是`v-my-directive:argName`，那么`arg`就是`argName`。
-   - `modifiers`：一个对象，包含指令的修饰符。
-3. `vnode`：虚拟节点，代表指令所绑定的元素的虚拟节点。
-4. `oldVnode`：上一个虚拟节点，仅在`update`和`componentUpdated`钩子中可用。
+1. 创建一个专门的文件用于存储全局定义或常量，例如`globals.js`：
 
-**四、自定义指令的应用场景**
+   ```javascript
+   export const globalConstant = "This is a global constant";
+   ```
 
-1. 操作 DOM 元素：例如，在特定条件下为元素添加或移除类名、设置样式、监听元素的事件等。
-2. 实现复杂的交互效果：比如拖拽、缩放、滚动监听等。
-3. 数据格式化：在将数据绑定到元素之前对数据进行格式化处理。
+2. 在需要使用的地方导入：
+   ```javascript
+   import { globalConstant } from "./globals.js";
+   ```
+
+**四、使用 Vuex（状态管理）**
+
+如果你的全局定义或常量需要在多个组件之间共享并且可能会发生变化，可以考虑使用 Vuex 进行状态管理。
+
+1. 安装和设置 Vuex：
+
+   ```bash
+   npm install vuex@next
+   ```
+
+   创建一个`store.js`文件：
+
+   ```javascript
+   import { createStore } from "vuex";
+
+   const store = createStore({
+     state: {
+       globalValue: "Global value from Vuex",
+     },
+     mutations: {},
+     actions: {},
+     modules: {},
+   });
+
+   export default store;
+   ```
+
+2. 在`main.js`中引入并挂载 Vuex：
+
+   ```javascript
+   import { createApp } from "vue";
+   import App from "./App.vue";
+   import store from "./store";
+
+   const app = createApp(App);
+   app.use(store);
+   app.mount("#app");
+   ```
+
+3. 在组件中使用：
+
+   ```vue
+   <script setup>
+   import { useStore } from "vuex";
+
+   const store = useStore();
+   </script>
+
+   <template>
+     <div>{{ store.state.globalValue }}</div>
+   </template>
+   ```

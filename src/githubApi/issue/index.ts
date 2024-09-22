@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] 如何自定义指令",
+  title: "[Vue] vue 如何配置全局使用的定义或者常量",
   key_world: [
-    "vue 自定义指令",
+    "vue 全局配置",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
@@ -21,7 +21,7 @@ const remote = {
     // company.other,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

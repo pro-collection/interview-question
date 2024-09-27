@@ -9,19 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "localStorage 是同步还是异步",
+  title: "手写实现 lodash.flattenDeep 将array递归为一维数组",
   key_world: [
-    // "vue 状态库对比",
+    "lodash.flattenDeep 实现",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     labels.application,
-    company.baidu,
+    company.mi,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

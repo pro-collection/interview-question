@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何限制 input 框只能输入正整数",
+  title: "localStorage 是同步还是异步",
   key_world: [
     // "vue 状态库对比",
     // ".exact 作用",
@@ -17,7 +17,7 @@ const remote = {
     // "todo",
   ],
   labels: [
-    labels.frameWork,
+    labels.application,
     company.baidu,
     // xx
   ],

@@ -9,16 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "手写实现 lodash.flattenDeep 将array递归为一维数组",
+  title: "防止对象被篡改有哪些方式",
   key_world: [
-    "lodash.flattenDeep 实现",
+    "防止对象篡改",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.application,
-    company.mi,
+    labels.js,
+    company.alibaba,
     // xx
   ],
   milestone: MileStone.inProgress,

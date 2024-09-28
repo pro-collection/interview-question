@@ -1,93 +1,74 @@
-**关键词**：防止对象篡改
+**关键词**：动画性能
 
-在 JavaScript 中，可以通过以下几种方式防止对象被篡改：
+> 作者备注， 这个问题其实没有啥太大的价值， 可以当做科普看看即可
 
-**一、使用`Object.freeze()`**
+**一、使用浏览器开发者工具**
 
-1. 功能：
+1. Chrome 开发者工具：
 
-   - 完全冻结一个对象，使其不能添加新属性、删除现有属性或修改现有属性的值。
-   - 对嵌套对象也会进行深度冻结。
+   - 打开 Chrome 浏览器，进入要检测动画性能的页面。
+   - 按下 F12 打开开发者工具，切换到“Performance”（性能）选项卡。
+   - 点击“Record”（录制）按钮开始录制页面的交互和动画。
+   - 进行页面上的动画操作，如滚动、拖动、动画播放等。
+   - 停止录制后，开发者工具会生成一个性能分析报告，其中包括 CPU 使用率、FPS（每秒帧数）、帧时间线等信息，可以帮助你分析动画的性能瓶颈。
 
-2. 示例：
+2. Firefox 开发者工具：
+   - 打开 Firefox 浏览器，进入页面后按下 F12 打开开发者工具。
+   - 切换到“Performance”选项卡。
+   - 点击“Start Recording Performance”（开始录制性能）按钮，然后进行动画操作。
+   - 停止录制后，可以查看类似 Chrome 开发者工具中的性能分析报告，包括帧时间线、FPS 等信息。
 
-   ```javascript
-   const obj = {
-     prop1: "value1",
-     prop2: { nestedProp: "nestedValue" },
-   };
-   Object.freeze(obj);
+**二、使用 JavaScript 性能分析工具**
 
-   // 以下操作都会抛出错误
-   obj.newProp = "newValue";
-   delete obj.prop1;
-   obj.prop1 = "newValue1";
-   obj.prop2.nestedProp = "newNestedValue";
-   ```
+Frame Timing API 可以用于检测动画性能。
 
-**二、使用`Object.seal()`**
+**2.1、Frame Timing API 的作用**
 
-1. 功能：
+Frame Timing API 提供了一种方式来测量浏览器渲染每一帧所花费的时间。这对于分析动画性能非常有用，因为它可以帮助你确定动画是否流畅，是否存在卡顿或掉帧的情况。
 
-   - 密封一个对象，阻止添加新属性和删除现有属性，但可以修改现有属性的值。
-   - 对嵌套对象不进行深度密封。
+**2.2、如何使用 Frame Timing API 进行性能检测**
 
-2. 示例：
+1. 获取帧时间数据：
+
+   - 使用 `performance.getEntriesByType('frame')` 方法可以获取帧时间数据的数组。每个条目代表一帧的信息，包括帧的开始时间、持续时间等。
 
    ```javascript
-   const obj = {
-     prop1: "value1",
-     prop2: { nestedProp: "nestedValue" },
-   };
-   Object.seal(obj);
-
-   // 以下操作会抛出错误或不被允许
-   obj.newProp = "newValue";
-   delete obj.prop1;
-
-   // 这个操作是允许的
-   obj.prop1 = "newValue1";
-   obj.prop2.nestedProp = "newNestedValue";
+   const frameEntries = performance.getEntriesByType("frame");
+   frameEntries.forEach((entry) => {
+     console.log(`Frame start time: ${entry.startTime}`);
+     console.log(`Frame duration: ${entry.duration}`);
+   });
    ```
 
-**三、使用`const`声明对象引用**
+2. 分析帧时间数据：
 
-1. 功能：
+   - 通过分析帧的持续时间，可以判断动画是否在预期的时间内渲染。如果帧的持续时间过长，可能表示动画出现了卡顿。
+   - 可以计算平均帧时间、最大帧时间等指标，以评估动画的整体性能。
 
-   - 使用`const`声明的变量不能被重新赋值，但对象本身的属性仍然可以被修改，除非使用上述冻结或密封的方法。
+3. 结合其他性能指标：
+   - Frame Timing API 可以与其他性能指标一起使用，如 FPS（每秒帧数）、CPU 使用率等，以全面了解动画性能。
+   - 例如，可以使用 `requestAnimationFrame` 来计算 FPS，并结合帧时间数据来确定动画的流畅度。
 
-2. 示例：
+**2.3、优势和局限性**
 
-   ```javascript
-   const obj = { prop: "value" };
-   // 以下操作会报错
-   obj = { newProp: "newValue" };
+1. 优势：
 
-   // 这个操作是允许的
-   obj.prop = "newValue1";
-   ```
+   - 提供精确的帧时间信息，有助于深入了解动画的性能细节。
+   - 可以在浏览器中直接使用，无需安装额外的工具。
 
-**四、使用代理（Proxy）进行拦截**
+2. 局限性：
+   - 并非所有浏览器都完全支持 Frame Timing API，可能存在兼容性问题。
+   - 仅提供帧时间数据，对于复杂的动画性能问题，可能需要结合其他工具和技术进行分析。
 
-1. 功能：
+**三、使用在线性能检测工具**
 
-   - 通过创建一个代理对象，可以拦截对目标对象的各种操作，如属性访问、赋值、删除等，并根据需要进行控制。
+1. WebPageTest：
 
-2. 示例：
+   - WebPageTest 是一个在线工具，可以对网页的性能进行全面的测试，包括加载时间、动画性能、资源加载等。
+   - 输入要测试的网页 URL，选择测试参数，如浏览器类型、地理位置等，然后启动测试。
+   - 测试完成后，会生成详细的报告，包括视频录制、性能指标图表等，可以帮助你分析动画性能问题。
 
-   ```javascript
-   const targetObject = { prop: "value" };
-   const handler = {
-     set(target, key, value) {
-       throw new Error("Object is immutable.");
-     },
-     deleteProperty(target, key) {
-       throw new Error("Object is immutable.");
-     },
-   };
-   const immutableObject = new Proxy(targetObject, handler);
-
-   // 以下操作都会抛出错误
-   immutableObject.prop = "newValue";
-   delete immutableObject.prop;
-   ```
+2. Lighthouse：
+   - Lighthouse 是一个由 Google 开发的开源工具，可以作为 Chrome 浏览器的扩展或命令行工具使用。
+   - 运行 Lighthouse 对网页进行审计，它会评估网页的性能、可访问性、最佳实践等方面，并提供详细的报告和建议。
+   - 在性能部分，会包括对动画性能的评估，如 FPS、主线程忙碌时间等指标。

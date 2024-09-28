@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "axios 支持哪些常用的配置",
+  title: "解释下 axios withCredentials 配置",
   key_world: [
     "axios 配置",
     // ".exact 作用",

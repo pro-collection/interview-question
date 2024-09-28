@@ -9,16 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] tree-shaking 原理",
+  title: "前端应用有哪些代码测试手段",
   key_world: [
-    "tree-shaking 原理",
+    "测试手段",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     // labels.js,
-    labels.engineering,
+    labels.application,
 
     company.tencent,
     // xx

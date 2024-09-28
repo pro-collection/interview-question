@@ -9,21 +9,21 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "数组里面有 10 万个数据，取第一个元素和第 10 万个元素的时间相差多少",
+  title: "[webpack] 发中使用的是 esm 和 webpack, 是否可以直接调用 commonjs 模块化的三方包",
   key_world: [
-    "数组访问",
+    "模块化混用",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.js,
+    labels.engineering,
     // labels.application,
 
-    // company.alibaba,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "在 forEach 中和 for 循环 中调用异步函数的区别",
+  title: "mobx 和 redux 有什么区别",
   key_world: [
-    "循环中的异步",
+    "mobx 和 redux 区别",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.js,
+    // labels.js,
     labels.application,
 
-    // company.alibaba,
+    company.alibaba,
     // xx
   ],
   milestone: MileStone.senior,

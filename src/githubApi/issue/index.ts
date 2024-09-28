@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "axios 如何取消请求",
+  title: "在 forEach 中和 for 循环 中调用异步函数的区别",
   key_world: [
-    "axios 取消请求",
+    "循环中的异步",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.network,
+    labels.js,
     labels.application,
 
     // company.alibaba,

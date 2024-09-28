@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "给 axios 做一个通用拦截器，实现功能为状态码非 200 的时候，统一拦截错误， 提示一个 toast, 该如何实现",
+  title: "axios 如何注销拦截器",
   key_world: [
     "axios 拦截器",
     // ".exact 作用",
@@ -23,7 +23,7 @@ const remote = {
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

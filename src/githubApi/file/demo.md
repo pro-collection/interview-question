@@ -2,48 +2,68 @@
 
 > 作者备注
 >
-> 拦截器是 axios 的最核心功能之一， 该问题只是考察 axios 的核心功能的基本使用
+> 这个问题稍微有点儿偏冷门， 需要阅读过 axios 官网才能正确作答， 考察的是同学自驱型学习能力
 
-以下是使用 Axios 的拦截器来实现当状态码非 200 时统一拦截错误并提示 toast 的方法：
+在 Axios 中，可以使用以下方法注销拦截器：
 
-假设你使用了一个名为 `toast` 的函数来显示 toast 消息，这个函数可以根据你的实际使用的 UI 库进行调整。
+**一、为拦截器分配一个引用**
+
+1. 创建拦截器时保存引用：
+
+   - 当创建一个 Axios 请求或响应拦截器时，可以将其分配给一个变量，以便后续可以引用并注销它。
+
+   ```javascript
+   const requestInterceptor = axios.interceptors.request.use((config) => {
+     // 请求拦截器逻辑
+     return config;
+   });
+
+   const responseInterceptor = axios.interceptors.response.use((response) => {
+     // 响应拦截器逻辑
+     return response;
+   });
+   ```
+
+**二、使用`Eject`方法注销拦截器**
+
+1. 注销单个拦截器：
+
+   - 使用拦截器的引用和`axios.interceptors.request.eject()`或`axios.interceptors.response.eject()`方法来注销特定的拦截器。
+
+   ```javascript
+   axios.interceptors.request.eject(requestInterceptor);
+   axios.interceptors.response.eject(responseInterceptor);
+   ```
+
+2. 注销所有拦截器：
+   - 如果需要注销所有的请求或响应拦截器，可以使用`axios.interceptors.request.clear()`或`axios.interceptors.response.clear()`方法。
+   ```javascript
+   axios.interceptors.request.clear();
+   axios.interceptors.response.clear();
+   ```
+
+以下是一个完整的示例：
 
 ```javascript
 import axios from "axios";
 
-// 创建 Axios 实例
-const instance = axios.create();
+const requestInterceptor = axios.interceptors.request.use((config) => {
+  // 请求拦截器逻辑
+  return config;
+});
 
-// 添加请求拦截器
-instance.interceptors.request.use(
-  (config) => {
-    // 在发送请求之前做些什么，比如添加请求头、加载动画等
-    return config;
-  },
-  (error) => {
-    // 对请求错误做些什么
-    return Promise.reject(error);
-  }
-);
+const responseInterceptor = axios.interceptors.response.use((response) => {
+  // 响应拦截器逻辑
+  return response;
+});
 
-// 添加响应拦截器
-instance.interceptors.response.use(
-  (response) => {
-    // 对响应数据做点什么
-    return response;
-  },
-  (error) => {
-    if (error.response && error.response.status !== 200) {
-      // 非 200 状态码时显示 toast
-      toast("请求错误！");
-    }
-    return Promise.reject(error);
-  }
-);
+// 注销特定拦截器
+axios.interceptors.request.eject(requestInterceptor);
+axios.interceptors.response.eject(responseInterceptor);
 
-export default instance;
+// 或者注销所有拦截器
+// axios.interceptors.request.clear();
+// axios.interceptors.response.clear();
 ```
 
-在上述代码中，首先创建了一个 Axios 实例，然后分别添加了请求拦截器和响应拦截器。在响应拦截器中，当响应状态码不是 200 时，调用`toast`函数显示错误提示信息。
-
-请注意，这里的`toast`函数只是一个示例，你需要根据实际使用的 UI 框架或库来实现具体的 toast 显示功能。
+通过这些方法，可以在需要的时候注销特定的拦截器或所有拦截器，以灵活地管理 Axios 的拦截器。

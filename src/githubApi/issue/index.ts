@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "解释下 axios withCredentials 配置",
+  title: "想设置 axios 全局通用配置， 有哪些方法",
   key_world: [
     "axios 配置",
     // ".exact 作用",
@@ -23,7 +23,7 @@ const remote = {
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

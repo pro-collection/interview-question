@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "mobx 和 redux 有什么区别",
+  title: "[webpack] tree-shaking 原理",
   key_world: [
-    "mobx 和 redux 区别",
+    "tree-shaking 原理",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     // labels.js,
-    labels.application,
+    labels.engineering,
 
-    company.alibaba,
+    company.tencent,
     // xx
   ],
   milestone: MileStone.senior,

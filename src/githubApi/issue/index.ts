@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] 发中使用的是 esm 和 webpack, 是否可以直接调用 commonjs 模块化的三方包",
+  title: "axios 支持哪些常用的配置",
   key_world: [
-    "模块化混用",
+    "axios 配置",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.engineering,
-    // labels.application,
+    labels.network,
+    labels.application,
 
-    company.alibaba,
+    // company.alibaba,
     // xx
   ],
   milestone: MileStone.senior,

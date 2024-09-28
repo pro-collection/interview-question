@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端应用有哪些代码测试手段",
+  title: "单元测试、E2E 测试有和区别？",
   key_world: [
-    "测试手段",
+    "前端测试",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

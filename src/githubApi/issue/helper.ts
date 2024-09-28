@@ -9,6 +9,12 @@ import { tempFilePath, htmlPath as htmlPathStatic } from "../file/consts";
 
 const execPromise = util.promisify(child_process.exec);
 
+/**
+ * 将 html 文件转为 markdown 文件， 写入本地
+ * @param path 写入文件的路径
+ * @param htmlPath html 文件的路径
+ * @returns null
+ */
 export const writeToTemp = async (path = tempFilePath, htmlPath = htmlPathStatic) => {
   const getHtml = fs.readFileSync(htmlPath, { encoding: "utf-8" });
 

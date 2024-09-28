@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "axios 如何注销拦截器",
+  title: "axios 如何取消请求",
   key_world: [
-    "axios 拦截器",
+    "axios 取消请求",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

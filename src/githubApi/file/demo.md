@@ -1,26 +1,26 @@
-**关键词**：axios 特性
+**关键词**：数组访问
 
-> 作者备注
->
-> 以下特性信息都是直接来自于官网 https://axios-http.com/docs/intro
->
-> 但是可能很多同学并不会去好好看官网， 所以这个问题， 只是考察同学们的学习主动性
+在 JavaScript 中，从数组中获取第一个元素和获取最后一个元素（假设这里你说的第 10 万个元素相当于数组的最后一个元素）的时间差异通常非常小，几乎可以忽略不计。
 
-- 从浏览器发出 XMLHttpRequests
-- 从 node.js 发出 http 请求
-- 支持 Promise API
-- 拦截请求和响应
-- 转换请求和响应数据
-- 取消请求
-- 超时
-- 查询参数序列化并支持嵌套条目
-- 自动将请求主体序列化为：
-- JSON ( application/json)
-- 多部分 / 表单数据 ( multipart/form-data)
-- URL 编码形式 ( application/x-www-form-urlencoded)
-- 将 HTML 表单发布为 JSON
-- 响应中的自动 JSON 数据处理
-- 浏览器和 node.js 的进度捕获以及附加信息（速度、剩余时间）
-- 为 node.js 设置带宽限制
-- 兼容符合规范的 FormData 和 Blob （包括 node.js）
-- 客户端支持防范 XSRF
+数组在内存中通常是连续存储的，访问数组中的元素可以通过索引快速定位。无论是访问第一个元素还是最后一个元素，时间复杂度都是 O(1)，即可以在常数时间内完成。
+
+然而，在实际情况中，可能会有一些微小的差异，这取决于以下因素：
+
+1. 数组的存储方式和实现细节：不同的 JavaScript 引擎可能在内部实现上有一些差异，但这些差异通常非常小。
+2. 计算机的内存和处理器性能：如果计算机的内存或处理器性能较低，可能会导致一些微小的延迟，但这种延迟不太可能在获取不同位置的元素之间有明显差异。
+
+以下是一个简单的测试示例：
+
+```javascript
+const largeArray = Array.from({ length: 100000 }, (_, index) => index);
+
+console.time("accessFirstElement");
+const firstElement = largeArray[0];
+console.timeEnd("accessFirstElement");
+
+console.time("accessLastElement");
+const lastElement = largeArray[99999];
+console.timeEnd("accessLastElement");
+```
+
+在大多数情况下，你会发现这两个操作的时间非常接近，甚至可能在同一毫秒内完成。

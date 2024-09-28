@@ -9,16 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "axios 有哪些特性",
+  title: "数组里面有 10 万个数据，取第一个元素和第 10 万个元素的时间相差多少",
   key_world: [
-    "axios 特性",
+    "数组访问",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
-    labels.network,
-    labels.application,
+    labels.js,
+    // labels.application,
 
     // company.alibaba,
     // xx

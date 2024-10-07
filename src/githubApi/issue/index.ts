@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http ETag 值改变了，是否意味着文件内容一定已经更改",
+  title: "站点是如何保持登录状态",
   key_world: [
-    "ETag 值",
+    "http 保持登录态",
     // "todo",
   ],
   labels: [
@@ -19,7 +19,7 @@ const remote = {
     labels.application,
     labels.network,
 
-    company.alibaba,
+    company.tencent,
     // xx
   ],
   milestone: MileStone.inProgress,

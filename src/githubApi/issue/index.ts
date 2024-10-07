@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "css 中属性选择器及类选择器的权重哪个高",
+  title: "commonjs 模块化中 module.exports 与 exports 有什么区别， 该如何选择",
   key_world: [
-    "选择器权重",
+    "模块化 导出",
     // "todo",
   ],
   labels: [
-    labels.css,
+    labels.engineering,
     labels.application,
 
     // company.xiaohongshu,

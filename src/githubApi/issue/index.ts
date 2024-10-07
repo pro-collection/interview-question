@@ -9,22 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "浏览器中如何实现剪切板复制内容的功能",
+  title: "http 响应头中的 ETag 值是如何生成的",
   key_world: [
-    "document.execCommand('copy')",
-    "navigator.clipboard API",
-    // ".exact 作用",
-    // "PerformanceObserver PerformanceResourceTiming api 使用",
+    "ETag 值",
     // "todo",
   ],
   labels: [
     // labels.js,
     labels.application,
 
-    company.mt,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

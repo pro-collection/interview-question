@@ -13,15 +13,7 @@
 ## 待整理
 
 - css 中属性选择器及类选择器的权重哪个高
-- 有没有接触过 fs-extra，它是解决什么问题的
-- 为什么会发生样式抖动
-- 关于 cors 的响应头有哪些
-- 如何避免 CDN 为 PC 端缓存移动端页面
-- position: sticky 如何工作，适用于哪些场景
-- 什么是层叠上下文 (stacking contect)，谈谈对它的理解
-- 你用 css 实现过什么不错的效果
-- 你做前端有多少时间花在写 css 上
-- js 中在 new 的时候发生了什么
+
 - 伪类与伪元素有什么区别
 - 在 node 中如何开启 https
 - node 中 module.exports 与 exports 有什么区别

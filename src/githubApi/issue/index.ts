@@ -9,15 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如果 cookie 没有设置  maxage， 那么这一条 cookie 失效时间改怎么算",
+  title: "css 中属性选择器及类选择器的权重哪个高",
   key_world: [
-    "cookie 失效时间",
+    "选择器权重",
     // "todo",
   ],
   labels: [
-    labels.network,
+    labels.css,
+    labels.application,
 
-    company.xiaohongshu,
+    // company.xiaohongshu,
     // xx
   ],
   milestone: MileStone.senior,

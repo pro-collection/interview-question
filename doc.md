@@ -12,16 +12,7 @@
 
 ## 待整理
 
-- http 响应头中的 ETag 值是如何生成的
-- 如果 http 响应头中 ETag 值改变了，是否意味着文件内容一定已经更改
-- http 服务中静态文件的 Last-Modified 是根据什么生成的
-- 既然 http 是无状态协议，那它是如何保持登录状态
-- 有没有读过 koa 的源码，什么是洋葱模型呢
-- https 是如何保证报文安全的
-- 我们如何从 http 的报文中得知该服务使用的技术栈
-- 在发送 http 请求报文时，Host 是必要的吗
 - 如何监控文件的变动
-- localhost:3000 与 localhost:5000 的 cookie 信息是否共享
 - http 响应头中如果 content-type 为 application/octet-stream，则代表什么意思
 - http 向 https 做重定向应该使用哪个状态码
 - js 代码压缩 minify 的原理是什么

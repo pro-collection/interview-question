@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http 响应头中的 ETag 值是如何生成的",
+  title: "http ETag 值改变了，是否意味着文件内容一定已经更改",
   key_world: [
     "ETag 值",
     // "todo",
@@ -17,11 +17,12 @@ const remote = {
   labels: [
     // labels.js,
     labels.application,
+    labels.network,
 
     company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,20 +9,20 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http 缓存 header 中的 Date 与 Last-Modified 有什么不同",
+  title: "如何进行代码质量检测",
   key_world: [
-    "http 缓存 header",
+    "代码质量检查",
     // "todo",
   ],
   labels: [
     // labels.js,
     labels.application,
-    labels.network,
+    // labels.network,
 
-    company.shopee,
+    company.mi,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.master,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -12,21 +12,6 @@
 
 ## 待整理
 
-- http 1.1 中的 keep-alive 有什么作用
-- 如果使用 SSR，可以在 created/componentWillMount 中访问 localStorage 吗
-- 当在浏览器中看到某资源使用了 http2 后，使用 curl 为什么看到的仍是 http 1.1
-- 关于 JSON，以下代码输出什么
-- 什么是队首阻塞，如何解决，原理如何
-- react hooks 如何替代或部分替代 redux 功能
-- 如何实现一个 react hook，你有没有自己写过一个
-- 权限设计中的 RABC 是指什么
-- 在 react/vue 中数组是否可以以在数组中的次序为 key
-- 如何进行代码质量检测
-- 什么是 CSRF 攻击
-- 如何设置一个 cookie
-- 如何删除一个 cookie
-- React 中 fiber 是用来做什么的
-- 在 js 中如何把类数组转化为数组
 - Array(100).map(x => 1) 结果是多少
 - 如何使用 css 写一个魔方
 - 如何在 url 中传递数组

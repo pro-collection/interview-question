@@ -9,20 +9,20 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何进行代码质量检测",
+  title: "http 缓存中 no-cache 与 no-store 的区别是什么",
   key_world: [
-    "代码质量检查",
+    "http 缓存",
     // "todo",
   ],
   labels: [
     // labels.js,
     labels.application,
-    // labels.network,
+    labels.network,
 
     company.mi,
     // xx
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -12,29 +12,6 @@
 
 ## 待整理
 
-- Array(100).map(x => 1) 结果是多少
-- 如何使用 css 写一个魔方
-- 如何在 url 中传递数组
-- 如何使用 css 写一个有 3D 效果的立方体
-- 如何实现 compose 函数，进行函数合成
-- 有没有使用过 css variable，它解决了哪些问题
-- 谈谈你对 styled-component 的看法
-- performance API 中什么指标可以衡量首屏时间
-- 使用 CSS 如何画一个三角形
-- 什么是 Open Graph 协议，用来做什么
-- 简述你们前端项目中资源的缓存配置策略
-- 如何加速 npm install
-- npm i 与 npm ci 的区别是什么
-- package-lock.json 有什么作用，如果项目中没有它会怎么样，举例说明
-- 前端中遇到过处理二进制的场景吗
-- 什么是 TypedArray
-- 如何实现类似 lodash.get 函数
-- 前端如何进行多分支部署
-- js 中什么是可选链操作符，如何访问数组
-- 如何实现一个深拷贝 (cloneDeep)
-- 对于已经 import 但未实际使用的模块使用 webpack 还会对它打包吗？
-- Node 中如何判断一个路径是文件还是文件夹
-- Code Splitting 的原理是什么
 - no-cache 与 no-store 的区别是什么
 - 如何判断当前环境是移动端还是 PC 端
 - React hooks 中 useCallback 的使用场景是什么

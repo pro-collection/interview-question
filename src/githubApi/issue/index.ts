@@ -9,9 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "分片上传文件，如何校验文件完整性",
+  title: "浏览器中如何实现剪切板复制内容的功能",
   key_world: [
-    // "校验文件完整性",
+    "document.execCommand('copy')",
+    "navigator.clipboard API",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
@@ -20,10 +21,10 @@ const remote = {
     // labels.js,
     labels.application,
 
-    // company.alibaba,
+    company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "站点是如何保持登录状态",
+  title: "http 静态文件缓存 Last-Modified 是根据什么生成的",
   key_world: [
-    "http 保持登录态",
+    "静态文件缓存",
     // "todo",
   ],
   labels: [
@@ -19,10 +19,10 @@ const remote = {
     labels.application,
     labels.network,
 
-    company.tencent,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

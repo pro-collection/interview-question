@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端部署应该要考虑哪些问题",
+  title: "前端需要加载一个大体积的文件时， 一般有哪些优化思路",
   key_world: [
-    "前端部署",
+    "前端加载文件过大",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",

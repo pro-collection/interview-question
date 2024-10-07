@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http2 中的首部压缩是什么",
+  title: "https 中如何保证证书是可信任的",
   key_world: [
-    // "tree-shaking 使用",
+    "https 证书可信保证",
     // "todo",
   ],
   labels: [
     labels.network,
 
-    // company.alibaba,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

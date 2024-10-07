@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "完整域名的构成部分",
+  title: "http2 中的首部压缩是什么",
   key_world: [
     // "tree-shaking 使用",
     // "todo",
@@ -20,7 +20,7 @@ const remote = {
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

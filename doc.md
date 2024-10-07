@@ -12,32 +12,7 @@
 
 ## 待整理
 
-- 以下代码，koa 会返回什么数据
-- Node 如何进行进程间通信
-- 如何实现一个 async/await
-- 如何使用 async/await 实现 Promise.all 的效果
-- 有没有用过 continuous local storage，用在了哪里
-- 有没有遇到 js 捕捉不到异常堆栈信息的情况
-- Promise 在异步资源的生命周期 (async_hooks) 中是如何被销毁的
-- 有没有用过 Promise.allSettled() ，它是干什么的
-- 在 node 中如何监听异步资源的生命周期
-- 测试中 TDD 与 BDD 有什么区别
-- 使用 js 实现一个 lru cache
-- 刚刚启动了一个服务，如何知道这个服务对应的端口号是多少
-- node --max-old-space-size=4096 是什么意思
 - https 中如何保证证书是可信任的
-- cookie 有哪些字段
-- 图片防盗链原理是什么
-- 如何理解 Node 的异步非阻塞 IO
-- 你们项目的测试覆盖率是怎么做的
-- 当 Node 应用发生 gc 时，如何监控
-- Node 应用中如何查看 gc 的日志
-- bind 与 call/apply 的区别是什么
-- CSP 是干什么用的了
-- 你如何看待 serverless
-- 什么是 XSS 攻击，如何避免
-- react hooks 的原理是什么
-- 如何查看你们 JS 项目中应采用的 node 版本
 - http2 中的首部压缩的实现原理是什么
 - 如何获取你们 Node 项目的 cpu profile 快照
 - 如何查看 node_modules(某一文件夹) 的体积有多大

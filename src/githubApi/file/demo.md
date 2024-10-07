@@ -1,76 +1,65 @@
-**关键词**：异常处理
+分片上传是一种将大文件分割成多个小片段进行上传的方法，在分片上传过程中校验文件完整性非常重要，可以确保上传的文件在服务器端能够正确地组合成完整的文件。以下是一些校验文件完整性的思路：
 
-题目是：以下代码有错吗？如果有错，应该如何改正？
+**一、使用哈希算法**
 
-```js
-try {
-  setTimeout(() => {
-    throw new Error("err");
-  }, 200);
-} catch (err) {
-  console.log(err);
-}
+1. **计算文件哈希值**：
 
-try {
-  Promise.resolve().then(() => {
-    throw new Error("err");
-  });
-} catch (err) {
-  console.log(err);
-}
-```
+   - 在客户端上传文件之前，先对整个文件计算哈希值。常用的哈希算法有 MD5、SHA-1、SHA-256 等。
+   - 例如，使用 JavaScript 的`crypto-js`库计算文件的 MD5 哈希值：
 
-**解答**
+   ```javascript
+   import CryptoJS from "crypto-js";
 
-才知道 try...catch 不能异步捕获代码错误。在 JavaScript 中，setTimeout 是一个异步函数，它的回调函数会在指定的延时后被放入事件队列，等待当前执行栈清空后才执行。因此，当 setTimeout 的回调函数执行并抛出错误时，try...catch 已经执行完毕，无法捕捉到异步回调中的错误。
-正确的做法是在异步操作中直接处理错误，例如使用回调函数、Promises 或者 async/await 结合 try...catch
+   const calculateFileHash = async (file) => {
+     const fileReader = new FileReader();
+     return new Promise((resolve, reject) => {
+       fileReader.onload = (event) => {
+         const hash = CryptoJS.MD5(event.target.result);
+         resolve(hash.toString());
+       };
+       fileReader.onerror = reject;
+       fileReader.readAsArrayBuffer(file);
+     });
+   };
+   ```
 
-```js
-new Promise((resolve, reject) => {
-  setTimeout(() => {
-    try {
-      throw new Error("err");
-    } catch (err) {
-      reject(err);
-    }
-  }, 200);
-})
-  .then(() => {
-    // 正常执行时的处理逻辑
-  })
-  .catch((err) => {
-    console.log(err); // 这里会捕捉到错误
-  });
-```
+2. **上传过程中携带哈希值**：
 
-至于第二个例子，尝试使用 try...catch 来捕捉一个在 Promise 链中抛出的错误。这种方式同样是无效的，因为 try...catch 不能捕捉到在 Promise 链中的异步错误。
+   - 在进行分片上传时，将文件的哈希值作为一个参数一起上传给服务器。
+   - 可以在每个分片的请求中携带哈希值，或者在上传开始时先将哈希值发送给服务器。
 
-在 Promise 中抛出一个错误（例如通过 throw 语句）会导致 Promise 被拒绝（或失败）。要正确处理这个错误，需要在 Promise 链中使用.catch 方法或者在一个 async 函数中使用 try...catch。
+3. **服务器端校验**：
+   - 服务器在接收到所有分片并组合成完整文件后，再次计算文件的哈希值，并与客户端上传的哈希值进行比较。
+   - 如果两个哈希值一致，则说明文件完整无误；如果不一致，则说明文件在上传过程中可能出现了问题。
 
-```js
-// 方法一
-Promise.resolve()
-  .then(() => {
-    throw new Error("err");
-  })
-  .catch((err) => {
-    console.log(err); // 这里会捕捉到错误
-  });
+**二、校验和（Checksum）**
 
-// 方法二
-async function handleError() {
-  try {
-    await Promise.resolve().then(() => {
-      throw new Error("err");
-    });
-  } catch (err) {
-    console.log(err); // 这里会捕捉到错误
-  }
-}
+1. **计算校验和**：
 
-handleError();
-```
+   - 除了哈希算法，还可以使用校验和来校验文件完整性。校验和是通过对文件的每个字节进行特定的数学运算得到的一个值。
+   - 例如，可以使用简单的累加校验和算法，将文件的每个字节的值相加得到一个总和作为校验和。
 
-**补充**
+2. **上传和校验**：
+   - 在客户端计算文件的校验和，并在分片上传时将校验和发送给服务器。
+   - 服务器在组合完文件后，计算文件的校验和并与客户端上传的校验和进行比较，以确定文件的完整性。
 
-![1](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0729c13766834971947e0f9c78a00b43~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.avis#?w=686&h=182&s=24314&e=png&b=fcfcfc)
+**三、文件大小比较**
+
+1. **记录文件大小**：
+
+   - 在客户端上传文件之前，记录文件的大小。可以通过`File`对象的`size`属性获取文件的大小。
+
+2. **服务器端验证**：
+   - 服务器在接收到所有分片并组合成完整文件后，检查文件的大小是否与客户端上传的文件大小一致。
+   - 如果大小一致，则说明文件可能是完整的；如果不一致，则说明文件在上传过程中出现了问题。
+
+**四、上传状态跟踪**
+
+1. **客户端跟踪上传状态**：
+
+   - 在客户端，可以使用一个数据结构来跟踪每个分片的上传状态，例如使用一个数组记录每个分片是否成功上传。
+   - 当所有分片都成功上传后，可以认为文件上传完整。
+
+2. **服务器端确认**：
+   - 服务器在接收到每个分片时，可以回复一个确认消息给客户端。客户端根据服务器的确认消息来更新上传状态。
+   - 当客户端收到服务器对所有分片的确认后，可以确定文件上传完整。

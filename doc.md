@@ -9,3 +9,503 @@
 - https://q.shanyue.tech/interview
 - https://github.com/wangtunan/blog
 - https://github.com/Advanced-Frontend/Daily-Interview-Question/issues
+
+## 待整理
+
+- http 响应头中的 ETag 值是如何生成的
+- 如果 http 响应头中 ETag 值改变了，是否意味着文件内容一定已经更改
+- http 服务中静态文件的 Last-Modified 是根据什么生成的
+- 既然 http 是无状态协议，那它是如何保持登录状态
+- 有没有读过 koa 的源码，什么是洋葱模型呢
+- https 是如何保证报文安全的
+- 我们如何从 http 的报文中得知该服务使用的技术栈
+- 在发送 http 请求报文时，Host 是必要的吗
+- 如何监控文件的变动
+- localhost:3000 与 localhost:5000 的 cookie 信息是否共享
+- http 响应头中如果 content-type 为 application/octet-stream，则代表什么意思
+- http 向 https 做重定向应该使用哪个状态码
+- js 代码压缩 minify 的原理是什么
+- 在 Node 应用中如何利用多核心 CPU 的优势
+- Node 中 cluster 的原理是什么
+- http 响应头中的 Date 与 Last-Modified 有什么不同，网站部署时需要注意什么
+- react hooks 中如何模拟 componentDidMount
+- http 1.1 中的 keep-alive 有什么作用
+- 如果使用 SSR，可以在 created/componentWillMount 中访问 localStorage 吗
+- 当在浏览器中看到某资源使用了 http2 后，使用 curl 为什么看到的仍是 http 1.1
+- 关于 JSON，以下代码输出什么
+- 什么是队首阻塞，如何解决，原理如何
+- react hooks 如何替代或部分替代 redux 功能
+- 如何实现一个 react hook，你有没有自己写过一个
+- 权限设计中的 RABC 是指什么
+- 在 react/vue 中数组是否可以以在数组中的次序为 key
+- 如何进行代码质量检测
+- 什么是 CSRF 攻击
+- 如何设置一个 cookie
+- 如何删除一个 cookie
+- React 中 fiber 是用来做什么的
+- 在 js 中如何把类数组转化为数组
+- Array(100).map(x => 1) 结果是多少
+- 如何使用 css 写一个魔方
+- 如何在 url 中传递数组
+- 如何使用 css 写一个有 3D 效果的立方体
+- 如何实现 compose 函数，进行函数合成
+- 有没有使用过 css variable，它解决了哪些问题
+- 谈谈你对 styled-component 的看法
+- performance API 中什么指标可以衡量首屏时间
+- 使用 CSS 如何画一个三角形
+- 什么是 Open Graph 协议，用来做什么
+- 简述你们前端项目中资源的缓存配置策略
+- 如何加速 npm install
+- npm i 与 npm ci 的区别是什么
+- package-lock.json 有什么作用，如果项目中没有它会怎么样，举例说明
+- 前端中遇到过处理二进制的场景吗
+- 什么是 TypedArray
+- 如何实现类似 lodash.get 函数
+- 前端如何进行多分支部署
+- js 中什么是可选链操作符，如何访问数组
+- 如何实现一个深拷贝 (cloneDeep)
+- 对于已经 import 但未实际使用的模块使用 webpack 还会对它打包吗？
+- Node 中如何判断一个路径是文件还是文件夹
+- Code Splitting 的原理是什么
+- no-cache 与 no-store 的区别是什么
+- 如何判断当前环境是移动端还是 PC 端
+- React hooks 中 useCallback 的使用场景是什么
+- input 中监听值的变化是在监听什么事件
+- 什么是跨域，如何解决跨域问题
+- 请简述一下 event loop
+- 如何实现一个 flatMap 函数 (头条)
+- 如何裁剪图片 (情景：选择头像)
+- useEffect 中如何使用 async/await
+- 主域名的 SEO 是否比二级域名要更好
+- 以下代码，koa 会返回什么数据
+- Node 如何进行进程间通信
+- 如何实现一个 async/await
+- 如何使用 async/await 实现 Promise.all 的效果
+- 有没有用过 continuous local storage，用在了哪里
+- 有没有遇到 js 捕捉不到异常堆栈信息的情况
+- Promise 在异步资源的生命周期 (async_hooks) 中是如何被销毁的
+- 有没有用过 Promise.allSettled() ，它是干什么的
+- 在 node 中如何监听异步资源的生命周期
+- 测试中 TDD 与 BDD 有什么区别
+- 使用 js 实现一个 lru cache
+- 刚刚启动了一个服务，如何知道这个服务对应的端口号是多少
+- node --max-old-space-size=4096 是什么意思
+- https 中如何保证证书是可信任的
+- cookie 有哪些字段
+- 图片防盗链原理是什么
+- 如何理解 Node 的异步非阻塞 IO
+- 你们项目的测试覆盖率是怎么做的
+- 当 Node 应用发生 gc 时，如何监控
+- Node 应用中如何查看 gc 的日志
+- bind 与 call/apply 的区别是什么
+- CSP 是干什么用的了
+- 你如何看待 serverless
+- 什么是 XSS 攻击，如何避免
+- react hooks 的原理是什么
+- 如何查看你们 JS 项目中应采用的 node 版本
+- http2 中的首部压缩的实现原理是什么
+- 如何获取你们 Node 项目的 cpu profile 快照
+- 如何查看 node_modules(某一文件夹) 的体积有多大
+- redux 解决什么问题，还有什么其他方案
+- 为什么不能在表达式里面定义 react hooks
+- display: inline 的元素设置 margin 和 padding 会生效吗
+- html 的默认 display 属性是多少
+- 响应式布局需要注意哪一些
+- 对一个非定长宽的块状元素如何做垂直水平居中
+- http 请求头中的 X-Forwarded-For 代表什么意思
+- prefetch 与 preload 的区别是什么
+- 有没有做过裁剪头像图片的需求，如何实现
+- Node 中循环引用会发生什么
+- Node 中 require 时发生了什么
+- 简述 node/v8 中的垃圾回收机制
+- peerDependency 是为了解决什么问题
+- semver 指什么，试图解释一下
+- optionalDependencies 的使用场景是什么
+- fetch 中 credentials 指什么意思，可以取什么值
+- package-lock.json 与 yarn.lock 有什么区别
+- node 中 exec，fork 与 spawn 有何区别
+- base64 由哪 64 个字符构成
+- 如何删除项目中没有使用到的 package
+- 如何实现左右固定，中间自适应布局
+- 如何实现表格单双行条纹样式
+- node 中 dns.resolve 及 dns.lookup 有什么区别
+- 简述下 css specificity
+- Node 中 require json 文件数据时，如何当文件更新时，重新 require
+- 当 cookie 没有设置 maxage 时，cookie 会存在多久
+- 如何实现 Promise.race
+- 在浏览器中如何获取剪切板中内容
+- '+' 与 '~' 选择器有什么不同
+- node 中如何查看函数异步调用栈
+- 有哪些 css 属性不能展示动画效果
+- css 动画与 js 动画哪个性能更好
+- css 中属性选择器及类选择器的权重哪个高
+- 有没有接触过 fs-extra，它是解决什么问题的
+- 为什么会发生样式抖动
+- 关于 cors 的响应头有哪些
+- 如何避免 CDN 为 PC 端缓存移动端页面
+- position: sticky 如何工作，适用于哪些场景
+- 什么是层叠上下文 (stacking contect)，谈谈对它的理解
+- 你用 css 实现过什么不错的效果
+- 你做前端有多少时间花在写 css 上
+- js 中在 new 的时候发生了什么
+- 伪类与伪元素有什么区别
+- 在 node 中如何开启 https
+- node 中 module.exports 与 exports 有什么区别
+- 如何把 json 数据转化为 demo.json 并下载文件
+- 如何实现一个 timeout 的中间件
+- 如何得知目前 node 版本的 v8 版本号
+- 在 node 中如何判断一个对象是 stream
+- 什么是 Iterable 对象，与 Array 有什么区别
+- 在 node 端如何向服务器上传文件
+- js 如何全部替代一个子串为另一个子串
+- 什么情况下会发送 OPTIONS 请求
+- CORS 如果需要指定多个域名怎么办
+- 既然 cors 配置可以做跨域控制，那可以防止 CSRF 攻击吗
+- js 动画和 css 动画那个性能比较好
+- css 如何匹配前 N 个子元素及最后 N 个子元素
+- node 中 nextTick 与 setTimeout 有什么区别
+- redux 和 mobx 有什么不同
+- 关于 React hooks 的 caputre value，以下输出多少
+- 在 React 项目中 immutable 是优化性能的
+- 如何使用 CSS 实现网站的暗黑模式 (Dark Mode)
+- 在 redux 中如何发送请求
+- 如何为你们的前端项目选择状态管理器
+- 简单介绍 requestIdleCallback 及使用场景
+- 在 redux 中如何写一个记录状态变更的日志插件
+- 在 js 中如何实现继承
+- React 在 setState 时发生了什么
+- 如何设计一个 UI 组件库
+- python 中的 self 与 javascript 中的 this 有何不同
+- 什么是浏览器的关键渲染路径
+- http2 中 server push 与 websocket 有什么区别
+- 简述下 TLS 握手过程
+- 以下输出顺序多少 (setTimeout 与 promise 顺序)
+- 简单介绍一下 RSA 算法
+- https 层可以做哪些性能优化
+- ECDHE 与 RSA 有何区别
+- https 中证书的格式化信息有哪些
+- https 连接时如何保证证书没被废弃掉
+- TLS1.3 相比 TLS1.2 有何不同
+- 在 wireshark 中如何抓包 https/http2
+- 实现一个 once 函数，记忆返回结果只执行一次
+- 在 TLS 层如何优化网站性能
+- 如何实现一个函数 isPlainObject 判断是否为纯对象
+- React 中的 dom diff 算法如何从 O(n3) 优化到 O(n) 的
+- 在 React 应用中如何排查性能问题
+- 你使用过哪些前端性能分析工具
+- React 17.0 有什么变化
+- 如何找到当前页面出现次数最多的 HTML 标签
+- 对以下字符串进行压缩编码
+- 如何在生产环境部署一个 Node 应用
+- 你有没有重客户端状态前端应用的经验
+- DV、OV、EV 类的证书有何区别
+- https 中是如何进行身份认证的
+- 如何实现一个无限累加的 sum 函数
+- JS 如何实现一个同步的 sleep 函数
+- 什么是安全的正则表达式
+- 什么是层叠上下文 (stacking context)
+- 在 nginx 中如何配置负载均衡
+- 实现一个函数用来解析 URL 的 querystring
+- 如何把 DOM 转化为图片
+- http 状态码 401 和 403 有什么区别
+- 当服务器资源返回 304 时与那些 HTTP 响应头有关
+- JS 如何实现一个 sleep/delay 函数
+- 如何实现一个 sample 函数，从数组中随机取一个元素
+- 浏览器的剪切板中如何监听复制事件
+- JSONP 的原理是什么，如何实现
+- 实现一个函数用来对 URL 的 querystring 进行编码
+- v8 是如何执行一段 JS 代码的
+- http3 解决了什么问题
+- 实现一个数组扁平化的函数 flatten
+- 介绍 CSS 隐藏页面中某个元素的几种方法
+- 实现一个数组去重函数 unique
+- 如何实现页面文本不可复制
+- 如何实现一个数组洗牌函数 shuffle
+- 异步加载 JS 脚本时，async 与 defer 有何区别
+- vue3 中，如何监听数组的变化
+- Vue 中 nextTick 的实现原理是什么
+- 现代框架如 React、Vue 相比原生开发有什么优势
+- typeof 与 instanceof 的区别
+- load 事件与 DomContentLoaded 事件的先后顺序
+- React/Vue 中的 router 实现原理如何
+- 如何计算白屏时间和首屏时间
+- JS 如何翻转一个字符串
+- 前端如何实现文件上传功能
+- 什么是重排重绘，如何减少重拍重绘
+- css 如何实现响应式布局大屏幕三等分、中屏幕二等分、小屏幕一等分
+- 在 SSR 项目中如何判断当前环境时服务器端还是浏览器端
+- 前端打包时 cjs、es、umd 模块有何不同
+- 前端开发中如何进行多主题配置
+- HTML 中的 input 标签有哪些 type
+- 什么是 Data URL
+- 如何自定义滚动条的样式
+- 什么是 HTML 的实体编码 (HTML Entity Encode)
+- 关于模块化，什么是 amd 和 umd
+- 简单介绍以下浏览器中的 module
+- 什么是 commonjs2
+- textarea 如何禁止拉伸
+- 在 Canvas 中如何处理跨域的图片
+- 如何实现容器中子元素三个三列布局，子元素两个则两列布局
+- 前端上传文件时如何读取文件内容
+- 你最喜欢的三个 js 库是什么
+- 网站设置字体时，如何设置优先使用系统默认字体
+- 现代化前端框架中如何进行调试
+- express 中间件的原理是什么
+- 写 CSS 时如何避免命名样式冲突
+- 什么是前端工程化
+- JWT 的原理是什么
+- 如何实现一个函数 lodash.merge
+- 如何实现一个 promise.any
+- 如何实现一个 Promise.all
+- CSS 如何设置方格背景
+- 如何取消请求的发送
+- 如何过滤数组中的 falsy value
+- 如何把一个数组随机打乱
+- 如何更好地给元素设置 z-index
+- React.setState 是同步还是异步的
+- 什么是服务器渲染 (SSR)
+- 在 React 中如何实现代码分割 (code splitting)
+- 在 React 中如何做好性能优化
+- 在 React 中发现状态更新时卡顿，此时应该如何定位及优化
+- 当多次重复点击按钮时，以下三个 Heading 是如何渲染的
+- Core Web Vitals 是什么，它有哪些指标
+- 画一个 100x100 的方框，其中文字可以正常换行，文字过多超过方框显示滚动条
+- JS 中基础数据类型有哪些
+- Grid 布局如何实现类似 flex: row-reverse
+- 如何创建一个数组大小为 100，每个值都为 0 的数组
+- dependencies 与 devDependencies 有何区别
+- 如何确认你们项目是否依赖某一个依赖项
+- 当你引入某一个依赖项时，你引入的是该依赖下的哪一个文件
+- npm workspaces 解决了什么问题
+- 如何检测并避免循环依赖
+- 有没有使用过 async/await，他们的原理是什么
+- 什么是闭包，闭包的应用有哪些地方
+- 关于事件循环，一道异步代码执行输出顺序问题
+- HTML 标签有哪些行内元素
+- CSS 如何设置一行超出显示省略号
+- CSS 如何设置多行超出显示省略号
+- 如何发布一个全局可执行命令的 npm package
+- 如何为一个项目指定 node 版本号
+- 什么是 semver，~1.2.3 与 ^1.2.3 的版本号范围是多少
+- package.json 中 main/module/browser/exports 字段有何区别
+- npm publish 时 npm script 的生命周期
+- 前端项目每次 npm install 之后需要执行一些处理工作，应该怎么办
+- flex 布局中 order 有何作用
+- flex 布局中 align-content 与 align-items 有何区别
+- 解构赋值一个数组，a 取第一项默认值为 3，c 取剩下的值组成数组
+- 解构赋值以下对象，他们的值是多少
+- Map 与 WeakMap 有何区别
+- HTML 中有哪些语义化标签
+- 子元素垂直居中，并且该子元素的长度/宽度为父容器宽度(width)一半的正方形
+- 简述 css 中 position 的值
+- 什么是 BFC
+- CSS 如何实现固定长宽比的元素
+- rem、em、vw、vh 的值各是什么意思
+- normalize.css 与 reset.css 又何区别
+- line-height 的值分别取 [2, 2em, 200%] 有什么区别?
+- 你是如何保障你们项目质量的
+- Javascript 数组中有那些方法可以改变自身，那些不可以
+- 如何判断一个数组是否包含某个值
+- 如何判断字符串包含某个子串
+- DOM 中如何阻止事件默认行为，如何判断事件否可阻止？
+- 什么是事件冒泡和事件捕获
+- 什么是事件委托，e.currentTarget 与 e.target 有何区别
+- 关于事件捕获和冒泡，以下代码输出多少
+- 浏览器中 cookie 有哪些字段
+- 某元素的 fontSize: 2rem; lineHeight: 1.5em; 此时 lineHeight 为多少像素
+- DOM 中 Element 与 Node 有何区别
+- 如何判断某一个值是数组
+- 简述 Object.defineProperty
+- Object.keys 与 Object.getOwnPropertyNames() 有何区别
+- 关于 setState 以下代码的输出
+- Grid 布局的优势在哪里
+- SameSite Cookie 有哪些值，是如何预防 CSRF 攻击的
+- sessionStorage 与 localStorage 有何区别
+- 如何封装一个支持过期时间的 localStorage
+- 如何实现三列均分布局
+- 如何统计当前页面出现的所有标签
+- 如何监听 localStorage 的变动
+- Data URL 的应用场景及如何生成
+- 实现一个 inherits 函数进行继承
+- WeakMap 与垃圾回收有何关系
+- 什么是媒体查询，JS 可以监听媒体查询吗
+- z-index: 999 元素一定会置于 z-index: 0 元素之上吗
+- 浏览器中事件有哪些属性与方法
+- 关于块级作用域，以下代码输出多少，在何时间输出
+- 如何逆序一个字符串
+- 为何 0.1+0.2 不等于 0.3，应如何做相等比较
+- 关于 this 与包装对象，以下输出多少
+- 浏览器中如何读取二进制信息
+- 关于类型转化，判断以下代码输出
+- 关于暂时性死域，判断以下代码输出
+- 关于词法作用域，判断以下代码输出
+- 关于 this，判断以下代码输出
+- 关于 new，判断以下代码输出
+- 如何正确得知某张图片的 MIME 格式
+- 关于简单的事件循环，判断以下代码输出
+- HTTP 响应头 cache-control: s-maxage=0 是什么意思
+- http 缓存控制中 Cach-Control 为 public 与 private 有何区别
+- http 方法 get 与 post 有何区别
+- 箭头函数和普通函数的区别
+- 什么是 URL 编码 (URL Encode)
+- http 状态码 204 使用在什么场景
+- 现代前端应用应如何配置 HTTP 缓存机制
+- 如何确保你们的项目开启了 gzip
+- HTTP 有哪些常见的请求头和响应头
+- 使用 webpack 如何分包
+- 什么是 HSTS
+- http 中 referer 请求头是做什么的
+- React 中什么是合成事件
+- 什么是纯函数
+- 前端项目中有哪些副作用
+- React/Vue 中受控组件与不受控组件的区别
+- 给数字添加千位符
+- React 中监听 input 的 onChange 事件的原生事件是什么
+- 在浏览器中点击 a 标签保存为文件如何做
+- 引入 BFF 层的优势在哪里
+- 如何实现一个深比较的函数 deepEqual
+- Object.is 与全等运算符(===)有何区别
+- 在 React hooks 中如何模拟 forceUpdate
+- 如何把对象转化为 key/value 的二维数组
+- 在 JS 中如何监听 Object 某个属性值的变化
+- 判断以下路由，将会响应哪一个路由
+- js 中什么是 AsyncIterable
+- 关于事件循环，仅有 Promise，判断以下代码输出
+- 关于字符串编码解码进阶
+- 请简介 CSS 的盒模型
+- 请简述重新登录 refresh token 的原理
+- 了解什么是 JSBridge 吗
+- React/Vue 中兄弟组件如何进行通信
+- React.memo 中是如何实现性能优化的
+- 如何使用 JS 实现一个发布订阅模式
+- immer 的原理是什么，为什么它的性能更高
+- React.useMemo 与 React.useCallback 是如何进行性能优化的
+- 在 nginx 中如何配置 HTTP 协商缓存
+- 什么是 base64 与 URL Safe base64
+- 列举 Number、String、Array、Object、Promise 有哪些 API
+- 使用 JS 如何生成一个随机字符串
+- CSS 有哪些选择器
+- CSS 有哪些伪类与伪元素选择器
+- Number.isNaN 与 globalThis.isNaN 有何区别
+- 如何判断一个数值为整数
+- 同一页面三个组件请求同一个 API 发送了三次请求，如何优化
+- 简述 koa 的中间件原理，手写 koa-compose 代码
+- 如何压缩前端项目中 JS 的体积
+- 如何优化 React 项目的性能
+- 实现一个函数 maxBy，根据给定条件找到最大的数组项
+- 实现一个函数 max，找到数组中最大的一个值/两个值/N 个值
+- 什么是安全整数，如何判断一个整数是安全整数
+- 在 Node 中如何读写文件
+- 在 Node 中如何发送请求
+- Node 中服务端框架如何解析 http 的请求体 body
+- 统计字符串中出现次数最多的字符及次数
+- 请输出 100 以内的菲波那切数列
+- 你们项目中使用了哪些依赖/第三方库
+- 如何使用正则匹配一个汉字
+- 如何把字符串全部转化为小写格式
+- HTTP 与 TCP 中的 keep-alive 各是什么
+- 如何实现数组函数 reduce
+- 在 Node 中流 (stream) 分为几类，有哪些应用场景
+- 如何实现 chunk 函数，数组进行分组
+- 实现一个异步的 sum/add
+- 随机生成六位数的手机验证码(重复/不可重复)
+- 如何禁止打开浏览器控制台
+- Array 中那些 API 可改变自身
+- 如何把一个数组 Array 转化为迭代器 Iterable
+- 如何去除字符串首尾空白字符
+- http 各个版本间各有什么改进
+- 简述 http3，http3 解决了什么问题
+- http2 中 Stream 与 Frame 是什么关系
+- useLayoutEffect 和 useEffect 有什么区别
+- css 加载会阻塞 DOM 树的解析和渲染吗
+- 实现 intersection，取数组交集
+- JS 中如何实现 call/apply
+- 实现一个 composeLeft/flow(从左向右) 函数，进行函数合成
+- 什么是点击劫持(ClickJacking)，如何预防
+- 在 React Hooks 中实现 usePreviouseValue 取上次渲染的值
+- 实现一个 render/template 函数，可以用以渲染模板
+- Number 中最大数、最大安全整数、EPSILON 都是多少，原理是什么
+- 给定一个数值，给出它在 IEEE754 的表示，如符号位、指数位与分数位
+- 请简述下 Node 与浏览器环境中的事件循环
+- JS 如何检测到对象中有循环引用
+- 实现二进制与十进制的互相转化的两个函数
+- 简述下 WebWorker，它如何进行通信
+- JS 中异步任务为何分为微任务与宏任务
+- 在 CSS 中，使用 rem 作为单位有何缺点
+- 如何提高首屏渲染时间？
+- 浏览器中监听事件函数 addEventListener 第三个参数有那些值
+- 什么是原码、补码与反码
+- 求给定数组中 N 个数相加之和为 sum 所有可能集合
+- 在 Node 中如何读取可读流的内容
+- 浏览器中 Frame 与 Event Loop 的关系是什么
+- 在 Typescript 中如何实现类型标记 Pick 与 Omit
+- 如何实现一个 sampleSize 函数，从数组中随机取 N 个元素
+- 实现一个函数 keyBy
+- 实现一个函数 groupBy
+- 在 Node 中如何读取大文件的内容
+- 求正序增长的正整数数组中，其和为 N 的两个数
+- FizzBuzz，是否能被 3 或 5 整除
+- 实现一个函数 camelCase，对变量转化为驼峰命名
+- 如何遍历一个对象
+- 网站性能优化中，如何对小图片进行优化
+- https 如何被抓包，原理是什么
+- setTimeout 为什么最小只能设置 4ms，如何实现一个 0ms 的 setTimeout?
+- JS 中如何原生实现 instanceOf
+- 如何根据 random5 随机生成 [0, 5]，生成一个函数 random7？
+- 如何实现一个 ORM 类似的 find 链式调用
+- 什么是协变与逆变
+- 在 ts 中如何实现 Partial
+- 在 ts 中什么是 infer，并实现 Parameters 与 ReturnType
+- Flex 布局中的 flex-basis 与 width 有何区别
+- OSCP Stapling 是什么
+- npm 执行命令传递参数时，为何需要双横线
+- 有没有使用过 Node 的 inspect 这个核心模块
+- 在虚拟 DOM 中进行 diff 算法时，介绍当根据 key 对数组进行重用时的算法
+- http client 中如何得知已接收完所有响应数据
+- 实现函数 promisify，把回调函数改成 promise 形式
+- return promise 与 return await promise 有何区别
+- 在 ES6 Class 中，super 的过程中做了什么
+- 关于 Promise，判断以下代码的输出
+- webpack 的 runtime 做了什么事情
+- typescript 中 interface 与 type 有何区别
+- 请简述 typescript 中的 infer
+- webpack 中的 code spliting 是如何动态加载 chunk 的？
+- core-js 是做什么用的？
+- 打包器(webpack/rollup) 如何将打包后的 js 资源注入 html 中
+- 打包器(webpack/rollup) 如何加载 json、image 等非 Javascript 资源
+- 打包器(webpack/rollup) 如何加载 style 样式资源
+- 如何提升 webpack 构建资源的速度
+- 如何处理白屏错误页的监控的？
+- 简述 npm script 的生命周期
+- git hooks 原理是什么
+- 如何检测出你们安装的依赖是否安全
+- 请简述下 eslint 的作用
+- 在项目中，如何平滑升级 npm 包
+- 请描述 node_modules 的目录结构(拓扑结构)
+- npm 第三方库需要提交 lockfile 吗
+- 请问什么是 CICD
+- 如何使用 docker 部署前端
+- pnpm 有什么优势
+- 浏览器中如何使用原生的 ESM
+- 如何将 CommonJS 转化为 ESM
+- 如何对 npm package 进行发包
+- 如何分析前端打包体积
+- 什么是 AST，及其应用
+- 简述 browserslist 的意义
+- 简述 bundless 的优势与不足
+- 简述 npm cache
+- 如何修复某个 npm 包的紧急 bug
+- 前端如何进行高效的分包
+- 前端如何对分支环境进行部署
+- 如何取得一个数字的小数部分与整数部分
+- websocket 和短轮询有什么区别
+- webpack 中是如何处理 new URL 资源的
+- vite 中是如何处理 new URL 资源的
+- 我们上传图片为 Blob/File 对象时，是如何向服务器端传送数据的
+- 如何实现一个 omit/omitBy 函数
+- 在 babel 编译为低版本 ES 时，为何能够编译可选链之类语法，但无法编译 API
+- 实现 batchFn 函数，可以批量执行函数
+- 在 react 中，以下父子组件的 useEffect/useLayoutEffect 顺序如何
+- webpack 的打包流程是什么样的
+- React18 有哪些新特性
+- React19 有哪些新特性

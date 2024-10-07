@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "try...catch 是否能捕获异步异常",
+  title: "分片上传文件，如何校验文件完整性",
   key_world: [
-    "异常处理",
+    // "校验文件完整性",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
@@ -23,7 +23,7 @@ const remote = {
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

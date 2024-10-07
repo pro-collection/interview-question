@@ -9,17 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http 缓存中 no-cache 与 no-store 的区别是什么",
+  title: "对于已经 import 但未实际使用的模块使用 webpack 还会对它打包吗",
   key_world: [
-    "http 缓存",
+    "tree-shaking 使用",
     // "todo",
   ],
   labels: [
-    // labels.js,
-    labels.application,
-    labels.network,
+    labels.engineering,
 
-    company.mi,
+    company.alibaba,
     // xx
   ],
   milestone: MileStone.inProgress,

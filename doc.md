@@ -12,11 +12,6 @@
 
 ## 待整理
 
-- 如何监控文件的变动
-- http 响应头中如果 content-type 为 application/octet-stream，则代表什么意思
-- http 向 https 做重定向应该使用哪个状态码
-- js 代码压缩 minify 的原理是什么
-- 在 Node 应用中如何利用多核心 CPU 的优势
 - Node 中 cluster 的原理是什么
 - http 响应头中的 Date 与 Last-Modified 有什么不同，网站部署时需要注意什么
 - react hooks 中如何模拟 componentDidMount

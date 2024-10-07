@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http header content-type 为 application/octet-stream，则代表什么意思",
+  title: "http 向 https 做重定向应该使用哪个状态码",
   key_world: [
-    "header content-type",
+    "重定向",
     // "todo",
   ],
   labels: [
@@ -19,10 +19,10 @@ const remote = {
     labels.application,
     labels.network,
 
-    // company.alibaba,
+    company.netEase,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

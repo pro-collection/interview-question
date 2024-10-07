@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http 静态文件缓存 Last-Modified 是根据什么生成的",
+  title: "http header content-type 为 application/octet-stream，则代表什么意思",
   key_world: [
-    "静态文件缓存",
+    "header content-type",
     // "todo",
   ],
   labels: [
@@ -19,7 +19,7 @@ const remote = {
     labels.application,
     labels.network,
 
-    company.alibaba,
+    // company.alibaba,
     // xx
   ],
   milestone: MileStone.senior,

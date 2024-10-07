@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "https 中如何保证证书是可信任的",
+  title: "如果 cookie 没有设置  maxage， 那么这一条 cookie 失效时间改怎么算",
   key_world: [
-    "https 证书可信保证",
+    "cookie 失效时间",
     // "todo",
   ],
   labels: [
     labels.network,
 
-    company.alibaba,
+    company.xiaohongshu,
     // xx
   ],
   milestone: MileStone.senior,

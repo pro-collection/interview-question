@@ -9,16 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "单元测试、E2E 测试有和区别？",
+  title: "前端部署应该要考虑哪些问题",
   key_world: [
-    "前端测试",
+    "前端部署",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     // labels.js,
-    labels.application,
+    labels.engineering,
 
     company.tencent,
     // xx

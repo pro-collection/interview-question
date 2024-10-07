@@ -9,21 +9,21 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端需要加载一个大体积的文件时， 一般有哪些优化思路",
+  title: "try...catch 是否能捕获异步异常",
   key_world: [
-    "前端加载文件过大",
+    "异常处理",
     // ".exact 作用",
     // "PerformanceObserver PerformanceResourceTiming api 使用",
     // "todo",
   ],
   labels: [
     // labels.js,
-    labels.engineering,
+    labels.application,
 
-    company.tencent,
+    // company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

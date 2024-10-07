@@ -1,83 +1,76 @@
-**关键词**：前端加载文件过大
+**关键词**：异常处理
 
-当前端需要加载大体积文件时，可以从以下几个方面进行优化：
+题目是：以下代码有错吗？如果有错，应该如何改正？
 
-**一、文件压缩**
+```js
+try {
+  setTimeout(() => {
+    throw new Error("err");
+  }, 200);
+} catch (err) {
+  console.log(err);
+}
 
-1. **服务器端压缩**：
+try {
+  Promise.resolve().then(() => {
+    throw new Error("err");
+  });
+} catch (err) {
+  console.log(err);
+}
+```
 
-   - 在服务器上配置文件压缩功能，如使用 Gzip 或 Brotli 压缩算法对文件进行压缩后再传输。这样可以显著减少文件的大小，降低传输时间。
-   - 例如，在 Nginx 服务器中，可以通过配置开启 Gzip 压缩：
+**解答**
 
-   ```nginx
-   gzip on;
-   gzip_comp_level 6;
-   gzip_types text/plain text/css application/javascript application/json image/svg+xml;
-   ```
+才知道 try...catch 不能异步捕获代码错误。在 JavaScript 中，setTimeout 是一个异步函数，它的回调函数会在指定的延时后被放入事件队列，等待当前执行栈清空后才执行。因此，当 setTimeout 的回调函数执行并抛出错误时，try...catch 已经执行完毕，无法捕捉到异步回调中的错误。
+正确的做法是在异步操作中直接处理错误，例如使用回调函数、Promises 或者 async/await 结合 try...catch
 
-2. **客户端解压缩**：
-   - 现代浏览器通常支持对 Gzip 和 Brotli 压缩的文件进行自动解压缩。当浏览器接收到压缩后的文件时，会自动解压缩并使用。
-   - 无需额外的客户端代码，浏览器会自动处理压缩文件的解压缩过程，提高文件加载速度。
+```js
+new Promise((resolve, reject) => {
+  setTimeout(() => {
+    try {
+      throw new Error("err");
+    } catch (err) {
+      reject(err);
+    }
+  }, 200);
+})
+  .then(() => {
+    // 正常执行时的处理逻辑
+  })
+  .catch((err) => {
+    console.log(err); // 这里会捕捉到错误
+  });
+```
 
-**二、文件分割与懒加载**
+至于第二个例子，尝试使用 try...catch 来捕捉一个在 Promise 链中抛出的错误。这种方式同样是无效的，因为 try...catch 不能捕捉到在 Promise 链中的异步错误。
 
-1. **文件分割**：
+在 Promise 中抛出一个错误（例如通过 throw 语句）会导致 Promise 被拒绝（或失败）。要正确处理这个错误，需要在 Promise 链中使用.catch 方法或者在一个 async 函数中使用 try...catch。
 
-   - 将大体积文件分割成多个较小的文件。例如，对于一个大型的 JavaScript 库，可以将其拆分成多个模块，根据需要逐步加载。
-   - 这样可以避免一次性加载整个大文件，减少初始加载时间。
-   - 例如，使用 Webpack 等构建工具可以将代码分割成多个 chunk，根据路由或特定条件进行加载。
+```js
+// 方法一
+Promise.resolve()
+  .then(() => {
+    throw new Error("err");
+  })
+  .catch((err) => {
+    console.log(err); // 这里会捕捉到错误
+  });
 
-2. **懒加载**：
-   - 对于不是立即需要的文件或资源，可以采用懒加载的方式。当用户实际需要使用该资源时，再进行加载。
-   - 例如，对于图片、视频等资源，可以在用户滚动到可视区域时再进行加载，避免在页面初始加载时加载所有资源。
-   - 对于 JavaScript 模块，可以使用动态导入（dynamic import）的方式实现懒加载：
-   ```javascript
-   const loadModule = async () => {
-     const module = await import("./largeModule.js");
-     // 使用加载的模块
-   };
-   ```
+// 方法二
+async function handleError() {
+  try {
+    await Promise.resolve().then(() => {
+      throw new Error("err");
+    });
+  } catch (err) {
+    console.log(err); // 这里会捕捉到错误
+  }
+}
 
-**三、缓存策略**
+handleError();
+```
 
-1. **浏览器缓存**：
+**补充**
 
-   - 设置合理的缓存策略，让浏览器缓存已经加载过的文件。这样，当用户再次访问时，可以直接从缓存中读取文件，而无需再次从服务器下载。
-   - 可以通过设置 HTTP 响应头来控制缓存，例如：
-
-   ```nginx
-   location / {
-     add_header Cache-Control "max-age=3600";
-   }
-   ```
-
-   - 上述配置将设置文件的缓存时间为 1 小时。
-
-2. **缓存更新机制**：
-   - 当文件内容发生变化时，需要确保浏览器能够获取到最新的版本。可以通过在文件名中添加版本号或哈希值来实现缓存更新。
-   - 例如，将文件名改为`largeFile_v1.2.js`或`largeFile_abc123.js`，当文件内容变化时，更新版本号或哈希值，浏览器会认为这是一个新的文件并进行下载。
-
-**四、优化加载顺序**
-
-1. **关键资源优先加载**：
-
-   - 确定哪些资源是页面加载的关键资源，优先加载这些资源。对于大体积文件，如果不是关键资源，可以延迟加载。
-   - 例如，对于一个图片库应用，先加载页面的基本结构和导航部分，图片可以在用户交互时再进行加载。
-
-2. **异步加载**：
-   - 使用异步加载的方式加载大体积文件。例如，对于 JavaScript 文件，可以使用`<script async>`标签或动态创建`<script>`标签并插入到页面中进行异步加载。
-   - ```html
-     <script async src="largeScript.js"></script>
-     ```
-   - 这样可以避免阻塞页面的渲染，提高用户体验。
-
-**五、CDN 加速**
-
-1. **使用内容分发网络（CDN）**：
-
-   - 将大体积文件托管在 CDN 上，利用 CDN 的分布式节点，可以让用户从离自己最近的节点获取文件，减少网络延迟，提高加载速度。
-   - 例如，将图片、视频、静态文件等托管在 CDN 上，通过 CDN 的 URL 进行访问。
-
-2. **CDN 缓存**：
-   - CDN 通常会对文件进行缓存，进一步提高文件的加载速度。当文件内容发生变化时，需要及时更新 CDN 上的缓存。
-   - 可以通过设置 CDN 的缓存策略或使用版本号等方式来管理 CDN 缓存。
+![1](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0729c13766834971947e0f9c78a00b43~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.avis#?w=686&h=182&s=24314&e=png&b=fcfcfc)

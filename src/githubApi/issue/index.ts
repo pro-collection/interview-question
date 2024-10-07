@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http 向 https 做重定向应该使用哪个状态码",
+  title: "http 缓存 header 中的 Date 与 Last-Modified 有什么不同",
   key_world: [
-    "重定向",
+    "http 缓存 header",
     // "todo",
   ],
   labels: [
@@ -19,10 +19,10 @@ const remote = {
     labels.application,
     labels.network,
 
-    company.netEase,
+    company.shopee,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

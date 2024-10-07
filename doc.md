@@ -12,9 +12,6 @@
 
 ## 待整理
 
-- Node 中 cluster 的原理是什么
-- http 响应头中的 Date 与 Last-Modified 有什么不同，网站部署时需要注意什么
-- react hooks 中如何模拟 componentDidMount
 - http 1.1 中的 keep-alive 有什么作用
 - 如果使用 SSR，可以在 created/componentWillMount 中访问 localStorage 吗
 - 当在浏览器中看到某资源使用了 http2 后，使用 curl 为什么看到的仍是 http 1.1

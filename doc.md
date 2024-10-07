@@ -12,16 +12,6 @@
 
 ## 待整理
 
-- no-cache 与 no-store 的区别是什么
-- 如何判断当前环境是移动端还是 PC 端
-- React hooks 中 useCallback 的使用场景是什么
-- input 中监听值的变化是在监听什么事件
-- 什么是跨域，如何解决跨域问题
-- 请简述一下 event loop
-- 如何实现一个 flatMap 函数 (头条)
-- 如何裁剪图片 (情景：选择头像)
-- useEffect 中如何使用 async/await
-- 主域名的 SEO 是否比二级域名要更好
 - 以下代码，koa 会返回什么数据
 - Node 如何进行进程间通信
 - 如何实现一个 async/await

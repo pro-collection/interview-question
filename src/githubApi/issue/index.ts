@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "对于已经 import 但未实际使用的模块使用 webpack 还会对它打包吗",
+  title: "完整域名的构成部分",
   key_world: [
-    "tree-shaking 使用",
+    // "tree-shaking 使用",
     // "todo",
   ],
   labels: [
-    labels.engineering,
+    labels.network,
 
-    company.alibaba,
+    // company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

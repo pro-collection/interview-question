@@ -9,9 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "HTTPS 安全协议主要是啥",
+  title: "https 加密协议里面: TLS 和 SSL 分别是什么，有何区别",
   key_world: [
-    "安全协议",
+    "TLS/SSL 概念",
+    "TLS/SSL 区别",
     // "iterator 和 数组关系",
     // "todo",
   ],

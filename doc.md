@@ -12,9 +12,6 @@
 
 ## 待整理
 
-- node 中 nextTick 与 setTimeout 有什么区别
-- redux 和 mobx 有什么不同
-- 关于 React hooks 的 caputre value，以下输出多少
 - 在 React 项目中 immutable 是优化性能的
 - 如何使用 CSS 实现网站的暗黑模式 (Dark Mode)
 - 在 redux 中如何发送请求

@@ -9,20 +9,20 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "node 中 nextTick 与 setTimeout 有什么区别",
+  title: "[React] 对象数据状态不可变是什么概念",
   key_world: [
-    "nextTick 与 setTimeout 区别",
+    "react 数据不可变",
     // "iterator 和 数组关系",
     // "todo",
   ],
   labels: [
     // labels.engineering,
-    labels.node,
+    labels.frameWork,
 
-    // company.xiaohongshu,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

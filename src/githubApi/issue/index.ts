@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 对象数据状态不可变是什么概念",
+  title: "[React] 如何实践数据不可变状态",
   key_world: [
     "react 数据不可变",
     // "iterator 和 数组关系",

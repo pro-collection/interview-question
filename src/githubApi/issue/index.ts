@@ -9,9 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "iterator 对象有哪些特征",
+  title: "iterator 和 数组 有什么关系",
   key_world: [
     "iterator 对象",
+    "iterator 和 数组关系",
     // "todo",
   ],
   labels: [
@@ -21,7 +22,7 @@ const remote = {
     // company.xiaohongshu,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

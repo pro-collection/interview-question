@@ -12,14 +12,6 @@
 
 ## 待整理
 
-- 什么是 Iterable 对象，与 Array 有什么区别
-- 在 node 端如何向服务器上传文件
-- js 如何全部替代一个子串为另一个子串
-- 什么情况下会发送 OPTIONS 请求
-- CORS 如果需要指定多个域名怎么办
-- 既然 cors 配置可以做跨域控制，那可以防止 CSRF 攻击吗
-- js 动画和 css 动画那个性能比较好
-- css 如何匹配前 N 个子元素及最后 N 个子元素
 - node 中 nextTick 与 setTimeout 有什么区别
 - redux 和 mobx 有什么不同
 - 关于 React hooks 的 caputre value，以下输出多少

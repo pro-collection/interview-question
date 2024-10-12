@@ -9,20 +9,20 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "iterator 和 数组 有什么关系",
+  title: "node 中 nextTick 与 setTimeout 有什么区别",
   key_world: [
-    "iterator 对象",
-    "iterator 和 数组关系",
+    "nextTick 与 setTimeout 区别",
+    // "iterator 和 数组关系",
     // "todo",
   ],
   labels: [
     // labels.engineering,
-    labels.js,
+    labels.node,
 
     // company.xiaohongshu,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

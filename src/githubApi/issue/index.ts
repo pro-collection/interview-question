@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 在 redux 中如何写一个记录状态变更的日志插件",
+  title: "[React] 在 setState 时发生了什么",
   key_world: [
-    "redux 插件",
+    "React setState 过程",
     // "iterator 和 数组关系",
     // "todo",
   ],
@@ -19,10 +19,10 @@ const remote = {
     // labels.engineering,
     labels.frameWork,
 
-    company.tencent,
+    company.mi,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

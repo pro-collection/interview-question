@@ -12,8 +12,6 @@
 
 ## 待整理
 
-- 在 redux 中如何写一个记录状态变更的日志插件
-- 在 js 中如何实现继承
 - React 在 setState 时发生了什么
 - 如何设计一个 UI 组件库
 - python 中的 self 与 javascript 中的 this 有何不同

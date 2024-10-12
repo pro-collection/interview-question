@@ -9,19 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "commonjs 模块化中 module.exports 与 exports 有什么区别， 该如何选择",
+  title: "iterator 对象有哪些特征",
   key_world: [
-    "模块化 导出",
+    "iterator 对象",
     // "todo",
   ],
   labels: [
-    labels.engineering,
-    labels.application,
+    // labels.engineering,
+    labels.js,
 
     // company.xiaohongshu,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

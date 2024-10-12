@@ -12,15 +12,6 @@
 
 ## 待整理
 
-- css 中属性选择器及类选择器的权重哪个高
-
-- 伪类与伪元素有什么区别
-- 在 node 中如何开启 https
-- node 中 module.exports 与 exports 有什么区别
-- 如何把 json 数据转化为 demo.json 并下载文件
-- 如何实现一个 timeout 的中间件
-- 如何得知目前 node 版本的 v8 版本号
-- 在 node 中如何判断一个对象是 stream
 - 什么是 Iterable 对象，与 Array 有什么区别
 - 在 node 端如何向服务器上传文件
 - js 如何全部替代一个子串为另一个子串

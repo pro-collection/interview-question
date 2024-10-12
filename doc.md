@@ -12,12 +12,6 @@
 
 ## 待整理
 
-- https 层可以做哪些性能优化
-- ECDHE 与 RSA 有何区别
-- https 中证书的格式化信息有哪些
-- https 连接时如何保证证书没被废弃掉
-- TLS1.3 相比 TLS1.2 有何不同
-- 在 wireshark 中如何抓包 https/http2
 - 实现一个 once 函数，记忆返回结果只执行一次
 - 在 TLS 层如何优化网站性能
 - 如何实现一个函数 isPlainObject 判断是否为纯对象

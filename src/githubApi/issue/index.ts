@@ -9,21 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "https 层可以做哪些性能优化",
+  title: "实现一个 once 函数，记忆返回结果只执行一次",
   key_world: [
-    "http 性能优化",
-    // "TLS/SSL 区别",
-    // "iterator 和 数组关系",
+    "once 函数",
     // "todo",
   ],
   labels: [
-    // labels.engineering,
-    labels.network,
+    labels.js,
 
     // company.mi,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

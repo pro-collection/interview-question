@@ -12,9 +12,6 @@
 
 ## 待整理
 
-- 简述下 TLS 握手过程
-- 以下输出顺序多少 (setTimeout 与 promise 顺序)
-- 简单介绍一下 RSA 算法
 - https 层可以做哪些性能优化
 - ECDHE 与 RSA 有何区别
 - https 中证书的格式化信息有哪些

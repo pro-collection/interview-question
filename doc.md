@@ -12,11 +12,6 @@
 
 ## 待整理
 
-- React 在 setState 时发生了什么
-- 如何设计一个 UI 组件库
-- python 中的 self 与 javascript 中的 this 有何不同
-- 什么是浏览器的关键渲染路径
-- http2 中 server push 与 websocket 有什么区别
 - 简述下 TLS 握手过程
 - 以下输出顺序多少 (setTimeout 与 promise 顺序)
 - 简单介绍一下 RSA 算法

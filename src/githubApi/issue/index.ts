@@ -9,17 +9,17 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 在 setState 时发生了什么",
+  title: "HTTPS 安全协议主要是啥",
   key_world: [
-    "React setState 过程",
+    "安全协议",
     // "iterator 和 数组关系",
     // "todo",
   ],
   labels: [
     // labels.engineering,
-    labels.frameWork,
+    labels.network,
 
-    company.mi,
+    // company.mi,
     // xx
   ],
   milestone: MileStone.senior,

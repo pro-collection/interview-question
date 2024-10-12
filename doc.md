@@ -12,11 +12,6 @@
 
 ## 待整理
 
-- 在 React 项目中 immutable 是优化性能的
-- 如何使用 CSS 实现网站的暗黑模式 (Dark Mode)
-- 在 redux 中如何发送请求
-- 如何为你们的前端项目选择状态管理器
-- 简单介绍 requestIdleCallback 及使用场景
 - 在 redux 中如何写一个记录状态变更的日志插件
 - 在 js 中如何实现继承
 - React 在 setState 时发生了什么

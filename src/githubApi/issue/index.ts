@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 如何实践数据不可变状态",
+  title: "[React] 在 redux 中如何写一个记录状态变更的日志插件",
   key_world: [
-    "react 数据不可变",
+    "redux 插件",
     // "iterator 和 数组关系",
     // "todo",
   ],
@@ -19,10 +19,10 @@ const remote = {
     // labels.engineering,
     labels.frameWork,
 
-    company.alibaba,
+    company.tencent,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

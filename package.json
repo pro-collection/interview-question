@@ -29,12 +29,14 @@
     "axios": "^1.3.4",
     "chatgpt": "^5.0.6",
     "cheerio": "1.0.0-rc.12",
+    "crawlee": "^3.11.5",
     "dayjs": "^1.11.7",
     "html-to-md": "^0.8.3",
     "lodash": "^4.17.21",
     "md-to-pdf": "^5.2.1",
     "octokit": "^2.0.14",
     "openai": "^3.2.1",
+    "playwright": "^1.48.0",
     "puppeteer": "^19.9.1"
   }
 }

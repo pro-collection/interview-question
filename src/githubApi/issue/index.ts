@@ -9,17 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "查找页面出现次数最多的 HTML 标签",
+  title: "部署一个 node 应用要考虑哪些因素",
   key_world: [
-    "标签查找",
+    "node 应用部署",
     // "todo",
   ],
   labels: [
-    labels.application,
-    // company.other,
+    labels.node,
+    labels.engineering,
+    company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -31,3 +31,5 @@ package-lock.json
 
 configToken.json
 authConfigToken.ts
+
+storage

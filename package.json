@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "write": "ts-node src/githubApi/issue/index.ts",
-    "release": "ts-node src/githubApi/releaseNote/index.ts"
+    "release": "ts-node src/githubApi/releaseNote/index.ts",
+    "juejin_spider": "ts-node src/spider/juejin/getRecentQuection.ts"
   },
   "repository": {
     "type": "git",

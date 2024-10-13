@@ -9,18 +9,17 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "实现一个 once 函数，记忆返回结果只执行一次",
+  title: "[React]在应用中如何排查性能问题",
   key_world: [
-    "once 函数",
+    "React 性能排查",
     // "todo",
   ],
   labels: [
-    labels.js,
-
-    // company.mi,
+    labels.frameWork,
+    company.other,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

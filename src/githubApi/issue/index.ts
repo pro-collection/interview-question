@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "常见的 http code 4xx 都有哪些状态码",
+  title: "304 是什么状态码， 跟哪些 header 有关",
   key_world: [
     "http 状态码",
     // "todo",

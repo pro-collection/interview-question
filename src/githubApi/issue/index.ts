@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "http3 有哪些核心的新特性",
+  title: "如何实现页面文本不可选中，不可复制",
   key_world: [
-    "http3 新特性",
+    "禁止文本复制",
     // "todo",
   ],
   labels: [
-    labels.network,
+    labels.application,
     // labels.engineering,
-    // company.mt,
+    company.jd,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

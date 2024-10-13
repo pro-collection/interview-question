@@ -9,17 +9,17 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "有哪些前端性能分析工具",
+  title: "查找页面出现次数最多的 HTML 标签",
   key_world: [
-    "前端性能分析",
+    "标签查找",
     // "todo",
   ],
   labels: [
     labels.application,
-    company.other,
+    // company.other,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

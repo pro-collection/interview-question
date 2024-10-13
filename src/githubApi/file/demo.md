@@ -1,50 +1,52 @@
-**关键词**：前端性能分析
+**关键词**：标签查找
 
-以下是一些常用的前端性能分析工具：
+> 作者备注
+>
+> 主要是考察 getElementsByTagName 选择器， 以及如何获取元素标签名：tagName
 
-**一、浏览器开发者工具**
+直接上代码
 
-1. **Chrome DevTools**：
+```html
+<!DOCTYPE html>
+<html lang="en">
 
-   - 功能强大，提供了丰富的性能分析选项。
-   - 在“Performance”（性能）面板中，可以录制页面的交互过程，分析 CPU 使用率、内存占用、网络请求等，找出性能瓶颈。
-   - “Network”（网络）面板可以查看请求的加载时间、大小等信息，帮助优化网络请求。
-   - “Lighthouse”功能可以对页面进行全面的性能、可访问性、最佳实践等方面的审计。
+<head>
+  <meta charset="UTF-8">
+</head>
 
-2. **Firefox Developer Tools**：
-   - 类似 Chrome DevTools，具有性能分析、网络监测等功能。
-   - “Performance”工具可以分析页面加载和交互过程中的性能问题。
+<body>
+  <div>Some content</div>
+  <p>Another paragraph</p>
+  <p>Another paragraph</p>
+  <p>Another paragraph</p>
+  <div>More div content</p>
+  <span>Span element</span>
+  <script>
+    function findMostFrequentTag() {
+      const allElements = document.getElementsByTagName('*');
+      const tagCount = {};
+      for (let i = 0; i < allElements.length; i++) {
+        const tagName = allElements[i].tagName;
+        if (tagCount[tagName]) {
+          tagCount[tagName]++;
+        } else {
+          tagCount[tagName] = 1;
+        }
+      }
+      let mostFrequentTag = null;
+      let maxCount = 0;
+      for (const tag in tagCount) {
+        if (tagCount[tag] > maxCount) {
+          mostFrequentTag = tag;
+          maxCount = tagCount[tag];
+        }
+      }
+      return mostFrequentTag;
+    }
+    const mostFrequent = findMostFrequentTag();
+    console.log(`The most frequent tag is: ${mostFrequent}`);
+  </script>
+</body>
 
-**二、性能监测平台**
-
-1. **WebPageTest**：
-
-   - 在线工具，可以从多个地点对网页进行性能测试。
-   - 提供详细的性能指标，如首次内容绘制（FCP）、最大内容绘制（LCP）、首次输入延迟（FID）等。
-   - 生成可视化的报告，帮助分析页面的加载过程和性能瓶颈。
-
-2. **Pingdom Tools**：
-   - 用于测试网站的性能和可用性。
-   - 提供页面加载时间、文件大小等信息，并给出优化建议。
-
-**三、前端性能监控工具**
-
-1. **Google Analytics**：
-
-   - 虽然主要用于网站分析，但也可以提供一些性能相关的数据。
-   - 如页面加载时间、用户行为等，可以帮助了解用户体验和性能趋势。
-
-2. **New Relic Browser**：
-   - 提供全面的前端性能监控和分析。
-   - 可以实时监测页面性能，跟踪用户交互，提供详细的报告和警报。
-
-**四、代码分析工具**
-
-1. **Lighthouse CI**：
-
-   - 可以集成到持续集成（CI）流程中，对代码进行自动化的性能审计。
-   - 确保代码在提交和部署前符合一定的性能标准。
-
-2. **PageSpeed Insights API**：
-   - 可以通过 API 方式获取页面的性能分析结果。
-   - 方便集成到自定义的工具或流程中，进行大规模的性能监测和优化。
+</html>
+```

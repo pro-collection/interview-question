@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "304 是什么状态码， 跟哪些 header 有关",
+  title: "实现一个 JS 函数， 功能是从数组中随机取一个元素",
   key_world: [
-    "http 状态码",
+    "随机取数函数",
     // "todo",
   ],
   labels: [
-    labels.network,
+    labels.js,
     // labels.engineering,
-    company.mt,
+    // company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

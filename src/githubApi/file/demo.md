@@ -1,29 +1,21 @@
-**关键词**：http 状态码
+**关键词**：随机取数函数
 
-304 是 HTTP 状态码中的“Not Modified”（未修改）状态码。
+以下是使用 JavaScript 实现从数组中随机取一个元素的函数：
 
-当客户端（通常是浏览器）向服务器请求资源时，如果服务器判断该资源自上次客户端获取后没有被修改，就会返回 304 状态码，告诉客户端可以使用其本地缓存的版本，而无需再次传输整个资源。
+```javascript
+function getRandomElement(arr) {
+  if (!Array.isArray(arr) || arr.length === 0) {
+    return null;
+  }
+  const randomIndex = Math.floor(Math.random() * arr.length);
+  return arr[randomIndex];
+}
+```
 
-304 状态码主要与以下 HTTP 响应头有关：
+你可以这样使用这个函数：
 
-**一、`Last-Modified` 和 `If-Modified-Since`**
-
-1. `Last-Modified`：
-
-   - 服务器在首次响应资源时，在响应头中添加这个字段，表明资源的最后修改时间。
-   - 例如：`Last-Modified: Thu, 12 Oct 2023 10:30:00 GMT`。
-
-2. `If-Modified-Since`：
-   - 当客户端再次请求该资源时，会在请求头中添加这个字段，其值为上次服务器返回的`Last-Modified`的值。
-   - 服务器收到请求后，会比较资源的最后修改时间与`If-Modified-Since`的值。如果资源自该时间后没有被修改，就返回 304 状态码。
-
-**二、`ETag` 和 `If-None-Match`**
-
-1. `ETag`：
-
-   - 服务器为资源生成的一个唯一标识符，通常基于资源的内容计算得出。
-   - 例如：`ETag: "abcdef123456"`。
-
-2. `If-None-Match`：
-   - 当客户端再次请求资源时，会在请求头中添加这个字段，其值为上次服务器返回的`ETag`的值。
-   - 服务器收到请求后，会比较资源当前的`ETag`与`If-None-Match`的值。如果一致，说明资源未被修改，返回 304 状态码。
+```javascript
+const array = [1, 2, 3, 4, 5];
+const randomElement = getRandomElement(array);
+console.log(randomElement);
+```

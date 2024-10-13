@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React]在应用中如何排查性能问题",
+  title: "有哪些前端性能分析工具",
   key_world: [
-    "React 性能排查",
+    "前端性能分析",
     // "todo",
   ],
   labels: [
-    labels.frameWork,
+    labels.application,
     company.other,
     // xx
   ],

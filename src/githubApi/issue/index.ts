@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "部署一个 node 应用要考虑哪些因素",
+  title: "常见的 http code 4xx 都有哪些状态码",
   key_world: [
-    "node 应用部署",
+    "http 状态码",
     // "todo",
   ],
   labels: [
-    labels.node,
-    labels.engineering,
-    company.tencent,
+    labels.network,
+    // labels.engineering,
+    company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

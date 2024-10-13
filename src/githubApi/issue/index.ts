@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "实现一个 JS 函数， 功能是从数组中随机取一个元素",
+  title: "http3 有哪些核心的新特性",
   key_world: [
-    "随机取数函数",
+    "http3 新特性",
     // "todo",
   ],
   labels: [
-    labels.js,
+    labels.network,
     // labels.engineering,
     // company.mt,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

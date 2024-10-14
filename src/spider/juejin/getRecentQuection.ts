@@ -38,7 +38,7 @@ const scrollFn = async (page: Page) => {
 };
 
 const crawler = new PlaywrightCrawler({
-  // headless: false,
+  headless: false,
   requestHandler: async ({ page, log }) => {
     // Wait for the actor cards to render.
     await page.waitForSelector("a.entry-link");
@@ -84,6 +84,10 @@ const crawler = new PlaywrightCrawler({
         return dayjs().format("YYYY-MM-DD");
       };
 
+      const applaud = trim(item.applaud)?.replace(/\/n/gi, "");
+
+      const applaudNumber = applaud ? toNumber(applaud) : 0;
+
       return {
         ...item,
         // tags: compact(item.tags?.split(" ")).map((tagText) => replace(tagText, "\n", "")),
@@ -92,6 +96,7 @@ const crawler = new PlaywrightCrawler({
           .map((tagText) => replace(tagText, "\n", "")),
         url: `https://juejin.cn${get(split(item.url, "?"), 0)}`,
         date: getDate(),
+        applaud: applaudNumber,
       };
     });
 

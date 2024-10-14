@@ -38,7 +38,7 @@ const scrollFn = async (page: Page) => {
 };
 
 const crawler = new PlaywrightCrawler({
-  headless: false,
+  // headless: false,
   requestHandler: async ({ page, log }) => {
     // Wait for the actor cards to render.
     await page.waitForSelector("a.entry-link");
@@ -56,6 +56,7 @@ const crawler = new PlaywrightCrawler({
           name: el.querySelector("a.title")?.firstChild?.textContent || "",
           tags: el.querySelector("li.tag")?.textContent || "",
           date: el.querySelector(".meta-list li:nth-child(2)")?.textContent || "",
+          applaud: el.querySelector("span.count")?.textContent || "",
         };
       });
     });
@@ -76,9 +77,11 @@ const crawler = new PlaywrightCrawler({
         }
 
         if (dayString.includes("月")) {
-          const hour = toNumber(get(dayString.split("天"), 0));
+          const hour = toNumber(get(dayString.split("月"), 0));
           return dayjs().subtract(hour, "month").format("YYYY-MM");
         }
+
+        return dayjs().format("YYYY-MM-DD");
       };
 
       return {
@@ -117,5 +120,5 @@ const crawler = new PlaywrightCrawler({
 
 // 前端热榜
 crawler.run([
-  "https://juejin.cn/search?query=%E9%9D%A2%E8%AF%95&fromSeo=0&fromHistory=1&fromSuggest=0&enterFrom=home_page&type=0&period=2&sort=1",
+  "https://juejin.cn/search?query=%E9%9D%A2%E8%AF%95&fromSeo=0&fromHistory=1&fromSuggest=0&enterFrom=home_page&type=0&period=3&sort=1",
 ]);

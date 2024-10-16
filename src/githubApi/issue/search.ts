@@ -41,10 +41,10 @@ export const search = async (search: string[]) => {
 };
 
 // todo 测试
-searchWithRepo().then((res) => {
-  console.log(`[yanle] - res`, res.data.items);
-  // console.log(
-  //   `[yanle] - title`,
-  //   map(res.data, (item) => item.title)
-  // );
-});
+// searchWithRepo().then((res) => {
+// console.log(`[yanle] - res`, res.data.items);
+// console.log(
+//   `[yanle] - title`,
+//   map(res.data, (item) => item.title)
+// );
+// });

@@ -31,6 +31,10 @@ export const apiUrl = {
   // https://docs.github.com/en/rest/search?apiVersion=2022-11-28#search-issues-and-pull-requests
   searchIssue: (queryString: string, created: string) =>
     `https://api.github.com/search/issues?q=${queryString}+state:open+created:>${created}&per_page=1`,
+
+  // https://api.github.com/search/issues?q=repo:pro-collection/interview-question+in%3Atitle+react&per_page=1&page=1&labels=web%E6%A1%86%E6%9E%B6
+  searchIssueWithRepo: (owner: string, repo: string, queryString: string, per_page = "100", page = "1") =>
+    `https://api.github.com/search/issues?q=repo:${owner}/${repo}+${queryString}&per_page=${per_page}&page=${page}`,
 };
 
 /**
@@ -45,4 +49,3 @@ export const giteeApiUrl = {
   // https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoIssues
   getIssue: (owner: string, repo: string) => `https://gitee.com/api/v5/repos/${owner}/${repo}/issues`,
 };
-

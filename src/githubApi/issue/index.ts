@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] vue3 还是使用的虚拟 dom 吗？",
+  title: "[Vue] vue3 对虚拟 dom 做了哪些优化",
   key_world: [
     "vue3 虚拟dom",
     // "todo",
@@ -20,7 +20,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

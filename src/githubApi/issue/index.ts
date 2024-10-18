@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] vue3 如何监听数组变化",
+  title: "[Vue] nextTick 作用是什么， 原理是什么",
   key_world: [
-    "vue3 监听数组变化",
+    "vue nextTick 作用、原理",
     // "todo",
   ],
   labels: [
@@ -20,7 +20,7 @@ const remote = {
     company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

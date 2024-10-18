@@ -12,7 +12,6 @@
 
 ## 待整理
 
-- vue3 中，如何监听数组的变化
 - Vue 中 nextTick 的实现原理是什么
 - 现代框架如 React、Vue 相比原生开发有什么优势
 - typeof 与 instanceof 的区别

@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 URLSearchParams API",
+  title: "如何把一个数组随机打乱",
   key_world: [
-    "URLSearchParams API 介绍",
+    "数组随机打乱",
     // "todo",
   ],
   labels: [
-    labels.application,
+    labels.code,
     // labels.engineering,
-    company.other,
+    // company.other,
     // xx
   ],
   milestone: MileStone.inProgress,

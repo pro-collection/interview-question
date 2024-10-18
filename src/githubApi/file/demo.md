@@ -1,95 +1,47 @@
-**关键词**：URLSearchParams API 介绍
+**关键词**：数组随机打乱
 
-`URLSearchParams`是 JavaScript 中的一个内置 API，用于处理 URL 的查询参数部分。它提供了一系列方法来方便地操作和获取 URL 中的查询参数。
+在 JavaScript 中，可以使用以下几种方法来随机打乱一个数组：
 
-**一、创建`URLSearchParams`对象**
+**一、使用`sort`方法结合随机函数**
 
-1. **从现有 URL**：
-   - 可以从当前页面的 URL 中提取查询参数来创建`URLSearchParams`对象。例如：
+1. **基本原理**：
 
-```javascript
-const urlParams = new URLSearchParams(window.location.search);
-```
+   - JavaScript 的数组`sort`方法可以接受一个比较函数作为参数。通过提供一个随机的比较函数，可以实现对数组的随机排序，从而打乱数组的顺序。
 
-- 这里使用`window.location.search`获取当前页面 URL 的查询字符串，然后将其传递给`URLSearchParams`构造函数来创建一个新的对象。
-
-2. **从字符串**：
-   - 也可以直接从一个查询字符串创建`URLSearchParams`对象。例如：
+2. **示例代码**：
 
 ```javascript
-const queryString = "param1=value1&param2=value2";
-const urlParams = new URLSearchParams(queryString);
+const array = [1, 2, 3, 4, 5];
+
+array.sort(() => Math.random() - 0.5);
+
+console.log(array);
 ```
 
-**二、主要方法**
+在这个例子中，`sort`方法的比较函数每次都会返回一个随机的正负值，使得数组元素的排序顺序完全随机，从而实现数组的随机打乱。
 
-1. **`get()`方法**：
-   - 用于获取指定参数的第一个值。例如：
+**二、Fisher-Yates 洗牌算法**
+
+1. **基本原理**：
+
+   - Fisher-Yates 洗牌算法是一种经典的随机打乱数组的算法。它的基本思想是从数组的最后一个元素开始，随机选择一个位置与当前元素交换，然后逐步向前移动，重复这个过程，直到处理完第一个元素。
+
+2. **示例代码**：
 
 ```javascript
-const value = urlParams.get("paramName");
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const array = [1, 2, 3, 4, 5];
+
+const shuffledArray = shuffleArray(array);
+
+console.log(shuffledArray);
 ```
 
-- 如果参数不存在，`get()`方法将返回`null`。
-
-2. **`set()`方法**：
-   - 设置指定参数的值。如果参数不存在，将添加一个新的参数。例如：
-
-```javascript
-urlParams.set("paramName", "newValue");
-```
-
-3. **`append()`方法**：
-   - 向现有参数添加一个新的值。如果参数不存在，将添加一个新的参数。例如：
-
-```javascript
-urlParams.append("paramName", "anotherValue");
-```
-
-4. **`delete()`方法**：
-   - 删除指定参数。例如：
-
-```javascript
-urlParams.delete("paramName");
-```
-
-5. **`has()`方法**：
-   - 检查是否存在指定参数。返回一个布尔值。例如：
-
-```javascript
-const hasParam = urlParams.has("paramName");
-```
-
-6. **遍历参数**：
-   - 可以使用`forEach()`方法遍历所有参数。例如：
-
-```javascript
-urlParams.forEach((value, key) => {
-  console.log(`${key}: ${value}`);
-});
-```
-
-**三、优点和用途**
-
-1. **方便性**：
-
-   - `URLSearchParams`提供了一种简洁、直观的方式来处理 URL 查询参数，避免了手动解析和拼接查询字符串的繁琐过程。
-
-2. **兼容性**：
-
-   - 它在现代浏览器中广泛支持，可以在各种前端开发场景中使用。
-
-3. **动态操作**：
-
-   - 可以方便地在运行时修改查询参数，例如在单页应用程序中根据用户操作动态更新 URL 的查询参数。
-
-4. **与 URL 对象结合**：
-   - 可以与`URL`对象结合使用，方便地构建和操作完整的 URL。例如：
-
-```javascript
-const url = new URL("https://example.com");
-url.searchParams.set("paramName", "value");
-console.log(url.toString());
-```
-
-总之，`URLSearchParams`是一个强大而方便的 API，用于处理 URL 的查询参数，在前端开发中具有广泛的应用。
+在这个例子中，定义了一个`shuffleArray`函数，该函数使用 Fisher-Yates 洗牌算法随机打乱输入的数组，并返回打乱后的数组。

@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何计算页面首屏时间",
+  title: "JS 如何翻转一个字符串",
   key_world: [
-    "首屏时间",
+    "翻转字符串",
     // "todo",
   ],
   labels: [
-    labels.application,
+    labels.code,
     // labels.engineering,
     // company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

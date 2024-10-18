@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 如何翻转一个数组",
+  title: "css 如何实现分栏布局",
   key_world: [
-    "翻转数组",
+    "分栏布局",
     // "todo",
   ],
   labels: [
-    labels.code,
+    labels.css,
     // labels.engineering,
     // company.mt,
     // xx

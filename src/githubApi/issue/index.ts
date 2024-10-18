@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] nextTick 作用是什么， 原理是什么",
+  title: "现代框架如 React、Vue 相比原生开发有什么优势",
   key_world: [
-    "vue nextTick 作用、原理",
+    "现代框架优势",
     // "todo",
   ],
   labels: [
     labels.frameWork,
     // labels.engineering,
-    company.mt,
+    // company.mt,
     // xx
   ],
   milestone: MileStone.senior,

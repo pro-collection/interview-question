@@ -1,111 +1,71 @@
-**关键词**：input 标签 type 属性
+**关键词**：获取 url 参数
 
-HTML 中的`<input>`标签有多种`type`属性值，以下是一些常见的类型：
+在前端，可以通过以下几种方式快速获取页面 URL 的查询参数：
 
-**一、文本输入类型**
+**一、使用 URLSearchParams API**
 
-1. `text`：
-
-   - 用于输入单行文本。这是最常见的输入类型之一，用户可以在输入框中输入任何文本内容。
-   - 例如：`<input type="text">`。
-
-2. `password`：
-   - 用于输入密码，输入的内容会以掩码形式显示，以保护密码的安全性。
-   - 例如：`<input type="password">`。
-
-**二、数值输入类型**
-
-1. `number`：
-
-   - 用于输入数值。可以设置最小值、最大值、步长等属性来限制输入的范围。
-   - 例如：`<input type="number" min="0" max="100" step="1">`。
-
-2. `range`：
-   - 以滑块的形式显示，用户可以通过拖动滑块来选择一个数值范围内的值。
-   - 例如：`<input type="range" min="0" max="100">`。
-
-**三、日期和时间输入类型**
-
-1. `date`：
-
-   - 用于选择日期。通常会显示一个日期选择器，方便用户选择日期。
-   - 例如：`<input type="date">`。
-
-2. `time`：
-
-   - 用于选择时间。可以选择小时、分钟和秒。
-   - 例如：`<input type="time">`。
-
-3. `datetime-local`：
-   - 用于选择日期和时间，包括本地时区信息。
-   - 例如：`<input type="datetime-local">`。
-
-**四、选择类型**
-
-1. `checkbox`：
-
-   - 复选框，用户可以选择多个选项。
-   - 例如：`<input type="checkbox">`。
-
-2. `radio`：
-
-   - 单选按钮，用户只能选择一个选项。通常多个单选按钮具有相同的`name`属性，以确保只能选择其中一个。
-   - 例如：`<input type="radio" name="option">`。
-
-3. `select`：
-   - 下拉列表，用户可以从预定义的选项中选择一个值。可以使用`<option>`标签来定义选项。
+1. **基本用法**：
+   - `URLSearchParams`是一个内置的 JavaScript API，用于处理 URL 的查询参数。它提供了一种方便的方式来获取、设置和删除查询参数。
+   - 首先，可以使用`window.location.search`获取 URL 的查询字符串，然后将其传递给`URLSearchParams`构造函数来创建一个`URLSearchParams`对象。
    - 例如：
 
-```html
-<select>
-  <option value="option1">Option 1</option>
-  <option value="option2">Option 2</option>
-</select>
+```javascript
+const urlParams = new URLSearchParams(window.location.search);
 ```
 
-**五、按钮类型**
+2. **获取单个参数值**：
+   - 可以使用`get`方法来获取指定参数的值。例如，要获取名为`paramName`的参数值，可以使用以下代码：
 
-1. `submit`：
+```javascript
+const paramValue = urlParams.get("paramName");
+```
 
-   - 提交按钮，用于提交表单数据。通常与`<form>`标签一起使用。
-   - 例如：`<input type="submit" value="Submit">`。
+3. **遍历所有参数**：
+   - 可以使用`forEach`方法来遍历所有的参数。例如：
 
-2. `reset`：
+```javascript
+urlParams.forEach((value, key) => {
+  console.log(`${key}: ${value}`);
+});
+```
 
-   - 重置按钮，用于重置表单中的所有输入字段为初始状态。
-   - 例如：`<input type="reset" value="Reset">`。
+**二、手动解析查询字符串**
 
-3. `button`：
-   - 普通按钮，可以通过 JavaScript 为其添加自定义的行为。
-   - 例如：`<input type="button" value="Click Me">`。
+1. **基本思路**：
 
-**六、其他类型**
+   - 如果不使用`URLSearchParams`，也可以手动解析 URL 的查询字符串。首先，获取`window.location.search`，它包含了查询字符串（例如`?param1=value1&param2=value2`）。
+   - 然后，可以使用字符串的分割和遍历操作来提取参数名和参数值。
 
-1. `email`：
+2. **示例代码**：
 
-   - 用于输入电子邮件地址。浏览器可能会对输入的内容进行有效性验证。
-   - 例如：`<input type="email">`。
+```javascript
+const queryString = window.location.search.substring(1);
+const params = {};
+const paramPairs = queryString.split("&");
+paramPairs.forEach((pair) => {
+  const [key, value] = pair.split("=");
+  if (key) {
+    params[key] = decodeURIComponent(value);
+  }
+});
+```
 
-2. `url`：
+在这个例子中，首先提取查询字符串，然后将其分割成参数对数组。对于每个参数对，再次分割得到参数名和参数值，并将其存储在一个对象中。最后，可以通过`params`对象来访问各个参数的值。
 
-   - 用于输入 URL 地址。浏览器可能会对输入的内容进行有效性验证。
-   - 例如：`<input type="url">`。
+**三、使用第三方库**
 
-3. `search`：
+1. **库的选择**：
 
-   - 用于输入搜索关键词。通常会显示一些特定的样式，如圆角等。
-   - 例如：`<input type="search">`。
+   - 有一些第三方库也提供了方便的方法来处理 URL 的查询参数。例如，`qs`库是一个流行的用于处理查询字符串的库。
+   - 可以使用`npm`或`yarn`安装`qs`库：`npm install qs`或`yarn add qs`。
 
-4. `hidden`：
+2. **使用示例**：
 
-   - 隐藏输入字段，用于在表单中传递数据，但不会在页面上显示给用户。
-   - 例如：`<input type="hidden" value="some-value">`。
+```javascript
+import qs from "qs";
 
-5. `color`：
+const queryString = window.location.search.substring(1);
+const params = qs.parse(queryString);
+```
 
-   - 用于选择颜色。通常会显示一个颜色选择器。
-   - 例如：`<input type="color">`。
-
-6. `file`：
-   - 用于上传文件。可以设置`multiple`属性允许选择多个文件。
-   - 例如：`<input type="file">`或`<input type="file" multiple>`。
+在这个例子中，使用`qs.parse`方法将查询字符串解析为一个对象，其中键是参数名，值是参数值。

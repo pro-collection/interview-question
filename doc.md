@@ -12,7 +12,6 @@
 
 ## 待整理
 
-- HTML 中的 input 标签有哪些 type
 - 什么是 Data URL
 - 如何自定义滚动条的样式
 - 什么是 HTML 的实体编码 (HTML Entity Encode)

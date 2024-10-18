@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "HTML 中的 input 标签有哪些 type",
+  title: "前端如何快速获取页面 url query 参数",
   key_world: [
-    "input 标签 type 属性",
+    "获取 url 参数",
     // "todo",
   ],
   labels: [
@@ -20,7 +20,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

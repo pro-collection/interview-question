@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何实现页面文本不可选中，不可复制",
+  title: "[Vue] vue3 如何监听数组变化",
   key_world: [
-    "禁止文本复制",
+    "vue3 监听数组变化",
     // "todo",
   ],
   labels: [
-    labels.application,
+    labels.frameWork,
     // labels.engineering,
-    company.jd,
+    company.mt,
     // xx
   ],
   milestone: MileStone.inProgress,

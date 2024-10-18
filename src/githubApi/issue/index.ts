@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何把一个数组随机打乱",
+  title: "package.json 依赖申明的方式有哪些， 他们有何却别",
   key_world: [
-    "数组随机打乱",
+    "前端依赖申明方式",
     // "todo",
   ],
   labels: [
-    labels.code,
+    labels.application,
     // labels.engineering,
     // company.other,
     // xx

@@ -12,8 +12,6 @@
 
 ## 待整理
 
-- load 事件与 DomContentLoaded 事件的先后顺序
-- React/Vue 中的 router 实现原理如何
 - 如何计算白屏时间和首屏时间
 - JS 如何翻转一个字符串
 - 前端如何实现文件上传功能

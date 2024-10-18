@@ -1,36 +1,76 @@
-**关键词**：DOMContentLoaded 和 onload 事件
+**关键词**：白屏时间
 
-`DOMContentLoaded`事件和`load`事件主要有以下区别：
+白屏时间是指从浏览器开始请求页面到页面开始显示内容的时间。可以通过以下方法计算白屏时间：
 
-**一、触发时机**
+**一、使用浏览器的性能 API**
 
-1. `DOMContentLoaded`事件：
+现代浏览器提供了`performance`对象，可以用来获取页面加载过程中的各种时间戳。通过这些时间戳的差值可以计算出白屏时间。
 
-   - 触发时机是在文档的 DOM（文档对象模型）完全加载和解析完成后，不等待样式表、图片和子框架等外部资源的加载完成。这意味着当 HTML 结构被完全解析，并且可以通过 JavaScript 访问和操作 DOM 元素时，该事件就会触发。
-   - 例如，当打开一个网页时，浏览器首先下载 HTML 文档并进行解析。一旦 HTML 文档的解析完成，`DOMContentLoaded`事件就会触发，此时可以立即执行一些与 DOM 操作相关的 JavaScript 代码，而不必等待页面上的所有图像和其他资源加载完毕。
+1. 具体步骤：
+   - 在页面的`<head>`标签中插入一段 JavaScript 代码，在页面加载时记录关键时间点。
+   - 使用`performance.timing.navigationStart`表示浏览器开始导航的时间戳。
+   - 寻找一个表示页面开始有内容显示的时间点，通常可以使用`performance.timing.domInteractive`（文档被解析完成，开始加载外部资源时的时间戳）或者`performance.timing.domContentLoadedEventStart`（`DOMContentLoaded`事件开始的时间戳）作为近似的白屏结束时间点。
+   - 白屏时间 = 白屏结束时间点 - `performance.timing.navigationStart`。
 
-2. `load`事件：
-   - 触发时机是在整个网页（包括所有的资源如样式表、图片、脚本等）完全加载完成后。这意味着不仅 HTML 文档的 DOM 结构要被加载和解析，而且所有的外部资源（如图片、CSS 文件、JavaScript 文件等）也必须完全下载并加载到浏览器中，该事件才会触发。
-   - 例如，在一个包含大量图片和复杂样式表的网页中，`load`事件可能会在所有这些资源都加载完成后才触发，这可能需要相对较长的时间，具体取决于网络速度和资源的大小。
+例如：
 
-**二、用途**
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      const timing = performance.timing;
+      const whiteScreenTime = timing.domInteractive - timing.navigationStart;
+      console.log(`白屏时间为：${whiteScreenTime}ms`);
+    </script>
+  </head>
 
-1. `DOMContentLoaded`事件：
+  <body>
+    <!-- 页面内容 -->
+  </body>
+</html>
+```
 
-   - 通常用于在 DOM 准备好后尽快执行一些关键的 JavaScript 代码，这些代码可能需要操作 DOM 元素或设置事件监听器，但不需要等待所有外部资源的加载。这样可以提高页面的交互性和响应速度，因为用户可以在页面的主要内容加载完成后就开始与页面进行交互，而不必等待所有资源加载完毕。
-   - 例如，可以在`DOMContentLoaded`事件的回调函数中初始化页面的布局、设置表单验证规则或显示一些初始的动画效果。
+2. 注意事项：
+   - 不同的浏览器对于性能时间戳的定义可能略有不同，需要在多种浏览器上进行测试以确保准确性。
+   - 这种方法计算的白屏时间是一个近似值，因为很难精确地确定页面开始显示内容的瞬间。
 
-2. `load`事件：
-   - 主要用于在确保整个页面的所有资源都加载完成后执行一些特定的操作，这些操作可能依赖于所有的资源都可用。例如，在一个需要确保所有图片都加载完成后才能正确显示的画廊页面中，可以使用`load`事件来触发图片的展示动画或调整页面布局以适应所有图片的尺寸。
-   - 另外，`load`事件也可以用于在页面完全加载后进行一些性能监测或统计工作，例如记录页面的加载时间或检查所有资源是否正确加载。
+**二、使用自定义标记和日志**
 
-**三、性能影响**
+1. 步骤：
+   - 在页面的 HTML 结构中，在`<head>`标签之后插入一个不可见的元素，例如一个空的`<div>`元素，并给它一个特定的 ID。
+   - 在页面的 CSS 中，将这个元素的背景颜色设置为与页面背景相同的颜色，使其在页面加载初期不可见。
+   - 在页面的 JavaScript 代码中，当页面开始有内容显示时，通过修改这个元素的样式使其变为可见，并记录当前时间。
+   - 白屏时间 = 元素变为可见的时间 - 浏览器开始导航的时间。
 
-1. `DOMContentLoaded`事件：
+例如：
 
-   - 由于它在 DOM 加载和解析完成后就触发，不等待外部资源的加载，所以可以更快地执行相关的 JavaScript 代码，减少用户等待的时间。这对于提高页面的性能和用户体验非常重要，特别是在网络速度较慢或页面包含大量资源的情况下。
-   - 例如，如果一个页面有很多大尺寸的图片，使用`DOMContentLoaded`事件可以让用户在图片还在加载的过程中就开始与页面进行交互，而不必等待所有图片都加载完成。
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #whiteScreenMarker {
+        display: none;
+      }
+    </style>
+    <script>
+      const timing = performance.timing;
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("whiteScreenMarker").style.display = "block";
+        const whiteScreenTime = performance.now() - timing.navigationStart;
+        console.log(`白屏时间为：${whiteScreenTime}ms`);
+      });
+    </script>
+  </head>
 
-2. `load`事件：
-   - 因为它需要等待所有资源的加载完成，所以可能会导致页面的加载时间较长，特别是在网络状况不佳或资源较多的情况下。然而，在某些情况下，确保所有资源都加载完成是必要的，所以`load`事件仍然有其特定的用途。
-   - 例如，如果一个页面的布局或功能依赖于所有的样式表和图片都加载完成，那么使用`load`事件可以确保在执行相关代码时所有资源都可用，避免出现布局错误或功能不正常的情况。
+  <body>
+    <div id="whiteScreenMarker"></div>
+    <!-- 页面内容 -->
+  </body>
+</html>
+```
+
+2. 注意事项：
+   - 这种方法需要手动在页面中插入标记元素和相应的 JavaScript 代码，可能会增加一些开发工作量。
+   - 同样需要考虑在不同浏览器上的兼容性和准确性。

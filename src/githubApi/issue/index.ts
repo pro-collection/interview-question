@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "`DOMContentLoaded`事件和`load`事件有什么区别",
+  title: "如何计算白屏时间和首屏时间",
   key_world: [
-    "DOMContentLoaded 和 onload 事件",
+    "白屏时间",
     // "todo",
   ],
   labels: [

@@ -12,7 +12,6 @@
 
 ## 待整理
 
-- 现代框架如 React、Vue 相比原生开发有什么优势
 - load 事件与 DomContentLoaded 事件的先后顺序
 - React/Vue 中的 router 实现原理如何
 - 如何计算白屏时间和首屏时间

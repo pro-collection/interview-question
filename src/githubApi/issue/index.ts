@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Vue] vue3 对虚拟 dom 做了哪些优化",
+  title: "如果我期望，页面加载和解析完成之后出发事件， 我该怎么做",
   key_world: [
-    "vue3 虚拟dom",
+    "DOMContentLoaded 和 onload 事件",
     // "todo",
   ],
   labels: [
-    labels.frameWork,
+    labels.application,
     // labels.engineering,
     // company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

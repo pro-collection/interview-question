@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如果我期望，页面加载和解析完成之后出发事件， 我该怎么做",
+  title: "`DOMContentLoaded`事件和`load`事件有什么区别",
   key_world: [
     "DOMContentLoaded 和 onload 事件",
     // "todo",
@@ -20,7 +20,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

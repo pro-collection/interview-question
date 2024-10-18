@@ -12,7 +12,6 @@
 
 ## 待整理
 
-- 前端打包时 cjs、es、umd 模块有何不同
 - 前端开发中如何进行多主题配置
 - HTML 中的 input 标签有哪些 type
 - 什么是 Data URL

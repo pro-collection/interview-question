@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] 是如何处理 commonjs 模块的文件， 使其编译结果能被浏览器使用。",
+  title: "前端如何处理一个页面多主题色可供选择的场景",
   key_world: [
-    "webpack 打包处理 commonjs 模块",
+    "主题色切换",
     // "todo",
   ],
   labels: [
-    labels.engineering,
+    labels.application,
     // labels.engineering,
     // company.mt,
     // xx

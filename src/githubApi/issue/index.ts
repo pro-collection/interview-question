@@ -1,5 +1,5 @@
 import { htmlWriteIssue } from "@src/githubApi/issue/htmlWriteIssue";
-import { writeToTemp } from "@src/githubApi/issue/helper";
+import { calculateY, writeToTemp } from "@src/githubApi/issue/helper";
 import { company, labels, MileStone } from "@src/githubApi/issue/consts";
 import fs from "fs";
 import { writeIssue } from "@src/githubApi/issue/writeIssue";
@@ -29,6 +29,9 @@ const main = async () => {
 
   if (remote.key_world.length) {
     let count = await search(remote.key_world);
+
+    // 线性回归的结果
+    count = calculateY(count);
 
     console.log("yanle - logger: 获取热度结果: ", count);
 

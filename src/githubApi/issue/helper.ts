@@ -62,6 +62,10 @@ export const commitPush = async (title: string) => {
   console.log("yanle - logger: 完成提交到 github");
 };
 
+/**
+ * 获取请求结果保存到本地
+ * @param url
+ */
 export const getIssueByUrlWriteLocal = async (url: string) => {
   axios
     .request({
@@ -72,4 +76,13 @@ export const getIssueByUrlWriteLocal = async (url: string) => {
       const body = res?.data?.body;
       fs.writeFileSync(path.resolve(__dirname, "./temp.md"), body, { encoding: "utf-8" });
     });
+};
+
+/**
+ * 线性回归到 500
+ * @param x
+ * @returns
+ */
+export const calculateY = (x: number) => {
+  return Math.ceil(x === 0 ? 0 : (1000 * x) / (x + 500));
 };

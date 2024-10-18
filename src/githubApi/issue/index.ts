@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "现代框架如 React、Vue 相比原生开发有什么优势",
+  title: "[Vue] vue3 还是使用的虚拟 dom 吗？",
   key_world: [
-    "现代框架优势",
+    "vue3 虚拟dom",
     // "todo",
   ],
   labels: [
@@ -20,7 +20,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

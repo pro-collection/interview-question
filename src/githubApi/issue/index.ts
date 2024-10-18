@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何计算白屏时间和首屏时间",
+  title: "如何计算页面首屏时间",
   key_world: [
-    "白屏时间",
+    "首屏时间",
     // "todo",
   ],
   labels: [

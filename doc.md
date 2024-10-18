@@ -12,9 +12,6 @@
 
 ## 待整理
 
-- dependencies 与 devDependencies 有何区别
-- 如何确认你们项目是否依赖某一个依赖项
-- 当你引入某一个依赖项时，你引入的是该依赖下的哪一个文件
 - npm workspaces 解决了什么问题
 - 如何检测并避免循环依赖
 - 有没有使用过 async/await，他们的原理是什么

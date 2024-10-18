@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "package.json 依赖申明的方式有哪些， 他们有何却别",
+  title: "npm workspaces 是什么概念， 主要是解决什么问题",
   key_world: [
-    "前端依赖申明方式",
+    "npm workspaces 概念",
     // "todo",
   ],
   labels: [
-    labels.application,
-    // labels.engineering,
+    // labels.application,
+    labels.engineering,
     // company.other,
     // xx
   ],

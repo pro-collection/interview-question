@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端如何处理一个页面多主题色可供选择的场景",
+  title: "HTML 中的 input 标签有哪些 type",
   key_world: [
-    "主题色切换",
+    "input 标签 type 属性",
     // "todo",
   ],
   labels: [
@@ -20,7 +20,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

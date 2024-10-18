@@ -1,142 +1,111 @@
-**关键词**：主题色切换
+**关键词**：input 标签 type 属性
 
-在前端处理一个页面有多个主题色可供选择的场景，可以通过以下几种方式实现：
+HTML 中的`<input>`标签有多种`type`属性值，以下是一些常见的类型：
 
-**一、使用 CSS 变量**
+**一、文本输入类型**
 
-1. **定义 CSS 变量**：
-   - 在 CSS 中，可以使用`--`来定义变量。例如，可以定义一些代表主题色的变量：
+1. `text`：
 
-```css
-:root {
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
-}
+   - 用于输入单行文本。这是最常见的输入类型之一，用户可以在输入框中输入任何文本内容。
+   - 例如：`<input type="text">`。
+
+2. `password`：
+   - 用于输入密码，输入的内容会以掩码形式显示，以保护密码的安全性。
+   - 例如：`<input type="password">`。
+
+**二、数值输入类型**
+
+1. `number`：
+
+   - 用于输入数值。可以设置最小值、最大值、步长等属性来限制输入的范围。
+   - 例如：`<input type="number" min="0" max="100" step="1">`。
+
+2. `range`：
+   - 以滑块的形式显示，用户可以通过拖动滑块来选择一个数值范围内的值。
+   - 例如：`<input type="range" min="0" max="100">`。
+
+**三、日期和时间输入类型**
+
+1. `date`：
+
+   - 用于选择日期。通常会显示一个日期选择器，方便用户选择日期。
+   - 例如：`<input type="date">`。
+
+2. `time`：
+
+   - 用于选择时间。可以选择小时、分钟和秒。
+   - 例如：`<input type="time">`。
+
+3. `datetime-local`：
+   - 用于选择日期和时间，包括本地时区信息。
+   - 例如：`<input type="datetime-local">`。
+
+**四、选择类型**
+
+1. `checkbox`：
+
+   - 复选框，用户可以选择多个选项。
+   - 例如：`<input type="checkbox">`。
+
+2. `radio`：
+
+   - 单选按钮，用户只能选择一个选项。通常多个单选按钮具有相同的`name`属性，以确保只能选择其中一个。
+   - 例如：`<input type="radio" name="option">`。
+
+3. `select`：
+   - 下拉列表，用户可以从预定义的选项中选择一个值。可以使用`<option>`标签来定义选项。
+   - 例如：
+
+```html
+<select>
+  <option value="option1">Option 1</option>
+  <option value="option2">Option 2</option>
+</select>
 ```
 
-- 这里定义了两个变量`--primary-color`和`--secondary-color`，分别代表主色和辅助色。
+**五、按钮类型**
 
-2. **在 CSS 中使用变量**：
-   - 然后在 CSS 规则中使用这些变量：
+1. `submit`：
 
-```css
-.button {
-  background-color: var(--primary-color);
-  color: white;
-}
-```
+   - 提交按钮，用于提交表单数据。通常与`<form>`标签一起使用。
+   - 例如：`<input type="submit" value="Submit">`。
 
-- 在这个例子中，`.button`类的按钮背景颜色使用了`--primary-color`变量定义的颜色。
+2. `reset`：
 
-3. **在 JavaScript 中切换主题**：
-   - 在 JavaScript 中，可以通过修改`document.documentElement.style`来改变 CSS 变量的值，从而切换主题色：
+   - 重置按钮，用于重置表单中的所有输入字段为初始状态。
+   - 例如：`<input type="reset" value="Reset">`。
 
-```javascript
-const setTheme = (theme) => {
-  document.documentElement.style.setProperty("--primary-color", theme.primaryColor);
-  document.documentElement.style.setProperty("--secondary-color", theme.secondaryColor);
-};
+3. `button`：
+   - 普通按钮，可以通过 JavaScript 为其添加自定义的行为。
+   - 例如：`<input type="button" value="Click Me">`。
 
-const theme1 = {
-  primaryColor: "#007bff",
-  secondaryColor: "#6c757d",
-};
+**六、其他类型**
 
-const theme2 = {
-  primaryColor: "#ff5733",
-  secondaryColor: "#999999",
-};
+1. `email`：
 
-// 切换到主题 1
-setTheme(theme1);
+   - 用于输入电子邮件地址。浏览器可能会对输入的内容进行有效性验证。
+   - 例如：`<input type="email">`。
 
-// 切换到主题 2
-setTheme(theme2);
-```
+2. `url`：
 
-- 在这个例子中，`setTheme`函数接受一个主题对象，然后通过`document.documentElement.style.setProperty`方法修改 CSS 变量的值。可以定义多个主题对象，然后根据用户的选择切换主题。
+   - 用于输入 URL 地址。浏览器可能会对输入的内容进行有效性验证。
+   - 例如：`<input type="url">`。
 
-**二、使用预处理器（如 Sass、Less）**
+3. `search`：
 
-1. **定义变量和混合**：
-   - 在 Sass 或 Less 中，可以定义变量来代表主题色。例如，在 Sass 中：
+   - 用于输入搜索关键词。通常会显示一些特定的样式，如圆角等。
+   - 例如：`<input type="search">`。
 
-```scss
-$primary-color: #007bff;
-$secondary-color: #6c757d;
+4. `hidden`：
 
-.button {
-  background-color: $primary-color;
-  color: white;
-}
-```
+   - 隐藏输入字段，用于在表单中传递数据，但不会在页面上显示给用户。
+   - 例如：`<input type="hidden" value="some-value">`。
 
-- 这里定义了变量`$primary-color`和`$secondary-color`，并在`.button`类中使用了这些变量。
+5. `color`：
 
-2. **创建多个主题文件**：
+   - 用于选择颜色。通常会显示一个颜色选择器。
+   - 例如：`<input type="color">`。
 
-   - 可以创建多个主题文件，每个文件定义不同的变量值。例如，创建`theme1.scss`和`theme2.scss`两个文件，分别定义不同的主题色。
-
-3. **在 JavaScript 中切换主题文件**：
-   - 在 HTML 中，可以通过`<link>`标签引入不同的 CSS 文件来切换主题。在 JavaScript 中，可以动态地修改`<link>`标签的`href`属性来切换主题文件：
-
-```javascript
-const setTheme = (theme) => {
-  const link = document.getElementById("theme-link");
-  link.href = theme.href;
-};
-
-const theme1 = {
-  href: "theme1.css",
-};
-
-const theme2 = {
-  href: "theme2.css",
-};
-
-// 切换到主题 1
-setTheme(theme1);
-
-// 切换到主题 2
-setTheme(theme2);
-```
-
-- 在这个例子中，`setTheme`函数接受一个主题对象，然后通过修改`<link>`标签的`href`属性来切换主题文件。可以定义多个主题对象，每个对象包含不同的主题文件路径。
-
-**三、使用 JavaScript 动态修改样式**
-
-1. **定义样式类**：
-   - 在 CSS 中定义多个样式类，每个类代表一种主题。例如：
-
-```css
-.theme1 {
-  background-color: #007bff;
-  color: white;
-}
-
-.theme2 {
-  background-color: #ff5733;
-  color: white;
-}
-```
-
-- 这里定义了两个样式类`.theme1`和`.theme2`，分别代表不同的主题。
-
-2. **在 JavaScript 中切换样式类**：
-   - 在 JavaScript 中，可以通过修改元素的`classList`属性来切换样式类，从而切换主题：
-
-```javascript
-const setTheme = (theme) => {
-  const element = document.getElementById("my-element");
-  element.classList.remove("theme1", "theme2");
-  element.classList.add(theme);
-};
-
-// 切换到主题 1
-setTheme("theme1");
-
-// 切换到主题 2
-setTheme("theme2");
-```
-
-- 在这个例子中，`setTheme`函数接受一个主题类名作为参数，然后通过修改元素的`classList`属性来切换主题。首先移除当前元素的所有主题类名，然后添加指定的主题类名。
+6. `file`：
+   - 用于上传文件。可以设置`multiple`属性允许选择多个文件。
+   - 例如：`<input type="file">`或`<input type="file" multiple>`。

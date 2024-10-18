@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 如何翻转一个字符串",
+  title: "JS 如何翻转一个数组",
   key_world: [
-    "翻转字符串",
+    "翻转数组",
     // "todo",
   ],
   labels: [

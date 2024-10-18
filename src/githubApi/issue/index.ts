@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端如何快速获取页面 url query 参数",
+  title: "介绍一下 URLSearchParams API",
   key_world: [
-    "获取 url 参数",
+    "URLSearchParams API 介绍",
     // "todo",
   ],
   labels: [
     labels.application,
     // labels.engineering,
-    // company.mt,
+    company.other,
     // xx
   ],
   milestone: MileStone.inProgress,

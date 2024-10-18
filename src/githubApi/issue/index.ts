@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "css 如何实现分栏布局",
+  title: "[webpack] 是如何处理 commonjs 模块的文件， 使其编译结果能被浏览器使用。",
   key_world: [
-    "分栏布局",
+    "webpack 打包处理 commonjs 模块",
     // "todo",
   ],
   labels: [
-    labels.css,
+    labels.engineering,
     // labels.engineering,
     // company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

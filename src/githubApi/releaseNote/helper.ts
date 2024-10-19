@@ -78,7 +78,7 @@ ${body}
       const commonLabels = filter(item.labels, (label) => !includes(companyList, label));
 
       // title
-      return `  - ${item.number}. ${item.title}【${join(commonLabels, "、")}】${companyString}`;
+      return `- ${item.number}. ${item.title}【${join(commonLabels, "、")}】${companyString}`;
     });
 
   const mapTitle = (list: any[]) =>
@@ -86,17 +86,18 @@ ${body}
 
   // 目录文件
   const index = `
-目录：
-${isEmpty(base) ? "" : `- 初级开发者相关问题【共计 ${base.length} 道题】`}
+**目录**：
+
+${isEmpty(base) ? "" : `**初级开发者相关问题【共计 ${base.length} 道题】**`}
 ${mapTitle(base)}
 
-${isEmpty(inProgress) ? "" : `- 中级开发者相关问题【共计 ${inProgress.length} 道题】`}
+${isEmpty(inProgress) ? "" : `**中级开发者相关问题【共计 ${inProgress.length} 道题】**`}
 ${mapTitle(inProgress)}
 
-${isEmpty(senior) ? "" : `- 高级开发者相关问题【共计 ${senior.length} 道题】`}
+${isEmpty(senior) ? "" : `**高级开发者相关问题【共计 ${senior.length} 道题】**`}
 ${mapTitle(senior)}
 
-${isEmpty(master) ? "" : `- 资深开发者相关问题【共计 ${master.length} 道题】`}
+${isEmpty(master) ? "" : `**资深开发者相关问题【共计 ${master.length} 道题】**`}
 ${mapTitle(master)}
 
 `;

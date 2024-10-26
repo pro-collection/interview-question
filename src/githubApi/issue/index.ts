@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "闭包有哪些使用场景，请距离",
+  title: "JS 浏览器事循环有哪些使用案例？",
   key_world: [
-    "闭包使用场景",
+    "事件循环案例",
     // "todo",
   ],
   labels: [
     labels.js,
     // labels.engineering,
-    company.mi,
+    company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

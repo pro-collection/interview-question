@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何定制化开发一个 eslint 插件， 功能是实现提示检验某一个项目里面的字符串error",
+  title: "闭包有哪些使用场景，请距离",
   key_world: [
-    "eslint 插件编写",
+    "闭包使用场景",
     // "todo",
   ],
   labels: [
-    // labels.application,
-    labels.engineering,
-    // company.other,
+    labels.js,
+    // labels.engineering,
+    company.mi,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

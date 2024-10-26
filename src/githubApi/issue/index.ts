@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Javascript 数组中有那些方法可以改变自身，那些不可以",
+  title: "事件委托是什么概念， 有何适用场景",
   key_world: [
-    "数组改变自身",
+    "事件委托概念",
     // "todo",
   ],
   labels: [
-    labels.application,
+    labels.js,
     // labels.engineering,
     // company.jd,
     // xx

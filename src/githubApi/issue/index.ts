@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "CSS 如何实现固定长宽比的元素",
+  title: "如何保证项目质量",
   key_world: [
-    "固定长宽比",
+    "项目质量保证",
     // "todo",
   ],
   labels: [
@@ -20,7 +20,7 @@ const remote = {
     // company.jd,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

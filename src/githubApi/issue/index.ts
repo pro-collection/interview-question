@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "z-index: 999 元素一定会置于 z-index: 0 元素之上吗",
+  title: "浏览器中点击 a 标签保存为文件如何做",
   key_world: [
-    "z-index 生效情况",
+    "a 标签保存文件",
     // "todo",
   ],
   labels: [
     // labels.js,
-    labels.css,
+    labels.application,
     // company.jd,
     // xx
   ],

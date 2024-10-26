@@ -9,13 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "HTML 中有哪些语义化标签",
+  title: "CSS 如何实现固定长宽比的元素",
   key_world: [
-    "html 语义化标签",
+    "固定长宽比",
     // "todo",
   ],
   labels: [
-    labels.application,
+    labels.css,
     // labels.engineering,
     // company.jd,
     // xx

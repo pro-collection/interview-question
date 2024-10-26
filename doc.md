@@ -12,10 +12,6 @@
 
 ## 待整理
 
-- HTML 中有哪些语义化标签
-- 子元素垂直居中，并且该子元素的长度/宽度为父容器宽度(width)一半的正方形
-- 简述 css 中 position 的值
-- 什么是 BFC
 - CSS 如何实现固定长宽比的元素
 - rem、em、vw、vh 的值各是什么意思
 - normalize.css 与 reset.css 又何区别

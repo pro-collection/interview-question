@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "package.json 里面，表示到处包内容的配置有哪些",
+  title: "html 里面哪些是块级元素， 哪些是行内元素",
   key_world: [
     "html 标签元素",
     // "todo",

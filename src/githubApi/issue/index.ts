@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "事件委托是什么概念， 有何适用场景",
+  title: "Object.keys 与 Object.getOwnPropertyNames() 有何区别",
   key_world: [
-    "事件委托概念",
+    // "事件委托概念",
     // "todo",
   ],
   labels: [

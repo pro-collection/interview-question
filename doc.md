@@ -12,13 +12,6 @@
 
 ## 待整理
 
-- Javascript 数组中有那些方法可以改变自身，那些不可以
-- 关于事件捕获和冒泡，以下代码输出多少
-- 浏览器中 cookie 有哪些字段
-- 某元素的 fontSize: 2rem; lineHeight: 1.5em; 此时 lineHeight 为多少像素
-- DOM 中 Element 与 Node 有何区别
-- 如何判断某一个值是数组
-- 简述 Object.defineProperty
 - Object.keys 与 Object.getOwnPropertyNames() 有何区别
 - 关于 setState 以下代码的输出
 - Grid 布局的优势在哪里

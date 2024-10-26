@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何保证项目质量",
+  title: "Javascript 数组中有那些方法可以改变自身，那些不可以",
   key_world: [
-    "项目质量保证",
+    "数组改变自身",
     // "todo",
   ],
   labels: [
-    labels.css,
+    labels.application,
     // labels.engineering,
     // company.jd,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

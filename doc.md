@@ -12,17 +12,7 @@
 
 ## 待整理
 
-- CSS 如何实现固定长宽比的元素
-- rem、em、vw、vh 的值各是什么意思
-- normalize.css 与 reset.css 又何区别
-- line-height 的值分别取 [2, 2em, 200%] 有什么区别?
-- 你是如何保障你们项目质量的
 - Javascript 数组中有那些方法可以改变自身，那些不可以
-- 如何判断一个数组是否包含某个值
-- 如何判断字符串包含某个子串
-- DOM 中如何阻止事件默认行为，如何判断事件否可阻止？
-- 什么是事件冒泡和事件捕获
-- 什么是事件委托，e.currentTarget 与 e.target 有何区别
 - 关于事件捕获和冒泡，以下代码输出多少
 - 浏览器中 cookie 有哪些字段
 - 某元素的 fontSize: 2rem; lineHeight: 1.5em; 此时 lineHeight 为多少像素

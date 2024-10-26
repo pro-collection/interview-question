@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "npm install 之后需要执行一些处理工作，应该如何处理",
+  title: "前端应用 CICD 有哪些方式实现",
   key_world: [
-    "html 标签元素",
+    "前端 CICD",
     // "todo",
   ],
   labels: [
-    labels.application,
+    labels.engineering,
     // labels.engineering,
-    company.pdd,
+    company.jd,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

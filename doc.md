@@ -12,8 +12,6 @@
 
 ## 待整理
 
-- package.json 中 main/module/browser/exports 字段有何区别
-- npm publish 时 npm script 的生命周期
 - 前端项目每次 npm install 之后需要执行一些处理工作，应该怎么办
 - flex 布局中 order 有何作用
 - flex 布局中 align-content 与 align-items 有何区别

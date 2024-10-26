@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "html 里面哪些是块级元素， 哪些是行内元素",
+  title: "npm install 之后需要执行一些处理工作，应该如何处理",
   key_world: [
     "html 标签元素",
     // "todo",
@@ -17,10 +17,10 @@ const remote = {
   labels: [
     labels.application,
     // labels.engineering,
-    // company.tencent,
+    company.pdd,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

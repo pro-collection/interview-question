@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何使用 node 做一个全局命令行工具",
+  title: "什么是 semver 规范，~1.2.3 与 ^1.2.3 的版本号范围是多少",
   key_world: [
-    "node 命令行工具",
+    "语义化版本",
     // "todo",
   ],
   labels: [
     labels.node,
     // labels.engineering,
-    company.alibaba,
+    company.tencent,
     // xx
   ],
   milestone: MileStone.inProgress,

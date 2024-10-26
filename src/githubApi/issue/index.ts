@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "什么是 semver 规范，~1.2.3 与 ^1.2.3 的版本号范围是多少",
+  title: "package.json 里面，表示到处包内容的配置有哪些",
   key_world: [
-    "语义化版本",
+    "html 标签元素",
     // "todo",
   ],
   labels: [
-    labels.node,
+    labels.application,
     // labels.engineering,
-    company.tencent,
+    // company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

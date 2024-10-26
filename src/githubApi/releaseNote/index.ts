@@ -91,7 +91,7 @@ const main = async () => {
   const contentHasBody = getReleaseContent(filterData, releaseName, true);
   const bookPath = path.resolve(__dirname, "../../../books");
 
-  const fileName = `[第${tag_name}期].${dayjs().format("YYYY-MM-DD")} 更新`;
+  const fileName = `[第${patch}期].${dayjs().format("YYYY-MM-DD")} 更新`;
 
   await writeContentForLocal({ path: bookPath, fileName, content: contentHasBody });
   /* ==============================  写入本地 - End   ============================== */

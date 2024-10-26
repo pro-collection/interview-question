@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "npm workspaces 是什么概念， 主要是解决什么问题",
+  title: "前端工程里面，如何检测并避免循环依赖",
   key_world: [
-    "npm workspaces 概念",
+    "循环依赖检测",
     // "todo",
   ],
   labels: [

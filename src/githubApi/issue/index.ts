@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端应用 CICD 有哪些方式实现",
+  title: "flex 布局中 align-content 与 align-items 有何区别",
   key_world: [
-    "前端 CICD",
+    "flex 布局属性",
     // "todo",
   ],
   labels: [
-    labels.engineering,
+    labels.application,
     // labels.engineering,
-    company.jd,
+    // company.jd,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

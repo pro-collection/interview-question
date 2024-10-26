@@ -12,12 +12,6 @@
 
 ## 待整理
 
-- 前端项目每次 npm install 之后需要执行一些处理工作，应该怎么办
-- flex 布局中 order 有何作用
-- flex 布局中 align-content 与 align-items 有何区别
-- 解构赋值一个数组，a 取第一项默认值为 3，c 取剩下的值组成数组
-- 解构赋值以下对象，他们的值是多少
-- Map 与 WeakMap 有何区别
 - HTML 中有哪些语义化标签
 - 子元素垂直居中，并且该子元素的长度/宽度为父容器宽度(width)一半的正方形
 - 简述 css 中 position 的值

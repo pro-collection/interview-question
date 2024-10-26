@@ -1,56 +1,145 @@
-**关键词**：flex 布局属性
+**关键词**：html 语义化标签
 
-在 Flex 布局中，`align-content`和`align-items`都是用于控制 Flex 容器内项目在交叉轴（垂直于主轴的方向）上的对齐方式，但它们有以下区别：
+在 HTML 中，语义化标签是具有明确含义的标签，它们可以更好地描述网页的结构和内容，提高代码的可读性、可维护性以及对搜索引擎的优化。以下是一些常见的语义化标签：
 
-**一、作用范围不同**
+**一、文档结构相关标签**
 
-1. `align-items`：
+1. `<header>`：
 
-   - 作用于 Flex 容器内的单行项目。
-   - 它决定了每个单独的项目在交叉轴上的对齐方式。
-   - 例如，如果`align-items: center`，则容器内的所有项目将在交叉轴上居中对齐。
+   - 定义文档的页眉部分，通常包含网站的标志、导航栏、搜索框等。
+   - 例如：
+     ```html
+     <header>
+       <h1>My Website</h1>
+       <nav>
+         <ul>
+           <li><a href="#">Home</a></li>
+           <li><a href="#">About</a></li>
+           <li><a href="#">Contact</a></li>
+         </ul>
+       </nav>
+     </header>
+     ```
 
-2. `align-content`：
-   - 作用于整个 Flex 容器的多行项目。
-   - 当 Flex 容器有多行项目时，它决定了这些行在交叉轴上的对齐方式。
-   - 例如，如果`align-content: space-between`，则多行项目之间在交叉轴上会均匀分布，第一行与容器顶部对齐，最后一行与容器底部对齐。
+2. `<nav>`：
 
-**二、适用场景不同**
+   - 用于定义导航链接的部分，可以包含网站的主要导航菜单、侧边栏导航等。
+   - 例如：
+     ```html
+     <nav>
+       <ul>
+         <li><a href="#">Page 1</a></li>
+         <li><a href="#">Page 2</a></li>
+         <li><a href="#">Page 3</a></li>
+       </ul>
+     </nav>
+     ```
 
-1. `align-items`：
+3. `<footer>`：
 
-   - 适用于单行的 Flex 布局，或者即使容器有多行，但只需要统一控制所有项目的对齐方式时。
-   - 比如，创建一个简单的导航栏，其中的项目在垂直方向上需要保持一致的对齐方式。
+   - 定义文档的页脚部分，通常包含版权信息、联系方式、相关链接等。
+   - 例如：
+     ```html
+     <footer>
+       <p>Copyright © 2024. All rights reserved.</p>
+     </footer>
+     ```
 
-2. `align-content`：
-   - 适用于多行的 Flex 布局，且需要对多行进行整体的对齐控制。
-   - 例如，一个包含大量卡片的网格布局，当卡片数量较多导致出现多行时，可以使用`align-content`来调整行与行之间在垂直方向上的间距和对齐方式。
+4. `<main>`：
+   - 表示文档的主要内容部分，每个页面应该只有一个`<main>`元素。
+   - 例如：
+     ```html
+     <main>
+       <article>
+         <h2>Article Title</h2>
+         <p>Article content goes here.</p>
+       </article>
+     </main>
+     ```
 
-**三、示例对比**
+**二、内容组织相关标签**
 
-1. `align-items`示例：
+1. `<article>`：
 
-   ```html
-   <div style="display: flex; align-items: center; height: 200px;">
-     <div style="background-color: lightblue; width: 50px; height: 50px;">Item 1</div>
-     <div style="background-color: lightgreen; width: 50px; height: 50px;">Item 2</div>
-     <div style="background-color: lightyellow; width: 50px; height: 50px;">Item 3</div>
-   </div>
-   ```
+   - 表示一个独立的、完整的内容块，如一篇博客文章、新闻报道、论坛帖子等。
+   - 例如：
+     ```html
+     <article>
+       <h2>News Article</h2>
+       <p>Article text here.</p>
+     </article>
+     ```
 
-   - 在这个例子中，三个项目在垂直方向上居中对齐，因为设置了`align-items: center`。
+2. `<section>`：
 
-2. `align-content`示例：
-   ```html
-   <div style="display: flex; flex-wrap: wrap; align-content: space-between; height: 300px;">
-     <div style="background-color: lightblue; width: 50px; height: 50px;">Item 1</div>
-     <div style="background-color: lightgreen; width: 50px; height: 50px;">Item 2</div>
-     <div style="background-color: lightyellow; width: 50px; height: 50px;">Item 3</div>
-     <div style="background-color: lightcoral; width: 50px; height: 50px;">Item 4</div>
-     <div style="background-color: lightskyblue; width: 50px; height: 50px;">Item 5</div>
-     <div style="background-color: lightpink; width: 50px; height: 50px;">Item 6</div>
-   </div>
-   ```
-   - 这里由于项目数量较多，容器出现了多行。设置了`align-content: space-between`后，行与行之间在垂直方向上均匀分布，第一行靠近容器顶部，最后一行靠近容器底部。
+   - 用于对页面内容进行分组和划分，通常包含一个主题相关的内容块。
+   - 例如：
+     ```html
+     <section>
+       <h2>Section Title</h2>
+       <p>Section content goes here.</p>
+     </section>
+     ```
 
-综上所述，`align-items`主要用于控制单行项目在交叉轴上的对齐方式，而`align-content`则用于控制多行项目整体在交叉轴上的对齐方式。
+3. `<aside>`：
+   - 表示与主要内容相关但可以独立存在的侧边栏内容，如广告、相关链接、注释等。
+   - 例如：
+     ```html
+     <main>
+       <article>
+         <h2>Main Article</h2>
+         <p>Article content.</p>
+       </article>
+       <aside>
+         <h3>Related Links</h3>
+         <ul>
+           <li><a href="#">Link 1</a></li>
+           <li><a href="#">Link 2</a></li>
+         </ul>
+       </aside>
+     </main>
+     ```
+
+**三、文本内容相关标签**
+
+1. `<h1>`到`<h6>`：
+
+   - 标题标签，用于表示不同级别的标题，`<h1>`为最高级别，`<h6>`为最低级别。
+   - 例如：
+     ```html
+     <h1>Main Title</h1>
+     <h2>Subtitle</h2>
+     ```
+
+2. `<p>`：
+
+   - 段落标签，用于包含文本段落。
+   - 例如：
+     ```html
+     <p>This is a paragraph of text.</p>
+     ```
+
+3. `<strong>`和`<em>`：
+
+   - `<strong>`用于表示强烈强调的文本，通常显示为粗体。`<em>`用于表示强调的文本，通常显示为斜体。
+   - 例如：
+     ```html
+     <p>This is <strong>very important</strong> text. And this is <em>emphasized</em> text.</p>
+     ```
+
+4. `<blockquote>`：
+
+   - 引用块标签，用于引用大段的文本内容。
+   - 例如：
+     ```html
+     <blockquote>
+       <p>“This is a long quote from someone.”</p>
+     </blockquote>
+     ```
+
+5. `<q>`：
+   - 短引用标签，用于引用简短的文本内容，通常会自动加上引号。
+   - 例如：
+     ```html
+     <p>He said, <q>Hello!</q></p>
+     ```

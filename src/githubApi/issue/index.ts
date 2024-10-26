@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "eslint 该如何配置",
+  title: "eslint 有哪些实用的插件， 该如何配置",
   key_world: [
     "eslint 配置",
     // "todo",

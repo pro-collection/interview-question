@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "eslint 有哪些实用的插件， 该如何配置",
+  title: "eslint 如何集成到 webpack",
   key_world: [
     "eslint 配置",
     // "todo",
@@ -20,7 +20,7 @@ const remote = {
     // company.other,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

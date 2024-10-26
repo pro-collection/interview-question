@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "eslint 如何集成到 webpack",
+  title: "如何定制化开发一个 eslint 插件， 功能是实现提示检验某一个项目里面的字符串error",
   key_world: [
-    "eslint 配置",
+    "eslint 插件编写",
     // "todo",
   ],
   labels: [

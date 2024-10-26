@@ -1,59 +1,96 @@
-**关键词**：eslint 配置
+**关键词**：eslint 插件编写
 
-要将 ESLint 集成到 Webpack 中，可以按照以下步骤进行操作：
+以下是一个可以检测特定字符串并支持参数传递的 ESLint 插件开发步骤：
 
-**一、安装必要的包**
+**一、创建插件项目**
 
-1. 确保已经安装了 Webpack 和 ESLint。如果还没有安装，可以使用以下命令进行安装：
+1. 创建一个新的目录来存放插件项目，例如`eslint-plugin-custom-string-check`。
+2. 在该目录下，运行`npm init`初始化一个 npm 项目。
 
-   - 使用 npm：
-     ```
-     npm install webpack webpack-cli eslint --save-dev
-     ```
-   - 使用 yarn：
-     ```
-     yarn add webpack webpack-cli eslint --dev
-     ```
+**二、插件结构**
 
-2. 安装`eslint-webpack-plugin`插件，这个插件可以将 ESLint 集成到 Webpack 构建过程中。
+1. 在项目目录下创建一个`index.js`文件作为插件的入口文件。
 
-   - 使用 npm：
-     ```
-     npm install eslint-webpack-plugin --save-dev
-     ```
-   - 使用 yarn：
-     ```
-     yarn add eslint-webpack-plugin --dev
-     ```
+2. 定义插件对象：
 
-**二、配置 ESLint**
+```javascript
+module.exports = {
+  rules: {},
+};
+```
 
-1. 在项目根目录下，运行`eslint --init`命令来初始化 ESLint 配置。按照提示选择适合项目的选项，生成`.eslintrc.*`配置文件。
+**三、实现规则**
 
-2. 根据项目需求，调整 ESLint 配置文件中的规则、解析器、插件等选项。
+1. 定义规则函数，接收一个参数`options`，这个参数可以包含你要检测的字符串。
 
-**三、配置 Webpack**
+```javascript
+module.exports = {
+  rules: {
+    "check-custom-string": (context, options) => {
+      return {
+        Program(node) {
+          const sourceCode = context.getSourceCode();
+          const text = sourceCode.getText();
+          const targetString = options && options.stringToCheck ? options.stringToCheck : null;
+          if (targetString && text.includes(targetString)) {
+            context.report({
+              node,
+              message: `Found custom string "${targetString}".`,
+            });
+          }
+        },
+      };
+    },
+  },
+};
+```
 
-1. 在 Webpack 配置文件（通常是`webpack.config.js`）中，引入`eslint-webpack-plugin`插件：
+**四、测试插件**
 
-   ```javascript
-   const ESLintPlugin = require("eslint-webpack-plugin");
-   ```
+1. 在项目目录下创建一个`tests`目录。
+2. 在`tests`目录下创建一个测试文件，例如`test.js`。
 
-2. 在 Webpack 配置对象的`plugins`数组中添加`ESLintPlugin`实例：
+```javascript
+const ruleTester = require("eslint").RuleTester;
+const rule = require("../index").rules["check-custom-string"];
 
-   ```javascript
-   module.exports = {
-     //...其他配置项
-     plugins: [
-       new ESLintPlugin({
-         // 可以在这里配置 ESLintPlugin 的选项，例如指定要检查的文件路径
-         files: ["./src/**/*.js"],
-       }),
-     ],
-   };
-   ```
+const ruleTester = new RuleTester();
+ruleTester.run("check-custom-string", rule, {
+  valid: [
+    {
+      code: 'const message = "This is a test.";',
+      options: { stringToCheck: "errorMessage" },
+    },
+  ],
+  invalid: [
+    {
+      code: 'const errorMessage = "This is an error.";',
+      options: { stringToCheck: "errorMessage" },
+      errors: [
+        {
+          message: 'Found custom string "errorMessage".',
+        },
+      ],
+    },
+  ],
+});
+```
 
-**四、运行 Webpack 构建**
+**五、使用插件**
 
-当运行 Webpack 构建时，`eslint-webpack-plugin`会在构建过程中自动运行 ESLint 检查。如果有不符合 ESLint 规则的代码，会在控制台输出错误信息。
+1. 在你的项目中安装这个插件：
+
+```bash
+npm install /path/to/your/plugin/eslint-plugin-custom-string-check --save-dev
+```
+
+2. 在项目的`.eslintrc`文件中配置插件：
+
+```json
+{
+  "plugins": ["custom-string-check"],
+  "rules": {
+    "custom-string-check/check-custom-string": ["error", { "stringToCheck": "yourTargetString" }]
+  }
+}
+```

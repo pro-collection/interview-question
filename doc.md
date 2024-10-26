@@ -1,243 +1,68 @@
-## 问题收集
+> 作者备注
+>
+> 这个问题， 其实本质就是一个 package.json 配置里面的 bin 配置， 没有多大的价值
 
-- https://juejin.cn/post/7399983901806854179
+以下是使用 Node.js 创建一个全局命令行工具的步骤：
 
-发现题库羊毛
+**一、创建项目结构**
 
-- https://fe.ecool.fun/topic-list
-- https://github.com/linwu-hi/code-interview/issues
-- https://q.shanyue.tech/interview
-- https://github.com/wangtunan/blog
-- https://github.com/Advanced-Frontend/Daily-Interview-Question/issues
+1. 创建一个新的文件夹作为项目目录，例如`my-cli-tool`。
+2. 在项目目录中，初始化一个新的 Node.js 项目，可以使用`npm init`或`yarn init`命令，根据提示填写项目的基本信息。
 
-## 待整理
+**二、安装必要的模块**
 
-- 关于事件循环，一道异步代码执行输出顺序问题
-- HTML 标签有哪些行内元素
-- CSS 如何设置一行超出显示省略号
-- CSS 如何设置多行超出显示省略号
-- 如何发布一个全局可执行命令的 npm package
-- 如何为一个项目指定 node 版本号
-- 什么是 semver，~1.2.3 与 ^1.2.3 的版本号范围是多少
-- package.json 中 main/module/browser/exports 字段有何区别
-- npm publish 时 npm script 的生命周期
-- 前端项目每次 npm install 之后需要执行一些处理工作，应该怎么办
-- flex 布局中 order 有何作用
-- flex 布局中 align-content 与 align-items 有何区别
-- 解构赋值一个数组，a 取第一项默认值为 3，c 取剩下的值组成数组
-- 解构赋值以下对象，他们的值是多少
-- Map 与 WeakMap 有何区别
-- HTML 中有哪些语义化标签
-- 子元素垂直居中，并且该子元素的长度/宽度为父容器宽度(width)一半的正方形
-- 简述 css 中 position 的值
-- 什么是 BFC
-- CSS 如何实现固定长宽比的元素
-- rem、em、vw、vh 的值各是什么意思
-- normalize.css 与 reset.css 又何区别
-- line-height 的值分别取 [2, 2em, 200%] 有什么区别?
-- 你是如何保障你们项目质量的
-- Javascript 数组中有那些方法可以改变自身，那些不可以
-- 如何判断一个数组是否包含某个值
-- 如何判断字符串包含某个子串
-- DOM 中如何阻止事件默认行为，如何判断事件否可阻止？
-- 什么是事件冒泡和事件捕获
-- 什么是事件委托，e.currentTarget 与 e.target 有何区别
-- 关于事件捕获和冒泡，以下代码输出多少
-- 浏览器中 cookie 有哪些字段
-- 某元素的 fontSize: 2rem; lineHeight: 1.5em; 此时 lineHeight 为多少像素
-- DOM 中 Element 与 Node 有何区别
-- 如何判断某一个值是数组
-- 简述 Object.defineProperty
-- Object.keys 与 Object.getOwnPropertyNames() 有何区别
-- 关于 setState 以下代码的输出
-- Grid 布局的优势在哪里
-- SameSite Cookie 有哪些值，是如何预防 CSRF 攻击的
-- sessionStorage 与 localStorage 有何区别
-- 如何封装一个支持过期时间的 localStorage
-- 如何实现三列均分布局
-- 如何统计当前页面出现的所有标签
-- 如何监听 localStorage 的变动
-- Data URL 的应用场景及如何生成
-- 实现一个 inherits 函数进行继承
-- WeakMap 与垃圾回收有何关系
-- 什么是媒体查询，JS 可以监听媒体查询吗
-- z-index: 999 元素一定会置于 z-index: 0 元素之上吗
-- 浏览器中事件有哪些属性与方法
-- 关于块级作用域，以下代码输出多少，在何时间输出
-- 如何逆序一个字符串
-- 为何 0.1+0.2 不等于 0.3，应如何做相等比较
-- 关于 this 与包装对象，以下输出多少
-- 浏览器中如何读取二进制信息
-- 关于类型转化，判断以下代码输出
-- 关于暂时性死域，判断以下代码输出
-- 关于词法作用域，判断以下代码输出
-- 关于 this，判断以下代码输出
-- 关于 new，判断以下代码输出
-- 如何正确得知某张图片的 MIME 格式
-- 关于简单的事件循环，判断以下代码输出
-- HTTP 响应头 cache-control: s-maxage=0 是什么意思
-- http 缓存控制中 Cach-Control 为 public 与 private 有何区别
-- http 方法 get 与 post 有何区别
-- 箭头函数和普通函数的区别
-- 什么是 URL 编码 (URL Encode)
-- http 状态码 204 使用在什么场景
-- 现代前端应用应如何配置 HTTP 缓存机制
-- 如何确保你们的项目开启了 gzip
-- HTTP 有哪些常见的请求头和响应头
-- 使用 webpack 如何分包
-- 什么是 HSTS
-- http 中 referer 请求头是做什么的
-- React 中什么是合成事件
-- 什么是纯函数
-- 前端项目中有哪些副作用
-- React/Vue 中受控组件与不受控组件的区别
-- 给数字添加千位符
-- React 中监听 input 的 onChange 事件的原生事件是什么
-- 在浏览器中点击 a 标签保存为文件如何做
-- 引入 BFF 层的优势在哪里
-- 如何实现一个深比较的函数 deepEqual
-- Object.is 与全等运算符(===)有何区别
-- 在 React hooks 中如何模拟 forceUpdate
-- 如何把对象转化为 key/value 的二维数组
-- 在 JS 中如何监听 Object 某个属性值的变化
-- 判断以下路由，将会响应哪一个路由
-- js 中什么是 AsyncIterable
-- 关于事件循环，仅有 Promise，判断以下代码输出
-- 关于字符串编码解码进阶
-- 请简介 CSS 的盒模型
-- 请简述重新登录 refresh token 的原理
-- 了解什么是 JSBridge 吗
-- React/Vue 中兄弟组件如何进行通信
-- React.memo 中是如何实现性能优化的
-- 如何使用 JS 实现一个发布订阅模式
-- immer 的原理是什么，为什么它的性能更高
-- React.useMemo 与 React.useCallback 是如何进行性能优化的
-- 在 nginx 中如何配置 HTTP 协商缓存
-- 什么是 base64 与 URL Safe base64
-- 列举 Number、String、Array、Object、Promise 有哪些 API
-- 使用 JS 如何生成一个随机字符串
-- CSS 有哪些选择器
-- CSS 有哪些伪类与伪元素选择器
-- Number.isNaN 与 globalThis.isNaN 有何区别
-- 如何判断一个数值为整数
-- 同一页面三个组件请求同一个 API 发送了三次请求，如何优化
-- 简述 koa 的中间件原理，手写 koa-compose 代码
-- 如何压缩前端项目中 JS 的体积
-- 如何优化 React 项目的性能
-- 实现一个函数 maxBy，根据给定条件找到最大的数组项
-- 实现一个函数 max，找到数组中最大的一个值/两个值/N 个值
-- 什么是安全整数，如何判断一个整数是安全整数
-- 在 Node 中如何读写文件
-- 在 Node 中如何发送请求
-- Node 中服务端框架如何解析 http 的请求体 body
-- 统计字符串中出现次数最多的字符及次数
-- 请输出 100 以内的菲波那切数列
-- 你们项目中使用了哪些依赖/第三方库
-- 如何使用正则匹配一个汉字
-- 如何把字符串全部转化为小写格式
-- HTTP 与 TCP 中的 keep-alive 各是什么
-- 如何实现数组函数 reduce
-- 在 Node 中流 (stream) 分为几类，有哪些应用场景
-- 如何实现 chunk 函数，数组进行分组
-- 实现一个异步的 sum/add
-- 随机生成六位数的手机验证码(重复/不可重复)
-- 如何禁止打开浏览器控制台
-- Array 中那些 API 可改变自身
-- 如何把一个数组 Array 转化为迭代器 Iterable
-- 如何去除字符串首尾空白字符
-- http 各个版本间各有什么改进
-- 简述 http3，http3 解决了什么问题
-- http2 中 Stream 与 Frame 是什么关系
-- useLayoutEffect 和 useEffect 有什么区别
-- css 加载会阻塞 DOM 树的解析和渲染吗
-- 实现 intersection，取数组交集
-- JS 中如何实现 call/apply
-- 实现一个 composeLeft/flow(从左向右) 函数，进行函数合成
-- 什么是点击劫持(ClickJacking)，如何预防
-- 在 React Hooks 中实现 usePreviouseValue 取上次渲染的值
-- 实现一个 render/template 函数，可以用以渲染模板
-- Number 中最大数、最大安全整数、EPSILON 都是多少，原理是什么
-- 给定一个数值，给出它在 IEEE754 的表示，如符号位、指数位与分数位
-- 请简述下 Node 与浏览器环境中的事件循环
-- JS 如何检测到对象中有循环引用
-- 实现二进制与十进制的互相转化的两个函数
-- 简述下 WebWorker，它如何进行通信
-- JS 中异步任务为何分为微任务与宏任务
-- 在 CSS 中，使用 rem 作为单位有何缺点
-- 如何提高首屏渲染时间？
-- 浏览器中监听事件函数 addEventListener 第三个参数有那些值
-- 什么是原码、补码与反码
-- 求给定数组中 N 个数相加之和为 sum 所有可能集合
-- 在 Node 中如何读取可读流的内容
-- 浏览器中 Frame 与 Event Loop 的关系是什么
-- 在 Typescript 中如何实现类型标记 Pick 与 Omit
-- 如何实现一个 sampleSize 函数，从数组中随机取 N 个元素
-- 实现一个函数 keyBy
-- 实现一个函数 groupBy
-- 在 Node 中如何读取大文件的内容
-- 求正序增长的正整数数组中，其和为 N 的两个数
-- FizzBuzz，是否能被 3 或 5 整除
-- 实现一个函数 camelCase，对变量转化为驼峰命名
-- 如何遍历一个对象
-- 网站性能优化中，如何对小图片进行优化
-- https 如何被抓包，原理是什么
-- setTimeout 为什么最小只能设置 4ms，如何实现一个 0ms 的 setTimeout?
-- JS 中如何原生实现 instanceOf
-- 如何根据 random5 随机生成 [0, 5]，生成一个函数 random7？
-- 如何实现一个 ORM 类似的 find 链式调用
-- 什么是协变与逆变
-- 在 ts 中如何实现 Partial
-- 在 ts 中什么是 infer，并实现 Parameters 与 ReturnType
-- Flex 布局中的 flex-basis 与 width 有何区别
-- OSCP Stapling 是什么
-- npm 执行命令传递参数时，为何需要双横线
-- 有没有使用过 Node 的 inspect 这个核心模块
-- 在虚拟 DOM 中进行 diff 算法时，介绍当根据 key 对数组进行重用时的算法
-- http client 中如何得知已接收完所有响应数据
-- 实现函数 promisify，把回调函数改成 promise 形式
-- return promise 与 return await promise 有何区别
-- 在 ES6 Class 中，super 的过程中做了什么
-- 关于 Promise，判断以下代码的输出
-- webpack 的 runtime 做了什么事情
-- typescript 中 interface 与 type 有何区别
-- 请简述 typescript 中的 infer
-- webpack 中的 code spliting 是如何动态加载 chunk 的？
-- core-js 是做什么用的？
-- 打包器(webpack/rollup) 如何将打包后的 js 资源注入 html 中
-- 打包器(webpack/rollup) 如何加载 json、image 等非 Javascript 资源
-- 打包器(webpack/rollup) 如何加载 style 样式资源
-- 如何提升 webpack 构建资源的速度
-- 如何处理白屏错误页的监控的？
-- 简述 npm script 的生命周期
-- git hooks 原理是什么
-- 如何检测出你们安装的依赖是否安全
-- 请简述下 eslint 的作用
-- 在项目中，如何平滑升级 npm 包
-- 请描述 node_modules 的目录结构(拓扑结构)
-- npm 第三方库需要提交 lockfile 吗
-- 请问什么是 CICD
-- 如何使用 docker 部署前端
-- pnpm 有什么优势
-- 浏览器中如何使用原生的 ESM
-- 如何将 CommonJS 转化为 ESM
-- 如何对 npm package 进行发包
-- 如何分析前端打包体积
-- 什么是 AST，及其应用
-- 简述 browserslist 的意义
-- 简述 bundless 的优势与不足
-- 简述 npm cache
-- 如何修复某个 npm 包的紧急 bug
-- 前端如何进行高效的分包
-- 前端如何对分支环境进行部署
-- 如何取得一个数字的小数部分与整数部分
-- websocket 和短轮询有什么区别
-- webpack 中是如何处理 new URL 资源的
-- vite 中是如何处理 new URL 资源的
-- 我们上传图片为 Blob/File 对象时，是如何向服务器端传送数据的
-- 如何实现一个 omit/omitBy 函数
-- 在 babel 编译为低版本 ES 时，为何能够编译可选链之类语法，但无法编译 API
-- 实现 batchFn 函数，可以批量执行函数
-- 在 react 中，以下父子组件的 useEffect/useLayoutEffect 顺序如何
-- webpack 的打包流程是什么样的
-- React18 有哪些新特性
-- React19 有哪些新特性
+1. 安装`commander`模块，这是一个用于构建命令行界面的流行工具。
+
+   - 使用 npm：`npm install commander --save`
+   - 使用 yarn：`yarn add commander`
+
+**三、编写命令行工具代码**
+
+1. 创建一个主入口文件，例如`index.js`。
+2. 在入口文件中，引入`commander`模块并进行配置：
+
+   ```javascript
+   const program = require("commander");
+
+   program
+     .version("1.0.0")
+     .description("My awesome CLI tool")
+     .option("-n, --name <value>", "Your name")
+     .action((options) => {
+       console.log(`Hello, ${options.name || "World"}!`);
+     });
+
+   program.parse(process.argv);
+   ```
+
+   在这个例子中，我们创建了一个命令行工具，它接受一个`--name`选项，并在执行时打印出问候语。
+
+**四、设置全局安装**
+
+1. 在项目的`package.json`文件中，添加一个`bin`字段，指定命令行工具的入口文件：
+
+   ```json
+   {
+     "name": "my-cli-tool",
+     "version": "1.0.0",
+     "description": "My awesome CLI tool",
+     "main": "index.js",
+     "bin": {
+       "my-tool": "./index.js"
+     },
+     "dependencies": {
+       "commander": "^9.4.0"
+     }
+   }
+   ```
+
+   这里将命令行工具的名称设置为`my-tool`，对应的入口文件是`index.js`。
+
+2. 使用`npm link`或`yarn link`命令将项目链接到全局环境中。这将使你的命令行工具在系统中可用。
+
+   - 使用 npm：`npm link`
+   - 使用 yarn：`yarn link`
+
+**五、测试命令行工具**
+
+1. 打开终端，输入`my-tool --name John`，如果一切正常，应该会看到输出`Hello, John!`。

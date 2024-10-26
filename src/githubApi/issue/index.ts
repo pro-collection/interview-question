@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Object.keys 与 Object.getOwnPropertyNames() 有何区别",
+  title: "z-index: 999 元素一定会置于 z-index: 0 元素之上吗",
   key_world: [
-    // "事件委托概念",
+    "z-index 生效情况",
     // "todo",
   ],
   labels: [
-    labels.js,
-    // labels.engineering,
+    // labels.js,
+    labels.css,
     // company.jd,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端工程里面，如何检测并避免循环依赖",
+  title: "eslint 该如何配置",
   key_world: [
-    "循环依赖检测",
+    "eslint 配置",
     // "todo",
   ],
   labels: [

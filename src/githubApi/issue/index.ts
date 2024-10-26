@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "浏览器中点击 a 标签保存为文件如何做",
+  title: "Object.is 与全等运算符(===)有何区别",
   key_world: [
-    "a 标签保存文件",
+    "等值判断",
     // "todo",
   ],
   labels: [
     // labels.js,
-    labels.application,
+    labels.js,
     // company.jd,
     // xx
   ],

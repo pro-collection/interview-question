@@ -12,28 +12,6 @@
 
 ## 待整理
 
-- 在浏览器中点击 a 标签保存为文件如何做
-- 引入 BFF 层的优势在哪里
-- 如何实现一个深比较的函数 deepEqual
-- Object.is 与全等运算符(===)有何区别
-- 在 React hooks 中如何模拟 forceUpdate
-- 如何把对象转化为 key/value 的二维数组
-- 在 JS 中如何监听 Object 某个属性值的变化
-- 判断以下路由，将会响应哪一个路由
-- js 中什么是 AsyncIterable
-- 关于事件循环，仅有 Promise，判断以下代码输出
-- 关于字符串编码解码进阶
-- 请简介 CSS 的盒模型
-- 请简述重新登录 refresh token 的原理
-- 了解什么是 JSBridge 吗
-- React/Vue 中兄弟组件如何进行通信
-- React.memo 中是如何实现性能优化的
-- 如何使用 JS 实现一个发布订阅模式
-- immer 的原理是什么，为什么它的性能更高
-- React.useMemo 与 React.useCallback 是如何进行性能优化的
-- 在 nginx 中如何配置 HTTP 协商缓存
-- 什么是 base64 与 URL Safe base64
-- 列举 Number、String、Array、Object、Promise 有哪些 API
 - 使用 JS 如何生成一个随机字符串
 - CSS 有哪些选择器
 - CSS 有哪些伪类与伪元素选择器

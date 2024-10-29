@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "详细讲一下 Reflect 内置函数",
+  title: "Reflect.get() 和直接通过对象 [.] 访问获取属性， 有何区别",
   key_world: [
     "Reflect 函数",
     // "todo",

@@ -1,132 +1,74 @@
 **关键词**：Reflect 函数
 
-`Reflect`是 ES6 引入的一个内置对象，它提供了一组与对象操作对应的方法，这些方法与`Object`上的某些方法类似，但有一些重要的区别。
+`Reflect.get()`和直接通过对象`[.]`访问获取属性有以下一些区别：
 
-以下是对`Reflect`内置函数的详细介绍：
+**一、返回值**
 
-**一、获取属性（`Reflect.get()`）**
+1. `Reflect.get()`：
 
-1. 作用：
+   - 如果属性不存在，返回`undefined`。
+   - 例如：
+     ```javascript
+     const obj = {};
+     const value = Reflect.get(obj, "property");
+     console.log(value); // undefined
+     ```
 
-   - 用于获取对象的属性值。
-   - 类似于传统的对象属性访问操作符（`obj.property`或`obj[property]`）。
+2. 对象直接访问：
+   - 如果属性不存在，在非严格模式下返回`undefined`；在严格模式下，会抛出一个`ReferenceError`错误。
+   - 例如：
+     ```javascript
+     const obj = {};
+     // 非严格模式下
+     console.log(obj.property); // undefined
+     // 严格模式下
+     ("use strict");
+     console.log(obj.property); // ReferenceError: property is not defined
+     ```
 
-2. 示例：
+**二、可接受的参数和功能扩展**
 
-   ```javascript
-   const obj = { name: "John" };
-   console.log(Reflect.get(obj, "name")); // 'John'
-   ```
+1. `Reflect.get()`：
 
-3. 与传统方式的区别：
-   - 返回值：如果属性不存在，`Reflect.get()`返回`undefined`，而直接访问属性可能会导致错误（如果在严格模式下）或返回`undefined`（非严格模式下）。
-   - 可接受第三个参数`receiver`，用于指定属性访问的上下文对象，这在某些情况下（如使用代理时）非常有用。
+   - 可以接受第三个参数`receiver`，用于指定属性访问的上下文对象，这在某些情况下非常有用，比如在使用代理时可以控制属性访问的行为。
+   - 例如：
+     ```javascript
+     const obj = { name: "John" };
+     const proxy = new Proxy(obj, {});
+     console.log(Reflect.get(proxy, "name", { name: "Jane" })); // 'Jane'
+     ```
 
-**二、设置属性（`Reflect.set()`）**
+2. 对象直接访问：
+   - 没有类似的参数来指定上下文对象。
 
-1. 作用：
+**三、与代理的交互**
 
-   - 用于设置对象的属性值。
-   - 类似于传统的属性赋值操作符（`obj.property = value`或`obj[property] = value`）。
+1. `Reflect.get()`：
 
-2. 示例：
+   - 与代理对象配合使用时，会触发代理对象上定义的相应拦截方法，使得可以对属性访问进行更精细的控制。
+   - 例如：
+     ```javascript
+     const obj = { name: "John" };
+     const handler = {
+       get(target, property, receiver) {
+         if (property === "name") {
+           return "Modified Name";
+         }
+         return Reflect.get(target, property, receiver);
+       },
+     };
+     const proxy = new Proxy(obj, handler);
+     console.log(proxy.name); // 'Modified Name'
+     ```
 
-   ```javascript
-   const obj = {};
-   Reflect.set(obj, "name", "Jane");
-   console.log(obj.name); // 'Jane'
-   ```
+2. 对象直接访问：
+   - 当通过直接访问属性的方式访问代理对象时，不一定会触发代理对象上的拦截方法，具体行为取决于代理的实现和配置。
 
-3. 与传统方式的区别：
-   - 返回值：返回一个布尔值，表示属性设置是否成功。如果目标对象不可扩展、属性不可写或属性为访问器属性且设置器函数返回`false`，则返回`false`；否则返回`true`。
-   - 同样可接受第三个参数`receiver`，用于指定属性设置的上下文对象。
+**四、一致性和规范性**
 
-**三、判断对象是否具有某个属性（`Reflect.has()`）**
+1. `Reflect.get()`：
 
-1. 作用：
+   - 作为一种更规范的方法，它与其他`Reflect`方法一起提供了一种统一的方式来进行对象操作，有助于提高代码的可读性和可维护性。
 
-   - 相当于`in`操作符，用于检查对象是否具有某个属性。
-
-2. 示例：
-   ```javascript
-   const obj = { age: 30 };
-   console.log(Reflect.has(obj, "age")); // true
-   console.log(Reflect.has(obj, "gender")); // false
-   ```
-
-**四、获取对象的原型（`Reflect.getPrototypeOf()`）**
-
-1. 作用：
-
-   - 获取对象的原型，与`Object.getPrototypeOf()`方法类似。
-
-2. 示例：
-   ```javascript
-   function Person() {}
-   const person = new Person();
-   console.log(Reflect.getPrototypeOf(person) === Person.prototype); // true
-   ```
-
-**五、设置对象的原型（`Reflect.setPrototypeOf()`）**
-
-1. 作用：
-
-   - 设置对象的原型，与`Object.setPrototypeOf()`方法类似。
-
-2. 示例：
-
-   ```javascript
-   function Person() {}
-   function Employee() {}
-   const person = new Person();
-   Reflect.setPrototypeOf(person, Employee.prototype);
-   console.log(Reflect.getPrototypeOf(person) === Employee.prototype); // true
-   ```
-
-3. 注意事项：
-   - 频繁地设置对象的原型可能会对性能产生负面影响，并且可能会导致代码难以理解和维护。
-
-**六、判断对象是否可扩展（`Reflect.isExtensible()`）**
-
-1. 作用：
-
-   - 确定一个对象是否可以添加新的属性。
-
-2. 示例：
-   ```javascript
-   const obj = {};
-   console.log(Reflect.isExtensible(obj)); // true
-   Object.preventExtensions(obj);
-   console.log(Reflect.isExtensible(obj)); // false
-   ```
-
-**七、使对象不可扩展（`Reflect.preventExtensions()`）**
-
-1. 作用：
-
-   - 使一个对象不可扩展，即不能再添加新的属性。
-
-2. 示例：
-   ```javascript
-   const obj = {};
-   Reflect.preventExtensions(obj);
-   try {
-     obj.newProperty = "value";
-   } catch (e) {
-     console.log("Cannot add new property to non-extensible object.");
-   }
-   ```
-
-**八、判断对象的属性是否可配置（`Reflect.ownKeys()`）**
-
-1. 作用：
-
-   - 返回一个对象自身的所有属性的键名，包括不可枚举属性和 Symbol 属性。
-
-2. 示例：
-   ```javascript
-   const obj = { name: "John", [Symbol("secret")]: "secret value" };
-   console.log(Reflect.ownKeys(obj)); // ['name', Symbol(secret)]
-   ```
-
-总的来说，`Reflect`对象提供了一种更统一、更规范的方式来进行对象操作，并且在某些情况下（如与代理一起使用时）具有特殊的用途。它的方法通常与`Object`上的对应方法具有相似的功能，但在返回值和行为上可能会有所不同，这使得开发者可以更精确地控制对象的操作。
+2. 对象直接访问：
+   - 虽然直接访问属性的方式更加简洁，但在一些复杂的场景下可能会导致不一致的行为，并且不太容易与其他高级特性（如代理）进行良好的集成。

@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Object.is 与全等运算符(===)有何区别",
+  title: "创建一个禁止修改的对象， 只能通过指定方法去修改属性",
   key_world: [
-    "等值判断",
+    // "等值判断",
     // "todo",
   ],
   labels: [
     // labels.js,
-    labels.js,
+    labels.code,
     // company.jd,
     // xx
   ],

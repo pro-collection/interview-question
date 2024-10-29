@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "创建一个禁止修改的对象， 只能通过指定方法去修改属性",
+  title: "详细讲一下 Reflect 内置函数",
   key_world: [
-    // "等值判断",
+    "Reflect 函数",
     // "todo",
   ],
   labels: [
     // labels.js,
-    labels.code,
+    labels.js,
     // company.jd,
     // xx
   ],

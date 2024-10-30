@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "canvas 是如何处理复杂事件交互的呢",
+  title: "弱网检测该如何做",
   key_world: [
-    "canvas 事件交互",
+    "网络状况检测",
     // "todo",
   ],
   labels: [
+    labels.network,
     labels.application,
-
-    company.other,
+    // company.other,
     // xx
   ],
   milestone: MileStone.senior,

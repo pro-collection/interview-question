@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "弱网检测该如何做",
+  title: "Performance API 主要有哪些应用场景",
   key_world: [
-    "网络状况检测",
+    "Performance API 应用",
     // "todo",
   ],
   labels: [

@@ -1,76 +1,76 @@
 **关键词**：对象与原型链
 
-**关键词**：Reflect 函数
+在 JavaScript 中，可以通过以下几种方式来判断一个属性是来自对象本身还是来自原型链：
 
-`Reflect.get()`和直接通过对象`[.]`访问获取属性有以下一些区别：
+**一、使用 `hasOwnProperty()` 方法**
 
-**一、返回值**
+1. 方法介绍：
 
-1. `Reflect.get()`：
+   - `hasOwnProperty()`是 JavaScript 对象的一个方法，用于判断一个对象自身是否具有指定的属性。
+   - 它不会检查原型链上的属性，只关注对象本身是否拥有该属性。
 
-   - 如果属性不存在，返回`undefined`。
-   - 例如：
-     ```javascript
-     const obj = {};
-     const value = Reflect.get(obj, "property");
-     console.log(value); // undefined
-     ```
+2. 示例代码：
 
-2. 对象直接访问：
-   - 如果属性不存在，在非严格模式下返回`undefined`；在严格模式下，会抛出一个`ReferenceError`错误。
-   - 例如：
-     ```javascript
-     const obj = {};
-     // 非严格模式下
-     console.log(obj.property); // undefined
-     // 严格模式下
-     ("use strict");
-     console.log(obj.property); // ReferenceError: property is not defined
-     ```
+   ```javascript
+   function Person() {}
+   Person.prototype.name = "prototype name";
 
-**二、可接受的参数和功能扩展**
+   const person = new Person();
+   person.age = 30;
 
-1. `Reflect.get()`：
+   console.log(person.hasOwnProperty("age")); // true，说明 age 属性是对象本身的属性
+   console.log(person.hasOwnProperty("name")); // false，说明 name 属性不在对象本身，而是在原型链上
+   ```
 
-   - 可以接受第三个参数`receiver`，用于指定属性访问的上下文对象，这在某些情况下非常有用，比如在使用代理时可以控制属性访问的行为。
-   - 例如：
-     ```javascript
-     const obj = { name: "John" };
-     const proxy = new Proxy(obj, {});
-     console.log(Reflect.get(proxy, "name", { name: "Jane" })); // 'Jane'
-     ```
+**二、使用 `in` 操作符结合 `hasOwnProperty()`**
 
-2. 对象直接访问：
-   - 没有类似的参数来指定上下文对象。
+1. 方法介绍：
 
-**三、与代理的交互**
+   - `in`操作符用于检查一个对象及其原型链中是否具有指定的属性。
+   - 可以结合`hasOwnProperty()`来判断属性的来源。
 
-1. `Reflect.get()`：
+2. 示例代码：
 
-   - 与代理对象配合使用时，会触发代理对象上定义的相应拦截方法，使得可以对属性访问进行更精细的控制。
-   - 例如：
-     ```javascript
-     const obj = { name: "John" };
-     const handler = {
-       get(target, property, receiver) {
-         if (property === "name") {
-           return "Modified Name";
-         }
-         return Reflect.get(target, property, receiver);
-       },
-     };
-     const proxy = new Proxy(obj, handler);
-     console.log(proxy.name); // 'Modified Name'
-     ```
+   ```javascript
+   function Person() {}
+   Person.prototype.name = "prototype name";
 
-2. 对象直接访问：
-   - 当通过直接访问属性的方式访问代理对象时，不一定会触发代理对象上的拦截方法，具体行为取决于代理的实现和配置。
+   const person = new Person();
+   person.age = 30;
 
-**四、一致性和规范性**
+   const propertyName = "name";
+   if (person.hasOwnProperty(propertyName)) {
+     console.log(`${propertyName} is an own property of the object.`);
+   } else if (propertyName in person) {
+     console.log(`${propertyName} is inherited from the prototype.`);
+   } else {
+     console.log(`${propertyName} is not found in the object or its prototype.`);
+   }
+   ```
 
-1. `Reflect.get()`：
+**三、使用 `Object.getOwnPropertyDescriptor()` 方法**
 
-   - 作为一种更规范的方法，它与其他`Reflect`方法一起提供了一种统一的方式来进行对象操作，有助于提高代码的可读性和可维护性。
+1. 方法介绍：
 
-2. 对象直接访问：
-   - 虽然直接访问属性的方式更加简洁，但在一些复杂的场景下可能会导致不一致的行为，并且不太容易与其他高级特性（如代理）进行良好的集成。
+   - `Object.getOwnPropertyDescriptor()`方法返回指定对象上一个自有属性的属性描述符。
+   - 如果对象没有指定的自有属性，则返回`undefined`。
+
+2. 示例代码：
+
+   ```javascript
+   function Person() {}
+   Person.prototype.name = "prototype name";
+
+   const person = new Person();
+   person.age = 30;
+
+   const ageDescriptor = Object.getOwnPropertyDescriptor(person, "age");
+   const nameDescriptor = Object.getOwnPropertyDescriptor(person, "name");
+
+   if (ageDescriptor) {
+     console.log("age is an own property of the object.");
+   }
+   if (!nameDescriptor) {
+     console.log("name is not an own property of the object.");
+   }
+   ```

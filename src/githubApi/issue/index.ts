@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 里面是否会存在，对象上有一个 name 属性，但是原型链上还有一个同名的 name 属性",
+  title: "如何判定一个属性来自于对象本身， 还是来自于原型链",
   key_world: [
     "对象与原型链",
     // "todo",
@@ -20,7 +20,7 @@ const remote = {
     // company.jd,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

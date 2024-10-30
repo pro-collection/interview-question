@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何判定一个属性来自于对象本身， 还是来自于原型链",
+  title: "canvas 是如何处理复杂事件交互的呢",
   key_world: [
-    "对象与原型链",
+    "canvas 事件交互",
     // "todo",
   ],
   labels: [
-    // labels.js,
-    labels.js,
-    // company.jd,
+    labels.application,
+
+    company.other,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

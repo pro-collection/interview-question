@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Performance API 主要有哪些应用场景",
+  title: "统计前端请求耗时",
   key_world: [
-    "Performance API 应用",
+    "请求耗时统计",
     // "todo",
   ],
   labels: [

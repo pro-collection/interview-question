@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "CDN  是如何决策资源请求的",
+  title: "如果特别多的事件都挂载到一个元素上，会存在什么问题",
   key_world: [
-    "CDN 资源请求决策",
+    "事件委托应用场景",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.network,
+    labels.js,
     // company.other,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

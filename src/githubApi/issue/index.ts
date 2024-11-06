@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 里面哪些类型是可以互转的",
+  title: "为何现在主流的图表库都是用的 canvas 方案， 而不是使用 svg， 是基于什么因素考量的呢",
   key_world: [
-    "JS 类型转换",
+    "SVG 与 canvas 对比",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.js,
+    labels.application,
     // company.other,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

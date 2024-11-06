@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "统计前端请求耗时",
+  title: "JS 里面哪些类型是可以互转的",
   key_world: [
-    "请求耗时统计",
+    "JS 类型转换",
     // "todo",
   ],
   labels: [
-    labels.network,
-    labels.application,
+    // labels.network,
+    labels.js,
     // company.other,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

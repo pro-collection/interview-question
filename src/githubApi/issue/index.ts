@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 如何将一个层级非常深的子组件的某一个方法， 抛出给上层组件使用",
+  title: "实现一个处理长字符串的函数",
   key_world: [
-    "调用子组件方法",
+    // "调用子组件方法",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.frameWork,
+    labels.code,
     // company.other,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

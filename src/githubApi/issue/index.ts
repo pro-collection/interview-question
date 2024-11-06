@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "排查谁在修改对象",
+  title: "网络五层模型  具体是值的啥",
   key_world: [
-    // "结构复制对象",
+    "网络模型 OSI 参考模型",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.application,
+    labels.network,
     // company.other,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

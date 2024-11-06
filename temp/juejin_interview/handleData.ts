@@ -1,21 +1,26 @@
-import { filter, forEach, get, join, map, toNumber, trim } from "lodash";
+import { filter, first, forEach, get, join, map, orderBy, toNumber, trim } from "lodash";
 // @ts-expect-error
-import jsonData from "./2024_10_01.json";
+import jsonData from "./2024_11_02.json";
 import fs from "fs";
 
 /**
  * 修正数据
  */
 const handleData = () => {
-  const data = filter(jsonData, (item) => {
-    return item.date?.includes("2024-09");
-  });
+  const data = orderBy(
+    filter(jsonData, (item) => {
+      return item.date?.includes("2024-09");
+    }),
+    (item) => item.applaud,
+    "desc"
+  );
 
   const tagObject: Record<string, string[]> = {};
   forEach(data, (item) => {
-    const tag = get(item, "tags", "其他");
+    const tags = get(item, "tags", ["其他"]);
+    const tag = first(tags) as string;
 
-    const link = `- [${item.name}](${item.url})`;
+    const link = `- \`点赞量: ${item.applaud}\` - [${item.name}](${item.url})`;
 
     if (tagObject[tag]) {
       tagObject[tag]?.push(link);
@@ -33,7 +38,7 @@ ${join(list, "\n")}`;
 
   // const json = JSON.stringify(data);
 
-  fs.writeFile("./temp/juejin_interview/2024_10_01.md", textString, (err) => {
+  fs.writeFile("./temp/juejin_interview/2024_09_01.md", textString, (err) => {
     if (err) {
       console.error("Error writing to file:", err);
     } else {

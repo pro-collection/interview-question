@@ -7,6 +7,7 @@ import fs from "fs";
 import day from "dayjs";
 import type { Page } from "playwright";
 import dayjs from "dayjs";
+import { handleDataParseMD } from "./utils";
 
 const delay = (time: number = 3 * 1000) =>
   new Promise((resolve) => {
@@ -39,6 +40,7 @@ const scrollFn = async (page: Page) => {
 
 const crawler = new PlaywrightCrawler({
   headless: false,
+  requestHandlerTimeoutSecs: 60 * 100,
   requestHandler: async ({ page, log }) => {
     // Wait for the actor cards to render.
     await page.waitForSelector("a.entry-link");
@@ -56,6 +58,7 @@ const crawler = new PlaywrightCrawler({
           name: el.querySelector("a.title")?.firstChild?.textContent || "",
           tags: el.querySelector("li.tag")?.textContent || "",
           date: el.querySelector(".meta-list li:nth-child(2)")?.textContent || "",
+          // 点赞数量
           applaud: el.querySelector("span.count")?.textContent || "",
         };
       });
@@ -105,8 +108,10 @@ const crawler = new PlaywrightCrawler({
     // Open a named dataset
     const dataset = await Dataset.open("default");
 
-    const fileName = day().format("YYYY_MM_01");
+    const fileName = day().format("YYYY_MM_02");
     await dataset.exportToJSON(fileName);
+
+    console.log(`[yanle] - 开始移动文档`);
 
     // 移动文件
     fs.rename(
@@ -120,10 +125,17 @@ const crawler = new PlaywrightCrawler({
         }
       }
     );
+
+    console.log(`[yanle] - 写入本地文档`);
+
+    /**
+     * 写入本地 markdown 文档
+     */
+    handleDataParseMD(linkElementObject, fileName, "2024-10");
   },
 });
 
 // 前端热榜
 crawler.run([
-  "https://juejin.cn/search?query=%E9%9D%A2%E8%AF%95&fromSeo=0&fromHistory=1&fromSuggest=0&enterFrom=home_page&type=0&period=3&sort=1",
+  "https://juejin.cn/search?query=%E9%9D%A2%E8%AF%95&fromSeo=0&fromHistory=1&fromSuggest=0&enterFrom=home_page&type=0&sort=2&period=3",
 ]);

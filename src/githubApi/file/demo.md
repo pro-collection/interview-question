@@ -97,23 +97,19 @@ Performance API 提供了一系列的性能测量工具，可以测量网页加�
    - 例如，可以计算`responseEnd`（服务器响应结束的时间）和`requestStart`（开始请求的时间）之间的差值来得到请求的耗时。
 
 2. 使用`performance.getEntriesByType('resource')`：
-   - 这个方法可以获取所有资源加载的性能条目。对于每个资源条目，可以获取其`startTime`（开始时间）和`responseEnd`（响应结束时间）等属性，从而计算出资源加载的耗时。
+   - 这个方法可以获取所有资源加载的性能条目。对于每个资源条目，可以获取其`duration` 等属性，从而计算出资源加载的耗时。
    - 可以遍历这些条目，找到特定的网络请求资源，并计算其耗时。
+     ![image.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/59f66d382dd847c49a3546f913e1719a~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAg5pm05bCP56-G:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDEyNTAyMzM1Nzg5OTM2NyJ9&rk3s=e9ecf3d6&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1730336010&x-orig-sign=pEMLNQgONe3yTNzoxRaYqwTVRAY%3D)
 
 以下是一个示例代码：
 
 ```javascript
-// 计算页面加载过程中第一个请求的耗时
-const timing = performance.timing;
-const requestDuration = timing.responseEnd - timing.requestStart;
-console.log(`First request took ${requestDuration} milliseconds.`);
-
 // 遍历所有资源加载条目，找到特定请求并计算耗时
 const resources = performance.getEntriesByType("resource");
 for (const resource of resources) {
+  // 指定请求连接诶
   if (resource.name === "https://example.com/specific-resource") {
-    const resourceDuration = resource.responseEnd - resource.startTime;
-    console.log(`Specific resource request took ${resourceDuration} milliseconds.`);
+    console.log(`Specific resource request took ${resource.duration} milliseconds.`);
     break;
   }
 }

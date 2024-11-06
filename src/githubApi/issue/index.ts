@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "绑定事件的元素节点销毁又重新创建， 绑定的事件还会生效吗",
+  title: "比如我把事件委托注册在 body 上面， 我如何去针对性的出发 不同的子元素",
   key_world: [
     "事件委托应用场景",
     // "todo",

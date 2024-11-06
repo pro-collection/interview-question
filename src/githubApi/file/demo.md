@@ -1,35 +1,63 @@
 **关键词**：事件委托应用场景
 
-> 比如我将事件绑定在 body 上面， 后来这个 body 人为移除掉了， 然后又重新创建了一个 body 标签， 那么之前绑定在 body 上面的事件还会生效吗？
+> 这个问题属于一个典型的「事件委托」的应用场景
+>
+> 如果知识背诵八股文的同学， 可能这个问题就尴尬了
 
-如果将事件绑定在 `body` 上，然后移除了这个 `body` 标签并重新创建一个 `body` 标签，之前绑定在旧 `body` 上的事件不会生效在新的 `body` 上。
+当把事件委托注册在 `body` 上时，可以通过以下方法针对性地触发不同子元素的特定行为：
 
-原因如下：
+**一、利用事件对象的属性判断目标元素**
 
-当你使用传统的事件绑定方式（如 `addEventListener`）将事件绑定到一个特定的 DOM 元素上时，这个绑定是针对特定的实例。一旦该元素被移除，与之相关的事件处理程序也会与该元素一起被销毁。当重新创建一个新的 `body` 标签时，它是一个全新的 DOM 元素，没有与之前被移除的 `body` 上的事件处理程序相关联。
+1. `event.target` 属性：
 
-例如：
+   - 当事件在 `body` 上触发时，可以通过 `event.target` 来获取实际触发事件的元素。
+   - 例如：
+     ```javascript
+     document.body.addEventListener("click", function (event) {
+       const target = event.target;
+       if (target.classList.contains("button1")) {
+         // 处理按钮 1 的点击事件
+       } else if (target.classList.contains("button2")) {
+         // 处理按钮 2 的点击事件
+       }
+     });
+     ```
+   - 在这个例子中，通过检查 `event.target` 的 `classList` 来确定点击的是哪个特定的按钮，然后执行相应的处理逻辑。
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-  </head>
+2. `matches()` 方法：
+   - 可以使用 `event.target.matches(selector)` 方法来检查目标元素是否与特定的 CSS 选择器匹配。
+   - 例如：
+     ```javascript
+     document.body.addEventListener("click", function (event) {
+       const target = event.target;
+       if (target.matches("#element1")) {
+         // 处理元素 1 的点击事件
+       } else if (target.matches(".class2")) {
+         // 处理具有特定类名的元素的点击事件
+       }
+     });
+     ```
+   - 这里使用 `matches()` 方法来判断点击的元素是否与特定的 ID 或类名选择器匹配，从而执行相应的操作。
 
-  <body>
-    <script>
-      document.body.addEventListener("click", function () {
-        console.log("body clicked");
-      });
-      // 假设这里有一些代码移除了 body 并重新创建一个新的 body
-      const oldBody = document.body;
-      oldBody.parentNode.removeChild(oldBody);
-      const newBody = document.createElement("body");
-      document.documentElement.appendChild(newBody);
-    </script>
-  </body>
-</html>
-```
+**二、使用数据属性进行区分**
 
-在这个例子中，点击新创建的 `body` 不会触发之前绑定的点击事件处理程序。
+1. 设置 `data-*` 属性：
+   - 可以在 HTML 元素上设置自定义的 `data-*` 属性来标识不同的元素，并在事件处理函数中根据这些属性进行区分。
+   - 例如：
+     ```html
+     <button data-action="action1">Button 1</button> <button data-action="action2">Button 2</button>
+     ```
+   - 然后在 JavaScript 中：
+     ```javascript
+     document.body.addEventListener("click", function (event) {
+       const target = event.target;
+       if (target.dataset.action === "action1") {
+         // 处理按钮 1 的点击事件
+       } else if (target.dataset.action === "action2") {
+         // 处理按钮 2 的点击事件
+       }
+     });
+     ```
+   - 在这个例子中，通过检查元素的 `data-action` 属性的值来确定执行哪个特定的操作。
+
+通过这些方法，可以在事件委托到 `body` 的情况下，有针对性地处理不同子元素的事件，提高代码的效率和可维护性。

@@ -1,39 +1,15 @@
-**关键词**：结构复制对象
+> 这是一个话题性值得问题：
+>
+> 例如：redux 申请了一份数据 store , 整个应用有特别多的地方在修改这个 store , 现在数据出现异常， 如何排查是哪儿场景修改的这份 store 导致的异常;
+>
+> 不仅仅是针对 redux ， 我们面临可能是全局对象等场景，对被多个调用方修改的现象。
 
-**浅拷贝**
+这个没有一个标准答案， 可以咨询去探索。
 
-举例：
+作者给几个意见：
 
-```javascript
-const obj = {
-  prop1: "value1",
-  prop2: {
-    nestedProp: "nestedValue",
-  },
-};
+1. 首先不允许直接修改对象， 必须要经过一个封装函数去修改， 修改的时候， 必须要传递 `actionUser` 信息， 这个 `actionUser` 表示调用方是谁；
 
-// 使用扩展运算符进行复制
-const obj2 = { ...obj };
+2. 怎么约束这个事儿呢？就比如我封装了一个函数去修改全局对象，但是就是有人要手动去改这个全局对象。 那么处理方式就是将这个全局对象冻结， 或者 proxy 劫持。 例如 formily 表单里面的 value 就是 proxy 劫持的， 只能允许用户去通过 onChange 修改。
 
-console.log("原始对象 obj:", obj);
-console.log("复制后的对象 obj2:", obj2);
-
-// 修改基本类型属性
-obj2.prop1 = "newValue1";
-console.log("修改基本类型属性后：");
-console.log("原始对象 obj:", obj);
-console.log("复制后的对象 obj2:", obj2);
-
-// 修改嵌套对象的属性
-obj2.prop2.nestedProp = "newNestedValue";
-console.log("修改嵌套对象属性后：");
-console.log("原始对象 obj:", obj);
-console.log("复制后的对象 obj2:", obj2);
-```
-
-解释如下：
-
-1. 首先定义了一个对象`obj`，它包含一个基本类型属性`prop1`和一个嵌套对象属性`prop2`。
-2. 使用扩展运算符`{...obj}`创建了一个新的对象`obj2`，这看起来像是对`obj`进行了复制。
-3. 当修改`obj2`的基本类型属性`prop1`时，原始对象`obj`的`prop1`不受影响。这是因为基本类型的值在复制时是按值复制的。
-4. 然而，当修改`obj2`的嵌套对象属性`prop2.nestedProp`时，原始对象`obj`的`prop2.nestedProp`也被修改了。这是因为扩展运算符对于嵌套对象只是复制了引用，而不是创建一个全新的嵌套对象副本，所以这是浅拷贝的行为。
+3. 那如何保证调用方就一定会传递 `actionUser` 信息呢；因为是一个函数， 所以要是调用方不传递这个会咋样； 解决办法最强硬的就是， 如果不传递 `actionUser` 就直接不执行， 同时 `throw error`；稍微温和一点儿就是写一个 eslint 插件， 给予 error 提示；最温和的方式， 就是用 TS interface 去约束入参；

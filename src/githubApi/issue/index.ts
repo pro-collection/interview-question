@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "解构复制对象， 是深拷贝还是浅拷贝",
+  title: "排查谁在修改对象",
   key_world: [
-    "结构复制对象",
+    // "结构复制对象",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.js,
+    labels.application,
     // company.other,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

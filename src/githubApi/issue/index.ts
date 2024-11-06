@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "为何现在主流的图表库都是用的 canvas 方案， 而不是使用 svg， 是基于什么因素考量的呢",
+  title: "[React] 如何将一个层级非常深的子组件的某一个方法， 抛出给上层组件使用",
   key_world: [
-    "SVG 与 canvas 对比",
+    "调用子组件方法",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.application,
+    labels.frameWork,
     // company.other,
     // xx
   ],

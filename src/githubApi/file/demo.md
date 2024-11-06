@@ -1,31 +1,101 @@
-**关键词**：SVG 与 canvas 对比
+**关键词**：调用子组件方法
 
-> 作者备注
->
-> 比较冷门的话题， 当做一个科普吧
+在 React 中，可以通过以下几种方式将一个层级非常深的子组件的某一个方法抛出给上层组件使用：
 
-SVG 和 Canvas 在利用 GPU 硬件加速方面存在以下区别：
+**一、使用回调函数传递**
 
-**一、SVG 的 GPU 加速特点**
+1. 在父组件中定义一个回调函数，并将其作为属性传递给子组件的父级组件，依次向下传递，直到目标子组件。
 
-1. 有限的自动加速
+   例如：
 
-   - SVG 图形通常由浏览器自动决定是否使用 GPU 加速。对于一些简单的 SVG 图形，浏览器可能不会启用 GPU 加速，因为在这种情况下，使用 CPU 进行渲染可能已经足够高效。
-   - 只有在处理较为复杂的 SVG 场景，如包含大量图形元素、复杂的变换或动画效果时，浏览器才有可能启用 GPU 加速。但这种加速的触发机制并不完全可控，取决于浏览器的实现和判断。
+   ```jsx
+   function ParentComponent() {
+     const handleDeepMethod = () => {
+       console.log("调用了深层子组件的方法");
+     };
+     return <ChildComponent onDeepMethod={handleDeepMethod} />;
+   }
 
-2. 依赖浏览器优化
-   - SVG 的 GPU 加速很大程度上依赖于浏览器的优化策略。不同的浏览器对 SVG 的 GPU 加速支持程度可能不同，这可能导致在不同的浏览器上 SVG 图形的性能表现不一致。
-   - 例如，一些现代浏览器可能会对特定的 SVG 特性（如滤镜效果、渐变等）进行优化并启用 GPU 加速，而其他浏览器可能没有这样的优化。
+   function ChildComponent({ onDeepMethod }) {
+     return <GrandChildComponent onDeepMethod={onDeepMethod} />;
+   }
 
-**二、Canvas 的 GPU 加速特点**
+   function GrandChildComponent({ onDeepMethod }) {
+     const deepMethod = () => {
+       console.log("深层子组件的方法被执行");
+       onDeepMethod();
+     };
+     return <button onClick={deepMethod}>触发深层方法</button>;
+   }
+   ```
 
-1. 更明确的控制
+2. 在深层子组件中，当特定条件触发时，调用这个通过层层传递下来的回调函数，从而让父组件执行相应的操作。
 
-   - 在 Canvas 中，可以通过一些特定的技术手段来明确地请求 GPU 加速。例如，使用 WebGL（基于 OpenGL ES 的 JavaScript API）与 Canvas 结合，可以直接利用 GPU 进行高性能的 3D 图形渲染。
-   - 对于 2D 图形，一些浏览器也提供了对 Canvas 的硬件加速支持，可以通过特定的浏览器设置或使用特定的图形库来启用。开发人员可以更直接地控制是否使用 GPU 加速，以及如何优化图形渲染以充分利用 GPU 的性能。
+**二、使用 React 的 Context API**
 
-2. 高性能图形渲染
-   - Canvas 结合 GPU 加速可以实现非常高性能的图形渲染，尤其适用于复杂的游戏、数据可视化和动画效果。通过利用 GPU 的并行处理能力，可以快速地绘制大量的图形和进行复杂的图形变换。
-   - 例如，在数据可视化中，使用 Canvas 和 WebGL 可以实现大规模数据的实时渲染和交互，提供流畅的用户体验。
+1. 创建一个 Context：
 
-总的来说，Canvas 在利用 GPU 硬件加速方面通常具有更明确的控制和更高的性能潜力，而 SVG 的 GPU 加速则更多地依赖于浏览器的自动优化，且加速的范围和效果相对有限。但在实际应用中，选择使用 SVG 还是 Canvas 并考虑 GPU 加速，需要根据具体的应用场景、性能需求和开发技术栈来综合决定。
+   ```jsx
+   const DeepMethodContext = React.createContext();
+   ```
+
+2. 在父组件中提供值：
+
+   ```jsx
+   function ParentComponent() {
+     const handleDeepMethod = () => {
+       console.log("调用了深层子组件的方法");
+     };
+     return (
+       <DeepMethodContext.Provider value={handleDeepMethod}>
+         <ChildComponent />
+       </DeepMethodContext.Provider>
+     );
+   }
+   ```
+
+3. 在深层子组件中获取 Context 值并调用：
+
+   ```jsx
+   function GrandChildComponent() {
+     const handleDeepMethod = React.useContext(DeepMethodContext);
+     const deepMethod = () => {
+       console.log("深层子组件的方法被执行");
+       handleDeepMethod();
+     };
+     return <button onClick={deepMethod}>触发深层方法</button>;
+   }
+   ```
+
+**三、使用 Custom Events**
+还有一种方法是使用自定义事件（Custom Events）。
+
+1. 在深层子组件中创建并派发自定义事件：
+
+   ```jsx
+   function GrandChildComponent() {
+     const deepMethod = () => {
+       console.log("深层子组件的方法被执行");
+       const event = new CustomEvent("deepMethodTriggered", { detail: {} });
+       window.dispatchEvent(event);
+     };
+     return <button onClick={deepMethod}>触发深层方法</button>;
+   }
+   ```
+
+2. 在父组件中监听这个自定义事件：
+
+   ```jsx
+   function ParentComponent() {
+     const handleDeepMethod = () => {
+       console.log("调用了深层子组件的方法");
+     };
+     useEffect(() => {
+       window.addEventListener("deepMethodTriggered", handleDeepMethod);
+       return () => {
+         window.removeEventListener("deepMethodTriggered", handleDeepMethod);
+       };
+     }, []);
+     return <ChildComponent />;
+   }
+   ```

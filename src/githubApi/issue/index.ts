@@ -9,14 +9,14 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "实现一个处理长字符串的函数",
+  title: "解构复制对象， 是深拷贝还是浅拷贝",
   key_world: [
-    // "调用子组件方法",
+    "结构复制对象",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.code,
+    labels.js,
     // company.other,
     // xx
   ],

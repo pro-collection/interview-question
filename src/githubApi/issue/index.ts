@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "proxy set 拦截器，其中参数中第一个参数 target 和 最后一个参数 receiver 有何区别",
+  title: "proxy 可以拦截数组变化",
   key_world: [
     "proxy set 拦截器",
     // "todo",
@@ -17,7 +17,7 @@ const remote = {
   labels: [
     // labels.network,
     labels.js,
-    company.mt,
+    company.jd,
     // xx
   ],
   milestone: MileStone.inProgress,

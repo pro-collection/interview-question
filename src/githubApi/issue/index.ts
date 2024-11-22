@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "比如我把事件委托注册在 body 上面， 我如何去针对性的出发 不同的子元素",
+  title: "如果一行文本展示不下，如何使其通过 popover 来展示全部内容？",
   key_world: [
-    "事件委托应用场景",
+    "动态计算文本是否溢出",
     // "todo",
   ],
   labels: [
     // labels.network,
     labels.js,
-    // company.other,
+    company.pdd,
     // xx
   ],
   milestone: MileStone.inProgress,

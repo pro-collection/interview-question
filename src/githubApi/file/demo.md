@@ -1,63 +1,72 @@
-**关键词**：事件委托应用场景
+**关键词**：动态计算文本是否溢出
 
-> 这个问题属于一个典型的「事件委托」的应用场景
+> 作者备注
 >
-> 如果知识背诵八股文的同学， 可能这个问题就尴尬了
+> 主要考核 JS 动态计算文本是否溢出
 
-当把事件委托注册在 `body` 上时，可以通过以下方法针对性地触发不同子元素的特定行为：
+以下是一种使用 HTML、CSS 和 JavaScript 来实现当文本一行展示不下时通过`popover`展示全部内容的基本方法。假设你在一个网页环境中操作。
 
-**一、利用事件对象的属性判断目标元素**
+1. **HTML 结构**
 
-1. `event.target` 属性：
+   - 首先，创建一个包含文本的元素，例如一个`span`标签。为这个元素添加一个自定义属性（比如`data-full-text`）来存储完整的文本内容。
 
-   - 当事件在 `body` 上触发时，可以通过 `event.target` 来获取实际触发事件的元素。
-   - 例如：
-     ```javascript
-     document.body.addEventListener("click", function (event) {
-       const target = event.target;
-       if (target.classList.contains("button1")) {
-         // 处理按钮 1 的点击事件
-       } else if (target.classList.contains("button2")) {
-         // 处理按钮 2 的点击事件
-       }
-     });
-     ```
-   - 在这个例子中，通过检查 `event.target` 的 `classList` 来确定点击的是哪个特定的按钮，然后执行相应的处理逻辑。
+   ```html
+   <span
+     id="textElement"
+     data-full-text="这是一段很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的文本"
+   >
+     这是一段很长很长很长的文本
+   </span>
+   ```
 
-2. `matches()` 方法：
-   - 可以使用 `event.target.matches(selector)` 方法来检查目标元素是否与特定的 CSS 选择器匹配。
-   - 例如：
-     ```javascript
-     document.body.addEventListener("click", function (event) {
-       const target = event.target;
-       if (target.matches("#element1")) {
-         // 处理元素 1 的点击事件
-       } else if (target.matches(".class2")) {
-         // 处理具有特定类名的元素的点击事件
-       }
-     });
-     ```
-   - 这里使用 `matches()` 方法来判断点击的元素是否与特定的 ID 或类名选择器匹配，从而执行相应的操作。
+2. **CSS 样式**
 
-**二、使用数据属性进行区分**
+   - 为`span`元素设置样式，使其在一行内显示文本，并在文本溢出时隐藏溢出部分。
 
-1. 设置 `data-*` 属性：
-   - 可以在 HTML 元素上设置自定义的 `data-*` 属性来标识不同的元素，并在事件处理函数中根据这些属性进行区分。
-   - 例如：
-     ```html
-     <button data-action="action1">Button 1</button> <button data-action="action2">Button 2</button>
-     ```
-   - 然后在 JavaScript 中：
-     ```javascript
-     document.body.addEventListener("click", function (event) {
-       const target = event.target;
-       if (target.dataset.action === "action1") {
-         // 处理按钮 1 的点击事件
-       } else if (target.dataset.action === "action2") {
-         // 处理按钮 2 的点击事件
-       }
-     });
-     ```
-   - 在这个例子中，通过检查元素的 `data-action` 属性的值来确定执行哪个特定的操作。
+   ```css
+   #textElement {
+       white - space: nowrap;
+       overflow: hidden;
+       text - overflow: ellipsis;
+       cursor: pointer;
+   }
+   ```
 
-通过这些方法，可以在事件委托到 `body` 的情况下，有针对性地处理不同子元素的事件，提高代码的效率和可维护性。
+- 这里设置`cursor: pointer`是为了让用户知道这个元素是可以点击的，当文本溢出时可以触发`popover`显示完整内容。
+
+3. **JavaScript 功能实现**
+   - 使用 JavaScript 来检测文本是否溢出。可以通过比较元素的`offsetWidth`和`scrollWidth`来实现。如果`scrollWidth`大于`offsetWidth`，说明文本溢出了。
+   - 当文本溢出时，创建一个`popover`来显示完整内容。可以使用一些现成的 JavaScript 库（如 Bootstrap 的`popover`插件）或者自己编写简单的`popover`功能。以下是一个使用自定义 JavaScript 实现简单`popover`功能的示例（不依赖第三方库）：
+   ```javascript
+   document.addEventListener("DOMContentLoaded", function () {
+     const textElement = document.getElementById("textElement");
+     if (textElement.scrollWidth > textElement.offsetWidth) {
+       textElement.addEventListener("click", function () {
+         const fullText = this.getAttribute("data-full-text");
+         const popover = document.createElement("div");
+         popover.className = "popover";
+         popover.textContent = fullText;
+         document.body.appendChild(popover);
+         // 简单的定位，将popover放在被点击元素的下方
+         const rect = this.getBoundingClientRect();
+         popover.style.left = rect.left + "px";
+         popover.style.top = rect.bottom + 5 + "px";
+       });
+     }
+   });
+   ```
+   - 同时，你还需要添加一些 CSS 样式来美化`popover`：
+   ```css
+   .popover {
+       position: absolute;
+       background - color: white;
+       border: 1px solid gray;
+       padding: 10px;
+       border - radius: 5px;
+       z - index: 100;
+   }
+   ```
+
+上述代码首先检查文本是否溢出。如果溢出，当用户点击该文本元素时，会创建一个`popover`元素并将完整文本内容放入其中，然后将`popover`添加到文档中，并简单地定位在被点击元素的下方。
+
+请注意，这只是一个简单的示例，在实际应用中，你可能需要根据具体的设计要求和项目框架（如使用 Vue.js、React.js 等）来进行更复杂的实现，并且可能需要考虑浏览器兼容性等问题。如果使用像 Bootstrap 这样的框架，实现`popover`功能会更加方便和具有更好的样式一致性。

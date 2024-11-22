@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] useMemo 是否可以支持异步函数",
+  title: "[React] useCallback 是否支持异步函数",
   key_world: [
     // "Object.defineProperty 监听数组变化",
     // "todo",

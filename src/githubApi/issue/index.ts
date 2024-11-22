@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "在 JS 里面， proxy set 拦截器， 有那些参数， 分别表示什么含义",
+  title: "proxy set 拦截器，其中参数中第一个参数 target 和 最后一个参数 receiver 有何区别",
   key_world: [
     "proxy set 拦截器",
     // "todo",

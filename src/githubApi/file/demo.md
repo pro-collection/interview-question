@@ -1,70 +1,42 @@
 **关键词**：proxy set 拦截器
 
 1. **`target`参数**
-   - **含义**：它是被代理的目标对象。这个对象是原始的、即将被操作（在`set`操作的情境下是被设置属性值）的对象。例如，如果你创建了一个代理来拦截对某个对象属性的设置操作，`target`就是那个实际拥有属性的原始对象。
-   - **示例**：
+
+   - **本质和用途**
+     - `target`是被代理的原始对象。它代表了代理操作所基于的实际对象。在`Proxy`的`set`拦截器中，`target`的主要作用是提供对原始对象属性和状态的访问，以便在拦截属性设置操作时，可以正确地将新值应用到原始对象的相应属性上。
+   - **示例说明**
+     - 假设我们有一个简单的对象`originalObject = { value: 10 };`，并创建了一个代理 `const proxy = new Proxy(originalObject, { set });`。当拦截器 `set` 被触发时，`target` 就是 `originalObject`。例如：
      ```javascript
-     let targetObj = { name: "John" };
-     let proxyObj = new Proxy(targetObj, {
+     const originalObject = { value: 10 };
+     const handler = {
        set(target, property, value) {
-         // 这里的target就是targetObj
-         console.log(`正在设置${target}对象的${property}属性为${value}`);
-         target[property] = value;
-         return true;
-       },
-     });
-     proxyObj.age = 30;
-     ```
-     在这个例子中，`target`在`proxyObj.age = 30`这个操作中，就是`targetObj`，它是被代理的基础对象，`set`拦截器可以对这个对象的属性设置操作进行监控和修改。
-2. **`property`参数**
-   - **含义**：它表示要设置的属性名。在对象操作中，当你通过`obj[key] = value`或者`obj.property = value`这样的方式设置属性时，`property`就是那个`key`或者`property`。这个参数让拦截器知道具体是哪个属性正在被操作。
-   - **示例**：
-     ```javascript
-     let targetObj = { name: "John" };
-     let proxyObj = new Proxy(targetObj, {
-       set(target, property, value) {
-         if (property === "age" && typeof value !== "number") {
-           throw new Error("年龄必须是数字");
-         }
-         target[property] = value;
-         return true;
-       },
-     });
-     proxyObj.age = "abc";
-     ```
-     在这里，当尝试设置`proxyObj.age`时，`property`的值就是`'age'`，拦截器可以根据这个属性名来进行特定的验证（如这里检查年龄是否为数字）。
-3. **`value`参数**
-   - **含义**：它是要设置给属性的新值。在`obj[key]=value`或者`obj.property = value`这样的操作中，`value`就是等号右边的值。拦截器可以获取这个值来决定是否允许设置，或者对这个值进行转换等操作。
-   - **示例**：
-     ```javascript
-     let targetObj = { name: "John" };
-     let proxyObj = new Proxy(targetObj, {
-       set(target, property, value) {
-         if (typeof value === "string") {
-           value = value.toUpperCase();
-         }
-         target[property] = value;
-         return true;
-       },
-     });
-     proxyObj.name = "jane";
-     console.log(targetObj.name);
-     ```
-     在这个例子中，当设置`proxyObj.name`时，`value`最初是`'jane'`，拦截器将其转换为大写`'JANE'`后再设置到`targetObj`的`name`属性中，最后`targetObj.name`的值为`'JANE'`。
-4. **`receiver`参数（可选）**
-   - **含义**：它通常是操作发生的对象。在大多数简单的情况下，它和`proxy`对象本身（即被用来设置属性的代理对象）是相同的。不过，在一些复杂的继承或者代理链场景下，它可以帮助确定真正接收操作的对象。这个参数提供了一种机制来正确地处理属性访问的上下文。
-   - **示例**：
-     ```javascript
-     let targetObj = { name: "John" };
-     let handler = {
-       set(target, property, value, receiver) {
-         console.log(`接收者是${receiver}`);
+         console.log(`原始对象是: ${JSON.stringify(target)}`);
          target[property] = value;
          return true;
        },
      };
-     let proxyObj = new Proxy(targetObj, handler);
-     let anotherObj = Object.create(proxyObj);
-     anotherObj.age = 30;
+     const proxy = new Proxy(originalObject, handler);
+     proxy.value = 20;
      ```
-     在这个例子中，当通过`anotherObj`（它继承自`proxyObj`）来设置属性`age`时，`receiver`参数将指向`anotherObj`，这可以帮助拦截器更好地理解操作的上下文。
+     - 在这个例子中，当设置`proxy.value`时，`target`就是`originalObject`，`set`拦截器可以通过`target`来修改`originalObject`的`value`属性。
+
+2. **`receiver`参数**
+   - **本质和用途**
+     - `receiver`是实际接收属性设置操作的对象。在简单的情况下，它通常就是代理对象本身。但是，在一些更复杂的场景中，比如涉及到对象的继承或者多层代理时，`receiver`和`target`可能不同，它能帮助确定操作发生的真实上下文。
+   - **示例说明**
+     - 考虑这样一个场景，有一个基础对象`baseObject`，创建了一个代理`proxy1`，然后又有一个对象通过`Object.create(proxy1)`创建并继承自`proxy1`。当在这个继承对象上进行属性设置操作时，`receiver`将指向这个继承对象，而`target`仍然是原始被代理的对象。
+     ```javascript
+     const baseObject = { count: 0 };
+     const handler = {
+       set(target, property, value, receiver) {
+         console.log(`接收操作的对象是: ${JSON.stringify(receiver)}`);
+         console.log(`原始对象是: ${JSON.stringify(target)}`);
+         target[property] = value;
+         return true;
+       },
+     };
+     const proxy1 = new Proxy(baseObject, handler);
+     const derivedObject = Object.create(proxy1);
+     derivedObject.count = 1;
+     ```
+     - 在这个例子中，当设置`derivedObject.count`时，`receiver`是`derivedObject`，因为它是实际接收操作的对象，而`target`是`baseObject`，因为它是原始被代理的对象。这就体现了`receiver`和`target`在复杂场景下的区别。

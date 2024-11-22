@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Object.defineProperty 是否可以监听拦截数组变化",
+  title: "项目部署更新之后，如何提醒用户去刷新更新页面资源",
   key_world: [
-    "Object.defineProperty 监听数组变化",
+    // "Object.defineProperty 监听数组变化",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.js,
-    company.mi,
+    labels.application,
+    company.baidu,
     // xx
   ],
   milestone: MileStone.senior,

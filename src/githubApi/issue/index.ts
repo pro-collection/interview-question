@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "proxy 可以拦截数组变化",
+  title: "Object.defineProperty 是否可以监听拦截数组变化",
   key_world: [
-    "proxy set 拦截器",
+    "Object.defineProperty 监听数组变化",
     // "todo",
   ],
   labels: [
     // labels.network,
     labels.js,
-    company.jd,
+    company.mi,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

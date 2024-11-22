@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] useCallback 是否支持异步函数",
+  title: "Webpack 与 Vite的核心差异点在哪儿",
   key_world: [
-    // "Object.defineProperty 监听数组变化",
+    "Webpack 与 Vite 核心差异",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.frameWork,
+    labels.engineering,
     // company.tencent,
     // xx
   ],
-  milestone: MileStone.base,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

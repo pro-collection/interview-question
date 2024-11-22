@@ -1,72 +1,70 @@
-**关键词**：动态计算文本是否溢出
+**关键词**：proxy set 拦截器
 
-> 作者备注
->
-> 主要考核 JS 动态计算文本是否溢出
-
-以下是一种使用 HTML、CSS 和 JavaScript 来实现当文本一行展示不下时通过`popover`展示全部内容的基本方法。假设你在一个网页环境中操作。
-
-1. **HTML 结构**
-
-   - 首先，创建一个包含文本的元素，例如一个`span`标签。为这个元素添加一个自定义属性（比如`data-full-text`）来存储完整的文本内容。
-
-   ```html
-   <span
-     id="textElement"
-     data-full-text="这是一段很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的文本"
-   >
-     这是一段很长很长很长的文本
-   </span>
-   ```
-
-2. **CSS 样式**
-
-   - 为`span`元素设置样式，使其在一行内显示文本，并在文本溢出时隐藏溢出部分。
-
-   ```css
-   #textElement {
-       white - space: nowrap;
-       overflow: hidden;
-       text - overflow: ellipsis;
-       cursor: pointer;
-   }
-   ```
-
-- 这里设置`cursor: pointer`是为了让用户知道这个元素是可以点击的，当文本溢出时可以触发`popover`显示完整内容。
-
-3. **JavaScript 功能实现**
-   - 使用 JavaScript 来检测文本是否溢出。可以通过比较元素的`offsetWidth`和`scrollWidth`来实现。如果`scrollWidth`大于`offsetWidth`，说明文本溢出了。
-   - 当文本溢出时，创建一个`popover`来显示完整内容。可以使用一些现成的 JavaScript 库（如 Bootstrap 的`popover`插件）或者自己编写简单的`popover`功能。以下是一个使用自定义 JavaScript 实现简单`popover`功能的示例（不依赖第三方库）：
-   ```javascript
-   document.addEventListener("DOMContentLoaded", function () {
-     const textElement = document.getElementById("textElement");
-     if (textElement.scrollWidth > textElement.offsetWidth) {
-       textElement.addEventListener("click", function () {
-         const fullText = this.getAttribute("data-full-text");
-         const popover = document.createElement("div");
-         popover.className = "popover";
-         popover.textContent = fullText;
-         document.body.appendChild(popover);
-         // 简单的定位，将popover放在被点击元素的下方
-         const rect = this.getBoundingClientRect();
-         popover.style.left = rect.left + "px";
-         popover.style.top = rect.bottom + 5 + "px";
-       });
-     }
-   });
-   ```
-   - 同时，你还需要添加一些 CSS 样式来美化`popover`：
-   ```css
-   .popover {
-       position: absolute;
-       background - color: white;
-       border: 1px solid gray;
-       padding: 10px;
-       border - radius: 5px;
-       z - index: 100;
-   }
-   ```
-
-上述代码首先检查文本是否溢出。如果溢出，当用户点击该文本元素时，会创建一个`popover`元素并将完整文本内容放入其中，然后将`popover`添加到文档中，并简单地定位在被点击元素的下方。
-
-请注意，这只是一个简单的示例，在实际应用中，你可能需要根据具体的设计要求和项目框架（如使用 Vue.js、React.js 等）来进行更复杂的实现，并且可能需要考虑浏览器兼容性等问题。如果使用像 Bootstrap 这样的框架，实现`popover`功能会更加方便和具有更好的样式一致性。
+1. **`target`参数**
+   - **含义**：它是被代理的目标对象。这个对象是原始的、即将被操作（在`set`操作的情境下是被设置属性值）的对象。例如，如果你创建了一个代理来拦截对某个对象属性的设置操作，`target`就是那个实际拥有属性的原始对象。
+   - **示例**：
+     ```javascript
+     let targetObj = { name: "John" };
+     let proxyObj = new Proxy(targetObj, {
+       set(target, property, value) {
+         // 这里的target就是targetObj
+         console.log(`正在设置${target}对象的${property}属性为${value}`);
+         target[property] = value;
+         return true;
+       },
+     });
+     proxyObj.age = 30;
+     ```
+     在这个例子中，`target`在`proxyObj.age = 30`这个操作中，就是`targetObj`，它是被代理的基础对象，`set`拦截器可以对这个对象的属性设置操作进行监控和修改。
+2. **`property`参数**
+   - **含义**：它表示要设置的属性名。在对象操作中，当你通过`obj[key] = value`或者`obj.property = value`这样的方式设置属性时，`property`就是那个`key`或者`property`。这个参数让拦截器知道具体是哪个属性正在被操作。
+   - **示例**：
+     ```javascript
+     let targetObj = { name: "John" };
+     let proxyObj = new Proxy(targetObj, {
+       set(target, property, value) {
+         if (property === "age" && typeof value !== "number") {
+           throw new Error("年龄必须是数字");
+         }
+         target[property] = value;
+         return true;
+       },
+     });
+     proxyObj.age = "abc";
+     ```
+     在这里，当尝试设置`proxyObj.age`时，`property`的值就是`'age'`，拦截器可以根据这个属性名来进行特定的验证（如这里检查年龄是否为数字）。
+3. **`value`参数**
+   - **含义**：它是要设置给属性的新值。在`obj[key]=value`或者`obj.property = value`这样的操作中，`value`就是等号右边的值。拦截器可以获取这个值来决定是否允许设置，或者对这个值进行转换等操作。
+   - **示例**：
+     ```javascript
+     let targetObj = { name: "John" };
+     let proxyObj = new Proxy(targetObj, {
+       set(target, property, value) {
+         if (typeof value === "string") {
+           value = value.toUpperCase();
+         }
+         target[property] = value;
+         return true;
+       },
+     });
+     proxyObj.name = "jane";
+     console.log(targetObj.name);
+     ```
+     在这个例子中，当设置`proxyObj.name`时，`value`最初是`'jane'`，拦截器将其转换为大写`'JANE'`后再设置到`targetObj`的`name`属性中，最后`targetObj.name`的值为`'JANE'`。
+4. **`receiver`参数（可选）**
+   - **含义**：它通常是操作发生的对象。在大多数简单的情况下，它和`proxy`对象本身（即被用来设置属性的代理对象）是相同的。不过，在一些复杂的继承或者代理链场景下，它可以帮助确定真正接收操作的对象。这个参数提供了一种机制来正确地处理属性访问的上下文。
+   - **示例**：
+     ```javascript
+     let targetObj = { name: "John" };
+     let handler = {
+       set(target, property, value, receiver) {
+         console.log(`接收者是${receiver}`);
+         target[property] = value;
+         return true;
+       },
+     };
+     let proxyObj = new Proxy(targetObj, handler);
+     let anotherObj = Object.create(proxyObj);
+     anotherObj.age = 30;
+     ```
+     在这个例子中，当通过`anotherObj`（它继承自`proxyObj`）来设置属性`age`时，`receiver`参数将指向`anotherObj`，这可以帮助拦截器更好地理解操作的上下文。

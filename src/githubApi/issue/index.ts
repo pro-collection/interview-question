@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "项目部署更新之后，如何提醒用户去刷新更新页面资源",
+  title: "[React] useMemo 是否可以支持异步函数",
   key_world: [
     // "Object.defineProperty 监听数组变化",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.application,
-    company.baidu,
+    labels.frameWork,
+    // company.tencent,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.base,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

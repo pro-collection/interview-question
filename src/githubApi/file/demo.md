@@ -1,3 +1,5 @@
+**关键词**：Rollup 构建效率
+
 **关键词**：vite 和 rollup
 
 1. **Vite 对 Rollup 的依赖关系（主要在生产构建阶段）**

@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "vite 和  rollup 是什么样的依赖关系",
+  title: "Rollup 为何高效",
   key_world: [
-    "vite 和 rollup",
+    "Rollup 构建效率",
     // "todo",
   ],
   labels: [

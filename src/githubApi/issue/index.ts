@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "corejs 是做什么用的， 跟 Polyfill 是什么关系",
+  title: "[webpack] 在编译产物的时候， 要区分 source 代码和外部依赖代码， 该如何处理",
   key_world: [
-    "corejs 和 Polyfill",
+    "webpack 产物",
     // "todo",
   ],
   labels: [
@@ -20,7 +20,7 @@ const remote = {
     // company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

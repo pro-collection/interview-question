@@ -1,11 +1,65 @@
-**关键词**：corejs 和 Polyfill
+**关键词**：webpack 产物
 
-1. **CoreJs 的作用**
+1. **使用 Webpack 的`optimize-module-ids`插件（用于区分模块来源）**
 
-   - **提供标准的 JavaScript 功能支持**：CoreJs 是一个 JavaScript 标准库，它提供了许多在现代 JavaScript 环境中被认为是标准的功能。这些功能包括但不限于对 ES6 + 语法的支持，如`Promise`、`Symbol`、`Map`、`Set`等。例如，在一些较旧的浏览器中可能没有原生的`Promise`支持，CoreJs 可以提供一个兼容的`Promise`实现，使得代码能够在这些浏览器中正确运行。
-   - **跨浏览器兼容性支持**：它能够填补不同浏览器之间的 JavaScript 功能差距。由于不同浏览器对 JavaScript 标准的实现进度不同，CoreJs 可以确保在各种浏览器环境下都能提供一致的功能。比如，某些浏览器可能没有完全实现`Array.prototype.includes`方法，CoreJs 可以添加这个方法的实现，使得应用程序在这些浏览器中也能使用该功能。
-   - **模块化的功能提供**：CoreJs 是模块化的，这意味着可以根据具体的需求选择引入特定的模块。例如，如果只需要在项目中添加`Promise`和`Map`的支持，而不需要其他功能，可以只引入 CoreJs 相关的模块，避免不必要的代码体积增加。
+   - **原理**：Webpack 在打包过程中会为每个模块分配一个唯一的`module.id`。`optimize-module-ids`插件可以帮助控制模块标识符的生成方式，使得能够根据模块是源文件还是外部依赖来区分它们。
+   - **配置步骤**：
 
-2. **CoreJs 与 Polyfill 的关系**
-   - **CoreJs 是 Polyfill 的一种实现方式**：Polyfill 是一个术语，用于描述一段代码，它提供了浏览器中缺失的功能。CoreJs 可以看作是一种全面的 Polyfill 库。当浏览器不支持某个 JavaScript 特性时，CoreJs 可以通过添加相应的代码来模拟该特性，就像填充了浏览器功能的空缺一样。例如，对于`Object.assign`方法，如果浏览器不支持，CoreJs 可以提供一个自定义的函数来实现相同的功能，这个自定义函数就是一种 Polyfill。
-   - **Polyfill 可以有多种来源，CoreJs 是常用的一种**：除了 CoreJs 之外，开发人员也可以自己编写 Polyfill 或者使用其他库来提供类似的功能。但是 CoreJs 是经过广泛测试和优化的，它涵盖了大量的 JavaScript 特性，并且能够很好地与 Babel 等工具配合使用。例如，在 Babel 的`@babel/preset - env`配置中，使用`useBuiltIns: 'usage'`选项时，Babel 会根据目标浏览器的情况，自动引入 CoreJs 中的相关 Polyfill，以确保代码在目标浏览器中能够正确运行。这样就能够高效地为项目添加必要的 Polyfill，而不是无差别地引入所有可能的 Polyfill，从而减小代码体积。
+     - 首先，安装`optimize-module-ids`插件（可能需要自行开发类似功能插件或寻找已有合适插件）。
+     - 然后，在 Webpack 配置文件中添加插件配置。例如：
+
+     ```javascript
+     const CustomModuleIdsPlugin = require("optimize-module-ids");
+     module.exports = {
+       //...其他配置
+       plugins: [
+         new CustomModuleIdsPlugin((module) => {
+           if (module.resource && module.resource.includes("node_modules")) {
+             return "external";
+           } else {
+             return "source";
+           }
+         }),
+       ],
+     };
+     ```
+
+     这个插件会依据模块的资源路径（`module.resource`）来判别模块是源自`node_modules`（外部依赖）还是其他源文件路径。若为外部依赖，模块的`id`会被标记为`external`，否则标记为`source`。如此一来，在最终的打包产物或构建信息里，就能通过这个`id`区分不同来源的模块。
+
+2. **通过构建工具的输出信息区分（适用于简单区分）**
+
+   - **查看构建日志**：Webpack 在构建过程中会输出大量的日志信息。可在构建日志里查找模块的路径信息以区分源文件和外部依赖。比如，日志中来自`src`目录的模块通常是源文件，而来自`node_modules`目录的模块则是外部依赖。
+   - **分析统计信息（`stats`）**：Webpack 提供了`stats`选项，可生成详细的构建统计信息。通过将`stats`配置为`'verbose'`或其他详细级别，能获取每个模块的路径、大小、依赖关系等信息。在这些信息中，可轻易识别出源文件和外部依赖。例如，配置`stats`如下：
+
+   ```javascript
+   module.exports = {
+     //...其他配置
+     stats: "verbose",
+   };
+   ```
+
+   之后便可通过分析生成的统计文件或在终端输出的详细统计信息来区分不同来源的模块。
+
+3. **自定义打包结构或命名规则（在输出阶段区分）**
+
+   - **分离输出目录**：在 Webpack 的输出配置（`output`）中，可以设置不同的输出路径来分离源文件和外部依赖的打包产物。例如：
+
+   ```javascript
+   module.exports = {
+     //...其他配置
+     output: {
+       path: path.resolve(__dirname, "dist"),
+       filename: (chunkData) => {
+         if (chunkData.chunk.name.includes("external")) {
+           return "external-bundles/[name].js";
+         } else {
+           return "source-bundles/[name].js";
+         }
+       },
+     },
+   };
+   ```
+
+   这里依据模块所属的`chunk`名称（可在构建过程中通过某些方式将模块所属的`chunk`标记为`external`或`source`），把外部依赖和源文件分别打包到不同的目录（`external-bundles`和`source-bundles`）下，这样在最终的打包产物中就能很直观地进行区分。
+
+   - **命名规则**：除了分离输出目录，还可通过命名规则来区分。例如，在输出文件名中添加前缀以表示模块来源，如`source-[name].js`和`external-[name].js`，如此在查看打包文件时就能快速识别模块来源。

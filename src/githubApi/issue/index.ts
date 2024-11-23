@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[Webpack] 我如何实现在高版本浏览器上使用 es6 产物， 在低版本上使用 es5",
+  title: "corejs 是做什么用的， 跟 Polyfill 是什么关系",
   key_world: [
-    "Webpack es6 产物",
+    "corejs 和 Polyfill",
     // "todo",
   ],
   labels: [
@@ -20,7 +20,7 @@ const remote = {
     // company.tencent,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

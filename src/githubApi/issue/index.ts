@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Webpack 与 Vite的核心差异点在哪儿",
+  title: "Webpack 与 Vite 在产物结果上有何区别",
   key_world: [
-    "Webpack 与 Vite 核心差异",
+    "Webpack 与 Vite 产物差异",
     // "todo",
   ],
   labels: [

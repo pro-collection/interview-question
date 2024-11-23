@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] externals 是如何加载外部依赖的",
+  title: "vite 和  rollup 是什么样的依赖关系",
   key_world: [
-    "webpack externals",
+    "vite 和 rollup",
     // "todo",
   ],
   labels: [

@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Webpack 与 Vite 在产物结果上有何区别",
+  title: "[Webpack] 我如何实现在高版本浏览器上使用 es6 产物， 在低版本上使用 es5",
   key_world: [
-    "Webpack 与 Vite 产物差异",
+    "Webpack es6 产物",
     // "todo",
   ],
   labels: [

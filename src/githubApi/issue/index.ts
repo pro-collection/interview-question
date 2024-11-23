@@ -9,9 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[webpack] 在编译产物的时候， 要区分 source 代码和外部依赖代码， 该如何处理",
+  title: "[webpack] externals 是如何加载外部依赖的",
   key_world: [
-    "webpack 产物",
+    "webpack externals",
     // "todo",
   ],
   labels: [

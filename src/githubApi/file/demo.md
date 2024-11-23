@@ -1,65 +1,89 @@
-**关键词**：webpack 产物
+**关键词**：webpack externals
 
-1. **使用 Webpack 的`optimize-module-ids`插件（用于区分模块来源）**
+1. **`externals`基础原理**
 
-   - **原理**：Webpack 在打包过程中会为每个模块分配一个唯一的`module.id`。`optimize-module-ids`插件可以帮助控制模块标识符的生成方式，使得能够根据模块是源文件还是外部依赖来区分它们。
-   - **配置步骤**：
+   - 当在 Webpack 配置文件中使用`externals`选项时，实际上是在告诉 Webpack 某些模块应该被视为外部依赖，而不是被打包进最终的输出文件。这意味着这些模块将在运行时由浏览器或其他运行环境提供，而不是由 Webpack 处理。
 
-     - 首先，安装`optimize-module-ids`插件（可能需要自行开发类似功能插件或寻找已有合适插件）。
-     - 然后，在 Webpack 配置文件中添加插件配置。例如：
+2. **在浏览器环境中的加载方式（以全局变量为例）**
 
+   - **配置`externals`**：
+     - 假设项目依赖于`lodash`库，并且希望在浏览器环境中通过`<script>`标签加载`lodash`的全局变量。首先在 Webpack 配置文件中这样配置`externals`：
      ```javascript
-     const CustomModuleIdsPlugin = require("optimize-module-ids");
      module.exports = {
        //...其他配置
-       plugins: [
-         new CustomModuleIdsPlugin((module) => {
-           if (module.resource && module.resource.includes("node_modules")) {
-             return "external";
-           } else {
-             return "source";
-           }
-         }),
-       ],
+       externals: {
+         lodash: "lodash",
+       },
      };
      ```
+   - **HTML 文件中的脚本引入**：
+     - 然后在 HTML 文件中，需要手动添加`<script>`标签来引入`lodash`。例如：
+     ```html
+     <!DOCTYPE html>
+     <html lang="en">
+       <head>
+         <meta charset="UTF-8" />
+       </head>
+       <body>
+         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+         <script src="your - main - app - bundle.js"></script>
+       </body>
+     </html>
+     ```
+     - 在这里，`your - main - app - bundle.js`是 Webpack 打包后的应用程序主文件。当 Webpack 在代码中遇到`import _ from 'lodash';`语句时，它不会将`lodash`的代码打包进输出文件，而是假设`lodash`已经在运行时环境中存在，并且可以通过全局变量`lodash`访问。所以在打包后的 JavaScript 代码中，实际上是通过全局变量来引用外部依赖的。
 
-     这个插件会依据模块的资源路径（`module.resource`）来判别模块是源自`node_modules`（外部依赖）还是其他源文件路径。若为外部依赖，模块的`id`会被标记为`external`，否则标记为`source`。如此一来，在最终的打包产物或构建信息里，就能通过这个`id`区分不同来源的模块。
+3. **在其他运行环境（如 Node.js）中的加载方式（以 CommonJS 模块为例）**
 
-2. **通过构建工具的输出信息区分（适用于简单区分）**
-
-   - **查看构建日志**：Webpack 在构建过程中会输出大量的日志信息。可在构建日志里查找模块的路径信息以区分源文件和外部依赖。比如，日志中来自`src`目录的模块通常是源文件，而来自`node_modules`目录的模块则是外部依赖。
-   - **分析统计信息（`stats`）**：Webpack 提供了`stats`选项，可生成详细的构建统计信息。通过将`stats`配置为`'verbose'`或其他详细级别，能获取每个模块的路径、大小、依赖关系等信息。在这些信息中，可轻易识别出源文件和外部依赖。例如，配置`stats`如下：
-
-   ```javascript
-   module.exports = {
-     //...其他配置
-     stats: "verbose",
-   };
-   ```
-
-   之后便可通过分析生成的统计文件或在终端输出的详细统计信息来区分不同来源的模块。
-
-3. **自定义打包结构或命名规则（在输出阶段区分）**
-
-   - **分离输出目录**：在 Webpack 的输出配置（`output`）中，可以设置不同的输出路径来分离源文件和外部依赖的打包产物。例如：
-
-   ```javascript
-   module.exports = {
-     //...其他配置
-     output: {
-       path: path.resolve(__dirname, "dist"),
-       filename: (chunkData) => {
-         if (chunkData.chunk.name.includes("external")) {
-           return "external-bundles/[name].js";
-         } else {
-           return "source-bundles/[name].js";
-         }
+   - **配置`externals`类似操作**：
+     - 在 Webpack 配置文件中，对于要作为外部依赖处理的模块（假设是`axios`，用于在 Node.js 环境中进行 HTTP 请求），配置`externals`如下：
+     ```javascript
+     module.exports = {
+       //...其他配置
+       externals: {
+         axios: "axios",
        },
-     },
-   };
-   ```
+     };
+     ```
+   - **运行时环境中的模块引用**：
+     - 在 Node.js 应用程序代码中，需要确保`axios`已经作为一个 CommonJS 模块安装在项目的`node_modules`目录下或者在全局环境中有相应的模块路径。当运行打包后的代码时，Webpack 不会打包`axios`，而是期望在 Node.js 的模块加载机制中找到它。例如，在打包后的 Node.js 代码中可能会有类似这样的引用：
+     ```javascript
+     const axios = require("axios");
+     ```
+     - 此时，Node.js 会按照自己的模块加载规则去查找`axios`模块，就像没有经过 Webpack 打包一样。这是因为 Webpack 通过`externals`配置将`axios`模块的加载责任交给了运行时环境的模块加载系统。
 
-   这里依据模块所属的`chunk`名称（可在构建过程中通过某些方式将模块所属的`chunk`标记为`external`或`source`），把外部依赖和源文件分别打包到不同的目录（`external-bundles`和`source-bundles`）下，这样在最终的打包产物中就能很直观地进行区分。
-
-   - **命名规则**：除了分离输出目录，还可通过命名规则来区分。例如，在输出文件名中添加前缀以表示模块来源，如`source-[name].js`和`external-[name].js`，如此在查看打包文件时就能快速识别模块来源。
+4. **AMD（Asynchronous Module Definition）模块加载方式（适用于支持 AMD 的环境）**
+   - **配置`externals`和模块定义**：
+     - 假设在一个支持 AMD 的浏览器环境或者 JavaScript 运行环境中，有一个名为`backbone`的外部依赖，在 Webpack 配置文件中设置`externals`：
+     ```javascript
+     module.exports = {
+       //...其他配置
+       externals: {
+         backbone: "backbone",
+       },
+     };
+     ```
+   - **AMD 模块加载脚本**：
+     - 在 HTML 文件或者 AMD 模块加载器的配置文件中，需要使用 AMD 的方式来加载`backbone`模块。例如，在一个简单的 AMD 配置中，可能会有如下代码来加载`backbone`和应用程序主模块：
+     ```html
+     <!DOCTYPE html>
+     <html lang="en">
+       <head>
+         <meta charset="UTF-8" />
+       </head>
+       <body>
+         <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+         <script>
+           require.config({
+             paths: {
+               backbone: "https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min",
+             },
+           });
+           require(["your - main - app - module", "backbone"], function (app, backbone) {
+             // 应用程序主模块和backbone模块都加载完成后执行的代码
+             app.init();
+           });
+         </script>
+       </body>
+     </html>
+     ```
+     - 这里使用`require.js`作为 AMD 模块加载器，通过`require.config`配置`backbone`模块的路径，然后在`require`函数中加载应用程序主模块和`backbone`模块。Webpack 在打包过程中，由于`externals`配置，知道`backbone`是外部依赖，会正确地处理代码中的引用，使得在运行时可以通过 AMD 模块加载器来加载`backbone`模块并正确地执行应用程序。

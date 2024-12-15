@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Rollup 为何高效",
+  title: "实现一个加法函数sum，支持sum(1)(2)(3,4)(5,6,7....)",
   key_world: [
-    "Rollup 构建效率",
+    "sum 函数实现",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.engineering,
+    labels.code,
     // company.tencent,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

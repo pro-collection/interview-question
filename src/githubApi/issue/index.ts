@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "实现一个加法函数sum，支持sum(1)(2)(3,4)(5,6,7....)",
+  title: "代码里console.log比较多，该怎么办",
   key_world: [
-    "sum 函数实现",
+    // "sum 函数实现",
     // "todo",
   ],
   labels: [
     // labels.network,
-    labels.code,
+    labels.application,
     // company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

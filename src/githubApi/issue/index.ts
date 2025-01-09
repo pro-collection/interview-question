@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "日常开发中使用到哪些常用的 Git 命令",
+  title: "前端假如有几十个请求，如何去控制并发",
   key_world: [
-    "git 常用命令",
+    "并发请求处理",
     // "sum 函数实现",
     // "todo",
   ],
   labels: [
-    // labels.network,
-    labels.application,
+    labels.network,
+    // labels.application,
     // company.tencent,
     // xx
   ],

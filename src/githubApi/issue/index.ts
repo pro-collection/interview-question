@@ -9,8 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "vite 在开发过程中， 是如何处理 TS 文件的",
-  key_world: ["vite", "开发", "TS"],
+  title: "vite 与 esbuild 是关系",
+  key_world: ["vite 与 esbuild"],
   labels: [
     // labels.code,
     labels.engineering,

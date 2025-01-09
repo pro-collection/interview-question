@@ -9,19 +9,19 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端假如有几十个请求，如何去控制并发",
+  title: "前端两个 dom 元素是可以拖拽的， 要实现两个 dom 之间的连接线，如何实现",
   key_world: [
-    "并发请求处理",
+    "拖拽元素连线实现",
     // "sum 函数实现",
     // "todo",
   ],
   labels: [
-    labels.network,
-    // labels.application,
+    labels.code,
+    labels.application,
     // company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

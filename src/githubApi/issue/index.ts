@@ -9,8 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "vite 开发和构建有何不同？",
-  key_world: ["vite", "开发", "构建"],
+  title: "vite 在开发过程中， 是如何处理 TS 文件的",
+  key_world: ["vite", "开发", "TS"],
   labels: [
     // labels.code,
     labels.engineering,

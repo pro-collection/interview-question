@@ -9,12 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "我使用 vite 打包工程， 输出为 es6 的代码， 但是我依赖的 模块是 es5 commonjs 写的；这个他是怎么处理的",
-  key_world: [
-    "vite 打包",
-    "es6 转 es5",
-    // "todo",
-  ],
+  title: "如何去衡量用户操作过程中否卡顿",
+  key_world: ["卡顿", "性能", "用户体验"],
   labels: [
     // labels.code,
     labels.engineering,

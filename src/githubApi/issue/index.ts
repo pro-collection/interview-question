@@ -9,8 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何去衡量用户操作过程中否卡顿",
-  key_world: ["卡顿", "性能", "用户体验"],
+  title: "前端有哪些性能指标？其中：FCP、LCP、TTFB、FID、TTI、CLS、TBT 等， 分别表示什么意思",
+  key_world: ["性能指标", "性能", "用户体验"],
   labels: [
     // labels.code,
     labels.engineering,

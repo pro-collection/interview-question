@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "vite 与 esbuild 是关系",
+  title: "vite 开发过程是直接将文件给浏览器",
   key_world: ["vite 与 esbuild"],
   labels: [
     // labels.code,
     labels.engineering,
-    company.alibaba,
+    // company.alibaba,
     // xx
   ],
   milestone: MileStone.senior,

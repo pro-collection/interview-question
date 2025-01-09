@@ -1,15 +1,45 @@
 **关键词**：vite 与 esbuild
 
-1. **Vite 对 Esbuild 的依赖关系（构建阶段）**
+那比如我使用的是 比如我开发是使用的 less + ts + react 他是怎么处理的
 
-   - **代码转换和打包工具**：在 Vite 的构建过程（`vite build`）中，Esbuild 扮演了重要的角色。Esbuild 是一个超高速的 JavaScript 打包器，Vite 利用 Esbuild 来进行代码的转换和初步打包。它能够快速地将 ES 模块（ESM）进行处理，如解析`import`和`export`语句，把多个模块合并成一个或多个输出文件。
-   - **性能优势体现**：Esbuild 的高性能主要体现在其使用 Go 语言编写，具有高度并行化的编译能力。相比传统的打包工具，它能够以极快的速度完成任务。例如，在处理大型项目中的大量 JavaScript 模块时，Esbuild 可以在很短的时间内完成打包工作，这对于 Vite 在构建阶段提高效率非常有帮助。
-
-2. **功能协作关系（在 Vite 生态中的角色）**
-
-   - **与 Vite 插件的协作**：Vite 有丰富的插件生态系统，Esbuild 可以和这些插件协作来完成更复杂的构建任务。例如，在处理 CSS、TS（TypeScript）等文件时，Vite 插件可以在 Esbuild 的基础上进行进一步的处理。当 Esbuild 完成对 JavaScript 模块的初步打包后，Vite 插件可以对打包后的文件进行优化，如压缩、添加代码注释等操作。
-   - **在不同模块类型处理中的分工**：对于不同类型的模块，Vite 和 Esbuild 有不同的处理方式。Esbuild 主要专注于 JavaScript 模块的快速打包和转换，而 Vite 则负责整体的构建流程协调，包括对 CSS 文件的处理（如解析`@import`语句）、静态资源的处理（如图片、字体的加载路径优化）以及模块热替换（HMR）等开发阶段的功能。例如，在处理一个包含 JavaScript、CSS 和图片的项目时，Esbuild 会快速打包 JavaScript 模块，Vite 则会确保 CSS 正确加载并且图片资源能够被正确引用。
-
-3. **Vite 开发阶段与 Esbuild 的关联（相对较弱）**
-   - **开发模式下的功能侧重不同**：在 Vite 开发阶段，其主要利用浏览器原生 ES 模块的支持来实现快速的模块加载和模块热替换，Esbuild 的打包功能在这个阶段没有像在构建阶段那样被大量使用。Vite 开发服务器会在浏览器请求模块时即时提供相应的 ES 模块文件，而不是依赖 Esbuild 进行预先打包。
-   - **潜在的间接关联**：不过，在开发阶段，Vite 的一些配置选项和底层机制可能会和 Esbuild 产生间接关联。例如，在配置`vite.config.js`文件时，一些关于模块解析、路径别名等设置可能会影响到后续构建阶段 Esbuild 的工作方式。同时，开发阶段对模块的处理方式也为构建阶段 Esbuild 的高效打包提供了基础，如准确的模块依赖关系等信息。
+1. **Vite 不是直接将原始文件给浏览器**
+   - Vite 是一个基于原生 ES 模块的前端构建工具。在开发过程中，它利用浏览器对原生 ES 模块的支持来提供快速的开发服务器。当你启动 Vite 开发服务器时，它会将你的项目文件作为模块加载。
+   - 对于像`less`、`ts`、`react`这样的文件类型，Vite 有相应的处理机制。
+2. **处理 Less 文件**
+   - Vite 使用插件来处理 Less 文件。它会通过`vite - less`插件（在 Vite 生态中用于处理 Less）来将 Less 文件编译成 CSS。
+   - 当浏览器请求一个 Less 文件对应的模块时，Vite 开发服务器会拦截这个请求。例如，如果你在一个 JavaScript 文件中导入了一个 Less 文件，像`import './styles.less';`。
+   - Vite 会使用`vite - less`插件将 Less 文件编译成 CSS，然后通过`style`标签或者`link`标签（根据配置）将生成的 CSS 注入到 HTML 页面中，使得样式能够生效。这个编译过程是基于 Less 的语法规则，将 Less 中的变量、嵌套规则等编译成浏览器能够理解的普通 CSS 样式。
+3. **处理 TypeScript 文件**
+   - Vite 本身对 TypeScript 有很好的支持。它利用浏览器原生的 ES 模块加载能力，在开发过程中，对于`.ts`和`.tsx`文件，Vite 会将它们视为 ES 模块。
+   - 当浏览器请求一个 TypeScript 文件对应的模块时，Vite 会进行即时编译（Just - in - Time，JIT）。它会根据 TypeScript 的语法规则将 TypeScript 代码编译成 JavaScript 代码。
+   - 例如，对于一个简单的 TypeScript 文件`main.ts`：
+     ```typescript
+     let myVariable: number = 10;
+     console.log(myVariable);
+     ```
+     Vite 会在内存中即时将其编译成等价的 JavaScript 代码：
+     ```javascript
+     let myVariable = 10;
+     console.log(myVariable);
+     ```
+     然后将编译后的 JavaScript 代码发送给浏览器，浏览器就能够正常执行这些代码了。而且 Vite 会根据 TypeScript 的模块导入和导出规则正确地处理模块之间的关系。
+4. **处理 React 文件（`.tsx`文件)**
+   - 对于 React + TypeScript（`.tsx`文件），Vite 同样利用上述 TypeScript 的即时编译机制。
+   - 例如，对于一个简单的 React 组件文件`App.tsx`：
+     ```typescript
+     import React from "react";
+     const App: React.FC = () => {
+       return <div>Hello, Vite with React and TS!</div>;
+     };
+     export default App;
+     ```
+   - Vite 会先将`tsx`文件中的 TypeScript 部分编译成 JavaScript，同时会保留 React 的 JSX 语法。因为现代浏览器虽然不能直接理解 JSX 语法，但是 Vite 会通过`@vitejs/plugin - react`插件等手段来处理 JSX。
+   - 这个插件会将 JSX 语法在发送给浏览器之前转换为浏览器能够理解的`React.createElement`函数调用形式（或者其他等价的高效形式，比如使用`jsx - runtime`）。例如，上面的`App.tsx`中的 JSX 部分可能会被转换为类似以下的 JavaScript 代码：
+     ```javascript
+     import React from "react";
+     const App = () => {
+       return React.createElement("div", null, "Hello, Vite with React and TS!");
+     };
+     export default App;
+     ```
+   - 这样转换后的代码就可以在浏览器中正常运行，并且能够正确地渲染 React 组件。

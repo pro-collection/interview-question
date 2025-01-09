@@ -9,16 +9,16 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端两个 dom 元素是可以拖拽的， 要实现两个 dom 之间的连接线，如何实现",
+  title: "我使用 vite 打包工程， 输出为 es6 的代码， 但是我依赖的 模块是 es5 commonjs 写的；这个他是怎么处理的",
   key_world: [
-    "拖拽元素连线实现",
-    // "sum 函数实现",
+    "vite 打包",
+    "es6 转 es5",
     // "todo",
   ],
   labels: [
-    labels.code,
-    labels.application,
-    // company.tencent,
+    // labels.code,
+    labels.engineering,
+    company.tencent,
     // xx
   ],
   milestone: MileStone.senior,

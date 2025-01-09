@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端有哪些性能指标？其中：FCP、LCP、TTFB、FID、TTI、CLS、TBT 等， 分别表示什么意思",
-  key_world: ["性能指标", "性能", "用户体验"],
+  title: "vite 开发和构建有何不同？",
+  key_world: ["vite", "开发", "构建"],
   labels: [
     // labels.code,
     labels.engineering,
-    company.tencent,
+    company.alibaba,
     // xx
   ],
   milestone: MileStone.senior,

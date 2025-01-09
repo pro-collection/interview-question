@@ -1,67 +1,24 @@
-**关键词**：性能指标、性能、用户体验
+**关键词**：vite、开发、构建
 
-**关键词**：卡顿、性能、用户体验
+1. **开发阶段**
 
-1. **使用浏览器性能指标 - FPS（每秒帧数）**
+   - **快速的模块加载**
+     - **原理**：在开发阶段，Vite 充分利用浏览器对原生 ES 模块（ESM）的支持。当浏览器请求一个模块时，Vite 直接将对应的 ES 模块文件发送给浏览器，而不需要像传统构建工具那样先进行打包。这使得模块加载速度非常快，因为浏览器可以直接解析和执行这些原生模块。
+     - **示例**：假设在一个 Vite 项目中有`main.js`和`utils.js`两个模块，`main.js`通过`import { someFunction } from './utils.js';`来引用`utils.js`中的函数。在开发服务器启动后，当浏览器访问`main.js`并遇到这个`import`语句时，Vite 会直接将`utils.js`发送给浏览器，浏览器能够快速地加载和执行这个模块。
+   - **高效的模块热替换（HMR）**
+     - **原理**：Vite 的 HMR 功能允许在修改代码后，只更新发生变化的模块，而不需要刷新整个页面。它通过建立一个 WebSocket 连接来实时监听文件变化。当一个模块被修改后，Vite 会将更新后的模块发送给浏览器，浏览器会用新模块替换旧模块，同时保持应用的当前状态。
+     - **示例**：如果在上述`utils.js`模块中修改了`someFunction`的实现，Vite 会检测到这个变化，通过 WebSocket 将更新后的`utils.js`发送给浏览器。浏览器接收到新模块后，会更新`main.js`中对`someFunction`的引用，并且应用的其他部分状态（如组件的局部状态）可以保持不变，从而实现了快速的热替换，提高了开发效率。
+   - **开发服务器的便利性**
+     - **原理**：Vite 提供了一个轻量级的开发服务器，它可以快速启动并且自动处理一些常见的开发任务，如解析`import`语句、处理 CSS 的`@import`等。这个开发服务器还支持一些开发时的功能，如自动打开浏览器、代理请求等。
+     - **示例**：在启动 Vite 开发服务器后，它可以自动打开默认浏览器并访问项目的首页。如果项目需要从后端 API 获取数据，并且开发环境和生产环境的 API 地址不同，Vite 的开发服务器可以通过配置代理，将前端请求转发到正确的后端 API 地址，方便开发过程中的联调。
 
-   - **基本原理**：FPS 是衡量页面流畅度的重要指标。在浏览器中，动画和交互的流畅呈现通常依赖于较高的 FPS。一般来说，当 FPS 达到 60 时，用户体验会比较流畅，因为这意味着每秒有 60 帧画面更新，人眼很难察觉到卡顿。如果 FPS 低于 30，用户就可能明显感觉到页面卡顿。
-   - **如何获取 FPS 数据**：可以使用`requestAnimationFrame`函数来计算 FPS。以下是一个简单的 JavaScript 示例，用于监测页面的 FPS：
-     ```javascript
-     let frameCount = 0;
-     let lastTime = 0;
-     const fpsArray = [];
-     function calculateFps() {
-       const now = performance.now();
-       frameCount++;
-       if (now - lastTime >= 1000) {
-         const fps = frameCount;
-         fpsArray.push(fps);
-         frameCount = 0;
-         lastTime = now;
-       }
-       requestAnimationFrame(calculateFps);
-     }
-     calculateFps();
-     ```
-     - 这个代码片段定义了一个函数`calculateFps`，它使用`performance.now`函数获取当前时间戳。每执行一次`requestAnimationFrame`回调函数（通常每秒执行约 60 次），`frameCount`就加 1。当时间间隔达到 1000 毫秒（1 秒）时，计算出 FPS 并存储在`fpsArray`中。通过分析`fpsArray`中的数据，可以了解页面在一段时间内的 FPS 情况，从而判断是否卡顿。
-
-2. **监测 Long Tasks（长任务）**
-
-   - **基本原理**：当浏览器执行 JavaScript 任务的时间过长时，就会导致页面卡顿。Long Tasks 是指那些执行时间超过 50 毫秒的任务，因为浏览器在执行这些任务时，无法及时响应用户的其他操作，如滚动、点击等。
-   - **如何监测 Long Tasks**：可以使用浏览器的`PerformanceObserver`来监测 Long Tasks。以下是一个示例：
-     ```javascript
-     const observer = new PerformanceObserver((list) => {
-       for (const entry of list.getEntries()) {
-         if (entry.duration > 50) {
-           console.log("发现长任务:", entry);
-         }
-       }
-     });
-     observer.observe({ entryTypes: ["longtask"] });
-     ```
-     - 这段代码创建了一个`PerformanceObserver`对象，它会监听`longtask`类型的性能条目。当发现执行时间超过 50 毫秒的任务时，会在控制台打印相关信息，包括任务的开始时间、持续时间等，通过这些信息可以定位导致卡顿的代码部分。
-
-3. **分析 First Input Delay（首次输入延迟 - FID）**
-
-   - **基本原理**：FID 衡量的是用户首次与页面交互（如点击、按键等）到浏览器开始响应这个交互的时间间隔。一个较低的 FID 表示页面能够快速响应用户操作，而较高的 FID 则可能导致用户感觉到卡顿。
-   - **如何获取 FID 数据**：可以使用浏览器的`PerformanceObserver`和相关的性能 API 来测量 FID。以下是一个示例：
-     ```javascript
-     let startTime;
-     const observer = new PerformanceObserver((list) => {
-       for (const entry of list.getEntries()) {
-         if (entry.name === "first - input") {
-           const delay = entry.startTime - startTime;
-           console.log("首次输入延迟:", delay);
-         }
-       }
-     });
-     observer.observe({ entryTypes: ["first - input"] });
-     document.addEventListener("click", (event) => {
-       startTime = performance.now();
-       // 模拟一个任务，可能导致延迟
-       setTimeout(() => {
-         console.log("任务完成");
-       }, 100);
-     });
-     ```
-     - 在这个示例中，当用户点击页面时，记录开始时间`startTime`，然后通过`PerformanceObserver`监听`first - input`类型的性能条目。当监听到这个条目时，计算并打印出 FID。通过这种方式，可以评估用户操作后的响应延迟情况。
+2. **构建阶段（主要是`vite build`）**
+   - **代码打包与优化**
+     - **原理**：在构建阶段，Vite 使用 Rollup 作为打包工具（在`vite build`过程中）。Rollup 会对项目中的所有 ES 模块进行静态分析，将它们打包成一个或多个适合生产环境的文件。这个过程包括 Tree - Shaking（摇树优化），即剔除未使用的代码，以及作用域提升（Scope Hoisting）来优化代码结构，减少变量查找的层级，从而生成更紧凑、高效的代码。
+     - **示例**：假设有一个包含多个工具函数的`utils.js`模块，如`export const add = (a, b) => a + b;`，`export const subtract = (a, b) => a - b;`等。在`main.js`中只使用了`add`函数，通过`import { add } from './utils.js';`引用。在构建过程中，Rollup 会通过 Tree - Shaking 检测到`subtract`等未使用的函数，不会将它们打包到最终的输出文件中，减小了文件大小。
+   - **资源处理与整合**
+     - **原理**：Vite 在构建阶段会对各种资源（如 CSS、静态图像、字体等）进行处理。对于 CSS，它会将`@import`语句解析并将相关的 CSS 文件合并，还可能进行压缩和代码转换。对于静态资源，它会根据配置将它们复制到输出目录，并可能对文件名进行哈希处理，以方便缓存管理。
+     - **示例**：如果项目中有一个`styles.css`文件，其中通过`@import`导入了其他 CSS 文件，如`@import 'normalize.css';`。在构建时，Vite 会将`normalize.css`和`styles.css`合并成一个或多个 CSS 文件，并将它们放置在输出目录的合适位置，同时可能会对 CSS 进行压缩，减少文件大小，提高页面加载速度。
+   - **输出格式和部署准备**
+     - **原理**：构建阶段会根据配置生成适合生产环境部署的文件格式。Vite 可以生成多种格式的输出，如`umd`、`es`、`cjs`等，以满足不同的部署场景。例如，`umd`格式可以用于在浏览器中通过`<script>`标签直接引用，`es`格式适合现代浏览器和模块加载器，`cjs`格式可以用于在 Node.js 环境或者一些支持 CommonJS 的地方使用。
+     - **示例**：如果配置 Vite 的输出格式为`umd`，并且项目名称为`my - app`，构建后会生成一个`my - app.umd.js`文件，这个文件可以直接在 HTML 文件中通过`<script>`标签引用，并且已经经过了打包和优化，适合在生产环境中部署。

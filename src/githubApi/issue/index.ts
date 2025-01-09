@@ -9,8 +9,9 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "代码里console.log比较多，该怎么办",
+  title: "日常开发中使用到哪些常用的 Git 命令",
   key_world: [
+    "git 常用命令",
     // "sum 函数实现",
     // "todo",
   ],
@@ -20,7 +21,7 @@ const remote = {
     // company.tencent,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

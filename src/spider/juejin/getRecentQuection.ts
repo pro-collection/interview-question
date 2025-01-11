@@ -9,111 +9,135 @@ import type { Page } from "playwright";
 import dayjs from "dayjs";
 import { handleDataParseMD } from "./utils";
 
-const delay = (time: number = 3 * 1000) =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      return resolve("delay");
-    }, time);
-  });
+// 修改滚动函数，增加数据获取逻辑
+const scrollAndGetData = async (page: Page) => {
+  let allData: any[] = [];
+  let scrollCount = 0;
+  const MAX_SCROLL_COUNT = 20;
 
-const scrollFn = async (page: Page) => {
-  const scrollItem = () =>
-    page.evaluate(() => {
-      window.scrollTo(0, document.body.scrollHeight);
-      return document.body.scrollHeight;
-    });
+  try {
+    // 获取初始数据
+    console.log("[开始获取初始数据]");
+    const initialResponsePromise = page.waitForResponse(
+      (response) => response.url().includes("/search_api/v1/search"),
+      { timeout: 10 * 1000 }
+    );
+    const initialResponse = await initialResponsePromise;
+    const initialJson = await initialResponse.json();
 
-  const height = await scrollItem();
+    const initialData = compact(
+      initialJson.data?.map?.((item: any) => {
+        if (item?.result_model?.article_info) {
+          return {
+            article_info: item?.result_model?.article_info,
+            category_name: item?.result_model?.category?.category_name,
+          };
+        }
+        return null;
+      })
+    );
 
-  await delay();
+    allData = [...allData, ...initialData];
+    console.log(`[获取初始数据] - ${initialData.length}条`);
 
-  const nextHeight = await scrollItem();
-  console.log(`[yanle] - height`, height);
-  console.log(`[yanle] - nextHeight`, nextHeight);
-  if (nextHeight > height) {
-    console.log(`[yanle] - next page`);
-    return await scrollFn(page);
+    const scrollItem = async () => {
+      try {
+        // 检查滚动次数
+        scrollCount++;
+        if (scrollCount > MAX_SCROLL_COUNT) {
+          console.log(`[达到最大滚动次数] - ${MAX_SCROLL_COUNT}次`);
+          return { done: true, data: allData };
+        }
+        console.log(`[当前滚动次数] - ${scrollCount}/${MAX_SCROLL_COUNT}`);
+
+        // 滚动到底部
+        const currentHeight = await page.evaluate(() => {
+          window.scrollTo(0, document.body.scrollHeight);
+          return document.body.scrollHeight;
+        });
+
+        try {
+          // 等待 API 响应，如果 10 秒内没有响应就终止整个循环
+          const responsePromise = page.waitForResponse((response) => response.url().includes("/search_api/v1/search"), {
+            timeout: 10 * 1000,
+          });
+
+          const response = await responsePromise;
+          const json = await response.json();
+
+          const newData = compact(
+            json.data?.map?.((item: any) => {
+              if (item?.result_model?.article_info) {
+                return {
+                  article_info: item?.result_model?.article_info,
+                  category_name: item?.result_model?.category?.category_name,
+                };
+              }
+              return null;
+            })
+          );
+
+          allData = [...allData, ...newData];
+          console.log(`[获取到新数据] - ${newData.length}条`);
+
+          // 再次滚动检查新高度
+          const nextHeight = await page.evaluate(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+            return document.body.scrollHeight;
+          });
+
+          console.log(`[当前高度] - ${currentHeight}`);
+          console.log(`[新高度] - ${nextHeight}`);
+
+          if (nextHeight > currentHeight) {
+            console.log(`[继续滚动获取下一页]`);
+            return await scrollItem();
+          }
+
+          return { done: true, data: allData };
+        } catch (requestError: any) {
+          console.log("[请求超时] - 等待响应超过10秒，终止循环");
+          return { done: true, data: allData, error: requestError };
+        }
+      } catch (error: any) {
+        console.log("[错误] - ", error?.message);
+        return { done: true, data: allData, error };
+      }
+    };
+
+    return await scrollItem();
+  } catch (error: any) {
+    console.log("[初始数据获取错误] - ", error?.message);
+    return { done: true, data: allData, error };
   }
-
-  return { done: true };
 };
 
 const crawler = new PlaywrightCrawler({
   headless: false,
   requestHandlerTimeoutSecs: 60 * 100,
   requestHandler: async ({ page, log }) => {
-    // Wait for the actor cards to render.
-    await page.waitForSelector("a.entry-link");
+    // 获取所有数据
+    const { data: allData, error } = await scrollAndGetData(page);
+    console.log(`[总共获取数据] - ${allData.length}条`);
+    if (error) {
+      console.log("[错误信息] - ", error?.message);
+    }
 
-    // 滚动到底部
-    await scrollFn(page);
+    // 保存数据到数据集
+    await Dataset.pushData(allData);
 
-    // Execute a function in the browser which targets
-    // the actor card elements and allows their manipulation.
-    const linkElementList = await page.$$eval("a.entry-link", (els) => {
-      // Extract text content from the actor cards
-      return els.map((el) => {
-        return {
-          url: el.getAttribute("href"),
-          name: el.querySelector("a.title")?.firstChild?.textContent || "",
-          tags: el.querySelector("li.tag")?.textContent || "",
-          date: el.querySelector(".meta-list li:nth-child(2)")?.textContent || "",
-          // 点赞数量
-          applaud: el.querySelector("span.count")?.textContent || "",
-        };
-      });
-    });
-
-    const linkElementObject = map(linkElementList, (item) => {
-      // 单位 - 小时/天/月
-      const dayString = trim(item.date).replace("\n", "");
-
-      const getDate = () => {
-        if (dayString.includes("小时")) {
-          const hour = toNumber(get(dayString.split("小时"), 0));
-          return dayjs().subtract(hour, "hour").format("YYYY-MM-DD");
-        }
-
-        if (dayString.includes("天")) {
-          const hour = toNumber(get(dayString.split("天"), 0));
-          return dayjs().subtract(hour, "day").format("YYYY-MM-DD");
-        }
-
-        if (dayString.includes("月")) {
-          const hour = toNumber(get(dayString.split("月"), 0));
-          return dayjs().subtract(hour, "month").format("YYYY-MM");
-        }
-
-        return dayjs().format("YYYY-MM-DD");
-      };
-
-      const applaud = trim(item.applaud)?.replace(/\/n/gi, "");
-
-      const applaudNumber = applaud ? toNumber(applaud) : 0;
-
-      return {
-        ...item,
-        // tags: compact(item.tags?.split(" ")).map((tagText) => replace(tagText, "\n", "")),
-        tags: compact(item.tags?.split(" "))
-          .filter((item) => item !== "\n")
-          .map((tagText) => replace(tagText, "\n", "")),
-        url: `https://juejin.cn${get(split(item.url, "?"), 0)}`,
-        date: getDate(),
-        applaud: applaudNumber,
-      };
-    });
-
-    await Dataset.pushData(linkElementObject);
-
-    // Open a named dataset
+    // 打开数据集准备导出
     const dataset = await Dataset.open("default");
 
-    const fileName = day().format("YYYY_MM_02");
+    // 生成文件名（使用当前日期）
+    const fileName = day().format("YYYY_MM_DD_HH_mm_ss");
+
+    // 导出数据到JSON文件
     await dataset.exportToJSON(fileName);
 
     console.log(`[yanle] - 开始移动文档`);
 
-    // 移动文件
+    // 移动文件到指定目录
     fs.rename(
       path.join(process.cwd(), `storage/key_value_stores/default/${fileName}.json`),
       path.join(process.cwd(), `temp/juejin_interview/${fileName}.json`),
@@ -128,14 +152,12 @@ const crawler = new PlaywrightCrawler({
 
     console.log(`[yanle] - 写入本地文档`);
 
-    /**
-     * 写入本地 markdown 文档
-     */
-    handleDataParseMD(linkElementObject, fileName, "2024-10");
+    // 生成markdown文档
+    // handleDataParseMD(allData, fileName, "2024-10");
   },
 });
 
 // 前端热榜
 crawler.run([
-  "https://juejin.cn/search?query=%E9%9D%A2%E8%AF%95&fromSeo=0&fromHistory=1&fromSuggest=0&enterFrom=home_page&type=0&sort=2&period=3",
+  "https://juejin.cn/search?query=%E9%9D%A2%E8%AF%95&fromSeo=0&fromHistory=0&fromSuggest=0&sort=2&period=3&enterFrom=home_page",
 ]);

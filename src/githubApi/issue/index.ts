@@ -9,11 +9,11 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "vite 开发过程是直接将文件给浏览器",
-  key_world: ["vite 与 esbuild"],
+  title: "node 里面 stream 是什么, 有啥应用场景",
+  key_world: ["node stream"],
   labels: [
     // labels.code,
-    labels.engineering,
+    labels.node,
     // company.alibaba,
     // xx
   ],

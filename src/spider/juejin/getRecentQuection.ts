@@ -153,7 +153,7 @@ const crawler = new PlaywrightCrawler({
     console.log(`[yanle] - 写入本地文档`);
 
     // 生成markdown文档
-    // handleDataParseMD(allData, fileName, "2024-10");
+    handleDataParseMD(allData, "2024_12");
   },
 });
 

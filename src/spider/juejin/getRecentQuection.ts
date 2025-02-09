@@ -1,12 +1,11 @@
 // Instead of CheerioCrawler let's use Playwright
 // to be able to render JavaScript.
 import { Dataset, PlaywrightCrawler } from "crawlee";
-import { compact, get, map, replace, split, toNumber, trim } from "lodash";
+import { compact } from "lodash";
 import path from "path";
 import fs from "fs";
 import day from "dayjs";
 import type { Page } from "playwright";
-import dayjs from "dayjs";
 import { handleDataParseMD } from "./utils";
 
 // 修改滚动函数，增加数据获取逻辑

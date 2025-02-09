@@ -1,29 +1,39 @@
 import { PlaywrightCrawler } from "crawlee";
-import axios from "axios";
-import * as cheerio from "cheerio";
 import fs from "fs";
 import path from "path";
-import { writeToTemp } from "@src/githubApi/issue/helper";
-import { htmlPath, tempFilePath } from "@src/githubApi/file/consts";
+import { formatMarkdown } from "@src/githubApi/issue/helper";
 import dayjs from "dayjs";
 
 interface ArticleResult {
   url: string;
   success: boolean;
   error?: string;
+  title?: string;
 }
 
-const crawlArticles = async (urls: string[]) => {
+// 修改 appendToFile 函数
+const appendToFile = (filePath: string, content: string) => {
+  // 如果文件不存在，先创建一个空文件
+  if (!fs.existsSync(filePath)) {
+    // 创建一个文件头
+    const fileHeader = `# 掘金文章合集\n创建时间: ${dayjs().format("YYYY-MM-DD HH:mm:ss")}\n`;
+    fs.writeFileSync(filePath, fileHeader, { encoding: "utf-8" });
+  }
+  // 追加内容
+  fs.appendFileSync(filePath, content, { encoding: "utf-8" });
+};
+
+const crawlArticles = async (urls: string[], outputFilePath: string) => {
   const results: ArticleResult[] = [];
 
-  // 创建输出目录
-  const outputDir = path.join(process.cwd(), "temp/juejin_articles");
+  // 确保输出目录存在
+  const outputDir = path.dirname(outputFilePath);
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
   const crawler = new PlaywrightCrawler({
-    headless: true, // 无头模式运行
+    headless: true,
     requestHandlerTimeoutSecs: 60,
     maxRequestsPerCrawl: urls.length,
 
@@ -32,31 +42,28 @@ const crawlArticles = async (urls: string[]) => {
       try {
         log.info(`开始爬取文章: ${url}`);
 
-        // 等待文章内容加载
         await page.waitForSelector("#article-root", { timeout: 10000 });
+        const title = await page.title();
+        log.info(`文章标题: ${title}`);
 
-        // 获取文章内容
         const articleHtml = await page.$eval("#article-root", (el) => el.innerHTML);
 
         if (!articleHtml) {
           throw new Error("未找到文章内容");
         }
 
-        // 生成唯一文件名
-        const timestamp = dayjs().format("YYYYMMDD_HHmmss");
-        const articleId = url.split("/").pop() || "unknown";
-        const fileName = `${articleId}_${timestamp}`;
+        const md = formatMarkdown(articleHtml);
 
-        // 保存HTML文件
-        const htmlFilePath = path.join(outputDir, `${fileName}.html`);
-        fs.writeFileSync(htmlFilePath, articleHtml, { encoding: "utf-8" });
+        // 构建要追加的内容，包含分隔符和元数据
+        const contentToAppend = `\n\n---\n# ${title}\n原文链接: ${url}\n爬取时间: ${dayjs().format(
+          "YYYY-MM-DD HH:mm:ss"
+        )}\n\n${md}\n`;
 
-        // 转换为Markdown并保存
-        const mdFilePath = path.join(outputDir, `${fileName}.md`);
-        await writeToTemp(mdFilePath, htmlFilePath);
+        // 追加到指定文件
+        appendToFile(outputFilePath, contentToAppend);
 
         log.info(`文章爬取成功: ${url}`);
-        results.push({ url, success: true });
+        results.push({ url, success: true, title });
       } catch (error) {
         log.error(`文章爬取失败: ${url}`, { error });
         results.push({
@@ -68,28 +75,28 @@ const crawlArticles = async (urls: string[]) => {
     },
   });
 
-  // 开始爬取
   await crawler.run(urls);
-
-  // 生成报告
-  const reportPath = path.join(outputDir, `crawl_report_${dayjs().format("YYYYMMDD_HHmmss")}.json`);
-  fs.writeFileSync(reportPath, JSON.stringify(results, null, 2), "utf-8");
-
   return results;
 };
 
 // 使用示例
-const articleUrls = [
-  "https://juejin.cn/post/7354940230301057033",
-  "https://juejin.cn/post/7354248123380776991",
-  // 添加更多文章链接...
-];
+const articleUrls = ["https://juejin.cn/post/7354940230301057033", "https://juejin.cn/post/7354248123380776991"];
 
-crawlArticles(articleUrls)
+// 指定输出文件路径
+const outputFilePath = path.join(process.cwd(), "temp/material/2025.01.md");
+
+crawlArticles(articleUrls, outputFilePath)
   .then((results) => {
     console.log("爬取完成!");
     console.log(`成功: ${results.filter((r) => r.success).length}`);
     console.log(`失败: ${results.filter((r) => !r.success).length}`);
+
+    // 打印成功爬取的文章标题
+    results
+      .filter((r) => r.success)
+      .forEach((r) => {
+        console.log(`- ${r.title}`);
+      });
   })
   .catch((error) => {
     console.error("爬取过程出错:", error);

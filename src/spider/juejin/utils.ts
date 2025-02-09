@@ -35,7 +35,7 @@ const timestampToYearMonth = (timestamp: string) => {
  * @param targetDate - 目标日期,格式为 "YYYY-MM"
  * @returns 按分类整理的文章数据对象
  */
-const formatArticleData = (jsonData: any[], targetDate: string) => {
+export const formatArticleData = (jsonData: any[], targetDate: string) => {
   // 创建一个对象来存储不同分类的文章
   const categoryArticles: Record<
     string,

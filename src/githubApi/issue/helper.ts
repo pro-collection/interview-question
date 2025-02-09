@@ -10,18 +10,18 @@ import { tempFilePath, htmlPath as htmlPathStatic } from "../file/consts";
 const execPromise = util.promisify(child_process.exec);
 
 /**
- * 将 html 文件转为 markdown 文件， 写入本地
- * @param path 写入文件的路径
- * @param htmlPath html 文件的路径
- * @returns null
+ * 处理markdown内容，清理无用的文本
+ * @param html HTML格式的字符串
+ * @returns 处理后的markdown文本，主要做了以下处理:
+ * 1. 移除各种语言的"Copy code"文本
+ * 2. 修正代码块语言标记
+ * 3. 修复转义字符
+ * 4. 移除"复制代码"文本
+ * 5. 调整标题层级
  */
-export const writeToTemp = async (path = tempFilePath, htmlPath = htmlPathStatic) => {
-  const getHtml = fs.readFileSync(htmlPath, { encoding: "utf-8" });
-
-  let markdown = h2m(getHtml);
-
-  // 写入文件
-  markdown = flow(
+export const formatMarkdown = (html: string): string => {
+  let markdown = h2m(html);
+  return flow(
     (value) => value.replace(/javascriptCopy code/gi, ""),
     (value) => value.replace(/htmlCopy code/gi, ""),
     (value) => value.replace(/cssCopy code/gi, ""),
@@ -38,6 +38,19 @@ export const writeToTemp = async (path = tempFilePath, htmlPath = htmlPathStatic
     // value => value.replace(/\n### /gi, "\n#### "),
     (value) => value.replace(/\n## /gi, "\n### ")
   )(markdown);
+};
+
+/**
+ * 将 html 文件转为 markdown 文件， 写入本地
+ * @param path 写入文件的路径
+ * @param htmlPath html 文件的路径
+ * @returns null
+ */
+export const writeToTemp = async (path = tempFilePath, htmlPath = htmlPathStatic) => {
+  const html = fs.readFileSync(htmlPath, { encoding: "utf-8" });
+
+  // 使用新的cleanMarkdown函数处理markdown
+  const markdown = formatMarkdown(html);
 
   if (markdown) fs.writeFileSync(path, markdown, { encoding: "utf-8" });
 

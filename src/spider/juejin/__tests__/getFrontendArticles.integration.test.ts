@@ -1,11 +1,11 @@
 import path from "path";
 import { getFrontendArticles } from "../utils";
-import jsonData from "../../../../temp/juejin_interview/2025_01_11_21_36_38.json";
+import jsonData from "../../../../temp/juejin_interview/2025_02_03_10_29_51.json";
 
 describe("getFrontendArticles 集成测试", () => {
   it("应该能正确读取并解析实际的JSON文件数据", () => {
     // 从文件名中提取日期
-    const fileName = "2025_01_11_21_36_38";
+    const fileName = "2025_01";
     const [year, month] = fileName.split("_");
     const targetDate = `${year}-${month}`;
 

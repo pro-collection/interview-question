@@ -3,6 +3,8 @@ import fs from "fs";
 import path from "path";
 import { formatMarkdown } from "@src/githubApi/issue/helper";
 import dayjs from "dayjs";
+import jsonData from "../../../temp/juejin_interview/2025_01_11_21_36_38.json";
+import { getFrontendArticles } from "./utils";
 
 interface ArticleResult {
   url: string;
@@ -79,8 +81,11 @@ const crawlArticles = async (urls: string[], outputFilePath: string) => {
   return results;
 };
 
-// 使用示例
-const articleUrls = ["https://juejin.cn/post/7354940230301057033", "https://juejin.cn/post/7354248123380776991"];
+/**
+ * 获取前端分类的文章数据并按点赞数排序
+ * 并获取文章的url
+ */
+const articleUrls = getFrontendArticles(jsonData, "2025-01").map((article) => article.url);
 
 // 指定输出文件路径
 const outputFilePath = path.join(process.cwd(), "temp/material/2025.01.md");

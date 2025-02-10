@@ -131,5 +131,26 @@ export const handleDataParseMD = (jsonData: any[], fileName: string) => {
   });
 };
 
+/**
+ * 获取前端分类的文章数据并按点赞数排序
+ * @param jsonData - 原始文章数据数组
+ * @param targetDate - 目标日期,格式为 "YYYY-MM"
+ * @returns 前端分类的文章数据数组
+ */
+export const getFrontendArticles = (
+  jsonData: any[],
+  targetDate: string
+): Array<{
+  title: string;
+  url: string;
+  diggCount: number;
+}> => {
+  // 使用 formatArticleData 获取所有分类的文章
+  const categoryArticles = formatArticleData(jsonData, targetDate);
+
+  // 返回前端分类的文章，如果不存在则返回空数组
+  return categoryArticles["前端"] || [];
+};
+
 // 使用示例
 // handleDataParseMD(jsonData, "2024_12");

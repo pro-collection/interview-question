@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "将已经 push 到远端的两个 commit 合并成一个 commit 应该怎么做",
-  key_world: ["git rebase 合并 commit"],
+  title: "eslint 是怎么做到用配置规则去检验代码异常",
+  key_world: ["eslint 原理"],
   labels: [
     labels.application,
     // labels.node,
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -1,106 +1,86 @@
-**关键词**：git rebase 合并 commit
+**关键词**：eslint 原理
 
-当你已经将两个 `commit` 推送到远端仓库，现在想要将它们合并成一个 `commit`，可以按照以下步骤操作：
+ESLint 是一个用于识别和报告 JavaScript 代码中模式问题的工具，它通过配置规则来检验代码异常，下面详细介绍其工作原理和实现过程。
 
-### 1. 克隆仓库到本地
+### 1. 规则配置
 
-如果你还没有在本地克隆该仓库，需要先将远程仓库克隆到本地：
+ESLint 允许用户通过配置文件来定义代码检查规则。常见的配置文件格式有 `.eslintrc.js`、`.eslintrc.json`、`.eslintrc.yml` 等。在配置文件中，可以为不同的规则设置不同的级别，规则级别主要有以下三种：
+
+- `off` 或 `0`：关闭该规则。
+- `warn` 或 `1`：开启规则，违反规则时给出警告。
+- `error` 或 `2`：开启规则，违反规则时给出错误。
+
+以下是一个 `.eslintrc.js` 配置文件的示例：
+
+```javascript
+module.exports = {
+  rules: {
+    // 要求使用分号结尾
+    semi: ["error", "always"],
+    // 要求使用两个空格缩进
+    indent: ["error", 2],
+  },
+};
+```
+
+### 2. 解析代码
+
+ESLint 使用 JavaScript 解析器（如 Espree）将 JavaScript 代码解析成抽象语法树（Abstract Syntax Tree，简称 AST）。AST 是代码的一种树形表示，它以节点的形式描述了代码的语法结构。例如，对于以下代码：
+
+```javascript
+function add(a, b) {
+  return a + b;
+}
+```
+
+解析后会生成一个包含函数定义、参数、返回语句等节点的 AST。
+
+### 3. 规则检查
+
+ESLint 根据配置文件中的规则，遍历 AST 节点，对代码进行检查。每个规则都定义了一个或多个检查函数，这些函数会在遍历到特定类型的 AST 节点时被调用。例如，对于 `semi` 规则，当遍历到语句结束的节点时，会检查该语句是否以分号结尾。
+
+以下是一个简单的自定义规则示例：
+
+```javascript
+module.exports = {
+  meta: {
+    type: "problem",
+    docs: {
+      description: "Ensure that all function names start with a capital letter",
+      category: "Best Practices",
+      recommended: true,
+    },
+    schema: [],
+    messages: {
+      functionNameShouldStartWithCapital: "Function name should start with a capital letter",
+    },
+  },
+  create(context) {
+    return {
+      FunctionDeclaration(node) {
+        const functionName = node.id.name;
+        if (functionName[0] !== functionName[0].toUpperCase()) {
+          context.report({
+            node,
+            messageId: "functionNameShouldStartWithCapital",
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+在这个自定义规则中，`create` 函数返回一个对象，对象的属性名是 AST 节点类型（如 `FunctionDeclaration`），对应的属性值是一个检查函数。当遍历到函数声明节点时，会调用该检查函数，检查函数名是否以大写字母开头。
+
+### 4. 报告问题
+
+如果代码违反了配置的规则，ESLint 会记录问题信息，包括问题所在的文件路径、行号、列号、规则名称和错误信息等。最后，ESLint 会将这些问题信息输出到控制台，方便开发者查看和修复。
+
+### 5. 自动修复
+
+对于一些简单的规则违反情况，ESLint 支持自动修复功能。在配置文件中，可以为规则设置 `fixable` 属性，并在规则的检查函数中实现修复逻辑。开发者可以使用 `--fix` 选项来让 ESLint 自动修复代码中的问题。例如：
 
 ```bash
-git clone <远程仓库地址>
-cd <仓库目录>
+eslint --fix yourfile.js
 ```
-
-### 2. 查看提交历史
-
-使用 `git log` 命令查看提交历史，确认要合并的两个 `commit` 的哈希值（`commit hash`）。一般来说，新的 `commit` 在前面，旧的 `commit` 在后面。
-
-```bash
-git log --oneline
-```
-
-例如，输出可能如下：
-
-```
-abcdefg 第三个提交
-1234567 第二个提交
-890abcd 第一个提交
-```
-
-假设你要合并的是 `1234567` 和 `abcdefg` 这两个 `commit`。
-
-### 3. 进行交互式变基
-
-使用 `git rebase -i` 命令进行交互式变基，指定要合并的 `commit` 的前一个 `commit` 的哈希值。在这个例子中，就是 `890abcd`。
-
-```bash
-git rebase -i 890abcd
-```
-
-执行上述命令后，会打开一个文本编辑器，显示如下内容：
-
-```plaintext
-pick abcdefg 第三个提交
-pick 1234567 第二个提交
-
-# Rebase 890abcd..abcdefg onto 890abcd (2 commands)
-#
-# Commands:
-# p, pick <commit> = use commit
-# r, reword <commit> = use commit, but edit the commit message
-# e, edit <commit> = use commit, but stop for amending
-# s, squash <commit> = use commit, but meld into previous commit
-# f, fixup <commit> = like "squash", but discard this commit's log message
-# x, exec <command> = run command (the rest of the line) using shell
-# b, break = stop here (continue rebase later with 'git rebase --continue')
-# d, drop <commit> = remove commit
-# l, label <label> = label current HEAD with a name
-# t, reset <label> = reset HEAD to a label
-# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
-# .       create a merge commit using the original merge commit's
-# .       message (or the oneline, if no original merge commit was
-# .       specified). Use -c <commit> to reword the commit message.
-#
-# These lines can be re-ordered; they are executed from top to bottom.
-#
-# If you remove a line here THAT COMMIT WILL BE LOST.
-#
-# However, if you remove everything, the rebase will be aborted.
-#
-# Note that empty commits are commented out
-```
-
-### 4. 修改提交操作
-
-将第二个 `commit` 前面的 `pick` 改为 `squash` 或 `s`，表示将这个 `commit` 合并到前一个 `commit` 中。修改后的内容如下：
-
-```plaintext
-pick abcdefg 第三个提交
-s 1234567 第二个提交
-```
-
-保存并关闭文本编辑器。
-
-### 5. 修改合并后的提交信息
-
-保存退出后，会再次打开一个文本编辑器，让你修改合并后的 `commit` 信息。你可以保留原有的 `commit` 信息，也可以根据需要进行修改。修改完成后，保存并关闭文本编辑器。
-
-### 6. 强制推送修改到远程仓库
-
-由于你已经修改了提交历史，本地的提交历史和远程仓库的提交历史不再一致，需要使用 `git push -f` 命令强制推送修改到远程仓库：
-
-```bash
-git push -f origin <分支名>
-```
-
-注意：强制推送会覆盖远程仓库的提交历史，可能会影响其他团队成员的工作，建议在操作前与团队成员沟通。
-
-### 7. 通知团队成员更新本地仓库
-
-强制推送后，通知团队成员拉取最新的提交历史：
-
-```bash
-git pull --rebase origin <分支名>
-```
-
-通过以上步骤，你就可以将已经推送到远端的两个 `commit` 合并成一个 `commit`。

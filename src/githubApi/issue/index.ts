@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "node 里面 stream 是什么, 有啥应用场景",
-  key_world: ["node stream"],
+  title: "[React] 状态管理库 Recoil 与 Redux 有何区别",
+  key_world: ["Recoil 与 Redux 区别"],
   labels: [
-    // labels.code,
-    labels.node,
+    labels.frameWork,
+    // labels.node,
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

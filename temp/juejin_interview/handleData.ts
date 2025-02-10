@@ -1,5 +1,4 @@
 import { filter, first, forEach, get, join, map, orderBy, toNumber, trim } from "lodash";
-// @ts-expect-error
 import jsonData from "./2024_12_02.json";
 import fs from "fs";
 

@@ -1,94 +1,106 @@
-**关键词**：Recoil selector 和 selectorFamily
+**关键词**：git rebase 合并 commit
 
-在 Recoil 中，`selectorFamily` 和 `selector` 都是用于创建派生状态的工具，但它们在使用场景和功能上存在一些差异，下面为你详细介绍它们的作用以及区别。
+当你已经将两个 `commit` 推送到远端仓库，现在想要将它们合并成一个 `commit`，可以按照以下步骤操作：
 
-### `selector` 的作用
+### 1. 克隆仓库到本地
 
-`selector` 用于创建派生状态，它可以根据一个或多个原子（`atom`）状态计算出新的状态。`selector` 的值会自动进行记忆化，只有当依赖的状态发生变化时才会重新计算。以下是一个简单的 `selector` 示例：
+如果你还没有在本地克隆该仓库，需要先将远程仓库克隆到本地：
 
-```jsx
-import { atom, selector, useRecoilValue } from "recoil";
-
-// 定义一个原子状态
-const textState = atom({
-  key: "textState",
-  default: "Hello, Recoil!",
-});
-
-// 定义一个 selector，它依赖于 textState
-const textLengthState = selector({
-  key: "textLengthState",
-  get: ({ get }) => {
-    const text = get(textState);
-    return text.length;
-  },
-});
-
-const App = () => {
-  const textLength = useRecoilValue(textLengthState);
-  return (
-    <div>
-      <p>Text length: {textLength}</p>
-    </div>
-  );
-};
+```bash
+git clone <远程仓库地址>
+cd <仓库目录>
 ```
 
-在这个例子中，`textLengthState` 是一个 `selector`，它根据 `textState` 的值计算文本的长度。
+### 2. 查看提交历史
 
-### `selectorFamily` 的作用
+使用 `git log` 命令查看提交历史，确认要合并的两个 `commit` 的哈希值（`commit hash`）。一般来说，新的 `commit` 在前面，旧的 `commit` 在后面。
 
-`selectorFamily` 是 `selector` 的一种扩展，它允许你创建一系列相关的 `selector`，这些 `selector` 可以根据传入的参数动态生成。这在需要根据不同的输入生成不同的派生状态时非常有用，比如根据不同的 ID 获取不同的数据。以下是一个 `selectorFamily` 的示例：
-
-```jsx
-import { atom, selectorFamily, useRecoilValue } from "recoil";
-
-// 模拟一个数据集合
-const dataState = atom({
-  key: "dataState",
-  default: {
-    1: { name: "Item 1" },
-    2: { name: "Item 2" },
-    3: { name: "Item 3" },
-  },
-});
-
-// 定义一个 selectorFamily
-const itemSelectorFamily = selectorFamily({
-  key: "itemSelectorFamily",
-  get:
-    (itemId) =>
-    ({ get }) => {
-      const data = get(dataState);
-      return data[itemId];
-    },
-});
-
-const App = () => {
-  const item1 = useRecoilValue(itemSelectorFamily(1));
-  const item2 = useRecoilValue(itemSelectorFamily(2));
-
-  return (
-    <div>
-      <p>Item 1: {item1?.name}</p>
-      <p>Item 2: {item2?.name}</p>
-    </div>
-  );
-};
+```bash
+git log --oneline
 ```
 
-在这个例子中，`itemSelectorFamily` 是一个 `selectorFamily`，它根据传入的 `itemId` 从 `dataState` 中获取相应的数据。通过不同的 `itemId` 可以获取不同的派生状态。
+例如，输出可能如下：
 
-### 两者的区别
+```
+abcdefg 第三个提交
+1234567 第二个提交
+890abcd 第一个提交
+```
 
-- **参数化能力**
-  - **`selector`**：没有参数化的能力，它的依赖和计算逻辑是固定的，每次使用时都会计算相同的派生状态。
-  - **`selectorFamily`**：支持参数化，可以根据传入的不同参数生成不同的 `selector` 实例，从而计算出不同的派生状态。
-- **使用场景**
-  - **`selector`**：适用于派生状态的计算逻辑固定，不依赖外部参数的场景，比如根据一个固定的原子状态计算其长度、总和等。
-  - **`selectorFamily`**：适用于需要根据不同的输入动态生成派生状态的场景，比如根据不同的 ID 获取不同的数据、根据不同的筛选条件获取过滤后的数据等。
-- **记忆化机制**
-  - **`selector`**：对整个 `selector` 进行记忆化，只要依赖的状态不变，就不会重新计算。
-  - **`selectorFamily`**：对每个根据不同参数生成的 `selector` 实例进行记忆化，不同参数对应的实例之间相互独立，每个实例的计算结果会分别进行记忆化。
+假设你要合并的是 `1234567` 和 `abcdefg` 这两个 `commit`。
 
-综上所述，`selectorFamily` 是 `selector` 的增强版本，当你需要根据不同的参数动态生成派生状态时，应该使用 `selectorFamily`；而当派生状态的计算逻辑固定时，使用 `selector` 即可。
+### 3. 进行交互式变基
+
+使用 `git rebase -i` 命令进行交互式变基，指定要合并的 `commit` 的前一个 `commit` 的哈希值。在这个例子中，就是 `890abcd`。
+
+```bash
+git rebase -i 890abcd
+```
+
+执行上述命令后，会打开一个文本编辑器，显示如下内容：
+
+```plaintext
+pick abcdefg 第三个提交
+pick 1234567 第二个提交
+
+# Rebase 890abcd..abcdefg onto 890abcd (2 commands)
+#
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup <commit> = like "squash", but discard this commit's log message
+# x, exec <command> = run command (the rest of the line) using shell
+# b, break = stop here (continue rebase later with 'git rebase --continue')
+# d, drop <commit> = remove commit
+# l, label <label> = label current HEAD with a name
+# t, reset <label> = reset HEAD to a label
+# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+# .       create a merge commit using the original merge commit's
+# .       message (or the oneline, if no original merge commit was
+# .       specified). Use -c <commit> to reword the commit message.
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+# Note that empty commits are commented out
+```
+
+### 4. 修改提交操作
+
+将第二个 `commit` 前面的 `pick` 改为 `squash` 或 `s`，表示将这个 `commit` 合并到前一个 `commit` 中。修改后的内容如下：
+
+```plaintext
+pick abcdefg 第三个提交
+s 1234567 第二个提交
+```
+
+保存并关闭文本编辑器。
+
+### 5. 修改合并后的提交信息
+
+保存退出后，会再次打开一个文本编辑器，让你修改合并后的 `commit` 信息。你可以保留原有的 `commit` 信息，也可以根据需要进行修改。修改完成后，保存并关闭文本编辑器。
+
+### 6. 强制推送修改到远程仓库
+
+由于你已经修改了提交历史，本地的提交历史和远程仓库的提交历史不再一致，需要使用 `git push -f` 命令强制推送修改到远程仓库：
+
+```bash
+git push -f origin <分支名>
+```
+
+注意：强制推送会覆盖远程仓库的提交历史，可能会影响其他团队成员的工作，建议在操作前与团队成员沟通。
+
+### 7. 通知团队成员更新本地仓库
+
+强制推送后，通知团队成员拉取最新的提交历史：
+
+```bash
+git pull --rebase origin <分支名>
+```
+
+通过以上步骤，你就可以将已经推送到远端的两个 `commit` 合并成一个 `commit`。

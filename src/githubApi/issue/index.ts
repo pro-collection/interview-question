@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] Recoil 里面 selectorFamily 的作用是什么？和 selector 有啥区别",
-  key_world: ["Recoil selector 和 selectorFamily"],
+  title: "将已经 push 到远端的两个 commit 合并成一个 commit 应该怎么做",
+  key_world: ["git rebase 合并 commit"],
   labels: [
-    labels.frameWork,
+    labels.application,
     // labels.node,
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

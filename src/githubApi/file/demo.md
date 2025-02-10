@@ -1,102 +1,189 @@
-**关键词**：Recoil 与 Redux 区别
+**关键词**：Recoil selector
 
-Recoil 和 Redux 都是用于管理 React 应用程序状态的库，但它们在设计理念、API、使用场景等方面存在一些明显的区别，下面为你详细介绍：
+在 Recoil 中，`selector` 用于创建派生状态，它可以根据一个或多个原子（`atom`）状态计算出新的状态。`selector` 的值会自动进行记忆化，只有当依赖的状态发生变化时才会重新计算。下面详细介绍 `selector` 的使用方法。
 
-### 1. 设计理念
+### 1. 基本使用
 
-- **Redux**
-  - 采用单向数据流和单一数据源的设计理念。整个应用的状态被存储在一个单一的 store 中，并且这个状态是只读的。唯一改变状态的方式是触发 action，reducer 会根据 action 来纯函数式地计算新的状态。这种设计使得应用的状态变化可预测，便于调试和维护。
-- **Recoil**
-  - 更强调原子性和灵活性。它将状态拆分成多个原子（atoms），每个原子代表一个独立的状态单元。组件可以独立地订阅和修改这些原子状态，并且可以通过选择器（selectors）来派生和组合状态。这种设计使得状态管理更加细粒度，易于扩展和复用。
-
-### 2. API 风格
-
-- **Redux**
-  - API 相对复杂，需要定义 action、reducer、store 等多个概念。通常的使用流程是：定义 action 类型和 action 创建函数，编写 reducer 函数来处理不同的 action，然后使用`createStore`函数创建 store。组件需要通过`connect`高阶组件或者`useSelector`、`useDispatch`等钩子来连接到 store 并获取状态和分发 action。
+创建一个简单的 `atom` 和 `selector`：
 
 ```jsx
-// 定义 action 类型
-const INCREMENT = "INCREMENT";
+import React from "react";
+import { atom, selector, useRecoilValue } from "recoil";
 
-// 定义 action 创建函数
-const increment = () => ({ type: INCREMENT });
+// 定义一个原子状态
+const textState = atom({
+  key: "textState",
+  default: "Hello, Recoil!",
+});
 
-// 定义 reducer
-const counterReducer = (state = 0, action) => {
-  switch (action.type) {
-    case INCREMENT:
-      return state + 1;
-    default:
-      return state;
-  }
-};
+// 定义一个 selector，它依赖于 textState
+const textLengthState = selector({
+  key: "textLengthState",
+  get: ({ get }) => {
+    const text = get(textState);
+    return text.length;
+  },
+});
 
-// 创建 store
-import { createStore } from "redux";
-const store = createStore(counterReducer);
+const App = () => {
+  // 使用 useRecoilValue 钩子获取 selector 的值
+  const textLength = useRecoilValue(textLengthState);
 
-// 在组件中使用
-import { useSelector, useDispatch } from "react-redux";
-const Counter = () => {
-  const count = useSelector((state) => state);
-  const dispatch = useDispatch();
   return (
     <div>
-      <p>Count: {count}</p>
-      <button onClick={() => dispatch(increment())}>Increment</button>
+      <p>Text length: {textLength}</p>
     </div>
   );
 };
+
+export default App;
 ```
 
-- **Recoil**
-  - API 更加简洁和直观。主要使用`atom`来定义状态原子，使用`selector`来定义派生状态。组件可以直接使用`useRecoilState`、`useRecoilValue`等钩子来访问和修改状态。
+在上述代码中：
+
+- 首先定义了一个 `atom` `textState`，它代表一个文本状态。
+- 然后定义了一个 `selector` `textLengthState`，在 `get` 函数中，通过 `get` 参数获取 `textState` 的值，并计算其长度。
+- 最后在组件中使用 `useRecoilValue` 钩子获取 `textLengthState` 的值并渲染。
+
+### 2. 多个依赖的 selector
+
+`selector` 可以依赖多个 `atom` 或其他 `selector`：
 
 ```jsx
-import { atom, useRecoilState } from "recoil";
+import React from "react";
+import { atom, selector, useRecoilValue } from "recoil";
 
-// 定义原子状态
+// 定义两个原子状态
+const num1State = atom({
+  key: "num1State",
+  default: 10,
+});
+
+const num2State = atom({
+  key: "num2State",
+  default: 20,
+});
+
+// 定义一个 selector，依赖于 num1State 和 num2State
+const sumState = selector({
+  key: "sumState",
+  get: ({ get }) => {
+    const num1 = get(num1State);
+    const num2 = get(num2State);
+    return num1 + num2;
+  },
+});
+
+const App = () => {
+  const sum = useRecoilValue(sumState);
+
+  return (
+    <div>
+      <p>Sum: {sum}</p>
+    </div>
+  );
+};
+
+export default App;
+```
+
+在这个例子中，`sumState` 这个 `selector` 依赖于 `num1State` 和 `num2State` 两个 `atom`，它会计算这两个状态的和。
+
+### 3. 可写的 selector
+
+除了只读的 `selector`，还可以创建可写的 `selector`，通过 `set` 函数来修改依赖的状态：
+
+```jsx
+import React from "react";
+import { atom, selector, useRecoilState } from "recoil";
+
+// 定义一个原子状态
 const counterState = atom({
   key: "counterState",
   default: 0,
 });
 
-// 在组件中使用
-const Counter = () => {
-  const [count, setCount] = useRecoilState(counterState);
+// 定义一个可写的 selector
+const doubleCounterState = selector({
+  key: "doubleCounterState",
+  get: ({ get }) => {
+    const counter = get(counterState);
+    return counter * 2;
+  },
+  set: ({ set }, newValue) => {
+    set(counterState, newValue / 2);
+  },
+});
+
+const App = () => {
+  const [doubleCounter, setDoubleCounter] = useRecoilState(doubleCounterState);
+
   return (
     <div>
-      <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <p>Double Counter: {doubleCounter}</p>
+      <button onClick={() => setDoubleCounter(doubleCounter + 2)}>Increment Double</button>
     </div>
   );
 };
+
+export default App;
 ```
 
-### 3. 状态管理粒度
+在这个例子中，`doubleCounterState` 是一个可写的 `selector`：
 
-- **Redux**
-  - 倾向于将整个应用的状态集中管理在一个 store 中，状态的更新是通过全局的 action 和 reducer 来处理的。这在大型应用中可能会导致 reducer 变得复杂，难以维护。
-- **Recoil**
-  - 支持细粒度的状态管理，每个原子状态都是独立的，可以被不同的组件独立订阅和修改。这种方式使得状态的管理更加灵活，易于扩展和复用。
+- `get` 函数根据 `counterState` 计算出双倍的值。
+- `set` 函数接收一个新值，并将其除以 2 后更新 `counterState`。
 
-### 4. 性能优化
+### 4. 使用多个 `selector` 组合状态
 
-- **Redux**
-  - 性能优化通常需要手动进行，例如使用`reselect`库来创建记忆化的选择器，避免不必要的重新计算。
-- **Recoil**
-  - 内置了一些性能优化机制，例如自动记忆化选择器，只有当依赖的状态发生变化时才会重新计算选择器的值。
+可以将多个 `selector` 组合起来创建更复杂的派生状态：
 
-### 5. 学习成本
+```jsx
+import React from "react";
+import { atom, selector, useRecoilValue } from "recoil";
 
-- **Redux**
-  - 由于其概念较多，如 action、reducer、store 等，学习成本相对较高，尤其是对于初学者来说。
-- **Recoil**
-  - 设计简单直观，API 易于理解和使用，学习成本较低。
+// 定义原子状态
+const priceState = atom({
+  key: "priceState",
+  default: 100,
+});
 
-### 6. 使用场景
+const discountRateState = atom({
+  key: "discountRateState",
+  default: 0.1,
+});
 
-- **Redux**
-  - 适用于大型、复杂的应用，尤其是需要严格控制状态变化和进行时间旅行调试的场景。例如，企业级应用、电商应用等。
-- **Recoil**
-  - 适用于中小型应用，或者需要快速迭代和灵活状态管理的场景。例如，原型开发、小型工具应用等。
+// 定义第一个 selector，计算折扣金额
+const discountAmountState = selector({
+  key: "discountAmountState",
+  get: ({ get }) => {
+    const price = get(priceState);
+    const discountRate = get(discountRateState);
+    return price * discountRate;
+  },
+});
+
+// 定义第二个 selector，计算最终价格
+const finalPriceState = selector({
+  key: "finalPriceState",
+  get: ({ get }) => {
+    const price = get(priceState);
+    const discountAmount = get(discountAmountState);
+    return price - discountAmount;
+  },
+});
+
+const App = () => {
+  const finalPrice = useRecoilValue(finalPriceState);
+
+  return (
+    <div>
+      <p>Final Price: {finalPrice}</p>
+    </div>
+  );
+};
+
+export default App;
+```
+
+在这个例子中，`discountAmountState` 计算折扣金额，`finalPriceState` 依赖于 `priceState` 和 `discountAmountState` 计算最终价格。

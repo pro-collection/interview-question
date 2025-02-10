@@ -9,8 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] 状态管理库 Recoil 与 Redux 有何区别",
-  key_world: ["Recoil 与 Redux 区别"],
+  title: "[React] Recoil 里面 selector 该如何使用",
+  key_world: ["Recoil selector"],
   labels: [
     labels.frameWork,
     // labels.node,

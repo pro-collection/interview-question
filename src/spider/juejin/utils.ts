@@ -46,6 +46,8 @@ export const formatArticleData = (jsonData: any[], targetDate: string) => {
     }>
   > = {};
 
+  console.log("formatArticleData: jsonData.length", jsonData.length);
+
   // 遍历并处理每篇文章
   jsonData.forEach((item) => {
     const article = item.article_info;

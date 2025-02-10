@@ -7,6 +7,7 @@
     "write": "ts-node src/githubApi/issue/index.ts",
     "release": "ts-node src/githubApi/releaseNote/index.ts",
     "juejin_spider": "ts-node src/spider/juejin/getRecentQuection.ts",
+    "juejin_crawl_articles": "ts-node src/spider/juejin/batchCrawlArticles.ts",
     "test": "jest"
   },
   "repository": {

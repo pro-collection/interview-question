@@ -4,8 +4,6 @@ import jsonData from "../../../../temp/juejin_interview/2025_01_11_21_36_38.json
 
 describe("getFrontendArticles 集成测试", () => {
   it("应该能正确读取并解析实际的JSON文件数据", () => {
-    // 读取实际的JSON文件
-
     // 从文件名中提取日期
     const fileName = "2025_01_11_21_36_38";
     const [year, month] = fileName.split("_");
@@ -13,6 +11,12 @@ describe("getFrontendArticles 集成测试", () => {
 
     // 获取前端文章
     const frontendArticles = getFrontendArticles(jsonData, targetDate);
+
+    // 输出调试信息
+
+    console.log(
+      `[getFrontendArticles 集成测试 - 应该能正确读取并解析实际的JSON文件数据] | 获取到的前端文章数量: ${frontendArticles.length}`
+    );
 
     // 基本验证
     expect(Array.isArray(frontendArticles)).toBe(true);

@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] Recoil 里面 selector 支持哪些参数",
-  key_world: ["Recoil selector"],
+  title: "[React] Recoil 里面 selectorFamily 的作用是什么？和 selector 有啥区别",
+  key_world: ["Recoil selector 和 selectorFamily"],
   labels: [
     labels.frameWork,
     // labels.node,
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

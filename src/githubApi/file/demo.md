@@ -1,102 +1,94 @@
-**关键词**：Recoil selector
+**关键词**：Recoil selector 和 selectorFamily
 
-在 Recoil 中，`selector` 函数接受一个配置对象作为参数，这个配置对象有多个可选属性，下面详细介绍这些属性。
+在 Recoil 中，`selectorFamily` 和 `selector` 都是用于创建派生状态的工具，但它们在使用场景和功能上存在一些差异，下面为你详细介绍它们的作用以及区别。
 
-### 1. `key`
+### `selector` 的作用
 
-- **类型**：`string`
-- **描述**：`key` 是一个必需的属性，用于唯一标识这个 `selector`。在 Recoil 的内部状态管理系统中，每个 `selector` 都需要一个唯一的键，以确保状态的正确更新和管理。
-- **示例**：
+`selector` 用于创建派生状态，它可以根据一个或多个原子（`atom`）状态计算出新的状态。`selector` 的值会自动进行记忆化，只有当依赖的状态发生变化时才会重新计算。以下是一个简单的 `selector` 示例：
 
 ```jsx
-const mySelector = selector({
-  key: "mySelector",
-  get: ({ get }) => {
-    // 状态计算逻辑
-  },
-});
-```
+import { atom, selector, useRecoilValue } from "recoil";
 
-### 2. `get`
-
-- **类型**：`({ get: GetRecoilValue }) => any`
-- **描述**：`get` 函数是 `selector` 中最重要的部分，用于计算 `selector` 的值。它接收一个对象作为参数，该对象包含一个 `get` 函数，通过这个 `get` 函数可以获取其他 `atom` 或 `selector` 的值。当依赖的状态发生变化时，`get` 函数会重新执行以计算新的值。
-- **示例**：
-
-```jsx
+// 定义一个原子状态
 const textState = atom({
   key: "textState",
-  default: "Hello",
+  default: "Hello, Recoil!",
 });
 
-const textLengthSelector = selector({
-  key: "textLengthSelector",
+// 定义一个 selector，它依赖于 textState
+const textLengthState = selector({
+  key: "textLengthState",
   get: ({ get }) => {
     const text = get(textState);
     return text.length;
   },
 });
+
+const App = () => {
+  const textLength = useRecoilValue(textLengthState);
+  return (
+    <div>
+      <p>Text length: {textLength}</p>
+    </div>
+  );
+};
 ```
 
-### 3. `set`（可选）
+在这个例子中，`textLengthState` 是一个 `selector`，它根据 `textState` 的值计算文本的长度。
 
-- **类型**：`({ set: SetRecoilState, reset: ResetRecoilState }, newValue: any) => void`
-- **描述**：`set` 函数用于使 `selector` 变为可写的。当调用 `useRecoilState` 或类似的钩子来修改这个 `selector` 的值时，`set` 函数会被执行。它接收两个参数：第一个参数是一个包含 `set` 和 `reset` 函数的对象，`set` 函数用于更新其他 `atom` 或 `selector` 的值，`reset` 函数用于将状态重置为默认值；第二个参数是新的值。
-- **示例**：
+### `selectorFamily` 的作用
+
+`selectorFamily` 是 `selector` 的一种扩展，它允许你创建一系列相关的 `selector`，这些 `selector` 可以根据传入的参数动态生成。这在需要根据不同的输入生成不同的派生状态时非常有用，比如根据不同的 ID 获取不同的数据。以下是一个 `selectorFamily` 的示例：
 
 ```jsx
-const counterState = atom({
-  key: "counterState",
-  default: 0,
+import { atom, selectorFamily, useRecoilValue } from "recoil";
+
+// 模拟一个数据集合
+const dataState = atom({
+  key: "dataState",
+  default: {
+    1: { name: "Item 1" },
+    2: { name: "Item 2" },
+    3: { name: "Item 3" },
+  },
 });
 
-const doubleCounterSelector = selector({
-  key: "doubleCounterSelector",
-  get: ({ get }) => {
-    const counter = get(counterState);
-    return counter * 2;
-  },
-  set: ({ set }, newValue) => {
-    set(counterState, newValue / 2);
-  },
+// 定义一个 selectorFamily
+const itemSelectorFamily = selectorFamily({
+  key: "itemSelectorFamily",
+  get:
+    (itemId) =>
+    ({ get }) => {
+      const data = get(dataState);
+      return data[itemId];
+    },
 });
+
+const App = () => {
+  const item1 = useRecoilValue(itemSelectorFamily(1));
+  const item2 = useRecoilValue(itemSelectorFamily(2));
+
+  return (
+    <div>
+      <p>Item 1: {item1?.name}</p>
+      <p>Item 2: {item2?.name}</p>
+    </div>
+  );
+};
 ```
 
-### 4. `dangerouslyAllowMutability`（可选）
+在这个例子中，`itemSelectorFamily` 是一个 `selectorFamily`，它根据传入的 `itemId` 从 `dataState` 中获取相应的数据。通过不同的 `itemId` 可以获取不同的派生状态。
 
-- **类型**：`boolean`
-- **描述**：Recoil 默认假设状态是不可变的，这有助于性能优化和状态管理。但在某些特殊情况下，你可能需要对状态进行可变的修改，这时可以将 `dangerouslyAllowMutability` 设置为 `true`。不过，使用这个选项需要谨慎，因为它可能会破坏 Recoil 的一些优化机制。
-- **示例**：
+### 两者的区别
 
-```jsx
-const mutableSelector = selector({
-  key: "mutableSelector",
-  get: () => {
-    // 获取状态逻辑
-  },
-  dangerouslyAllowMutability: true,
-});
-```
+- **参数化能力**
+  - **`selector`**：没有参数化的能力，它的依赖和计算逻辑是固定的，每次使用时都会计算相同的派生状态。
+  - **`selectorFamily`**：支持参数化，可以根据传入的不同参数生成不同的 `selector` 实例，从而计算出不同的派生状态。
+- **使用场景**
+  - **`selector`**：适用于派生状态的计算逻辑固定，不依赖外部参数的场景，比如根据一个固定的原子状态计算其长度、总和等。
+  - **`selectorFamily`**：适用于需要根据不同的输入动态生成派生状态的场景，比如根据不同的 ID 获取不同的数据、根据不同的筛选条件获取过滤后的数据等。
+- **记忆化机制**
+  - **`selector`**：对整个 `selector` 进行记忆化，只要依赖的状态不变，就不会重新计算。
+  - **`selectorFamily`**：对每个根据不同参数生成的 `selector` 实例进行记忆化，不同参数对应的实例之间相互独立，每个实例的计算结果会分别进行记忆化。
 
-### 5. `cachePolicy_UNSTABLE`（可选）
-
-- **类型**：`{ eviction: 'most-recent' | 'lru' | 'none' }`
-- **描述**：这个属性用于控制 `selector` 的缓存策略。`eviction` 有三个可选值：
-  - `'most-recent'`：只保留最近使用的值。
-  - `'lru'`：使用最近最少使用（LRU）算法进行缓存淘汰。
-  - `'none'`：不使用缓存，每次都重新计算。
-- **示例**：
-
-```jsx
-const cachedSelector = selector({
-  key: "cachedSelector",
-  get: () => {
-    // 状态计算逻辑
-  },
-  cachePolicy_UNSTABLE: {
-    eviction: "lru",
-  },
-});
-```
-
-这些就是 `selector` 支持的主要参数，通过合理使用这些参数，可以实现复杂的状态计算和管理。
+综上所述，`selectorFamily` 是 `selector` 的增强版本，当你需要根据不同的参数动态生成派生状态时，应该使用 `selectorFamily`；而当派生状态的计算逻辑固定时，使用 `selector` 即可。

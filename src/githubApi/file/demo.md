@@ -1,111 +1,57 @@
 **关键词**：Recoil selector
 
-在 Recoil 中，`selector` 用于创建派生状态，它可以根据一个或多个原子（`atom`）状态计算出新的状态。`selector` 的值会自动进行记忆化，只有当依赖的状态发生变化时才会重新计算。下面详细介绍 `selector` 的使用方法。
+在 Recoil 中，`selector` 函数接受一个配置对象作为参数，这个配置对象有多个可选属性，下面详细介绍这些属性。
 
-### 1. 基本使用
+### 1. `key`
 
-创建一个简单的 `atom` 和 `selector`：
+- **类型**：`string`
+- **描述**：`key` 是一个必需的属性，用于唯一标识这个 `selector`。在 Recoil 的内部状态管理系统中，每个 `selector` 都需要一个唯一的键，以确保状态的正确更新和管理。
+- **示例**：
 
 ```jsx
-import React from "react";
-import { atom, selector, useRecoilValue } from "recoil";
+const mySelector = selector({
+  key: "mySelector",
+  get: ({ get }) => {
+    // 状态计算逻辑
+  },
+});
+```
 
-// 定义一个原子状态
+### 2. `get`
+
+- **类型**：`({ get: GetRecoilValue }) => any`
+- **描述**：`get` 函数是 `selector` 中最重要的部分，用于计算 `selector` 的值。它接收一个对象作为参数，该对象包含一个 `get` 函数，通过这个 `get` 函数可以获取其他 `atom` 或 `selector` 的值。当依赖的状态发生变化时，`get` 函数会重新执行以计算新的值。
+- **示例**：
+
+```jsx
 const textState = atom({
   key: "textState",
-  default: "Hello, Recoil!",
+  default: "Hello",
 });
 
-// 定义一个 selector，它依赖于 textState
-const textLengthState = selector({
-  key: "textLengthState",
+const textLengthSelector = selector({
+  key: "textLengthSelector",
   get: ({ get }) => {
     const text = get(textState);
     return text.length;
   },
 });
-
-const App = () => {
-  // 使用 useRecoilValue 钩子获取 selector 的值
-  const textLength = useRecoilValue(textLengthState);
-
-  return (
-    <div>
-      <p>Text length: {textLength}</p>
-    </div>
-  );
-};
-
-export default App;
 ```
 
-在上述代码中：
+### 3. `set`（可选）
 
-- 首先定义了一个 `atom` `textState`，它代表一个文本状态。
-- 然后定义了一个 `selector` `textLengthState`，在 `get` 函数中，通过 `get` 参数获取 `textState` 的值，并计算其长度。
-- 最后在组件中使用 `useRecoilValue` 钩子获取 `textLengthState` 的值并渲染。
-
-### 2. 多个依赖的 selector
-
-`selector` 可以依赖多个 `atom` 或其他 `selector`：
+- **类型**：`({ set: SetRecoilState, reset: ResetRecoilState }, newValue: any) => void`
+- **描述**：`set` 函数用于使 `selector` 变为可写的。当调用 `useRecoilState` 或类似的钩子来修改这个 `selector` 的值时，`set` 函数会被执行。它接收两个参数：第一个参数是一个包含 `set` 和 `reset` 函数的对象，`set` 函数用于更新其他 `atom` 或 `selector` 的值，`reset` 函数用于将状态重置为默认值；第二个参数是新的值。
+- **示例**：
 
 ```jsx
-import React from "react";
-import { atom, selector, useRecoilValue } from "recoil";
-
-// 定义两个原子状态
-const num1State = atom({
-  key: "num1State",
-  default: 10,
-});
-
-const num2State = atom({
-  key: "num2State",
-  default: 20,
-});
-
-// 定义一个 selector，依赖于 num1State 和 num2State
-const sumState = selector({
-  key: "sumState",
-  get: ({ get }) => {
-    const num1 = get(num1State);
-    const num2 = get(num2State);
-    return num1 + num2;
-  },
-});
-
-const App = () => {
-  const sum = useRecoilValue(sumState);
-
-  return (
-    <div>
-      <p>Sum: {sum}</p>
-    </div>
-  );
-};
-
-export default App;
-```
-
-在这个例子中，`sumState` 这个 `selector` 依赖于 `num1State` 和 `num2State` 两个 `atom`，它会计算这两个状态的和。
-
-### 3. 可写的 selector
-
-除了只读的 `selector`，还可以创建可写的 `selector`，通过 `set` 函数来修改依赖的状态：
-
-```jsx
-import React from "react";
-import { atom, selector, useRecoilState } from "recoil";
-
-// 定义一个原子状态
 const counterState = atom({
   key: "counterState",
   default: 0,
 });
 
-// 定义一个可写的 selector
-const doubleCounterState = selector({
-  key: "doubleCounterState",
+const doubleCounterSelector = selector({
+  key: "doubleCounterSelector",
   get: ({ get }) => {
     const counter = get(counterState);
     return counter * 2;
@@ -114,76 +60,43 @@ const doubleCounterState = selector({
     set(counterState, newValue / 2);
   },
 });
-
-const App = () => {
-  const [doubleCounter, setDoubleCounter] = useRecoilState(doubleCounterState);
-
-  return (
-    <div>
-      <p>Double Counter: {doubleCounter}</p>
-      <button onClick={() => setDoubleCounter(doubleCounter + 2)}>Increment Double</button>
-    </div>
-  );
-};
-
-export default App;
 ```
 
-在这个例子中，`doubleCounterState` 是一个可写的 `selector`：
+### 4. `dangerouslyAllowMutability`（可选）
 
-- `get` 函数根据 `counterState` 计算出双倍的值。
-- `set` 函数接收一个新值，并将其除以 2 后更新 `counterState`。
-
-### 4. 使用多个 `selector` 组合状态
-
-可以将多个 `selector` 组合起来创建更复杂的派生状态：
+- **类型**：`boolean`
+- **描述**：Recoil 默认假设状态是不可变的，这有助于性能优化和状态管理。但在某些特殊情况下，你可能需要对状态进行可变的修改，这时可以将 `dangerouslyAllowMutability` 设置为 `true`。不过，使用这个选项需要谨慎，因为它可能会破坏 Recoil 的一些优化机制。
+- **示例**：
 
 ```jsx
-import React from "react";
-import { atom, selector, useRecoilValue } from "recoil";
-
-// 定义原子状态
-const priceState = atom({
-  key: "priceState",
-  default: 100,
-});
-
-const discountRateState = atom({
-  key: "discountRateState",
-  default: 0.1,
-});
-
-// 定义第一个 selector，计算折扣金额
-const discountAmountState = selector({
-  key: "discountAmountState",
-  get: ({ get }) => {
-    const price = get(priceState);
-    const discountRate = get(discountRateState);
-    return price * discountRate;
+const mutableSelector = selector({
+  key: "mutableSelector",
+  get: () => {
+    // 获取状态逻辑
   },
+  dangerouslyAllowMutability: true,
 });
-
-// 定义第二个 selector，计算最终价格
-const finalPriceState = selector({
-  key: "finalPriceState",
-  get: ({ get }) => {
-    const price = get(priceState);
-    const discountAmount = get(discountAmountState);
-    return price - discountAmount;
-  },
-});
-
-const App = () => {
-  const finalPrice = useRecoilValue(finalPriceState);
-
-  return (
-    <div>
-      <p>Final Price: {finalPrice}</p>
-    </div>
-  );
-};
-
-export default App;
 ```
 
-在这个例子中，`discountAmountState` 计算折扣金额，`finalPriceState` 依赖于 `priceState` 和 `discountAmountState` 计算最终价格。
+### 5. `cachePolicy_UNSTABLE`（可选）
+
+- **类型**：`{ eviction: 'most-recent' | 'lru' | 'none' }`
+- **描述**：这个属性用于控制 `selector` 的缓存策略。`eviction` 有三个可选值：
+  - `'most-recent'`：只保留最近使用的值。
+  - `'lru'`：使用最近最少使用（LRU）算法进行缓存淘汰。
+  - `'none'`：不使用缓存，每次都重新计算。
+- **示例**：
+
+```jsx
+const cachedSelector = selector({
+  key: "cachedSelector",
+  get: () => {
+    // 状态计算逻辑
+  },
+  cachePolicy_UNSTABLE: {
+    eviction: "lru",
+  },
+});
+```
+
+这些就是 `selector` 支持的主要参数，通过合理使用这些参数，可以实现复杂的状态计算和管理。

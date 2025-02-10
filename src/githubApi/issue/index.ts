@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "[React] Recoil 里面 selector 该如何使用",
+  title: "[React] Recoil 里面 selector 支持哪些参数",
   key_world: ["Recoil selector"],
   labels: [
     labels.frameWork,

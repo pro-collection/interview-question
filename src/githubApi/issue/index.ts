@@ -9,8 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "eslint 是怎么做到用配置规则去检验代码异常",
-  key_world: ["eslint 原理"],
+  title: "自定义 eslint 插件， 要求常量为大写 snake 命名方式， 该怎么做",
+  key_world: ["eslint 插件实现"],
   labels: [
     labels.application,
     // labels.node,

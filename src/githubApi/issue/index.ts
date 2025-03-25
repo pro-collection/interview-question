@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "单测中，如果有一些三方依赖，想排除这个三方依赖进行测试，该如何做？",
-  key_world: ["前端单测，如何排除三方依赖"],
+  title: "如何排除样式文件、图片等资源文件进行单测",
+  key_world: ["前端单测，如何排除样式文件、图片"],
   labels: [
     labels.engineering,
     // labels.node,
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

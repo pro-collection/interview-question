@@ -1,131 +1,140 @@
-**关键词**：前端单测，如何排除三方依赖
+**关键词**：前端单测，如何排除样式文件、图片
 
-在单元测试里，当存在三方依赖时，为保证测试的独立性与稳定性，你可以采用模拟（Mock）或桩（Stub）的方式排除这些三方依赖。下面结合不同的测试框架和场景，介绍具体的实现方法。
+在进行前端单元测试时，样式文件（如 CSS、SCSS 等）和图片等资源文件通常不会影响代码的逻辑功能，为了让测试更加专注于代码逻辑，避免不必要的依赖和错误，需要排除这些资源文件。下面分别介绍使用不同测试框架（如 Jest）时的处理方法。
 
-### 使用 Jest 进行模拟
+### 使用 Jest 排除资源文件
 
-Jest 是一个功能强大的 JavaScript 测试框架，它内置了模拟功能，可方便地模拟三方依赖。
+#### 1. 样式文件处理
 
-#### 模拟模块
+对于样式文件，可使用 `identity-obj-proxy` 包来模拟样式导入。`identity-obj-proxy` 会将所有的 CSS 类名转换为相同的字符串，从而避免实际加载 CSS 文件。
 
-若三方依赖以模块形式引入，可使用 `jest.mock` 方法模拟该模块。
-
-**示例代码**：
-
-```javascript
-// api.js （三方依赖模块）
-export const fetchData = async () => {
-  const response = await fetch("https://example.com/api/data");
-  return response.json();
-};
-
-// myModule.js （使用三方依赖的模块）
-import { fetchData } from "./api";
-
-export const processData = async () => {
-  const data = await fetchData();
-  return data.length;
-};
-
-// myModule.test.js （测试文件）
-import { processData } from "./myModule";
-jest.mock("./api");
-import { fetchData } from "./api";
-
-describe("processData", () => {
-  test("should return the length of the data", async () => {
-    const mockData = ["item1", "item2", "item3"];
-    fetchData.mockResolvedValue(mockData);
-
-    const result = await processData();
-    expect(result).toBe(mockData.length);
-  });
-});
-```
-
-在上述示例中，`jest.mock('./api')` 模拟了 `api.js` 模块，`fetchData.mockResolvedValue(mockData)` 指定了 `fetchData` 函数的返回值。
-
-#### 模拟全局对象或函数
-
-若三方依赖是全局对象或函数，可使用 `jest.spyOn` 或直接覆盖该对象或函数。
-
-**示例代码**：
-
-```javascript
-// myFunction.js
-export const myFunction = () => {
-  return Math.random();
-};
-
-// myFunction.test.js
-import { myFunction } from "./myFunction";
-
-describe("myFunction", () => {
-  test("should return a mocked value", () => {
-    const originalMathRandom = Math.random;
-    Math.random = () => 0.5;
-
-    const result = myFunction();
-    expect(result).toBe(0.5);
-
-    Math.random = originalMathRandom;
-  });
-});
-```
-
-此例中，通过覆盖 `Math.random` 函数来模拟其返回值，测试结束后恢复原始函数。
-
-### 使用 Sinon 进行模拟
-
-Sinon 是一个流行的 JavaScript 测试工具，可创建间谍（spy）、存根（stub）和模拟（mock）对象。
-
-#### 安装 Sinon
+**安装依赖**
 
 ```bash
-npm install --save-dev sinon
+npm install --save-dev identity-obj-proxy
 ```
 
-#### 使用 Sinon 存根函数
+**配置 Jest**
+在 `jest.config.js` 或 `package.json` 中的 `jest` 配置里添加如下内容：
 
 ```javascript
-// api.js
-export const fetchData = async () => {
-  const response = await fetch("https://example.com/api/data");
-  return response.json();
+module.exports = {
+  // ...其他配置
+  moduleNameMapper: {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+  },
+};
+```
+
+或者在 `package.json` 中：
+
+```json
+{
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+    }
+  }
+}
+```
+
+这样，当在测试代码中导入 CSS 文件时，Jest 会使用 `identity-obj-proxy` 来模拟，而不会真正加载 CSS 文件。
+
+**示例代码**
+假设有如下组件：
+
+```jsx
+// MyComponent.jsx
+import React from "react";
+import "./styles.css";
+
+const MyComponent = () => {
+  return <div className="my-class">Hello, World!</div>;
 };
 
-// myModule.js
-import { fetchData } from "./api";
+export default MyComponent;
+```
 
-export const processData = async () => {
-  const data = await fetchData();
-  return data.length;
-};
+测试代码可以正常编写，不用担心 `styles.css` 文件的加载问题：
 
-// myModule.test.js
-import sinon from "sinon";
-import { processData } from "./myModule";
-import { fetchData } from "./api";
+```javascript
+// MyComponent.test.js
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import MyComponent from "./MyComponent";
 
-describe("processData", () => {
-  let stub;
-  beforeEach(() => {
-    stub = sinon.stub();
-    stub.resolves(["item1", "item2", "item3"]);
-    sinon.replace(fetchData, "fetchData", stub);
-  });
-
-  afterEach(() => {
-    sinon.restore();
-  });
-
-  test("should return the length of the data", async () => {
-    const result = await processData();
-    expect(result).toBe(3);
-  });
+test("renders MyComponent", () => {
+  render(<MyComponent />);
+  const element = screen.getByText("Hello, World!");
+  expect(element).toBeInTheDocument();
 });
 ```
 
-在这个示例中，使用 `sinon.stub` 创建一个存根函数，使用 `sinon.replace` 替换 `fetchData` 函数，测试结束后使用 `sinon.restore` 恢复原始函数。
+#### 2. 图片文件处理
 
-通过以上方法，你可以在单元测试中排除三方依赖，确保测试的独立性和稳定性。
+对于图片文件，可使用一个简单的模块来模拟图片导入。
+
+**配置 Jest**
+在 `jest.config.js` 或 `package.json` 中的 `jest` 配置里添加如下内容：
+
+```javascript
+module.exports = {
+  // ...其他配置
+  moduleNameMapper: {
+    "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/__mocks__/fileMock.js",
+  },
+};
+```
+
+或者在 `package.json` 中：
+
+```json
+{
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/__mocks__/fileMock.js"
+    }
+  }
+}
+```
+
+**创建模拟文件**
+在项目根目录下创建 `__mocks__` 文件夹，并在其中创建 `fileMock.js` 文件，内容如下：
+
+```javascript
+module.exports = "test-file-stub";
+```
+
+这样，当在测试代码中导入图片文件时，Jest 会使用 `fileMock.js` 中的模拟值来替代，而不会真正加载图片文件。
+
+**示例代码**
+假设有如下组件：
+
+```jsx
+// ImageComponent.jsx
+import React from "react";
+import myImage from "./my-image.png";
+
+const ImageComponent = () => {
+  return <img src={myImage} alt="Test Image" />;
+};
+
+export default ImageComponent;
+```
+
+测试代码可以正常编写，不用担心 `my-image.png` 文件的加载问题：
+
+```javascript
+// ImageComponent.test.js
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import ImageComponent from "./ImageComponent";
+
+test("renders ImageComponent", () => {
+  render(<ImageComponent />);
+  const imageElement = screen.getByAltText("Test Image");
+  expect(imageElement).toBeInTheDocument();
+});
+```
+
+通过以上配置，你可以在 Jest 单元测试中排除样式文件和图片等资源文件的干扰，专注于代码逻辑的测试。

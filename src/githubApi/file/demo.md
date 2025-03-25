@@ -1,128 +1,134 @@
-**关键词**：前端单测 jest 配置
+**关键词**：前端测试 jest 配置
 
-Jest 有许多重要配置项，它们能帮助你根据项目需求定制测试环境和流程。以下是一些关键的 Jest 配置项及其用途：
+当使用 Babel 编译 React TypeScript 项目并配置 Jest 时，可按以下步骤进行：
 
-### 1. `testMatch`
+### 1. 安装必要的依赖
 
-- **作用**：指定 Jest 要测试的文件匹配模式。Jest 会在项目中查找符合这些模式的文件并执行测试。
-- **示例**：
+在项目根目录下，通过以下命令安装所需的依赖：
 
-```javascript
-module.exports = {
-  testMatch: ["**/__tests__/**/*.js?(x)", "**/?(*.)+(spec|test).js?(x)"],
-};
+```bash
+npm install --save-dev jest babel-jest @babel/core @babel/preset-env @babel/preset-react @babel/preset-typescript @types/jest @testing-library/react @testing-library/jest-dom @testing-library/user-event
 ```
 
-上述配置表示 Jest 会查找 `__tests__` 目录下的所有 `.js` 或 `.jsx` 文件，以及文件名包含 `spec` 或 `test` 的 `.js` 或 `.jsx` 文件。
+- `jest`：测试框架。
+- `babel-jest`：让 Jest 能使用 Babel 转换代码。
+- `@babel/core`：Babel 的核心库。
+- `@babel/preset-env`：根据目标环境转换代码。
+- `@babel/preset-react`：处理 React 的 JSX 语法。
+- `@babel/preset-typescript`：支持 TypeScript 代码的转换。
+- `@types/jest`：为 Jest 提供 TypeScript 类型定义。
+- `@testing-library/react`：用于测试 React 组件的工具库。
+- `@testing-library/jest-dom`：提供额外的 DOM 断言方法。
+- `@testing-library/user-event`：模拟用户交互的工具库。
 
-### 2. `moduleNameMapper`
+### 2. 配置 Babel
 
-- **作用**：用于映射模块名，可将特定的模块名映射到另一个模块或文件。常见用途是处理样式文件、图片等资源文件的导入，避免在测试时实际加载这些资源。
-- **示例**：
+在项目根目录下创建或修改 `.babelrc` 文件（也可以使用 `babel.config.js`），添加以下配置：
+
+```json
+{
+  "presets": ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"]
+}
+```
+
+- `@babel/preset-env`：依据 `package.json` 里的 `browserslist` 配置转换代码。
+- `@babel/preset-react`：处理 React 的 JSX 语法。
+- `@babel/preset-typescript`：将 TypeScript 代码转换为 JavaScript 代码。
+
+### 3. 配置 Jest
+
+在项目根目录下创建 `jest.config.js` 文件，并添加以下配置：
 
 ```javascript
 module.exports = {
+  // 使用 babel-jest 转换文件
+  transform: {
+    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+  },
+  // 配置测试环境
+  testEnvironment: "jsdom",
+  // 配置模块名映射，处理样式和图片文件
   moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/__mocks__/fileMock.js",
   },
+  // 在每个测试文件运行前执行的脚本
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
+  // 识别的文件扩展名
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 };
 ```
 
-这里将 CSS 等样式文件映射到 `identity-obj-proxy`，将图片文件映射到自定义的模拟文件 `fileMock.js`。
+- `transform`：指定使用 `babel-jest` 转换 `.js`、`.jsx`、`.ts` 和 `.tsx` 文件。
+- `testEnvironment`：设置测试环境为 `jsdom`，模拟浏览器环境。
+- `moduleNameMapper`：处理样式文件和图片文件的导入，避免在测试时实际加载这些资源。
+- `setupFilesAfterEnv`：指定在每个测试文件运行前执行的脚本文件。
+- `moduleFileExtensions`：指定 Jest 识别的文件扩展名。
 
-### 3. `setupFilesAfterEnv`
+### 4. 创建模拟文件
 
-- **作用**：在每个测试文件运行前执行的脚本文件列表。常用于设置测试环境，如引入测试工具、全局配置等。
-- **示例**：
+在项目根目录下创建 `__mocks__` 文件夹，并在其中创建 `fileMock.js` 文件，内容如下：
 
 ```javascript
-module.exports = {
-  setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
-};
+module.exports = "test-file-stub";
 ```
 
-在 `setupTests.js` 文件中可以进行一些全局的测试配置，例如引入 `@testing-library/jest-dom` 扩展断言：
+该文件用于模拟图片等资源文件的导入。
 
-```javascript
+### 5. 创建测试设置文件
+
+在 `src` 目录下创建 `setupTests.ts` 文件，并添加以下内容：
+
+```typescript
 import "@testing-library/jest-dom";
 ```
 
-### 4. `testEnvironment`
+这会引入 `@testing-library/jest-dom` 提供的额外 DOM 断言方法。
 
-- **作用**：指定测试运行的环境，常见的值有 `node` 和 `jsdom`。`node` 适用于 Node.js 环境的测试，`jsdom` 模拟了浏览器环境，适用于前端 JavaScript 代码的测试。
-- **示例**：
+### 6. 配置 `package.json`
 
-```javascript
-module.exports = {
-  testEnvironment: "jsdom",
-};
+在 `package.json` 文件中添加测试脚本：
+
+```json
+{
+  "scripts": {
+    "test": "jest"
+  }
+}
 ```
 
-### 5. `coverageDirectory`
+### 7. 编写并运行测试用例
 
-- **作用**：指定代码覆盖率报告的输出目录。
-- **示例**：
+例如，有一个简单的 React TypeScript 组件 `App.tsx`：
 
-```javascript
-module.exports = {
-  coverageDirectory: "<rootDir>/coverage",
+```tsx
+import React from "react";
+
+const App: React.FC = () => {
+  return <h1>Hello, Jest!</h1>;
 };
+
+export default App;
 ```
 
-### 6. `coverageThreshold`
+对应的测试文件 `App.test.tsx` 可以这样写：
 
-- **作用**：设置代码覆盖率的阈值。可以为全局或特定文件设置分支、函数、行和语句的覆盖率阈值，如果测试结果未达到这些阈值，Jest 会报错。
-- **示例**：
+```typescript
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import App from "./App";
 
-```javascript
-module.exports = {
-  coverageThreshold: {
-    global: {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80,
-    },
-  },
-};
+test("renders App component", () => {
+  render(<App />);
+  const element = screen.getByText("Hello, Jest!");
+  expect(element).toBeInTheDocument();
+});
 ```
 
-### 7. `transform`
+在终端运行以下命令来执行测试：
 
-- **作用**：指定如何转换不同类型的文件。通常用于处理 Babel 转换，将 ES6+ 代码转换为兼容的 JavaScript 代码。
-- **示例**：
-
-```javascript
-module.exports = {
-  transform: {
-    "^.+\\.(js|jsx)$": "babel-jest",
-  },
-};
+```bash
+npm test
 ```
 
-上述配置表示使用 `babel-jest` 来转换 `.js` 和 `.jsx` 文件。
-
-### 8. `verbose`
-
-- **作用**：一个布尔值，控制是否在测试结果中显示每个测试用例的详细信息。设置为 `true` 会显示更详细的测试结果。
-- **示例**：
-
-```javascript
-module.exports = {
-  verbose: true,
-};
-```
-
-### 9. `watchPlugins`
-
-- **作用**：指定在 watch 模式下使用的插件。例如，`jest-watch-typeahead` 插件可以让你在 watch 模式下通过输入文件名或测试用例名来快速过滤测试。
-- **示例**：
-
-```javascript
-module.exports = {
-  watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"],
-};
-```
-
-这些配置项能帮助你更好地定制 Jest 的行为，满足不同项目的测试需求。你可以根据项目的具体情况进行选择和配置。
+通过以上步骤，你就可以在使用 Babel 编译的 React TypeScript 项目中配置好 Jest 进行测试了。

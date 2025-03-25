@@ -9,8 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何保障前端项目质量",
-  key_world: ["前端项目质量保证"],
+  title: "前端单测，如何通过单测模拟请求",
+  key_world: ["前端单测模拟请求"],
   labels: [
     labels.engineering,
     // labels.node,

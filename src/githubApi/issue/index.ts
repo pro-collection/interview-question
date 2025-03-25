@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何搭建前端测试环境",
+  title: "前端 单元测试， react 项目为例， 该如何做单测选型",
   key_world: ["前端测试"],
   labels: [
     labels.engineering,

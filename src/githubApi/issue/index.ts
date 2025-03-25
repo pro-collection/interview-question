@@ -9,8 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何排除样式文件、图片等资源文件进行单测",
-  key_world: ["前端单测，如何排除样式文件、图片"],
+  title: "jest 有哪些重要配置？",
+  key_world: ["前端单测 jest 配置"],
   labels: [
     labels.engineering,
     // labels.node,

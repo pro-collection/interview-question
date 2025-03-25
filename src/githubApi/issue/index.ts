@@ -9,8 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端单测，如何通过单测模拟请求",
-  key_world: ["前端单测模拟请求"],
+  title: "jest 单测， 如何测试 react 组件交互",
+  key_world: ["前端单测模拟 react 交互"],
   labels: [
     labels.engineering,
     // labels.node,

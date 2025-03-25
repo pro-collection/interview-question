@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "自定义 eslint 插件， 要求常量为大写 snake 命名方式， 该怎么做",
-  key_world: ["eslint 插件实现"],
+  title: "如何搭建前端测试环境",
+  key_world: ["前端测试"],
   labels: [
-    labels.application,
+    labels.engineering,
     // labels.node,
     // company.alibaba,
     // xx

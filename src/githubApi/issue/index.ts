@@ -9,8 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "jest 单测， 如何测试 react 组件交互",
-  key_world: ["前端单测模拟 react 交互"],
+  title: "如何 对 react 状态库进行单测， 比如 redux、recoil 等状态库",
+  key_world: ["前端单测模拟 react 状态"],
   labels: [
     labels.engineering,
     // labels.node,

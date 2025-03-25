@@ -9,8 +9,8 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端 e2e 测试， 该如何选型",
-  key_world: ["前端测试"],
+  title: "如何保障前端项目质量",
+  key_world: ["前端项目质量保证"],
   labels: [
     labels.engineering,
     // labels.node,

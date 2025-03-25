@@ -1,265 +1,131 @@
-**关键词**：前端单测模拟 react 状态
+**关键词**：前端单测，如何排除三方依赖
 
-下面分别介绍如何对 Redux 和 Recoil 这两种常见的 React 状态库进行单元测试。
+在单元测试里，当存在三方依赖时，为保证测试的独立性与稳定性，你可以采用模拟（Mock）或桩（Stub）的方式排除这些三方依赖。下面结合不同的测试框架和场景，介绍具体的实现方法。
 
-### 测试 Redux
+### 使用 Jest 进行模拟
 
-Redux 是一个可预测的状态容器，主要由 actions、reducers 和 store 构成。单元测试时可分别对这些部分进行测试。
+Jest 是一个功能强大的 JavaScript 测试框架，它内置了模拟功能，可方便地模拟三方依赖。
 
-#### 1. 测试 Actions
+#### 模拟模块
 
-Actions 是用于描述状态变化的普通 JavaScript 对象。可以测试 action 创建函数是否返回正确的 action 对象。
+若三方依赖以模块形式引入，可使用 `jest.mock` 方法模拟该模块。
+
+**示例代码**：
 
 ```javascript
-// actions.js
-export const increment = () => ({
-  type: "INCREMENT",
-});
+// api.js （三方依赖模块）
+export const fetchData = async () => {
+  const response = await fetch("https://example.com/api/data");
+  return response.json();
+};
 
-// actions.test.js
-import { increment } from "./actions";
+// myModule.js （使用三方依赖的模块）
+import { fetchData } from "./api";
 
-describe("increment action", () => {
-  test("should return an action with type INCREMENT", () => {
-    const action = increment();
-    expect(action.type).toBe("INCREMENT");
+export const processData = async () => {
+  const data = await fetchData();
+  return data.length;
+};
+
+// myModule.test.js （测试文件）
+import { processData } from "./myModule";
+jest.mock("./api");
+import { fetchData } from "./api";
+
+describe("processData", () => {
+  test("should return the length of the data", async () => {
+    const mockData = ["item1", "item2", "item3"];
+    fetchData.mockResolvedValue(mockData);
+
+    const result = await processData();
+    expect(result).toBe(mockData.length);
   });
 });
 ```
 
-#### 2. 测试 Reducers
+在上述示例中，`jest.mock('./api')` 模拟了 `api.js` 模块，`fetchData.mockResolvedValue(mockData)` 指定了 `fetchData` 函数的返回值。
 
-Reducers 是纯函数，接收当前状态和 action，返回新的状态。可以测试 reducer 在不同 action 下是否返回正确的状态。
+#### 模拟全局对象或函数
+
+若三方依赖是全局对象或函数，可使用 `jest.spyOn` 或直接覆盖该对象或函数。
+
+**示例代码**：
 
 ```javascript
-// reducer.js
-const initialState = {
-  count: 0,
+// myFunction.js
+export const myFunction = () => {
+  return Math.random();
 };
 
-const counterReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case "INCREMENT":
-      return {
-        ...state,
-        count: state.count + 1,
-      };
-    default:
-      return state;
-  }
-};
+// myFunction.test.js
+import { myFunction } from "./myFunction";
 
-export default counterReducer;
+describe("myFunction", () => {
+  test("should return a mocked value", () => {
+    const originalMathRandom = Math.random;
+    Math.random = () => 0.5;
 
-// reducer.test.js
-import counterReducer from "./reducer";
+    const result = myFunction();
+    expect(result).toBe(0.5);
 
-describe("counterReducer", () => {
-  test("should handle INCREMENT action", () => {
-    const initialState = { count: 0 };
-    const action = { type: "INCREMENT" };
-    const newState = counterReducer(initialState, action);
-    expect(newState.count).toBe(1);
-  });
-
-  test("should return the same state for unknown action", () => {
-    const initialState = { count: 0 };
-    const action = { type: "UNKNOWN_ACTION" };
-    const newState = counterReducer(initialState, action);
-    expect(newState).toEqual(initialState);
+    Math.random = originalMathRandom;
   });
 });
 ```
 
-#### 3. 测试 Connected Components
+此例中，通过覆盖 `Math.random` 函数来模拟其返回值，测试结束后恢复原始函数。
 
-如果组件通过 `connect` 函数连接到 Redux store，可以使用 `enzyme` 或 `@testing-library/react` 来测试组件是否正确接收和使用 store 中的状态和 actions。
+### 使用 Sinon 进行模拟
 
-```jsx
-// CounterComponent.jsx
-import React from "react";
-import { connect } from "react-redux";
-import { increment } from "./actions";
+Sinon 是一个流行的 JavaScript 测试工具，可创建间谍（spy）、存根（stub）和模拟（mock）对象。
 
-const CounterComponent = ({ count, increment }) => (
-  <div>
-    <p>Count: {count}</p>
-    <button onClick={increment}>Increment</button>
-  </div>
-);
+#### 安装 Sinon
 
-const mapStateToProps = (state) => ({
-  count: state.count,
-});
+```bash
+npm install --save-dev sinon
+```
 
-const mapDispatchToProps = {
-  increment,
+#### 使用 Sinon 存根函数
+
+```javascript
+// api.js
+export const fetchData = async () => {
+  const response = await fetch("https://example.com/api/data");
+  return response.json();
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CounterComponent);
+// myModule.js
+import { fetchData } from "./api";
 
-// CounterComponent.test.js
-import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
-import CounterComponent from "./CounterComponent";
+export const processData = async () => {
+  const data = await fetchData();
+  return data.length;
+};
 
-const mockStore = configureStore([]);
+// myModule.test.js
+import sinon from "sinon";
+import { processData } from "./myModule";
+import { fetchData } from "./api";
 
-describe("CounterComponent", () => {
-  let store;
-
+describe("processData", () => {
+  let stub;
   beforeEach(() => {
-    store = mockStore({ count: 0 });
+    stub = sinon.stub();
+    stub.resolves(["item1", "item2", "item3"]);
+    sinon.replace(fetchData, "fetchData", stub);
   });
 
-  test("should display the count from the store", () => {
-    render(
-      <Provider store={store}>
-        <CounterComponent />
-      </Provider>
-    );
-    const countElement = screen.getByText("Count: 0");
-    expect(countElement).toBeInTheDocument();
+  afterEach(() => {
+    sinon.restore();
   });
 
-  test("should dispatch increment action on button click", () => {
-    render(
-      <Provider store={store}>
-        <CounterComponent />
-      </Provider>
-    );
-    const incrementButton = screen.getByText("Increment");
-    fireEvent.click(incrementButton);
-    const actions = store.getActions();
-    expect(actions).toEqual([{ type: "INCREMENT" }]);
+  test("should return the length of the data", async () => {
+    const result = await processData();
+    expect(result).toBe(3);
   });
 });
 ```
 
-### 测试 Recoil
+在这个示例中，使用 `sinon.stub` 创建一个存根函数，使用 `sinon.replace` 替换 `fetchData` 函数，测试结束后使用 `sinon.restore` 恢复原始函数。
 
-Recoil 是一个用于管理 React 应用状态的库，主要包含 atoms（原子状态）和 selectors（派生状态）。
-
-#### 1. 测试 Atoms
-
-Atoms 是 Recoil 中的基本状态单元。可以测试 atoms 的初始值是否正确。
-
-```javascript
-// atoms.js
-import { atom } from "recoil";
-
-export const counterState = atom({
-  key: "counterState",
-  default: 0,
-});
-
-// atoms.test.js
-import { counterState } from "./atoms";
-import { useRecoilValue } from "recoil";
-import { renderHook } from "@testing-library/react-hooks";
-
-describe("counterState", () => {
-  test("should have an initial value of 0", () => {
-    const { result } = renderHook(() => useRecoilValue(counterState));
-    expect(result.current).toBe(0);
-  });
-});
-```
-
-#### 2. 测试 Selectors
-
-Selectors 是基于 atoms 或其他 selectors 派生出来的状态。可以测试 selectors 是否正确计算派生状态。
-
-```javascript
-// selectors.js
-import { atom, selector } from "recoil";
-
-export const counterState = atom({
-  key: "counterState",
-  default: 0,
-});
-
-export const doubleCounterSelector = selector({
-  key: "doubleCounterSelector",
-  get: ({ get }) => {
-    const count = get(counterState);
-    return count * 2;
-  },
-});
-
-// selectors.test.js
-import { counterState, doubleCounterSelector } from "./selectors";
-import { useRecoilValue, set } from "recoil";
-import { renderHook } from "@testing-library/react-hooks";
-
-describe("doubleCounterSelector", () => {
-  test("should return double the counter value", () => {
-    const { result } = renderHook(() => useRecoilValue(doubleCounterSelector));
-    expect(result.current).toBe(0);
-
-    const { set } = renderHook(() => ({
-      set: (value) => useSetRecoilState(counterState)(value),
-    })).result.current;
-
-    set(5);
-    const { result: newResult } = renderHook(() => useRecoilValue(doubleCounterSelector));
-    expect(newResult.current).toBe(10);
-  });
-});
-```
-
-#### 3. 测试 Recoil 组件
-
-可以测试使用 Recoil 状态的组件是否正确更新和渲染。
-
-```jsx
-// CounterComponent.jsx
-import React from "react";
-import { useRecoilState } from "recoil";
-import { counterState } from "./atoms";
-
-const CounterComponent = () => {
-  const [count, setCount] = useRecoilState(counterState);
-
-  const increment = () => {
-    setCount(count + 1);
-  };
-
-  return (
-    <div>
-      <p>Count: {count}</p>
-      <button onClick={increment}>Increment</button>
-    </div>
-  );
-};
-
-export default CounterComponent;
-
-// CounterComponent.test.js
-import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
-import { RecoilRoot } from "recoil";
-import CounterComponent from "./CounterComponent";
-
-describe("CounterComponent", () => {
-  test("should display the count and increment on button click", () => {
-    render(
-      <RecoilRoot>
-        <CounterComponent />
-      </RecoilRoot>
-    );
-    const countElement = screen.getByText("Count: 0");
-    expect(countElement).toBeInTheDocument();
-
-    const incrementButton = screen.getByText("Increment");
-    fireEvent.click(incrementButton);
-
-    const newCountElement = screen.getByText("Count: 1");
-    expect(newCountElement).toBeInTheDocument();
-  });
-});
-```
-
-通过以上方法，可以对 Redux 和 Recoil 状态库进行有效的单元测试，确保状态管理逻辑的正确性。
+通过以上方法，你可以在单元测试中排除三方依赖，确保测试的独立性和稳定性。

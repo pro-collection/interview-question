@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "解释 V8 引擎的内存管理机制，如何通过优化闭包或对象结构减少内存泄漏？",
-  key_world: ["内存机制、内存泄露"],
+  title: "介绍一下 Web Components和Shadow DOM",
+  key_world: ["Web Components"],
   labels: [
     labels.engineering,
     // labels.node,
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

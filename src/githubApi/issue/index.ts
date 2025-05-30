@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Web Components 有哪些优势",
+  title: "为何 Web Components 没有成为 web 前端的主流技术框架， 反而是 react 和 vue 呢？",
   key_world: ["Web Components"],
   labels: [
     labels.engineering,

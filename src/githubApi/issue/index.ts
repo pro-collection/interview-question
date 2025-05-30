@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "该如何给自己的项目添加 jest 去测试 react ts 项目",
-  key_world: ["前端测试 jest 配置"],
+  title: "解释 V8 引擎的内存管理机制，如何通过优化闭包或对象结构减少内存泄漏？",
+  key_world: ["内存机制、内存泄露"],
   labels: [
     labels.engineering,
     // labels.node,
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 Web Components和Shadow DOM",
+  title: "Web Components 有哪些优势",
   key_world: ["Web Components"],
   labels: [
     labels.engineering,
@@ -17,7 +17,7 @@ const remote = {
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何将一个非常到大的 spa 应用， 迁移到微前端架构， 有哪些考虑因素",
-  key_world: ["微前端框架"],
+  title: "将网页dom 元素转为图片， 有哪些办法",
+  key_world: ["dom 转图片"],
   labels: [
-    labels.engineering,
+    labels.application,
     // labels.node,
     // company.tencent,
     // xx
   ],
-  milestone: MileStone.master,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

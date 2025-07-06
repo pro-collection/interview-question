@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "为何 Web Components 没有成为 web 前端的主流技术框架， 反而是 react 和 vue 呢？",
-  key_world: ["Web Components"],
+  title: "前端倒计时有误差怎么解决",
+  key_world: [],
   labels: [
-    labels.engineering,
+    labels.application,
     // labels.node,
-    // company.alibaba,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "很多web前端框架里面会有约定式路由， 他们是如何实现的",
-  key_world: ["约定是路由"],
+  title: "如何对一个大型 SPA（单页应用）进行全面的性能优化？请从构建阶段、运行时、网络请求、渲染等多个维度说明。",
+  key_world: ["性能优化"],
   labels: [
     labels.engineering,
     // labels.node,
-    company.alibaba,
+    company.tencent,
     // xx
   ],
   milestone: MileStone.senior,

@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "让元素滚动到可视区， 有那些办法",
+  title: "scrollIntoView、scrollIntoViewIfNeeded、scrollTo 有何区别？",
   key_world: [],
   labels: [
     labels.application,

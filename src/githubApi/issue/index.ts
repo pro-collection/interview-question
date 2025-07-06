@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "微前端架构有哪些主流框架可以选， 各有啥优劣势？",
+  title: "如何将一个非常到大的 spa 应用， 迁移到微前端架构， 有哪些考虑因素",
   key_world: ["微前端框架"],
   labels: [
     labels.engineering,
     // labels.node,
-    company.tencent,
+    // company.tencent,
     // xx
   ],
   milestone: MileStone.master,

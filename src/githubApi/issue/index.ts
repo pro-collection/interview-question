@@ -9,12 +9,12 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "scrollIntoView、scrollIntoViewIfNeeded、scrollTo 有何区别？",
+  title: "decodeURI 和 decodeURIComponent 有何区别",
   key_world: [],
   labels: [
     labels.application,
     // labels.node,
-    company.alibaba,
+    company.jd,
     // xx
   ],
   milestone: MileStone.inProgress,

@@ -1,84 +1,85 @@
-`scrollIntoView()`、`scrollIntoViewIfNeeded()` 和 `scrollTo()` 是 JavaScript 中用于滚动的三个方法，它们的功能和适用场景有所不同：
+`decodeURI()` 和 `decodeURIComponent()` 是 JavaScript 中用于解码 URI（统一资源标识符）的两个方法，它们的核心区别在于解码范围和适用场景。
 
-### **1. Element.scrollIntoView()**
+### **1. 编码规则回顾**
 
-- **所属对象**：DOM 元素（Element）。
-- **作用**：将调用该方法的元素滚动到浏览器窗口的可视区域内。
-- **参数**：
-  - **`behavior`**：滚动行为，可选 `smooth`（平滑滚动）或 `auto`（瞬间滚动，默认值）。
-  - **`block`**：垂直对齐方式，可选 `start`（元素顶部与视口顶部对齐）、`center`（居中）、`end`（底部对齐）或 `nearest`（最近边缘）。
-  - **`inline`**：水平对齐方式，可选 `start`、`center`、`end` 或 `nearest`。
+在 URI 中，某些字符（如空格、特殊符号）需要被编码为 `%` 后跟两位十六进制数。例如：
 
-```javascript
-// 平滑滚动到元素顶部对齐
-element.scrollIntoView({ behavior: "smooth", block: "start" });
-```
+- 空格被编码为 `%20`
+- `&` 被编码为 `%26`
+- `#` 被编码为 `%23`
 
-- **兼容性**：所有现代浏览器 + IE11。
+### **2. 核心区别**
 
-### **2. Element.scrollIntoViewIfNeeded()**
+| 方法                   | 解码范围                                                 | 保留字符                        | 典型应用场景           |
+| ---------------------- | -------------------------------------------------------- | ------------------------------- | ---------------------- |
+| `decodeURI()`          | 解码整个 URI（如 `http://example.com/path?query=value`） | `;/?:@&=+$,#`（URI 分隔符）     | 解码完整 URL           |
+| `decodeURIComponent()` | 解码 URI 的组件部分（如查询参数、路径片段）              | 无保留字符（解码所有 `%` 编码） | 解码查询参数或路径参数 |
 
-- **所属对象**：DOM 元素（Element）。
-- **作用**：**仅在元素当前不在可视区域内时**，将其滚动到可视区域。如果元素已可见，则不执行滚动。
-- **参数**：
-  - **`centerIfNeeded`**：布尔值（仅 WebKit 浏览器支持，如 Chrome/Safari）。
-    - `true`：将元素居中显示（默认值）。
-    - `false`：将元素滚动到最近的边缘（顶部或底部）。
+### **3. 示例对比**
+
+#### **场景 1：解码完整 URL**
 
 ```javascript
-// 仅在元素不可见时滚动（Chrome/Safari）
-element.scrollIntoViewIfNeeded(true);
+const encodedUrl = "http://example.com/path%2Fsubpath?param1=value1%26param2=value2";
+
+// 使用 decodeURI()
+decodeURI(encodedUrl);
+// 输出：http://example.com/path/subpath?param1=value1%26param2=value2
+// 注意：路径分隔符 `/`（%2F）和解码，但查询参数中的 `&`（%26）未解码
+
+// 使用 decodeURIComponent()
+decodeURIComponent(encodedUrl);
+// 报错：URIError: malformed URI sequence
+// 原因：完整 URL 中的分隔符（如 `?`、`&`）被错误解码
 ```
 
-- **兼容性**：Chrome、Safari 完全支持，Firefox 部分支持，**IE/Edge 不支持**。
-
-### **3. Window.scrollTo() / Element.scrollTo()**
-
-- **所属对象**：
-  - `window.scrollTo()`：滚动整个页面。
-  - `element.scrollTo()`：滚动特定容器（如 `<div class="scrollable">`）。
-- **作用**：滚动到指定的坐标位置。
-- **参数**：
-  - **坐标方式**：`scrollTo(x, y)`，指定目标位置的绝对坐标。
-  - **选项对象**：
-    - `top`：垂直滚动位置（像素）。
-    - `left`：水平滚动位置（像素）。
-    - `behavior`：滚动行为，同 `scrollIntoView()`。
+#### **场景 2：解码查询参数**
 
 ```javascript
-// 滚动到页面 (0, 500) 位置
-window.scrollTo({ top: 500, behavior: "smooth" });
+const encodedParam = "key1=value1%26key2=value2%23hash";
 
-// 滚动容器内的元素
-const container = document.querySelector(".scrollable");
-container.scrollTo({ left: 200, behavior: "smooth" });
+// 使用 decodeURI()
+decodeURI(encodedParam);
+// 输出：key1=value1%26key2=value2%23hash
+// 注意：`&`（%26）和 `#`（%23）未被解码
+
+// 使用 decodeURIComponent()
+decodeURIComponent(encodedParam);
+// 输出：key1=value1&key2=value2#hash
+// 正确解码所有参数部分
 ```
 
-### **核心区别总结**
+### **4. 常见误区**
 
-| 方法                       | 作用对象   | 触发条件           | 定位方式         | 兼容性        |
-| -------------------------- | ---------- | ------------------ | ---------------- | ------------- |
-| `scrollIntoView()`         | 元素自身   | 始终触发滚动       | 基于元素位置对齐 | 全浏览器支持  |
-| `scrollIntoViewIfNeeded()` | 元素自身   | 仅元素不可见时触发 | 自动选择最佳位置 | Chrome/Safari |
-| `scrollTo()`               | 窗口或容器 | 始终触发滚动       | 指定绝对坐标     | 全浏览器支持  |
+- **误用 `decodeURI()` 处理参数**：若 URL 参数包含 `&`、`=` 等符号，`decodeURI()` 不会解码它们，导致参数解析错误。
 
-### **使用场景建议**
+  ```javascript
+  // 错误示例：查询参数中的 `&` 未被解码
+  const query = "name=John%26Doe";
+  decodeURI(query); // "name=John%26Doe"（错误）
 
-- **将元素显示在视口中**：用 `scrollIntoView()`，适合固定导航栏跳转或表单错误定位。
-- **避免不必要的滚动**：用 `scrollIntoViewIfNeeded()`，适合懒加载内容或动态列表。
-- **精确控制滚动位置**：用 `scrollTo()`，适合实现进度条或分步表单。
+  // 正确方式
+  decodeURIComponent(query); // "name=John&Doe"（正确）
+  ```
 
-例如：
+- **误用 `decodeURIComponent()` 处理完整 URL**：会破坏 URL 结构（如路径分隔符被解码）。
+  ```javascript
+  const url = "http://example.com/path%3Fparam=value"; // 假设路径中包含 `?`
+  decodeURIComponent(url); // "http://example.com/path?param=value"（错误，路径被截断）
+  ```
 
-```javascript
-// 平滑滚动到页面顶部
-window.scrollTo({ top: 0, behavior: "smooth" });
+### **5. 总结**
 
-// 将错误提示滚动到可视区
-errorElement.scrollIntoView({ block: "center", behavior: "smooth" });
+- **使用 `decodeURI()` 时**：
 
-// 仅在图片不可见时滚动到它（Chrome/Safari）
-imageElement.scrollIntoViewIfNeeded();
-```
+  - 处理完整 URL（如 `window.location.href`）。
+  - 保留 URI 中的特殊分隔符（如 `?`、`&`、`/`）。
 
-选择合适的方法能提升用户体验，避免不必要的页面抖动。
+- **使用 `decodeURIComponent()` 时**：
+  - 处理 URI 的组件部分（如查询参数、路径参数）。
+  - 需要解码所有特殊字符（如表单提交的参数）。
+
+**口诀**：
+
+- **完整 URL** → `decodeURI()`
+- **参数片段** → `decodeURIComponent()`

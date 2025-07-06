@@ -9,7 +9,7 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端倒计时有误差怎么解决",
+  title: "让元素滚动到可视区， 有那些办法",
   key_world: [],
   labels: [
     labels.application,

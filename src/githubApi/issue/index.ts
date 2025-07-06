@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "decodeURI 和 decodeURIComponent 有何区别",
-  key_world: [],
+  title: "很多web前端框架里面会有约定式路由， 他们是如何实现的",
+  key_world: ["约定是路由"],
   labels: [
-    labels.application,
+    labels.engineering,
     // labels.node,
-    company.jd,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

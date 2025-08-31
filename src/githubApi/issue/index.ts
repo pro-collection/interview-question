@@ -9,15 +9,17 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "将网页dom 元素转为图片， 有哪些办法",
-  key_world: ["dom 转图片"],
+  title: "深层清理对象中的空值属性",
+  key_world: [
+    //
+  ],
   labels: [
-    labels.application,
+    labels.code,
     // labels.node,
     // company.tencent,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

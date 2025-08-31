@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "less 与 scss 有何区别",
+  title: "less 与 css 有何区别",
   key_world: [
     //
-    "less 与 scss",
+    "less 与 css",
   ],
   labels: [
     labels.application,

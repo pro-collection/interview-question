@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "用 css 实现一个 loading 动画， 该如何做（转圈）",
+  title: "ts 里面 infer 是什么关键词， 怎么用",
   key_world: [
     //
-    "css 动画",
+    "ts infer",
   ],
   labels: [
-    labels.css,
+    labels.ts,
     // labels.node,
-    // company.tencent,
+    company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -1,76 +1,128 @@
-**关键词**：css 动画
+**关键词**：ts infer
 
-> 作者备注
->
-> 这个问题主要是对 css 动画的考察， 比直接问 animation 和 transform 属性有意义。
+在 TypeScript 中，`infer` 是一个用于**类型推断**的关键字，通常与条件类型（`Conditional types`）配合使用，用于**从泛型类型中提取或推断出某个具体类型**。它的核心作用是“让 TypeScript 自动推导出我们需要的类型”，而无需需手动指定。
 
-可以利用 CSS 的 `animation 和 transform` 属性，通过旋转一个带有渐变边框的元素来实现。
+### 基本语法与作用
 
-这个转圈 `loading` 动画的核心实现思路如下：
+`infer` 只能在条件类型的 `extends` 子句中使用，语法格式如下：
 
-1. **创建圆形元素**：
-
-   - 使用 `width` 和 `height` 设置相同的尺寸
-   - 通过 `border-radius: 50%` 将方形元素变成圆形
-
-2. **设计边框样式**：
-
-   - 设置一个较粗的边框（`border`）
-   - 让大部分边框保持半透明（`rgba(255, 255, 255, 0.3)`）
-   - 只让顶部边框使用实色（`border-top-color`），形成旋转时的流动效果
-
-3. **添加旋转动画**：
-   - 定义 `spin` 动画，通过 `transform: rotate(360deg)` 实现 360 度旋转
-   - 使用 `animation` 属性应用动画，设置 `1s` 为一个周期，`ease-in-out` 缓动效果，`infinite` 无限循环
-
-**直接上代码**：
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CSS Loading Spinner</title>
-    <style>
-      /* 基础样式设置 */
-      body {
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #f0f2f5;
-      }
-
-      /* 加载动画容器 */
-      .loading-spinner {
-        /* 动画大小 */
-        width: 50px;
-        height: 50px;
-
-        /* 创建圆形边框 */
-        border: 5px solid rgba(255, 255, 255, 0.3); /* 浅色边框 */
-        border-top-color: #1677ff; /* 高亮边框（旋转时形成流动效果） */
-        border-radius: 50%; /* 圆形 */
-
-        /* 旋转动画 */
-        animation: spin 1s ease-in-out infinite;
-      }
-
-      /* 旋转动画定义 */
-      @keyframes spin {
-        to {
-          /* 360度旋转 */
-          transform: rotate(360deg);
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <!-- 加载动画元素 -->
-    <div class="loading-spinner"></div>
-  </body>
-</html>
+```typescript
+type 类型名<T> = T extends 某个类型<infer 待推断类型> ? 待推断类型 : 其他类型;
 ```
+
+- `infer X` 表示“声明一个需要推断的类型变量 `X`”
+- TypeScript 会自动分析 `T` 的结构，推导出 `X` 的具体类型
+
+### 典型使用场景
+
+#### 1. 提取函数的返回值类型
+
+最常见的场景之一：从函数类型中提取其返回值类型。
+
+```typescript
+// 定义一个条件类型，提取函数的返回值类型
+type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+
+// 使用示例
+function getUser() {
+  return { name: "张三", age: 20 };
+}
+
+// 推断 getUser 函数的返回值类型
+type User = ReturnType<typeof getUser>;
+// User 的类型为 { name: string; age: number }
+```
+
+- `T extends (...args: any[]) => infer R` 表示：如果 `T` 是一个函数，就推断其返回值类型为 `R`
+- 最终 `User` 被推断为函数 `getUser` 的返回值类型
+
+#### 2. 提取函数的参数类型
+
+类似地，可以提取函数的参数类型（单个参数或参数列表）。
+
+```typescript
+// 提取单个参数类型
+type ParamType<T> = T extends (param: infer P) => any ? P : never;
+
+// 提取参数列表类型（返回元组）
+type ParamsType<T> = T extends (...args: infer P) => any ? P : never;
+
+// 使用示例
+function sum(a: number, b: string): boolean {
+  return a + Number(b) > 10;
+}
+
+type SumParam = ParamType<typeof sum>; // 错误！因为函数有多个参数，这里会返回 never
+type SumParams = ParamsType<typeof sum>; // [number, string]（参数列表组成的元组）
+type SumReturn = ReturnType<typeof sum>; // boolean（返回值类型）
+```
+
+#### 3. 提取数组的元素类型
+
+从数组类型中推断出元素的类型。
+
+```typescript
+// 提取数组元素类型
+type ArrayItem<T> = T extends Array<infer Item> ? Item : T;
+
+// 使用示例
+type NumberItem = ArrayItem<number[]>; // number
+type StringItem = ArrayItem<string[]>; // string
+type UserItem = ArrayItem<{ name: string }[]>; // { name: string }
+type Primitive = ArrayItem<boolean>; // boolean（非数组类型则返回自身）
+```
+
+#### 4. 提取 Promise 的 resolve 类型
+
+从 `Promise` 类型中推断出其最终解析（resolve）的类型。
+
+```typescript
+// 提取 Promise 解析的类型
+type PromiseResolve<T> = T extends Promise<infer R> ? R : T;
+
+// 使用示例
+type Resolve1 = PromiseResolve<Promise<string>>; // string
+type Resolve2 = PromiseResolve<Promise<{ id: number }>>; // { id: number }
+type Resolve3 = PromiseResolve<number>; // number（非 Promise 类型则返回自身）
+```
+
+#### 5. 嵌套推断（复杂结构）
+
+`infer` 支持多层嵌套推断，可用于复杂类型结构的提取。
+
+```typescript
+// 从 { data: T } 结构中提取 T
+type ExtractData<T> = T extends { data: infer D } ? D : T;
+
+// 嵌套推断：从 Promise<{ data: T }> 中提取 T
+type ExtractPromiseData<T> = T extends Promise<{ data: infer D }> ? D : T;
+
+// 使用示例
+type Data1 = ExtractData<{ data: { name: string } }>; // { name: string }
+type Data2 = ExtractPromiseData<Promise<{ data: number[] }>>; // number[]
+```
+
+### 注意事项
+
+1. **只能在条件类型中使用**：`infer` 不能单独使用，必须放在 `T extends ...` 的子句中。
+2. **推断的不确定性**：如果 TypeScript 无法明确推断类型（如多种可能的匹配），会返回 `never` 或联合类型。
+
+   ```typescript
+   type Ambiguous<T> = T extends (a: infer A, b: infer A) => any ? A : never;
+   type Test = Ambiguous<(x: number, y: string) => void>; // number | string（联合类型）
+   ```
+
+3. **与内置工具类型的关系**：TypeScript 内置的很多工具类型（如 `ReturnType`、`Parameters`）都是基于 `infer` 实现的，例如：
+   ```typescript
+   // TypeScript 内置的 Parameters 实现
+   type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
+   ```
+
+### 总结
+
+`infer` 是 TypeScript 类型系统中用于**自动推断类型**的强大工具，核心价值在于：
+
+- 从复杂类型（如函数、数组、Promise 等）中“提取”我们需要的具体类型
+- 减少手动编写重复类型的工作量，提升类型定义的灵活性和可维护性
+
+它最常见的应用场景包括提取函数参数/返回值、数组元素、Promise 解析值等，是编写高级类型工具的基础。

@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "TypeScript 中，ReturnType 的作用和用法",
+  title: "react 开发的应用里面， 如何给系统设置一个全局的崩溃的提示页面",
   key_world: [
     //
-    "ts RetrunType",
+    "崩溃提示",
   ],
   labels: [
-    labels.ts,
+    labels.frameWork,
     // labels.node,
-    // company.mt,
+    company.mi,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

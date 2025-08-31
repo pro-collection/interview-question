@@ -1,115 +1,76 @@
-**关键词**：less 与 css
+**关键词**：css 动画
 
-Less 是 CSS 的预处理器，它在原生 CSS 的基础上扩展了诸多功能，解决了原生 CSS 开发中的痛点（如缺乏变量、复用机制、逻辑处理等）。以下是 Less 与 CSS 的核心区别：
+> 作者备注
+>
+> 这个问题主要是对 css 动画的考察， 比直接问 animation 和 transform 属性有意义。
 
-### **1. 语法与功能**
+可以利用 CSS 的 `animation 和 transform` 属性，通过旋转一个带有渐变边框的元素来实现。
 
-| **特性**     | **CSS**（原生）                                             | **Less**                                                                  |
-| ------------ | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
-| **变量支持** | 无（CSS 变量 `--var` 是较新特性，兼容性和功能有限）         | 支持 `@variable: value` 定义变量，可全局复用、参与运算，优先级清晰        |
-| **嵌套规则** | 需重复书写父选择器，代码冗余（如 `.parent .child { ... }`） | 支持选择器嵌套（类似 HTML 结构），减少重复代码，层级更清晰                |
-| **代码复用** | 无原生复用机制，需复制粘贴或依赖 `@import` 导入整个文件     | 支持「混合（Mixin）」复用样式片段，可带参数实现个性化复用                 |
-| **逻辑处理** | 无（仅能通过 `@media` 实现简单条件，无循环、判断）          | 支持条件判断（`when`）、循环（混合自调用）、运算（加减乘除、颜色计算）    |
-| **模块化**   | `@import` 导入整个 CSS 文件，增加请求数，无作用域隔离       | 支持导入 Less 文件，可结合 `(reference)` 仅引用变量/混合，避免冗余代码    |
-| **内置工具** | 无                                                          | 提供颜色处理（`darken()`、`lighten()`）、数值计算（`percentage()`）等函数 |
+这个转圈 `loading` 动画的核心实现思路如下：
 
-### **2. 开发效率**
+1. **创建圆形元素**：
 
-- **CSS**：  
-  编写重复代码多（如相同颜色、尺寸需多次书写），修改时需全局搜索替换，维护成本高。  
-  示例（重复代码问题）：
+   - 使用 `width` 和 `height` 设置相同的尺寸
+   - 通过 `border-radius: 50%` 将方形元素变成圆形
 
-  ```css
-  .btn {
-    background: #1890ff;
-  }
-  .card {
-    border-color: #1890ff;
-  }
-  .title {
-    color: #1890ff;
-  }
-  /* 若要修改主题色，需逐个修改 */
-  ```
+2. **设计边框样式**：
 
-- **Less**：  
-  通过变量、混合等特性减少重复代码，修改时只需调整一处，开发和维护效率大幅提升。  
-  示例（解决重复问题）：
-  ```less
-  @primary: #1890ff; /* 变量定义 */
-  .btn {
-    background: @primary;
-  }
-  .card {
-    border-color: @primary;
-  }
-  .title {
-    color: @primary;
-  }
-  /* 修改主题色只需改 @primary 即可 */
-  ```
+   - 设置一个较粗的边框（`border`）
+   - 让大部分边框保持半透明（`rgba(255, 255, 255, 0.3)`）
+   - 只让顶部边框使用实色（`border-top-color`），形成旋转时的流动效果
 
-### **3. 编译方式**
+3. **添加旋转动画**：
+   - 定义 `spin` 动画，通过 `transform: rotate(360deg)` 实现 360 度旋转
+   - 使用 `animation` 属性应用动画，设置 `1s` 为一个周期，`ease-in-out` 缓动效果，`infinite` 无限循环
 
-- **CSS**：  
-  是浏览器可直接解析的样式语言，无需编译，写完即可运行。
+**直接上代码**：
 
-- **Less**：  
-  是「预编译语言」，浏览器无法直接识别，必须通过 Less 编译器（如 `lessc`、Webpack 的 `less-loader`）转换为 CSS 后才能被浏览器解析。  
-  流程：`Less 代码 → 编译 → CSS 代码 → 浏览器执行`
-
-### **4. 代码结构**
-
-- **CSS**：  
-  层级嵌套需通过后代选择器实现，代码冗长且层级不直观。  
-  示例：
-
-  ```css
-  .header {
-    padding: 20px;
-  }
-  .header .logo {
-    width: 100px;
-  }
-  .header .nav {
-    margin-left: 20px;
-  }
-  .header .nav li {
-    display: inline-block;
-  }
-  ```
-
-- **Less**：  
-  支持嵌套语法，结构与 HTML 一致，层级清晰，减少选择器冗余。  
-  示例：
-  ```less
-  .header {
-    padding: 20px;
-    .logo {
-      width: 100px;
-    }
-    .nav {
-      margin-left: 20px;
-      li {
-        display: inline-block;
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Loading Spinner</title>
+    <style>
+      /* 基础样式设置 */
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f2f5;
       }
-    }
-  }
-  ```
 
-### **5. 适用场景**
+      /* 加载动画容器 */
+      .loading-spinner {
+        /* 动画大小 */
+        width: 50px;
+        height: 50px;
 
-- **CSS**：  
-  适合简单页面（如静态页面、小网站），或需要快速编写、无需复杂逻辑的场景。
+        /* 创建圆形边框 */
+        border: 5px solid rgba(255, 255, 255, 0.3); /* 浅色边框 */
+        border-top-color: #1677ff; /* 高亮边框（旋转时形成流动效果） */
+        border-radius: 50%; /* 圆形 */
 
-- **Less**：  
-  适合中大型项目、组件库开发或需要频繁复用样式、动态调整主题的场景（如通过变量切换主题色、响应式适配）。
+        /* 旋转动画 */
+        animation: spin 1s ease-in-out infinite;
+      }
 
-### **总结**
-
-Less 不是替代 CSS，而是对 CSS 的增强：
-
-- **CSS 是基础**：浏览器最终执行的是 CSS，它是样式的“目标语言”。
-- **Less 是工具**：通过提供变量、嵌套、复用等功能，让开发者更高效地编写 CSS，最终仍需编译为 CSS 才能运行。
-
-简单说，Less 解决了原生 CSS“写起来麻烦、改起来痛苦”的问题，是现代前端开发中提升样式开发效率的主流选择。
+      /* 旋转动画定义 */
+      @keyframes spin {
+        to {
+          /* 360度旋转 */
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 加载动画元素 -->
+    <div class="loading-spinner"></div>
+  </body>
+</html>
+```

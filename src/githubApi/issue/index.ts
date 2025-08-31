@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "less 与 css 有何区别",
+  title: "用 css 实现一个 loading 动画， 该如何做（转圈）",
   key_world: [
     //
-    "less 与 css",
+    "css 动画",
   ],
   labels: [
-    labels.application,
+    labels.css,
     // labels.node,
-    company.tencent,
+    // company.tencent,
     // xx
   ],
   milestone: MileStone.inProgress,

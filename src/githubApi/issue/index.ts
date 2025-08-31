@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "JS 里面， 对于对象的读写， 是使用 object 好，还是 Map，性能差异如何？",
+  title: "less 是否支持条件判定",
   key_world: [
     //
-    "Object 与 Map",
+    "less 条件判定",
   ],
   labels: [
-    labels.js,
+    labels.application,
     // labels.node,
-    company.alibaba,
+    company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 git diff",
+  title: "JS 里面， 对于对象的读写， 是使用 object 好，还是 Map，性能差异如何？",
   key_world: [
     //
-    "git diff",
+    "Object 与 Map",
   ],
   labels: [
-    labels.application,
+    labels.js,
     // labels.node,
-    // company.tencent,
+    company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

@@ -9,12 +9,13 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "深层清理对象中的空值属性",
+  title: "介绍一下 git stash",
   key_world: [
     //
+    "git stash",
   ],
   labels: [
-    labels.code,
+    labels.application,
     // labels.node,
     // company.tencent,
     // xx

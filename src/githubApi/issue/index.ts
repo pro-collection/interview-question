@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "ts 有哪些常用的关键词",
+  title: "对比一下 ts 和 jsdoc",
   key_world: [
     //
-    "ts 关键词",
+    "ts 对比 jsdoc",
   ],
   labels: [
     labels.ts,
     // labels.node,
-    company.mt,
+    // company.mt,
     // xx
   ],
   milestone: MileStone.inProgress,

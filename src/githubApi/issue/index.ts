@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "less 是否支持条件判定",
+  title: "less 有那些高级特性， 驱使你们项目工程去使用它",
   key_world: [
     //
-    "less 条件判定",
+    "less 特性",
   ],
   labels: [
     labels.application,

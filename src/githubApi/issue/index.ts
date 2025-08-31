@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "对比一下 ts 和 jsdoc",
+  title: "TypeScript 中，ReturnType 的作用和用法",
   key_world: [
     //
-    "ts 对比 jsdoc",
+    "ts RetrunType",
   ],
   labels: [
     labels.ts,
@@ -20,7 +20,7 @@ const remote = {
     // company.mt,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

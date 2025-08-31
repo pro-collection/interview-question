@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "ts 里面 infer 是什么关键词， 怎么用",
+  title: "ts 有哪些常用的关键词",
   key_world: [
     //
-    "ts infer",
+    "ts 关键词",
   ],
   labels: [
     labels.ts,
@@ -20,7 +20,7 @@ const remote = {
     company.mt,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

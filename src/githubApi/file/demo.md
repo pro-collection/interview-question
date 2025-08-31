@@ -1,128 +1,38 @@
-**关键词**：ts infer
+**关键词**：ts 关键词
 
-在 TypeScript 中，`infer` 是一个用于**类型推断**的关键字，通常与条件类型（`Conditional types`）配合使用，用于**从泛型类型中提取或推断出某个具体类型**。它的核心作用是“让 TypeScript 自动推导出我们需要的类型”，而无需需手动指定。
+> 作者备注
+>
+> 这个问题主要是对 ts 类型熟悉程度的考察， 比直接问 number、string 等基础类型有意义。
 
-### 基本语法与作用
+TypeScript 在 JavaScript 基础上扩展了许多用于类型定义和类型控制的关键字，这些关键字是构建 TypeScript 类型系统的核心。以下是常用的关键词分类及说明：
 
-`infer` 只能在条件类型的 `extends` 子句中使用，语法格式如下：
+以下是 TypeScript 常用关键字的分类汇总表：
 
-```typescript
-type 类型名<T> = T extends 某个类型<infer 待推断类型> ? 待推断类型 : 其他类型;
-```
+| 分类          | 关键字/操作符                  | 主要用途                                                     |
+| ------------- | ------------------------------ | ------------------------------------------------------------ | ---------------------------- |
+| **基础类型**  | `number` `string` `boolean`    | 定义数字、字符串、布尔值类型                                 |
+|               | `null` `undefined`             | 定义空值类型                                                 |
+|               | `void`                         | 表示函数无返回值                                             |
+|               | `any` `unknown`                | `any` 关闭类型检查；`unknown` 安全的未知类型（需断言后使用） |
+|               | `never`                        | 表示永远不会发生的类型（如抛出错误）                         |
+| **复合类型**  | `array`（`T[]` 或 `Array<T>`） | 定义数组类型                                                 |
+|               | `interface`                    | 定义对象结构（可扩展、继承）                                 |
+|               | `type`                         | 类型别名（支持联合、交叉等复杂类型）                         |
+|               | `enum`                         | 定义命名常量集合                                             |
+|               | `tuple`（`[T1, T2]`）          | 固定长度和类型的数组                                         |
+| **类型操作**  | <span>`                        | `<span/>（联合类型）                                         | 表示“或”关系（类型可选其一） |
+|               | `&`（交叉类型）                | 表示“且”关系（合并多个类型）                                 |
+|               | `extends`                      | 泛型约束；接口/类继承                                        |
+|               | `infer`                        | 条件类型中推断类型（如提取函数返回值）                       |
+|               | `keyof`                        | 获取对象类型的所有键名组成的联合类型                         |
+|               | `typeof`                       | 获取变量/属性的类型                                          |
+|               | `as`                           | 类型断言（指定变量的实际类型）                               |
+| **函数/泛型** | `function`                     | 定义函数（指定参数和返回值类型）                             |
+|               | 泛型（`T` `U` 等）             | 定义通用类型，实现类型复用                                   |
+| **模块/命名** | `export` `import`              | 模块导出/导入                                                |
+|               | `namespace`                    | 定义命名空间（避免全局变量冲突）                             |
+| **其他常用**  | `readonly`                     | 定义只读属性或数组                                           |
+|               | `declare`                      | 声明全局变量/模块类型（用于 `.d.ts` 文件）                   |
+|               | `abstract`                     | 定义抽象类/抽象方法（需子类实现）                            |
 
-- `infer X` 表示“声明一个需要推断的类型变量 `X`”
-- TypeScript 会自动分析 `T` 的结构，推导出 `X` 的具体类型
-
-### 典型使用场景
-
-#### 1. 提取函数的返回值类型
-
-最常见的场景之一：从函数类型中提取其返回值类型。
-
-```typescript
-// 定义一个条件类型，提取函数的返回值类型
-type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
-
-// 使用示例
-function getUser() {
-  return { name: "张三", age: 20 };
-}
-
-// 推断 getUser 函数的返回值类型
-type User = ReturnType<typeof getUser>;
-// User 的类型为 { name: string; age: number }
-```
-
-- `T extends (...args: any[]) => infer R` 表示：如果 `T` 是一个函数，就推断其返回值类型为 `R`
-- 最终 `User` 被推断为函数 `getUser` 的返回值类型
-
-#### 2. 提取函数的参数类型
-
-类似地，可以提取函数的参数类型（单个参数或参数列表）。
-
-```typescript
-// 提取单个参数类型
-type ParamType<T> = T extends (param: infer P) => any ? P : never;
-
-// 提取参数列表类型（返回元组）
-type ParamsType<T> = T extends (...args: infer P) => any ? P : never;
-
-// 使用示例
-function sum(a: number, b: string): boolean {
-  return a + Number(b) > 10;
-}
-
-type SumParam = ParamType<typeof sum>; // 错误！因为函数有多个参数，这里会返回 never
-type SumParams = ParamsType<typeof sum>; // [number, string]（参数列表组成的元组）
-type SumReturn = ReturnType<typeof sum>; // boolean（返回值类型）
-```
-
-#### 3. 提取数组的元素类型
-
-从数组类型中推断出元素的类型。
-
-```typescript
-// 提取数组元素类型
-type ArrayItem<T> = T extends Array<infer Item> ? Item : T;
-
-// 使用示例
-type NumberItem = ArrayItem<number[]>; // number
-type StringItem = ArrayItem<string[]>; // string
-type UserItem = ArrayItem<{ name: string }[]>; // { name: string }
-type Primitive = ArrayItem<boolean>; // boolean（非数组类型则返回自身）
-```
-
-#### 4. 提取 Promise 的 resolve 类型
-
-从 `Promise` 类型中推断出其最终解析（resolve）的类型。
-
-```typescript
-// 提取 Promise 解析的类型
-type PromiseResolve<T> = T extends Promise<infer R> ? R : T;
-
-// 使用示例
-type Resolve1 = PromiseResolve<Promise<string>>; // string
-type Resolve2 = PromiseResolve<Promise<{ id: number }>>; // { id: number }
-type Resolve3 = PromiseResolve<number>; // number（非 Promise 类型则返回自身）
-```
-
-#### 5. 嵌套推断（复杂结构）
-
-`infer` 支持多层嵌套推断，可用于复杂类型结构的提取。
-
-```typescript
-// 从 { data: T } 结构中提取 T
-type ExtractData<T> = T extends { data: infer D } ? D : T;
-
-// 嵌套推断：从 Promise<{ data: T }> 中提取 T
-type ExtractPromiseData<T> = T extends Promise<{ data: infer D }> ? D : T;
-
-// 使用示例
-type Data1 = ExtractData<{ data: { name: string } }>; // { name: string }
-type Data2 = ExtractPromiseData<Promise<{ data: number[] }>>; // number[]
-```
-
-### 注意事项
-
-1. **只能在条件类型中使用**：`infer` 不能单独使用，必须放在 `T extends ...` 的子句中。
-2. **推断的不确定性**：如果 TypeScript 无法明确推断类型（如多种可能的匹配），会返回 `never` 或联合类型。
-
-   ```typescript
-   type Ambiguous<T> = T extends (a: infer A, b: infer A) => any ? A : never;
-   type Test = Ambiguous<(x: number, y: string) => void>; // number | string（联合类型）
-   ```
-
-3. **与内置工具类型的关系**：TypeScript 内置的很多工具类型（如 `ReturnType`、`Parameters`）都是基于 `infer` 实现的，例如：
-   ```typescript
-   // TypeScript 内置的 Parameters 实现
-   type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
-   ```
-
-### 总结
-
-`infer` 是 TypeScript 类型系统中用于**自动推断类型**的强大工具，核心价值在于：
-
-- 从复杂类型（如函数、数组、Promise 等）中“提取”我们需要的具体类型
-- 减少手动编写重复类型的工作量，提升类型定义的灵活性和可维护性
-
-它最常见的应用场景包括提取函数参数/返回值、数组元素、Promise 解析值等，是编写高级类型工具的基础。
+这个表涵盖了日常开发中最常用的关键字，可根据场景快速查阅。核心重点关注 **类型声明**（`number`/`interface` 等）、**类型操作**（`extends`/`keyof`/`infer`）和 **泛型相关** 关键字，它们是 TypeScript 类型系统的核心。

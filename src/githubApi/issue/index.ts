@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "less 有那些高级特性， 驱使你们项目工程去使用它",
+  title: "less 与 scss 有何区别",
   key_world: [
     //
-    "less 特性",
+    "less 与 scss",
   ],
   labels: [
     labels.application,
@@ -20,7 +20,7 @@ const remote = {
     company.tencent,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

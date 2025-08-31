@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "介绍一下 git stash",
+  title: "介绍一下 git diff",
   key_world: [
     //
-    "git stash",
+    "git diff",
   ],
   labels: [
     labels.application,
@@ -20,7 +20,7 @@ const remote = {
     // company.tencent,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

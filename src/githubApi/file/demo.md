@@ -1,131 +1,98 @@
-**关键词**：nginx 配置跨域
+**关键词**：nginx proxy_pass
 
-Nginx 配置跨域（CORS）的核心是通过设置特定响应头，允许不同域的前端资源请求当前服务器资源。以下是关键配置和复杂跨域场景的注意事项：
+Nginx 中 `proxy_pass` 路径结尾是否加 `/` 会直接影响代理后的 URL 拼接规则，对前端接口请求路径的映射结果有显著差异。理解这一差异是配置接口代理的关键。
 
-### 一、基础跨域配置：关键响应头
+### 核心差异：路径拼接规则
 
-基础跨域（无 cookie、无自定义头）需配置以下核心响应头，允许指定域的请求访问资源：
+假设：
+
+- Nginx 配置的 `location` 匹配规则为 `/api`
+- 后端服务地址为 `http://backend:3000`
+
+两种配置的区别如下：
+
+| `proxy_pass` 配置                          | 拼接规则                                                         | 最终代理地址                            |
+| ------------------------------------------ | ---------------------------------------------------------------- | --------------------------------------- |
+| 不加 `/`：`proxy_pass http://backend:3000` | 将 `location` 匹配的路径（`/api`）**完整拼接到后端地址后**       | `http://backend:3000 + /api + 剩余路径` |
+| 加 `/`：`proxy_pass http://backend:3000/`  | 将 `location` 匹配的路径（`/api`）**替换为 `/`**，仅拼接剩余路径 | `http://backend:3000 + / + 剩余路径`    |
+
+### 举例说明（前端请求路径对比）
+
+假设前端发送请求：`http://nginx-host/api/user/list`
+
+#### 1. `proxy_pass` 不加 `/` 的情况
 
 ```nginx
-location / {
-    # 1. 允许的源域名（必填）
-    # 注意：生产环境建议明确指定域名（如 https://example.com），而非 *
-    add_header Access-Control-Allow-Origin *;
-
-    # 2. 允许的请求方法（必填）
-    add_header Access-Control-Allow-Methods 'GET, POST, PUT, DELETE, OPTIONS';
-
-    # 3. 允许的请求头（可选，根据实际需求添加）
-    add_header Access-Control-Allow-Headers 'Content-Type, Authorization';
-
-    # 4. 预检请求（OPTIONS）的缓存时间（可选，减少预检请求次数）
-    add_header Access-Control-Max-Age 3600;
-
-    # 处理预检请求（OPTIONS）：直接返回 204 成功状态
-    if ($request_method = 'OPTIONS') {
-        return 204;
-    }
+location /api {
+    # 后端地址末尾无 /
+    proxy_pass http://backend:3000;
 }
 ```
 
-**各头字段作用**：
+- 匹配逻辑：`location /api` 匹配到请求中的 `/api` 部分
+- 代理后地址：`http://backend:3000` + `/api` + `/user/list` → `http://backend:3000/api/user/list`
 
-- `Access-Control-Allow-Origin`：指定允许跨域请求的源（`*` 表示允许所有源，不推荐生产环境使用）。
-- `Access-Control-Allow-Methods`：允许的 HTTP 方法（需包含实际使用的方法，如 `OPTIONS` 是预检请求必须的）。
-- `Access-Control-Allow-Headers`：允许请求中携带的自定义头（如 `Authorization`、`X-Custom-Header`）。
-- `Access-Control-Max-Age`：预检请求（OPTIONS）的结果缓存时间（秒），避免频繁预检。
-
-### 二、复杂跨域场景：带 cookie、自定义头的注意点
-
-当跨域请求需要 **携带 cookie** 或 **自定义请求头** 时，配置需更严格，且前后端需协同配合：
-
-#### 1. 带 cookie 的跨域（`withCredentials: true`）
-
-- **Nginx 必须明确指定允许的源**（不能用 `*`），否则浏览器会拒绝响应：
-
-  ```nginx
-  # 错误：带 cookie 时不能用 *
-  # add_header Access-Control-Allow-Origin *;
-
-  # 正确：明确指定允许的源（如 https://frontend.com）
-  add_header Access-Control-Allow-Origin https://frontend.com;
-
-  # 必须添加：允许携带 cookie
-  add_header Access-Control-Allow-Credentials true;
-  ```
-
-- **前端需配合设置**：请求时需显式开启 `withCredentials`（以 Fetch 为例）：
-  ```javascript
-  fetch("https://backend.com/api/data", {
-    credentials: "include", // 等价于 XMLHttpRequest 的 withCredentials: true
-  });
-  ```
-
-#### 2. 带自定义请求头（如 `X-Token`）
-
-- **需在 `Access-Control-Allow-Headers` 中显式包含自定义头**，否则预检请求会失败：
-
-  ```nginx
-  # 例如允许 X-Token、X-User-Id 等自定义头
-  add_header Access-Control-Allow-Headers 'Content-Type, X-Token, X-User-Id';
-  ```
-
-- **浏览器会先发送 OPTIONS 预检请求**，需确保 Nginx 正确处理（返回 204 或 200）：
-  ```nginx
-  if ($request_method = 'OPTIONS') {
-      return 204;  # 预检请求成功，无需返回 body
-  }
-  ```
-
-#### 3. 其他注意事项
-
-- **`add_header` 指令的作用域**：如果 Nginx 配置中存在多个 `location` 块，跨域头需配置在对应请求的 `location` 中（如接口请求通常在 `/api` 路径）。
-- **避免重复设置头**：如果后端服务（如 Node.js、Java）已设置 CORS 头，Nginx 无需重复添加，否则可能导致浏览器解析冲突。
-
-- **生产环境安全性**：
-  - 禁止使用 `Access-Control-Allow-Origin: *`（尤其是带 cookie 的场景）。
-  - 限制 `Access-Control-Allow-Methods` 为必要的方法（如仅允许 `GET, POST`）。
-  - 避免 `Access-Control-Allow-Headers` 包含通配符（如 `*`），仅添加实际需要的头。
-
-### 三、完整复杂跨域配置示例（带 cookie + 自定义头）
+#### 2. `proxy_pass` 加 `/` 的情况
 
 ```nginx
-server {
-    listen 80;
-    server_name backend.com;
-
-    # 接口路径的跨域配置（假设接口都在 /api 下）
-    location /api {
-        # 明确允许的前端域名（不能用 *）
-        add_header Access-Control-Allow-Origin https://frontend.com;
-
-        # 允许携带 cookie
-        add_header Access-Control-Allow-Credentials true;
-
-        # 允许的方法（包含预检请求 OPTIONS）
-        add_header Access-Control-Allow-Methods 'GET, POST, PUT, DELETE, OPTIONS';
-
-        # 允许的头（包含自定义头 X-Token）
-        add_header Access-Control-Allow-Headers 'Content-Type, Authorization, X-Token';
-
-        # 预检请求结果缓存 1 小时
-        add_header Access-Control-Max-Age 3600;
-
-        # 处理预检请求
-        if ($request_method = 'OPTIONS') {
-            return 204;
-        }
-
-        # 转发请求到后端服务（如 Node.js、Java 服务）
-        proxy_pass http://127.0.0.1:3000;
-        proxy_set_header Host $host;
-    }
+location /api {
+    # 后端地址末尾有 /
+    proxy_pass http://backend:3000/;
 }
+```
+
+- 匹配逻辑：`location /api` 匹配到的 `/api` 被替换为 `/`
+- 代理后地址：`http://backend:3000/` + `/user/list` → `http://backend:3000/user/list`
+
+### 扩展场景：`location` 带多级路径时
+
+若 `location` 规则为 `/api/v1`，请求路径为 `http://nginx-host/api/v1/user/list`
+
+#### 1. 不加 `/`
+
+```nginx
+location /api/v1 {
+    proxy_pass http://backend:3000;
+}
+# 代理结果：http://backend:3000/api/v1/user/list
+```
+
+#### 2. 加 `/`
+
+```nginx
+location /api/v1 {
+    proxy_pass http://backend:3000/;
+}
+# 代理结果：http://backend:3000/user/list
+```
+
+### 特殊场景：`proxy_pass` 包含子路径
+
+若 `proxy_pass` 不仅是域名/IP，还包含子路径（如 `http://backend:3000/service`），加不加 `/` 的规则依然适用：
+
+#### 1. 后端路径不加 `/`
+
+```nginx
+location /api {
+    proxy_pass http://backend:3000/service;
+}
+# 请求 /api/user → 代理到 http://backend:3000/serviceapi/user
+# （注意：/api 被完整拼接，导致 service 和 api 连在一起，通常不符合预期）
+```
+
+#### 2. 后端路径加 `/`
+
+```nginx
+location /api {
+    proxy_pass http://backend:3000/service/;
+}
+# 请求 /api/user → 代理到 http://backend:3000/service/user
+# （正确拼接：/api 被替换为 /，剩余路径 /user 拼接到 service/ 后）
 ```
 
 ### 总结
 
-- 基础跨域：核心配置 `Access-Control-Allow-Origin`、`-Methods`、`-Headers`。
-- 带 cookie 跨域：必须指定具体 `Origin`，并添加 `Access-Control-Allow-Credentials: true`。
-- 自定义头跨域：需在 `Allow-Headers` 中显式声明，并正确处理 OPTIONS 预检请求。
-- 生产环境需严格限制允许的源、方法和头，避免安全风险。
+- **不加 `/`**：`location` 匹配的路径会被完整拼接到 `proxy_pass` 地址后（适合后端接口路径与前端请求路径完全一致的场景）。
+- **加 `/`**：`location` 匹配的路径会被替换为 `/`，仅将剩余路径拼接到 `proxy_pass` 地址后（适合需要简化后端接口路径的场景）。
+
+实际配置时，建议通过 `curl` 测试或查看后端日志确认代理结果，避免因路径拼接错误导致接口 404。

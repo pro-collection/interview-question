@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Nginx 配置跨域（CORS）需设置哪些关键响应头？复杂跨域（带 cookie、自定义头）有何注意点",
+  title: "Nginx 中 proxy_pass 路径结尾加 / 与不加 /，对前端接口代理路径有何差异？举例说明。",
   key_world: [
     //
-    "nginx 配置跨域",
+    "nginx proxy_pass",
   ],
   labels: [
     labels.application,

@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Nginx 如何按资源类型（如.js/.png）分发到不同服务器？配置策略是什么？",
+  title: "Nginx 配置 gzip/brotli 压缩时需考虑哪些因素？为何不建议对所有前端资源开启压缩？",
   key_world: [
     //
-    "nginx 转发",
+    "nginx 配置资源压缩",
   ],
   labels: [
     labels.application,

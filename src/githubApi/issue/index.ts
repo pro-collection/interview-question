@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "react 开发的应用里面， 如何给系统设置一个全局的崩溃的提示页面",
+  title: "SPA 的 history 路由模式在 Nginx 部署时刷新 404，如何配置解决",
   key_world: [
     //
-    "崩溃提示",
+    "nginx 刷新 404",
   ],
   labels: [
-    labels.frameWork,
+    labels.application,
     // labels.node,
-    company.mi,
+    // company.mi,
     // xx
   ],
   milestone: MileStone.inProgress,

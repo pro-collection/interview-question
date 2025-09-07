@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "微前端通过 Nginx 实现主 / 子应用路由分发，如何配置 location 和 try_files？需处理哪些资源路径问题？",
+  title: "Nginx 配置 HTTPS 需哪些核心项（协议、加密套件）？如何强制 HTTP 跳转 HTTPS？",
   key_world: [
     //
-    "nginx 配置主/子路由分发",
+    "nginx 配置 https",
   ],
   labels: [
     labels.application,

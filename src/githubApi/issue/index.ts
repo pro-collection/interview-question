@@ -9,18 +9,18 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Nginx 配置 gzip/brotli 压缩时需考虑哪些因素？为何不建议对所有前端资源开启压缩？",
+  title: "如何通过 Nginx 配置前端静态资源的 “hash 资源永久缓存 + 非 hash 资源协商缓存”？",
   key_world: [
     //
-    "nginx 配置资源压缩",
+    "nginx 资源缓存",
   ],
   labels: [
     labels.application,
     // labels.node,
-    company.alibaba,
+    // company.alibaba,
     // xx
   ],
-  milestone: MileStone.senior,
+  milestone: MileStone.inProgress,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

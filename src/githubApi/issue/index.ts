@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Nginx 如何通过 include 或 vhost 实现前端多环境隔离？同域名不同路径映射需解决哪些重写问题？",
+  title: "Nginx 如何配置支持前端大资源的 Range 分片请求？核心参数是什么？",
   key_world: [
     //
-    "nginx 多环境隔离",
+    "nginx 配置分片请求",
   ],
   labels: [
     labels.application,

@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Nginx 中 proxy_pass 路径结尾加 / 与不加 /，对前端接口代理路径有何差异？举例说明。",
+  title: "Nginx 如何通过 include 或 vhost 实现前端多环境隔离？同域名不同路径映射需解决哪些重写问题？",
   key_world: [
     //
-    "nginx proxy_pass",
+    "nginx 多环境隔离",
   ],
   labels: [
     labels.application,

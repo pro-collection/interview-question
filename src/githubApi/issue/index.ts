@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "SPA 的 history 路由模式在 Nginx 部署时刷新 404，如何配置解决",
+  title: "Nginx 配置跨域（CORS）需设置哪些关键响应头？复杂跨域（带 cookie、自定义头）有何注意点",
   key_world: [
     //
-    "nginx 刷新 404",
+    "nginx 配置跨域",
   ],
   labels: [
     labels.application,
@@ -20,7 +20,7 @@ const remote = {
     // company.mi,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

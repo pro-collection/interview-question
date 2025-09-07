@@ -9,10 +9,10 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "如何通过 Nginx 配置前端静态资源的 “hash 资源永久缓存 + 非 hash 资源协商缓存”？",
+  title: "微前端通过 Nginx 实现主 / 子应用路由分发，如何配置 location 和 try_files？需处理哪些资源路径问题？",
   key_world: [
     //
-    "nginx 资源缓存",
+    "nginx 配置主/子路由分发",
   ],
   labels: [
     labels.application,
@@ -20,7 +20,7 @@ const remote = {
     // company.alibaba,
     // xx
   ],
-  milestone: MileStone.inProgress,
+  milestone: MileStone.senior,
   body: () => fs.readFileSync(filePath, { encoding: "utf8" }),
 };
 

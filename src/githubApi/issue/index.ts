@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "Nginx 如何配置支持前端大资源的 Range 分片请求？核心参数是什么？",
+  title: "Nginx 如何按资源类型（如.js/.png）分发到不同服务器？配置策略是什么？",
   key_world: [
     //
-    "nginx 配置分片请求",
+    "nginx 转发",
   ],
   labels: [
     labels.application,
     // labels.node,
-    // company.mi,
+    company.alibaba,
     // xx
   ],
   milestone: MileStone.senior,

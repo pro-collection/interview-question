@@ -9,15 +9,15 @@ import { filePath } from "@src/githubApi/file/consts";
 import { input, confirm } from "@inquirer/prompts";
 
 const remote = {
-  title: "前端静态资源加载超时，Nginx 可通过哪些配置优化？",
+  title: "Nginx 如何为不同前端资源配置缓存策略？如何强制刷新特定资源？",
   key_world: [
     //
-    "nginx 加载超时优化",
+    "nginx 加载特定资源",
   ],
   labels: [
     labels.application,
     // labels.node,
-    company.alibaba,
+    // company.alibaba,
     // xx
   ],
   milestone: MileStone.senior,
